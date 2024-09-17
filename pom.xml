@@ -37,9 +37,18 @@
 
 	<developers>
 		<developer>
-			<name>JAParejo</name>
-			<email>japarejo@gmail.com</email>
+			<id>Marta</id>
+			<name>MartaAguilarMorcillo</name>
+			<email>marta.aguilar.morcillo1@gmail.com</email>
 			<url>http://www.isa.us.es</url>
+			<roles>
+				<role>tech master</role>
+			</roles>
+			<properties>
+				<picUrl>
+			https://pbs.twimg.com/media/Eh4n9GhUMAAdO8x?format=jpg
+				</picUrl>
+			</properties>
 		</developer>
 	</developers>
 

@@ -61,6 +61,19 @@
 				<picUrl> https://pbs.twimg.com/media/Eh4n9GgUYAAan80?format=jpg </picUrl>
  			</properties>
 		</developer>
+		<developer>
+			<id>dgl2523</id>
+			<name>Candela</name>
+			<email>cangutgon@alum.us.es</email>
+			<roles>
+			<role>tech master</role>
+			</roles> 
+			<properties>
+			<picUrl> 
+				https://pbs.twimg.com/media/Eh4n9GgUYAAan80?format=jpg
+			</picUrl>
+ 			</properties>
+		</developer>
 	</developers>
 
 	<dependencies>

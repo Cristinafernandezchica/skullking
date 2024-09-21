@@ -3,7 +3,7 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>es.us.dp1</groupId>
-	<artifactId>lx-xy-2425-game-name</artifactId>
+	<artifactId>l7-5-2425-game-name</artifactId>
 	<version>0.1.0.BUILD-SNAPSHOT</version>
 
 	<parent>
@@ -11,7 +11,7 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.3.3</version>
 	</parent>
-	<name>DP1 Game Template</name>
+	<name>DP1 Game L7-5</name>
 
 	<properties>
 
@@ -37,16 +37,42 @@
 
 	<developers>
 		<developer>
-			<id>YTR7670</id>
-			<name>Angel</name>
-			<email>angamosan@alum.us.es</email>
-			<url>http://www.tmht.com/angel</url>
+			<id>Marta</id>
+			<name>MartaAguilarMorcillo</name>
+			<email>marta.aguilar.morcillo1@gmail.com</email>
+			<url>http://www.isa.us.es</url>
 			<roles>
 				<role>tech master</role>
 			</roles>
 			<properties>
-				<picUrl>https://pbs.twimg.com/media/Eh4n9GhUMAAdO8x?format=jpg</picUrl>
+				<picUrl>
+			https://pbs.twimg.com/media/Eh4n9GhUMAAdO8x?format=jpg
+				</picUrl>
 			</properties>
+		</developer>
+		<developer>
+			<id>RFM6490</id>
+			<name>Cristina</name>
+			<email>criferchi@alum.us.es</email>
+			<roles>
+				<role>tech master</role>
+			</roles> 
+			<properties>
+				<picUrl> https://pbs.twimg.com/media/Eh4n9GgUYAAan80?format=jpg </picUrl>
+ 			</properties>
+		</developer>
+		<developer>
+			<id>dgl2523</id>
+			<name>Candela</name>
+			<email>cangutgon@alum.us.es</email>
+			<roles>
+			<role>tech master</role>
+			</roles> 
+			<properties>
+			<picUrl> 
+				https://pbs.twimg.com/media/Eh4n9GgUYAAan80?format=jpg
+			</picUrl>
+ 			</properties>
 		</developer>
 	</developers>
 

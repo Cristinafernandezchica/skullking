@@ -38,17 +38,15 @@
 	<developers>
 		<developer>
 			<id>YTR7670</id>
-<name>Angel</name>
-<email>angamosan@alum.us.es</email>
-<url>http://www.tmht.com/angel</url>
-<roles>
-<role>tech master</role>
-</roles>
-<properties>
-<picUrl>
-https://pbs.twimg.com/media/Eh4n9GhUMAAdO8x?format=jpg
-</picUrl>
-</properties>
+			<name>Angel</name>
+			<email>angamosan@alum.us.es</email>
+			<url>http://www.tmht.com/angel</url>
+			<roles>
+				<role>tech master</role>
+			</roles>
+			<properties>
+				<picUrl>https://pbs.twimg.com/media/Eh4n9GhUMAAdO8x?format=jpg</picUrl>
+			</properties>
 		</developer>
 	</developers>
 

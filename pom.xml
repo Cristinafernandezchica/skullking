@@ -37,6 +37,20 @@
 
 	<developers>
 		<developer>
+<<<<<<< HEAD
+			<id>pxt3852</id>
+			<name>EmmanuelChavez</name>
+			<email>luichamal@alum.us.es</email>
+			<url>http://www.tmht.com/leo</url>
+			<roles>
+			<role>wuolah lover</role>
+			</roles>
+			<properties>
+			<picUrl>
+			https://pbs.twimg.com/media/Eh4n9GhUMAAdO8x?format=jpg&name=large
+			</picUrl>
+			</properties>
+=======
 			<id>YTR7670</id>
 			<name>Angel</name>
 			<email>angamosan@alum.us.es</email>
@@ -87,6 +101,7 @@
 				https://pbs.twimg.com/media/Eh4n9GgUYAAan80?format=jpg
 			</picUrl>
  			</properties>
+>>>>>>> main
 		</developer>
 	</developers>
 

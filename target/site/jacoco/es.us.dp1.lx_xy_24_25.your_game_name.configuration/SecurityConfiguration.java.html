@@ -57,40 +57,41 @@ import es.us.dp1.lx_xy_24_25.your_game_name.configuration.services.UserDetailsSe
 <span class="fc" id="L57">			.exceptionHandling((exepciontHandling) -&gt; exepciontHandling.authenticationEntryPoint(unauthorizedHandler))			</span>
 			
 <span class="fc" id="L59">			.authorizeHttpRequests(authorizeRequests -&gt;	authorizeRequests</span>
-<span class="fc" id="L60">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/resources/**&quot;)).permitAll()</span>
-<span class="fc" id="L61">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/webjars/**&quot;)).permitAll() </span>
-<span class="fc" id="L62">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/static/**&quot;)).permitAll() </span>
-<span class="fc" id="L63">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/swagger-resources/**&quot;)).permitAll()						</span>
-<span class="fc" id="L64">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/&quot;)).permitAll()</span>
-<span class="fc" id="L65">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/oups&quot;)).permitAll()</span>
-<span class="fc" id="L66">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/api/v1/auth/**&quot;)).permitAll()</span>
-<span class="fc" id="L67">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/v3/api-docs/**&quot;)).permitAll()</span>
-<span class="fc" id="L68">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/swagger-ui.html&quot;)).permitAll()</span>
-<span class="fc" id="L69">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/swagger-ui/**&quot;)).permitAll()												</span>
-<span class="fc" id="L70">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/api/v1/developers&quot;)).permitAll()												</span>
-<span class="fc" id="L71">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/api/v1/plan&quot;)).permitAll()</span>
-<span class="fc" id="L72">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/api/v1/users/**&quot;)).hasAuthority(ADMIN)</span>
-<span class="fc" id="L73">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/h2-console/**&quot;)).permitAll()</span>
-<span class="fc" id="L74">			.anyRequest().authenticated())					</span>
+<span class="fc" id="L60">			.requestMatchers(&quot;/api/v1/developers&quot;).permitAll()</span>
+<span class="fc" id="L61">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/resources/**&quot;)).permitAll()</span>
+<span class="fc" id="L62">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/webjars/**&quot;)).permitAll() </span>
+<span class="fc" id="L63">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/static/**&quot;)).permitAll() </span>
+<span class="fc" id="L64">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/swagger-resources/**&quot;)).permitAll()						</span>
+<span class="fc" id="L65">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/&quot;)).permitAll()</span>
+<span class="fc" id="L66">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/oups&quot;)).permitAll()</span>
+<span class="fc" id="L67">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/api/v1/auth/**&quot;)).permitAll()</span>
+<span class="fc" id="L68">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/v3/api-docs/**&quot;)).permitAll()</span>
+<span class="fc" id="L69">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/swagger-ui.html&quot;)).permitAll()</span>
+<span class="fc" id="L70">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/swagger-ui/**&quot;)).permitAll()												</span>
+<span class="fc" id="L71">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/api/v1/developers&quot;)).permitAll()												</span>
+<span class="fc" id="L72">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/api/v1/plan&quot;)).permitAll()</span>
+<span class="fc" id="L73">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/api/v1/users/**&quot;)).hasAuthority(ADMIN)</span>
+<span class="fc" id="L74">			.requestMatchers(AntPathRequestMatcher.antMatcher(&quot;/h2-console/**&quot;)).permitAll()</span>
+<span class="fc" id="L75">			.anyRequest().authenticated())					</span>
 			
-<span class="fc" id="L76">			.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);		</span>
-<span class="fc" id="L77">		return http.build();</span>
+<span class="fc" id="L77">			.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);		</span>
+<span class="fc" id="L78">		return http.build();</span>
 	}
 
 	@Bean
 	public AuthTokenFilter authenticationJwtTokenFilter() {
-<span class="fc" id="L82">		return new AuthTokenFilter();</span>
+<span class="fc" id="L83">		return new AuthTokenFilter();</span>
 	}
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
-<span class="fc" id="L87">		return config.getAuthenticationManager();</span>
+<span class="fc" id="L88">		return config.getAuthenticationManager();</span>
 	}	
 
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-<span class="fc" id="L93">		return new BCryptPasswordEncoder();</span>
+<span class="fc" id="L94">		return new BCryptPasswordEncoder();</span>
 	}
 	
 	

@@ -37,9 +37,18 @@
 
 	<developers>
 		<developer>
-			<name>JAParejo</name>
-			<email>japarejo@gmail.com</email>
-			<url>http://www.isa.us.es</url>
+			<id>pxt3852</id>
+			<name>EmmanuelChavez</name>
+			<email>luichamal@alum.us.es</email>
+			<url>http://www.tmht.com/leo</url>
+			<roles>
+			<role>wuolah lover</role>
+			</roles>
+			<properties>
+			<picUrl>
+			https://pbs.twimg.com/media/Eh4n9GhUMAAdO8x?format=jpg&name=large
+			</picUrl>
+			</properties>
 		</developer>
 	</developers>
 

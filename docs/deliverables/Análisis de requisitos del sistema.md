@@ -28,7 +28,7 @@ _Os recomentamos usar la siguiente plantilla de contenidos que usa un formato ta
 | "Como admin Quiero ver el listado de usuarios registrados para llevar un control sobre la cantidad de usuarios en el sistema."| 
 |-----|
 |Mockups (prototipos en formato imagen de baja fidelidad) de la interfaz de usuario del sistema|
-|Decripción de las interacciones concretas a realizar con la interfaz de usuario del sistema para lleva a cabo la historia. |
+|Puedes tener de forma visual todos los jugadores activos, dicha pantalla tambien tiene mas funcionalidades para proximos |
 
 
 

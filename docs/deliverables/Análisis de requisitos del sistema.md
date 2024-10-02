@@ -24,11 +24,11 @@ _Ej3: Administrador: Dueño de la clínica que se encarga de dar de alta veterin
 
 A continuación se definen  todas las historias de usuario a implementar:
 _Os recomentamos usar la siguiente plantilla de contenidos que usa un formato tabular:_
- ### HU-(ISSUE#ID): Nombre ([Enlace a la Issue asociada a la historia de usuario]()
-|Descripción de la historia siguiendo el esquema:  "Como <rol> quiero que el sistema <funcionalidad>  para poder <objetivo/beneficio>."| 
+ ### HGA1-(ISSUE#30): Nombre ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/30#issue-2561421045]()
+| "Como admin Quiero ver el listado de usuarios registrados para llevar un control sobre la cantidad de usuarios en el sistema."| 
 |-----|
 |Mockups (prototipos en formato imagen de baja fidelidad) de la interfaz de usuario del sistema|
-|Decripción de las interacciones concretas a realizar con la interfaz de usuario del sistema para lleva a cabo la historia. |
+|Puedes tener de forma visual todos los jugadores activos, dicha pantalla tambien tiene mas funcionalidades |
 
 
 

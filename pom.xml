@@ -51,7 +51,7 @@
 			</properties>
 		</developer>
 		<developer>
-			<id> YTR7670 </id>
+			<id>YTR7670</id>
 			<name>Angel</name>
 			<email>angamosan@alum.us.es</email>
 			<url>http://www.tmht.com/angel</url>
@@ -101,7 +101,7 @@
 				https://pbs.twimg.com/media/Eh4n9GgUYAAan80?format=jpg
 			</picUrl>
  			</properties>
-			</developer>
+		</developer>
 	</developers>
 
 	<dependencies>

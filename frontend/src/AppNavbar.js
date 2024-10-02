@@ -52,6 +52,7 @@ function AppNavbar() {
                 <NavItem>
                     <NavLink style={{ color: "white" }} id="login" tag={Link} to="/login">Login</NavLink>
                 </NavItem>
+
             </>
         )
     } else {
@@ -60,6 +61,7 @@ function AppNavbar() {
                 <NavItem>
                     <NavLink style={{ color: "white" }} tag={Link} to="/dashboard">Dashboard</NavLink>
                 </NavItem>
+
             </>
         )
         userLogout = (
@@ -69,6 +71,9 @@ function AppNavbar() {
                 </NavItem>
                 <NavItem>
                     <NavLink style={{ color: "white" }} id="plans" tag={Link} to="/plans">Pricing Plans</NavLink>
+                </NavItem>
+                <NavItem>
+                    <NavLink style={{ color: "white" }} id="Instructions" tag={Link} to="/Instructions">Instrucciones</NavLink>
                 </NavItem>
                 <NavbarText style={{ color: "white" }} className="justify-content-end">{username}</NavbarText>
                 <NavItem className="d-flex">

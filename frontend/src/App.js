@@ -13,6 +13,9 @@ import tokenService from "./services/token.service";
 import UserListAdmin from "./admin/users/UserListAdmin";
 import UserEditAdmin from "./admin/users/UserEditAdmin";
 import SwaggerDocs from "./public/swagger";
+import Play from "./play";
+import Instructions from "./player/instrucciones";
+
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
@@ -52,7 +55,8 @@ function App() {
     if (role === "PLAYER") {
       ownerRoutes = (
         <>
-          
+         
+          <Route path="/Play" exact={true} element={<PrivateRoute><Play/></PrivateRoute>} />
         </>)
     }    
   })
@@ -81,6 +85,7 @@ function App() {
           <Route path="/" exact={true} element={<Home />} />
           <Route path="/plans" element={<PlanList />} />
           <Route path="/docs" element={<SwaggerDocs />} />
+          <Route path="/Instructions" element={<Instructions />} />
           {publicRoutes}
           {userRoutes}
           {adminRoutes}

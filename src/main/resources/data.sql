@@ -17,3 +17,4 @@ INSERT INTO appusers(id,username,password,authority) VALUES (13,'player10','$2a$
 INSERT INTO appusers(id,username,password,authority) VALUES (16,'NMY0786','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2);
 INSERT INTO appusers(id,username,password,authority) VALUES (14,'YTR7670','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2);
 INSERT INTO appusers(id,username,password,authority) VALUES (15,'RFM6490','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2);
+INSERT INTO appusers(id,username,password,authority) VALUES (16,'DGL2523','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2);

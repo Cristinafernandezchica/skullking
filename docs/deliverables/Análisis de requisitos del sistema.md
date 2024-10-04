@@ -23,46 +23,69 @@ _Ej3: Administrador: Dueño de la clínica que se encarga de dar de alta veterin
 ## Historias de Usuario
 
 A continuación se definen  todas las historias de usuario a implementar:
-_Os recomentamos usar la siguiente plantilla de contenidos que usa un formato tabular:_
- ### HJJ8-(ISSUE#47): Conocer reglas de juego ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/47#issue-2565864686]()
-| "Como Jugador quiero conocer las reglas del juego para poder jugar correctamente"| 
-|-----|
-|![Ver instrucciones](../mockups/Ver_Instrucciones.png)|
-|Puedes acceder al pdf con todas las reglas del juego e incluso descargar dico pdf para tenerlo en tu computadora |
 
- ### HJJ9-(ISSUE#48): Crear partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/48#issue-2565866251]()
-| "Como jugador quiero poder crear partidas para poder jugar"| 
+ ### HJJ1-(ISSUE#36): Jugar una carta durante mi turno ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/36]())
+| "Como jugador quiero poder jugar una carta durante mi turno para intentar ganar una baza."| 
 |-----|
-|![Lobby](../mockups/Lobby_partidas.png)|
-|Puedes presionar en el boton crear partida, para crear una sala en la que las personas puedan entrar|
+|![Jugar una carta durante mi turno](../mockups/Poder_jugar_una_carta.png)|
+|El jugador selecciona una de sus cartas disponibles siempre y cuando el juego le permita echarla en base a las reglas del juego, si no es posible, el jugador deberá escoger otra de sus cartas.|
 
- ### HGJ1-(ISSUE#49): Registrar usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/49#issue-2565870591]()
-| "Como jugador quiero poder registrarme en el juego para poder jugar al mismo"| 
+ ### HJJ2-(ISSUE#37): Ver puntuación actualizada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/37]())
+| "Como jugador quiero poder ver mi puntuación actualizada tras cada ronda para saber si voy ganando o no."| 
 |-----|
-|![Registro](../mockups/Registro.png)|
-|![RegistroJugador](../mockups/Datos_registro.png)|
-|Puedes presionar el boton "player" para registrate como jugador, esto te enviara a un formulario en el cual simplemente debes introducir los datos indicados y presionar "save" para guardar tu perfil |
+|![Ver puntuación actualizado](../mockups/Ver_puntuacion.png)|
+|El jugador podrá observar su puntuación y la de sus compañeros actualizada tras cada ronda en el margen izquierdo de la pantalla. Esta se mantendrá visible durante toda la ronda siguiente hasta que se actualice al final de la ronda.|
 
- ### HGJ2-(ISSUE#50): Hacer log-in ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/50#issue-2565890369]()
-| "Como jugador quiero poder loguearme en el juego para jugar desde mi usuario"| 
+ ### HJJ3-(ISSUE#38): Usar cartas especiales ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/38]())
+| "Como jugador quiero poder usar cartas especiales (pirata, sirena o Skull King) en lugar del palo predominante para intentar ganar una baza."| 
 |-----|
-|![Login](../mockups/Login.png)|
-|Tienes que rellenar los datos solicitados para verificar que efectivamente es tu usuario, finalmente puedes presionar "Log-in" en el cual si los datos son correctos entraras en tu perfil, caso contrario deberas introducirlos nuevamente |
+|![Usar cartas especiales](../mockups/Usar_cartas_especiales.png)|
+|El jugador selecciona una carta especial de su mano durante su turno, podrá echarla independientemente del palo que predomine durante la baza.|
 
- ### HGJ3-(ISSUE#51): Hacer log-out ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/51#issue-2565892501]()
-| "Como jugador quiero poder hacer log-out para salirme de mi usuario y evitar que otras personas lo usen"| 
+ ### HJJ4-(ISSUE#39): Usar carta blanca/de escape ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/39]())
+| "Como jugador quiero poder usar una carta blanca/de escape para perder una baza y acertar mi apuesta."| 
 |-----|
-|![Logout](../mockups/Logout.png)|
-| Siempre y cuando estes logado, aparecera en el navbar el boton "log-out", una vez presionado ya no estaras logeado en tu perfil |
+|![Usar carta blanca/de escape](../mockups/Jugar_carta_escape.png)|
+|El jugador selecciona una carta blanca/de escape de su mano durante su turno, podrá echarla independientemente del palo que predomine durante la baza.|
 
- ### HGJ4-(ISSUE#52): Editar perfil de usuario  ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/52#issue-2565901340]()
-| "Como jugador quiero poder editar mi perfil para poner mi información correctamente."| 
+ ### HJJ5-(ISSUE#40): Ver apuestas de la ronda ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/40]())
+| "Como jugador quiero poder ver todas las apuestas realizadas en la ronda actual para poder perjudicar las apuestas de otros jugadores."| 
 |-----|
-|![Editar perfil](../mockups/Editar_perfil.png)|
-|  |
+|![Ver apuestas de la ronda](../mockups/Ver_apuestas_para_hacer_estrategia.png)|
+|El jugador podrá observar las apuestas de todos los jugadores actualizada tras cada ronda en el margen izquierdo de la pantalla. Esta se mantendrá visible durante toda la ronda hasta que se actualice en la siguiente ronda.|
 
- ### HGA1-(ISSUE#30): Ver usuarios registrados ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/30#issue-2561421045]()
-| "Como administrador quiero ver el listado de usuarios registrados para llevar un control sobre la cantidad de usuarios en el sistema."|
+ ### HJJ6-(ISSUE#41): Elegir rol de la carta Tigresa ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/41]())
+| "Como jugador quiero poder escoger el rol de la carta Tigresa (bandera blanca o pirata) para poder cumplir con mi apuesta."| 
+|-----|
+|![Elegir rol de la carta Tigresa](../mockups/Elegir_la_carta_Tigresa.png)|
+|El jugador selecciona la carta Tigresa, aparece una ventana emergente donde le aparecerán dos botones con cada una de las opciones, deberá pulsar una de los dos para elegir el rol. Una vez pulsado el rol quedará seleccionado.|
+
+ ### HJJ7-(ISSUE#42): Salir de la partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/42]())
+| "Como jugador quiero poder rendirme y salir en mitad de la partida para evitar seguir jugando en caso de que me surja un imprevisto."| 
+|-----|
+|![Salir de la partida](../mockups/Poder_salir_en_mitad_de_la_partida.png)|
+|El jugador debe pulsar el botón 'Exit', situado en la esquina inferior derecha.|
+
+ ### HJJ10-(ISSUE#43): Hacer apuestas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/43]())
+| "Como jugador quiero poder hacer apuestas sobre cuántas bazas ganaré para poder planificar mi estrategia."| 
+|-----|
+|![Hacer apuestas](../mockups/Hacer_apuesta_sobre_cuantas_bazas_ganare.png)|
+|Al inicio de cada ronda aparecerá una ventana emergente con botones del 0 al número de cartas repartidas en la ronda actual, el jugador deberá pulsar uno de los números en función de la predicción de bazas que cree que va a ganar en la ronda.|
+
+ ### HJA1-(ISSUE#44): Ver listado de partidas en curso ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/44]())
+| "Como administrador quiero poder ver el listado de partidas en curso, incluyendo creador y usuarios participantes para llevar un control sobre las partidas en curso."| 
+|-----|
+|![Listado de partidas en curso](../mockups/Listado_partidas_en_curso.png)|
+|El administrador, en la parte superior de la pantalla, tendrá un desplegable 'Partidas' del que salen las categorías 'En Curso' y 'Terminadas'. Debe pulsar en 'En Curso', esto le llevará a una pantalla con el listado de partidas en curso.|
+
+### HJA2-(ISSUE#45): Ver listado de partidas finalizadas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/45]())
+| "Como administrador quiero poder ver el listado de partidas finalizadas, incluyendo creador y usuarios participantes para llevar un control sobre las partidas ya finalizadas."| 
+|-----|
+|![Listado de partidas finalizadas](../mockups/Listado_partidas_terminadas.png)|
+|El administrador, en la parte superior de la pantalla, tendrá un desplegable 'Partidas' del que salen las categorías 'En Curso' y 'Terminadas'. Debe pulsar en 'Terminadas', esto le llevará a una pantalla con el listado de partidas ya finalizadas.|
+
+ ### HGA1-(ISSUE#30): Nombre ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/30#issue-2561421045]())
+| "Como admin Quiero ver el listado de usuarios registrados para llevar un control sobre la cantidad de usuarios en el sistema."| 
 |-----|
 |![Listado de usuarios](../mockups/Listado_usuarios.png)|
 | Se despliega una lista de todos los usuarios registrados en el sistema |
@@ -80,36 +103,10 @@ _Os recomentamos usar la siguiente plantilla de contenidos que usa un formato ta
 | en el formulario que aparece puedes modificar los datos en el apartado de contraseña para cambiar las credenciales del usuario especificado |
 
 ## Diagrama conceptual del sistema
-_En esta sección debe proporcionar un diagrama UML de clases que describa el modelo de datos a implementar en la aplicación. Este diagrama estará anotado con las restricciones simples (de formato/patrón, unicidad, obligatoriedad, o valores máximos y mínimos) de los datos a gestionar por la aplicación. _
+_En esta sección proporcionamos un diagrama UML de clases que describe el modelo de datos a implementar en la aplicación. Este diagrama esta anotado con las restricciones simples de los datos a gestionar por la aplicación.
 
-_Recuerde que este es un diagrama conceptual, y por tanto no se incluyen los tipos de los atributos, ni clases específicas de librerías o frameworks, solamente los conceptos del dominio/juego que pretendemos implementar_
-Ej:
+![Diagrama UML conceptual](/docs/diagrams/Diagrama%20UML%20Spring%201.png)
 
-```mermaid
-classDiagram
-    note "From Duck till Zebra"
-    Animal <|-- Duck
-    note for Duck "can fly\ncan swim\ncan dive\ncan help in debugging"
-    Animal <|-- Fish
-    Animal <|-- Zebra
-    Animal : age
-    Animal : gender
-    class Duck{
-        beakColor        
-    }
-    class Fish{
-       sizeInFeet
-    }
-    class Zebra{
-        is_wild
-        
-    }
-```
-_Si vuestro diagrama se vuelve demasiado complejo, siempre podéis crear varios diagramas para ilustrar todos los conceptos del dominio. Por ejemplo podríais crear un diagrama para cada uno de los módulos que quereis abordar. La única limitación es que hay que ser coherente entre unos diagramas y otros si nos referimos a las mismas clases_
-
-_Puede usar la herramienta de modelado que desee para generar sus diagramas de clases. Para crear el diagrama anterior nosotros hemos usado un lenguaje textual y librería para la generación de diagramas llamada Mermaid_
-
-_Si deseais usar esta herramienta para generar vuestro(s) diagramas con esta herramienta os proporcionamos un [enlace a la documentación oficial de la sintaxis de diagramas de clases de _ermaid](https://mermaid.js.org/syntax/classDiagram.html)_
 
 ## Reglas de Negocio
 ### R-< X > < Nombre Regla de negocio >

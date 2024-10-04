@@ -62,7 +62,7 @@ _Si vuestro diagrama se vuelve demasiado complejo, siempre podéis crear varios 
 
 _Puede usar la herramienta de modelado que desee para generar sus diagramas de clases. Para crear el diagrama anterior nosotros hemos usado un lenguaje textual y librería para la generación de diagramas llamada Mermaid_
 
-![Diagrama UML conceptual](/docs/diagrams/Diagrama%20UML%20Spring%201.png)<img src="Diagrama%20UML%20Spring%201.png" alt="Diagrama UML conceptual" />
+![Diagrama UML conceptual](/docs/diagrams/Diagrama%20UML%20Spring%201.png)<img src="Diagrama%20UML%20Spring%201.png" />
 
 _Si deseais usar esta herramienta para generar vuestro(s) diagramas con esta herramienta os proporcionamos un [enlace a la documentación oficial de la sintaxis de diagramas de clases de _ermaid](https://mermaid.js.org/syntax/classDiagram.html)_
 

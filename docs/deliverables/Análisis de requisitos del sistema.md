@@ -24,13 +24,60 @@ _Ej3: Administrador: Dueño de la clínica que se encarga de dar de alta veterin
 
 A continuación se definen  todas las historias de usuario a implementar:
 _Os recomentamos usar la siguiente plantilla de contenidos que usa un formato tabular:_
- ### HJJ8-(ISSUE#47): Nombre ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/47#issue-2565864686]()
+ ### HJJ8-(ISSUE#47): Conocer reglas de juego ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/47#issue-2565864686]()
 | "Como Jugador quiero conocer las reglas del juego para poder jugar correctamente"| 
 |-----|
 |![Ver instrucciones](../mockups/Ver_Instrucciones.png)|
 |Puedes acceder al pdf con todas las reglas del juego e incluso descargar dico pdf para tenerlo en tu computadora |
 
+ ### HJJ9-(ISSUE#48): Crear partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/48#issue-2565866251]()
+| "Como jugador quiero poder crear partidas para poder jugar"| 
+|-----|
+|![Lobby](../mockups/Lobby_partidas.png)|
+|Puedes presionar en el boton crear partida, para crear una sala en la que las personas puedan entrar|
 
+ ### HGJ1-(ISSUE#49): Registrar usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/49#issue-2565870591]()
+| "Como jugador quiero poder registrarme en el juego para poder jugar al mismo"| 
+|-----|
+|![Registro](../mockups/Registro.png)|
+|![RegistroJugador](../mockups/Datos_registro.png)|
+|Puedes presionar el boton "player" para registrate como jugador, esto te enviara a un formulario en el cual simplemente debes introducir los datos indicados y presionar "save" para guardar tu perfil |
+
+ ### HGJ2-(ISSUE#50): Hacer log-in ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/50#issue-2565890369]()
+| "Como jugador quiero poder loguearme en el juego para jugar desde mi usuario"| 
+|-----|
+|![Login](../mockups/Login.png)|
+|Tienes que rellenar los datos solicitados para verificar que efectivamente es tu usuario, finalmente puedes presionar "Log-in" en el cual si los datos son correctos entraras en tu perfil, caso contrario deberas introducirlos nuevamente |
+
+ ### HGJ3-(ISSUE#51): Hacer log-out ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/51#issue-2565892501]()
+| "Como jugador quiero poder hacer log-out para salirme de mi usuario y evitar que otras personas lo usen"| 
+|-----|
+|![Logout](../mockups/Logout.png)|
+| Siempre y cuando estes logado, aparecera en el navbar el boton "log-out", una vez presionado ya no estaras logeado en tu perfil |
+
+ ### HGJ4-(ISSUE#52): Editar perfil de usuario  ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/52#issue-2565901340]()
+| "Como jugador quiero poder editar mi perfil para poner mi información correctamente."| 
+|-----|
+|![Editar perfil](../mockups/Editar_perfil.png)|
+|  |
+
+ ### HGA1-(ISSUE#30): Ver usuarios registrados ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/30#issue-2561421045]()
+| "Como administrador quiero ver el listado de usuarios registrados para llevar un control sobre la cantidad de usuarios en el sistema."|
+|-----|
+|![Listado de usuarios](../mockups/Listado_usuarios.png)|
+| Se despliega una lista de todos los usuarios registrados en el sistema |
+
+ ### HGA4-(ISSUE#53): CRUD de usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/53#issue-2565933479]()
+| "Como administrador quiero poder crear, ver, actualizar y borrar usuarios para llevar un control adecuado de los usuarios del sistema."|
+|-----|
+|![Listado de usuarios](../mockups/Listado_usuarios.png)|
+| En la lista de usuarios tienes las opciones para editar los datos de los usuarios usando el boton edit, crear uno con el boton "add user" y eliminarlo usando delete, ademas haciendo clieck en el nombre del usuario puedes ver su perfil |
+
+ ### HGA5-(ISSUE#54): Restablecer ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/54#issue-2565956464]()
+| "Como administrador quiero poder restablecer la contraseña de un usuario para ayudar a los jugadores que hayan olvidado sus credenciales."|
+|-----|
+|![cambio de credenciales](../mockups/Cambio_de_credenciales.png)|
+| en el formulario que aparece puedes modificar los datos en el apartado de contraseña para cambiar las credenciales del usuario especificado |
 
 ## Diagrama conceptual del sistema
 _En esta sección debe proporcionar un diagrama UML de clases que describa el modelo de datos a implementar en la aplicación. Este diagrama estará anotado con las restricciones simples (de formato/patrón, unicidad, obligatoriedad, o valores máximos y mínimos) de los datos a gestionar por la aplicación. _

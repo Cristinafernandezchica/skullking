@@ -24,11 +24,11 @@ _Ej3: Administrador: Dueño de la clínica que se encarga de dar de alta veterin
 
 A continuación se definen  todas las historias de usuario a implementar:
 _Os recomentamos usar la siguiente plantilla de contenidos que usa un formato tabular:_
- ### HGA1-(ISSUE#30): Nombre ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/30#issue-2561421045]()
-| "Como admin Quiero ver el listado de usuarios registrados para llevar un control sobre la cantidad de usuarios en el sistema."| 
+ ### HJJ8-(ISSUE#47): Nombre ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/47#issue-2565864686]()
+| "Como Jugador quiero conocer las reglas del juego para poder jugar correctamente"| 
 |-----|
-|Mockups (prototipos en formato imagen de baja fidelidad) de la interfaz de usuario del sistema|
-|Puedes tener de forma visual todos los jugadores activos, dicha pantalla tambien tiene mas funcionalidades |
+|([../mockups/Ver_instrucciones.png])|
+|Puedes acceder al pdf con todas las reglas del juego e incluso descargar dico pdf para tenerlo en tu computadora |
 
 
 

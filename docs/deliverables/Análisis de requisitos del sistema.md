@@ -65,7 +65,6 @@ A continuación se definen  todas las historias de usuario a implementar:
 |-----|
 |![Salir de la partida](../mockups/Poder_salir_en_mitad_de_la_partida.png)|
 |El jugador debe pulsar el botón 'Exit', situado en la esquina inferior derecha.| ### HJJ8-(ISSUE#47): Conocer  
-
 ### HJJ8-(ISSUE#47): reglas de juego ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/47#issue-2565864686]()
 | "Como Jugador quiero conocer las reglas del juego para poder jugar correctamente"| 
 |-----|
@@ -83,7 +82,6 @@ A continuación se definen  todas las historias de usuario a implementar:
 |-----|
 |![Hacer apuestas](../mockups/Hacer_apuesta_sobre_cuantas_bazas_ganare.png)|
 |Al inicio de cada ronda aparecerá una ventana emergente con botones del 0 al número de cartas repartidas en la ronda actual, el jugador deberá pulsar uno de los números en función de la predicción de bazas que cree que va a ganar en la ronda.|
-
  ### HJA1-(ISSUE#44): Ver listado de partidas en curso ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/44]())
 | "Como administrador quiero poder ver el listado de partidas en curso, incluyendo creador y usuarios participantes para llevar un control sobre las partidas en curso."| 
 |-----|
@@ -95,6 +93,31 @@ A continuación se definen  todas las historias de usuario a implementar:
 |-----|
 |![Listado de partidas finalizadas](../mockups/Listado_partidas_terminadas.png)|
 |El administrador, en la parte superior de la pantalla, tendrá un desplegable 'Partidas' del que salen las categorías 'En Curso' y 'Terminadas'. Debe pulsar en 'Terminadas', esto le llevará a una pantalla con el listado de partidas ya finalizadas.|
+
+ ### HGJ1-(ISSUE#49): Registrar usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/49#issue-2565870591]()
+| "Como jugador quiero poder registrarme en el juego para poder jugar al mismo"| 
+|-----|
+|![Registro](../mockups/Registro.png)|
+|![RegistroJugador](../mockups/Datos_registro.png)|
+|Puedes presionar el boton "player" para registrate como jugador, esto te enviara a un formulario en el cual simplemente debes introducir los datos indicados y presionar "save" para guardar tu perfil |
+
+ ### HGJ2-(ISSUE#50): Hacer log-in ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/50#issue-2565890369]()
+| "Como jugador quiero poder loguearme en el juego para jugar desde mi usuario"| 
+|-----|
+|![Login](../mockups/Login.png)|
+|Tienes que rellenar los datos solicitados para verificar que efectivamente es tu usuario, finalmente puedes presionar "Log-in" en el cual si los datos son correctos entraras en tu perfil, caso contrario deberas introducirlos nuevamente |
+
+ ### HGJ3-(ISSUE#51): Hacer log-out ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/51#issue-2565892501]()
+| "Como jugador quiero poder hacer log-out para salirme de mi usuario y evitar que otras personas lo usen"| 
+|-----|
+|![Logout](../mockups/Logout.png)|
+| Siempre y cuando estes logado, aparecera en el navbar el boton "log-out", una vez presionado ya no estaras logeado en tu perfil |
+
+ ### HGJ4-(ISSUE#52): Editar perfil de usuario  ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/52#issue-2565901340]()
+| "Como jugador quiero poder editar mi perfil para poner mi información correctamente."| 
+|-----|
+|![Editar perfil](../mockups/Editar_perfil.png)|
+|  |
 
  ### HGA1-(ISSUE#30): Nombre ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/30#issue-2561421045]())
 | "Como admin Quiero ver el listado de usuarios registrados para llevar un control sobre la cantidad de usuarios en el sistema."| 

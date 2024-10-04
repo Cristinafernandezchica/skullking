@@ -27,7 +27,7 @@ _Os recomentamos usar la siguiente plantilla de contenidos que usa un formato ta
  ### HJJ8-(ISSUE#47): Nombre ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/47#issue-2565864686]()
 | "Como Jugador quiero conocer las reglas del juego para poder jugar correctamente"| 
 |-----|
-|([../mockups/Ver_instrucciones.png])|
+![Ver instrucciones](../mockups/Ver_Instrucciones.png)
 |Puedes acceder al pdf con todas las reglas del juego e incluso descargar dico pdf para tenerlo en tu computadora |
 
 

@@ -22,7 +22,7 @@ _Ej3: Administrador: Dueño de la clínica que se encarga de dar de alta veterin
 
 ## Historias de Usuario
 
-A continuación se definen  todas las historias de usuario a implementar:
+A continuación se definen todas las historias de usuario a implementar:
 
  ### HJJ1-(ISSUE#36): Jugar una carta durante mi turno ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/36]())
 | "Como jugador quiero poder jugar una carta durante mi turno para intentar ganar una baza."| 
@@ -64,24 +64,26 @@ A continuación se definen  todas las historias de usuario a implementar:
 | "Como jugador quiero poder rendirme y salir en mitad de la partida para evitar seguir jugando en caso de que me surja un imprevisto."| 
 |-----|
 |![Salir de la partida](../mockups/Poder_salir_en_mitad_de_la_partida.png)|
-|El jugador debe pulsar el botón 'Exit', situado en la esquina inferior derecha.| ### HJJ8-(ISSUE#47): Conocer  
-### HJJ8-(ISSUE#47): reglas de juego ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/47#issue-2565864686]()
-| "Como Jugador quiero conocer las reglas del juego para poder jugar correctamente"| 
+|El jugador debe pulsar el botón 'Exit', situado en la esquina inferior derecha.|
+
+### HJJ8-(ISSUE#47): Conocer reglas de juego ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/47#issue-2565864686]())
+| "Como Jugador quiero conocer las reglas del juego para poder jugar correctamente."| 
 |-----|
 |![Ver instrucciones](../mockups/Ver_Instrucciones.png)|
-|Puedes acceder al pdf con todas las reglas del juego e incluso descargar dico pdf para tenerlo en tu computadora |
+|Puedes acceder al pdf con todas las reglas del juego e incluso descargar dicho pdf para tenerlo en tu computadora.|
 
- ### HJJ9-(ISSUE#48): Crear partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/48#issue-2565866251]()
-| "Como jugador quiero poder crear partidas para poder jugar"| 
+ ### HJJ9-(ISSUE#48): Crear partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/48#issue-2565866251]())
+| "Como jugador quiero poder crear partidas para poder jugar."| 
 |-----|
 |![Lobby](../mockups/Lobby_partidas.png)|
-|Puedes presionar en el boton crear partida, para crear una sala en la que las personas puedan entrar|
+|Puedes presionar en el botón "crear partida", para crear una sala en la que las personas puedan entrar.|
 
  ### HJJ10-(ISSUE#43): Hacer apuestas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/43]())
 | "Como jugador quiero poder hacer apuestas sobre cuántas bazas ganaré para poder planificar mi estrategia."| 
 |-----|
 |![Hacer apuestas](../mockups/Hacer_apuesta_sobre_cuantas_bazas_ganare.png)|
 |Al inicio de cada ronda aparecerá una ventana emergente con botones del 0 al número de cartas repartidas en la ronda actual, el jugador deberá pulsar uno de los números en función de la predicción de bazas que cree que va a ganar en la ronda.|
+
  ### HJA1-(ISSUE#44): Ver listado de partidas en curso ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/44]())
 | "Como administrador quiero poder ver el listado de partidas en curso, incluyendo creador y usuarios participantes para llevar un control sobre las partidas en curso."| 
 |-----|
@@ -94,48 +96,48 @@ A continuación se definen  todas las historias de usuario a implementar:
 |![Listado de partidas finalizadas](../mockups/Listado_partidas_terminadas.png)|
 |El administrador, en la parte superior de la pantalla, tendrá un desplegable 'Partidas' del que salen las categorías 'En Curso' y 'Terminadas'. Debe pulsar en 'Terminadas', esto le llevará a una pantalla con el listado de partidas ya finalizadas.|
 
- ### HGJ1-(ISSUE#49): Registrar usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/49#issue-2565870591]()
-| "Como jugador quiero poder registrarme en el juego para poder jugar al mismo"| 
+ ### HGJ1-(ISSUE#49): Registrar usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/49#issue-2565870591]())
+| "Como jugador quiero poder registrarme en el juego para poder jugar al mismo."| 
 |-----|
 |![Registro](../mockups/Registro.png)|
 |![RegistroJugador](../mockups/Datos_registro.png)|
-|Puedes presionar el boton "player" para registrate como jugador, esto te enviara a un formulario en el cual simplemente debes introducir los datos indicados y presionar "save" para guardar tu perfil |
+|Puedes presionar el boton "player" para registrate como jugador, esto te enviará a un formulario en el cual simplemente debes introducir los datos indicados y presionar "save" para guardar tu perfil.|
 
- ### HGJ2-(ISSUE#50): Hacer log-in ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/50#issue-2565890369]()
-| "Como jugador quiero poder loguearme en el juego para jugar desde mi usuario"| 
+ ### HGJ2-(ISSUE#50): Hacer log-in ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/50#issue-2565890369]())
+| "Como jugador quiero poder loguearme en el juego para jugar desde mi usuario."| 
 |-----|
 |![Login](../mockups/Login.png)|
-|Tienes que rellenar los datos solicitados para verificar que efectivamente es tu usuario, finalmente puedes presionar "Log-in" en el cual si los datos son correctos entraras en tu perfil, caso contrario deberas introducirlos nuevamente |
+|Tienes que rellenar los datos solicitados para verificar que efectivamente es tu usuario, finalmente puedes presionar "Log-in", en el cual si los datos son correctos entrarás en tu perfil, en caso contrario deberás introducirlos nuevamente.|
 
- ### HGJ3-(ISSUE#51): Hacer log-out ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/51#issue-2565892501]()
+ ### HGJ3-(ISSUE#51): Hacer log-out ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/51#issue-2565892501]())
 | "Como jugador quiero poder hacer log-out para salirme de mi usuario y evitar que otras personas lo usen"| 
 |-----|
 |![Logout](../mockups/Logout.png)|
-| Siempre y cuando estes logado, aparecera en el navbar el boton "log-out", una vez presionado ya no estaras logeado en tu perfil |
+|Siempre y cuando estés logado, aparecerá en el navbar el botón "log-out", una vez presionado ya no estarás logado en tu perfil.|
 
- ### HGJ4-(ISSUE#52): Editar perfil de usuario  ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/52#issue-2565901340]()
+ ### HGJ4-(ISSUE#52): Editar perfil de usuario  ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/52#issue-2565901340]())
 | "Como jugador quiero poder editar mi perfil para poner mi información correctamente."| 
 |-----|
 |![Editar perfil](../mockups/Editar_perfil.png)|
 |  |
 
- ### HGA1-(ISSUE#30): Nombre ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/30#issue-2561421045]())
-| "Como admin Quiero ver el listado de usuarios registrados para llevar un control sobre la cantidad de usuarios en el sistema."| 
+ ### HGA1-(ISSUE#30): Listado usuaios registrados ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/30#issue-2561421045]())
+| "Como admin quiero ver el listado de usuarios registrados para llevar un control sobre la cantidad de usuarios en el sistema."| 
 |-----|
 |![Listado de usuarios](../mockups/Listado_usuarios.png)|
-| Se despliega una lista de todos los usuarios registrados en el sistema |
+|Se despliega una lista de todos los usuarios registrados en el sistema.|
 
- ### HGA4-(ISSUE#53): CRUD de usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/53#issue-2565933479]()
+ ### HGA4-(ISSUE#53): CRUD de usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/53#issue-2565933479]())
 | "Como administrador quiero poder crear, ver, actualizar y borrar usuarios para llevar un control adecuado de los usuarios del sistema."|
 |-----|
 |![Listado de usuarios](../mockups/Listado_usuarios.png)|
-| En la lista de usuarios tienes las opciones para editar los datos de los usuarios usando el boton edit, crear uno con el boton "add user" y eliminarlo usando delete, ademas haciendo clieck en el nombre del usuario puedes ver su perfil |
+|En la lista de usuarios tienes las opciones para editar los datos de los usuarios usando el boton "edit", crear uno con el boton "add user" y eliminarlo usando "delete", ademas haciendo click en el nombre del usuario puedes ver su perfil.|
 
- ### HGA5-(ISSUE#54): Restablecer ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/54#issue-2565956464]()
+ ### HGA5-(ISSUE#54): Restablecer ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/54#issue-2565956464]())
 | "Como administrador quiero poder restablecer la contraseña de un usuario para ayudar a los jugadores que hayan olvidado sus credenciales."|
 |-----|
 |![cambio de credenciales](../mockups/Cambio_de_credenciales.png)|
-| en el formulario que aparece puedes modificar los datos en el apartado de contraseña para cambiar las credenciales del usuario especificado |
+|En el formulario que aparece puedes modificar los datos en el apartado de contraseña para cambiar las credenciales del usuario especificado.|
 
 ## Diagrama conceptual del sistema
 _En esta sección proporcionamos un diagrama UML de clases que describe el modelo de datos a implementar en la aplicación. Este diagrama esta anotado con las restricciones simples de los datos a gestionar por la aplicación.

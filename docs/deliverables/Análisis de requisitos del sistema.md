@@ -35,8 +35,6 @@ Si se halla alguna carta 14 de los palos normales, se deberá sumar 10 puntos po
 Jugador: Usuario interesado en jugar al juego de mesa SkullKing desde su dispositivo
 
 Administrador: Persona autorizada a intervenir entre los usuarios y a acceder a la información registrada en la aplicación de las partidas en curso y las finalizadas y de los usuarios registrados.
-Jugador: persona interesada en crear o unirse a una partida del juego de mesa Skull King desde su dispositivo.
-Administrador: persona autorizada a acceder a los datos sobre las partidas y a intervenir entre los usuarios. 
 
 ## Historias de Usuario
 

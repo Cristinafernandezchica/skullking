@@ -32,15 +32,8 @@ Si se halla alguna carta 14 de los palos normales, se deberá sumar 10 puntos po
 
 ## Tipos de Usuarios / Roles
 
-< Nombre Rol >: < Breve descripción del rol >
-
-_Ej1: Propietario: Dueño de una o varias mascota que viene a la clínica para mantenerla sana y cuidar de su salud._
-
-_Ej2: Veterinario: Profesional de la salud animal con titulación universitaria homologada, está registrado en la clínica y se encarga de realizar diagnósticos y recetar tratamientos. Además mantiene actualizado el vademécum._
-
-_Ej3: Administrador: Dueño de la clínica que se encarga de dar de alta veterinarios y gestionar la información registrada en la aplicación de la clínica._
-
-
+Jugador: persona interesada en crear o unirse a una partida del juego de mesa Skull King desde su dispositivo.
+Administrador: persona autorizada a acceder a los datos sobre las partidas y a intervenir entre los usuarios. 
 
 ## Historias de Usuario
 

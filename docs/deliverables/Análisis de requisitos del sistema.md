@@ -149,13 +149,13 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Listado de usuarios](../mockups/Listado_usuarios.png)|
 |Se despliega una lista de todos los usuarios registrados en el sistema.|
 
- ### HGA4-(ISSUE#53): CRUD de usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/53#issue-2565933479]())
+ ### HGA2-(ISSUE#53): CRUD de usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/53#issue-2565933479]())
 | "Como administrador quiero poder crear, ver, actualizar y borrar usuarios para llevar un control adecuado de los usuarios del sistema."|
 |-----|
 |![Listado de usuarios](../mockups/Listado_usuarios.png)|
 |En la lista de usuarios tienes las opciones para editar los datos de los usuarios usando el boton "edit", crear uno con el boton "add user" y eliminarlo usando "delete", ademas haciendo click en el nombre del usuario puedes ver su perfil.|
 
- ### HGA5-(ISSUE#54): Restablecer ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/54#issue-2565956464]())
+ ### HGA3-(ISSUE#54): Restablecer contraseña ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/54#issue-2565956464]())
 | "Como administrador quiero poder restablecer la contraseña de un usuario para ayudar a los jugadores que hayan olvidado sus credenciales."|
 |-----|
 |![cambio de credenciales](../mockups/Cambio_de_credenciales.png)|

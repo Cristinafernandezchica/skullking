@@ -28,6 +28,7 @@ public class User extends BaseEntity {
 	@JoinColumn(name = "authority")
 	Authorities authority;
 
+
 	public Boolean hasAuthority(String auth) {
 		return authority.getAuthority().equals(auth);
 	}

@@ -46,12 +46,14 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Registro](../mockups/Registro.png)|
 |![RegistroJugador](../mockups/Datos_registro.png)|
 |Puedes presionar el boton "player" para registrate como jugador, esto te enviará a un formulario en el cual simplemente debes introducir los datos indicados y presionar "save" para guardar tu perfil.|
+|Caso negativo: Si el usuario ya existe, se mostrará un error en el que se indicará que el usuario está ocupado.|
 
  ### HGJ2-(ISSUE#50): Hacer log-in ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/50#issue-2565890369]())
 | "Como jugador quiero poder loguearme en el juego para jugar desde mi usuario."| 
 |-----|
 |![Login](../mockups/Login.png)|
 |Tienes que rellenar los datos solicitados para verificar que efectivamente es tu usuario, finalmente puedes presionar "Log-in", en el cual si los datos son correctos entrarás en tu perfil, en caso contrario deberás introducirlos nuevamente.|
+|Caso negativo: Si el usuario o la contraseña son incorrectos, se mostrará un error en el que se indicará que los datos de inicio de sesión son incorrectos.|
 
  ### HGJ3-(ISSUE#51): Hacer log-out ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/51#issue-2565892501]())
 | "Como jugador quiero poder hacer log-out para salirme de mi usuario y evitar que otras personas lo usen"| 

@@ -72,7 +72,7 @@ public class SecurityConfiguration {
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/plan")).permitAll()
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users/**")).hasAuthority(ADMIN)
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
-			.anyRequest().authenticated())					
+			.anyRequest().permitAll())					
 			
 			.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);		
 		return http.build();

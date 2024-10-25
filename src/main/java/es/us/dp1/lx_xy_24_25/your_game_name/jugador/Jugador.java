@@ -10,24 +10,26 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode(of="id", callSuper = true)
 public class Jugador extends BaseEntity {
     
-    @Column(name = "puntuacion")
     private Integer puntuacion;
 
     @Column(name = "partida_id")
     private Integer partidaId;
 
-    @JsonBackReference
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
-    
     private User user;
 
+    private Integer turno;
+
+    
 }

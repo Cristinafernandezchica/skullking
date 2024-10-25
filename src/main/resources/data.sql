@@ -21,7 +21,7 @@ INSERT INTO appusers(id,username,password,authority) VALUES (16,'NMY0786','$2a$1
 INSERT INTO appusers(id,username,password,authority) VALUES (17,'PXT3852','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2);
 INSERT INTO appusers(id,username,password,authority) VALUES (18,'DGL2523','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2);
 
-INSERT INTO Jugador(id,puntuacion,partida_id,user_id) VALUES (3,30,3,4);
-INSERT INTO Jugador(id,puntuacion,partida_id,user_id) VALUES (1,15,3,5);
-INSERT INTO Jugador(id,puntuacion,partida_id,user_id) VALUES (2,15,3,5);
-INSERT INTO Jugador(id,puntuacion,partida_id,user_id) VALUES (4,30,3,4);
+INSERT INTO Jugador(id,puntuacion,partida_id,user_id,turno) VALUES (3,30,3,4,1);
+INSERT INTO Jugador(id,puntuacion,partida_id,user_id,turno) VALUES (1,15,3,5,1);
+INSERT INTO Jugador(id,puntuacion,partida_id,user_id,turno) VALUES (2,15,3,5,1);
+INSERT INTO Jugador(id,puntuacion,partida_id,user_id,turno) VALUES (4,30,3,4,1);

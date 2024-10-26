@@ -84,3 +84,23 @@ INSERT INTO Carta(id,  numero, tipo_carta) VALUES (45,  3, 'skullking');
 INSERT INTO Carta(id,  numero, tipo_carta) VALUES (46,  4, 'tigresa');
 INSERT INTO Carta(id,  numero, tipo_carta) VALUES (47, 5, 'banderaBlanca');
 INSERT INTO Carta(id,  numero, tipo_carta) VALUES (48,  6, 'triunfo');
+
+
+-- testeo
+
+INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (1, 4, 5, 3);
+INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (2, 4, 7, 6);
+INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (3, 4, 4, 2);
+
+-- Asignar cartas a la mano 1
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 1);  -- Mano 1 contiene Carta 1
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 2);  -- Mano 1 contiene Carta 2
+
+-- Asignar cartas a la mano 2
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (2, 2);  -- Mano 2 contiene Carta 2
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (2, 3);  -- Mano 2 contiene Carta 3
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (2, 4);  -- Mano 2 contiene Carta 4
+
+-- Asignar cartas a la mano 3
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (3, 1);  -- Mano 3 contiene Carta 1
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (3, 4);  -- Mano 3 contiene Carta 4

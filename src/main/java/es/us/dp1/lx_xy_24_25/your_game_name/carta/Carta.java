@@ -20,4 +20,34 @@ public class Carta extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TipoCarta tipoCarta;
 
+    private String imagenFrontal;   // Imagen parte delantera
+
+    private String imagenTrasera;   // Imagen parte trasera
+
+
+    public Boolean esPersonaje(){
+        return tipoCarta == TipoCarta.pirata||
+           tipoCarta == TipoCarta.sirena ||
+           tipoCarta == TipoCarta.skullking ||
+           tipoCarta == TipoCarta.tigresa;
+    }
+
+    public Boolean esCartaEspecial(){
+        return tipoCarta == TipoCarta.pirata ||
+        tipoCarta == TipoCarta.sirena ||
+        tipoCarta == TipoCarta.skullking ||
+        tipoCarta == TipoCarta.tigresa ||
+        tipoCarta == TipoCarta.banderaBlanca;
+    }
+
+    public Boolean esTriunfo(){
+        return tipoCarta == TipoCarta.triunfo;
+    }
+
+    public Boolean esPaloColor(){
+        return tipoCarta == TipoCarta.morada || 
+                tipoCarta == TipoCarta.amarillo || 
+                tipoCarta == TipoCarta.verde;
+    }
+
 }

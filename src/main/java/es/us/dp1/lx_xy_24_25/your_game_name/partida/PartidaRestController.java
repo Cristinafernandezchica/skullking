@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.YamlProcessor.MatchStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -29,17 +30,17 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/v1/partidas")
 @Tag(name = "Partidas", description = "API par el manejo de las Partidas")
 @SecurityRequirement(name = "bearerAuth")
-public class PartidaController {
+public class PartidaRestController {
 
     PartidaService ps;
     JugadorService js;
-    RondaService rs;
+    // RondaService rs;
 
     @Autowired
-    public PartidaController(PartidaService ps) {
+    public PartidaRestController(PartidaService ps, JugadorService js) {
         this.ps = ps;
         this.js = js;
-        this.rs = rs;
+        // this.rs = rs;
     }
 
     // @RequestParam es para filtrar por esos valores, por tanto no hacen falta los métodos PartidasByName y PartidasByEstado
@@ -84,16 +85,21 @@ public class PartidaController {
     }
 
     // Relación de uno a muchos con la clase Jugador, mirar los nombres de los métodos
+    // TENER EN CUENTA
+    // Te devulve el jugador con la contraseña incluida, para frontend solo queremos el username
     @GetMapping("/{id}/jugadores")
-    public List<Jugador> getJugadoresByPartidaId(@PathVariable("id")Integer id){
-        return js.getJugadoresByPartidaId(id);
+    public ResponseEntity<List<Jugador>> getJugadoresByPartidaId(@PathVariable("id")Integer id){
+        List<Jugador> jugadoresPartida = js.findByPartidaId(id);
+        return ResponseEntity.ok(jugadoresPartida);
     }
 
     // Relación de uno a 10 con la clase Ronda, mirar los nombres de los métodos
+    /* 
     @GetMapping("/{id}/rondas")
     public List<Ronda> getRondasByPartidaId(@PathVariable("id")Integer id){
         return rs.getRondasByPartidaId(id);
     }
+    */
 
     // Para iniciar una partida desde frontend
     @PostMapping("/{id}/iniciar-partida")

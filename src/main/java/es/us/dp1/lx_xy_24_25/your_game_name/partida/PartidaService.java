@@ -18,7 +18,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 public class PartidaService {
 
     PartidaRepository pr;
-    RondaService rs;
+    // RondaService rs;
 
     // JugadorRepository jr;
 
@@ -74,7 +74,7 @@ public class PartidaService {
         Partida partida = partidaOpt.get();
         partida.setEstado(PartidaEstado.JUGANDO);
         partida.setInicio(LocalDateTime.now());
-        rs.iniciarRonda();      // Llama al método que inicia la primera ronda (en RondaService) --> TODO: Revisar nombre método llamada y si contiene atributos a pasar
+        // rs.iniciarRonda();      // Llama al método que inicia la primera ronda (en RondaService) --> TODO: Revisar nombre método llamada y si contiene atributos a pasar
 
     }
 

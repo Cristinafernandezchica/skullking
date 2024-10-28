@@ -22,19 +22,19 @@ import lombok.Setter;
 @Entity
 @EqualsAndHashCode(of="id", callSuper = true)
 public class Jugador extends BaseEntity {
-    
+
     private Integer puntos;
 
 
     @Column(name = "partida_id")
     private Integer partidaId;
 
+    // hacer pull
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     private Integer turno;
-
 
 }

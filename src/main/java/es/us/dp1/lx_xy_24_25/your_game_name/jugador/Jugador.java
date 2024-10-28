@@ -29,6 +29,7 @@ public class Jugador extends BaseEntity {
     @Column(name = "partida_id")
     private Integer partidaId;
 
+    // Relacion con el usuario
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)

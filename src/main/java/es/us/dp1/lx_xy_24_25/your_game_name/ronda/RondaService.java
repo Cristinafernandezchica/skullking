@@ -1,6 +1,5 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.ronda;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,13 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 
 @Service
 public class RondaService {
     
     RondaRepository rr;
+    PartidaService ps;
+    // ManoService ms;
+    BazaService bs;
 
     @Autowired
     public RondaService(RondaRepository rr){
@@ -48,35 +52,40 @@ public class RondaService {
     }
 
     @Transactional
-    public Ronda inicial(Partida partida) {
+    public Ronda iniciarRonda (Partida partida) {
         Ronda ronda = new Ronda();
         ronda.setNumBazas(1);
         ronda.setNumRonda(1);
         ronda.setBazaActual(1);
         ronda.setPartida(partida);
+        // ms.inicioMano()
+        // bs.iniciarBazas()
         return rr.save(ronda);
     }
 
-    // Parida accederá a dicha función proporcionándo el id de la ronda actual
+
+    // Partida accederá a dicha función proporcionándo el id de la ronda actual
     @Transactional
     public Ronda nextRonda(Integer id) {
         Ronda ronda = rr.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Ronda no encontrada"));
-        int nextRonda = ronda.getNumRonda() + 1;
+        Integer nextRonda = ronda.getNumRonda() + 1;
 
-        // IMPORTANTE: habrá que implementar ua comprobación en partida
-        // para cuando se cree la ronda con numRonda = 11 cambiar el estado
-        // de la partida a "finalizada"
-
-        ronda.setNumBazas(nextRonda);
-        ronda.setNumRonda(nextRonda);
-        ronda.setBazaActual(nextRonda);
-
+        // Comprobación si es la última ronda
+        if(nextRonda > 10){
+            ps.finalizarPartida(ronda.getPartida().getId());
+        } else{
+            ronda.setNumBazas(nextRonda);
+            ronda.setNumRonda(nextRonda);
+            ronda.setBazaActual(1);
+            ronda.setEstado(RondaEstado.JUGANDO);
+        }
+        
         return rr.save(ronda);
     }
 
     @Transactional
-    public void finalizarPartida(Integer rondaId){
+    public void finalizarRonda(Integer rondaId){
         Optional<Ronda> rondaOpt = getRondaById(rondaId);
         if (!rondaOpt.isPresent()) {
             throw new ResourceNotFoundException("Ronda no encontrada");
@@ -84,6 +93,7 @@ public class RondaService {
 
         Ronda ronda = rondaOpt.get();
         ronda.setEstado(RondaEstado.FINALIZADA);
+        // ms.calculoPuntaje();
 
         rr.save(ronda);
     }

@@ -27,7 +27,7 @@ public class Jugador extends BaseEntity {
 
 
     @Column(name = "partida_id")
-    private Integer partidaId;
+    private Integer partidaId;      // TODO: Hay que mirar la relacion con partida
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")

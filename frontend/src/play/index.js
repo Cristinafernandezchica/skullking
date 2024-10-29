@@ -7,6 +7,7 @@ import Modal from '../components/modals/informacionSala.js';
 import { Link } from "react-router-dom";
 import { loginFormInputs } from "../play/form/crearSalaInputs.js";
 import tokenService from '../services/token.service.js';
+import CrearPartidaModal from '../components/modals/CrearPartidaModal.js';
 
 
 const jwt = tokenService.getLocalAccessToken();
@@ -16,6 +17,7 @@ export default function Play(){
   const handleCloseModal = () => setModalOpen(false);
   const [jugadores, setJugadores] = useState([{id:1 ,puntuacion: "estoy de manera ilustrativa, no funciono :c "}]);
 
+  /*
   useEffect(() => {
     fetchJugadores();
   }, []);
@@ -37,6 +39,64 @@ const jugadoresList = jugadores.map((jugador) => {
     </tr>
   )
 });
+*/
+const handleConfirm = async (nombrePartida) => {
+  try {
+      const response = await fetch('/api/v1/partidas', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${jwt}`,
+          },
+          body: JSON.stringify({
+              nombre: nombrePartida,
+              inicio: new Date().toISOString(), // Fecha actual en formato ISO
+              estado: "ESPERANDO"
+          }),
+      });
+
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+
+      const partida = await response.json();
+
+      // Crear el jugador que ha creado la partida  -->  Modificación en backend
+      // await createJugador(partida.id, userId)
+
+      console.log('Partida creada:', partida);
+      handleCloseModal();
+  } catch (error) {
+      console.error('Error:', error);
+  }
+}
+
+// Crear el jugador que ha creado la partida
+const createJugador = async (partidaId, userId) => {
+  try {
+      const response = await fetch('/api/v1/jugadores', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${jwt}`,
+          },
+          body: JSON.stringify({
+              usuarioId: userId,
+              partidaId: partidaId
+          }),
+      });
+
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+
+      const jugador = await response.json();
+      console.log('Jugador creado:', jugador);
+  } catch (error) {
+      console.error('Error creando jugador:', error);
+  }
+};
+
 
 
 
@@ -45,7 +105,9 @@ const jugadoresList = jugadores.map((jugador) => {
         <div className="hero-div">
           <h1>Lobby</h1>
           <h3>---</h3>
-          <Button style={{ textDecoration: "none" }} onClick={handleOpenModal}>crear partida</Button>
+          <div style = {{marginBottom: 20}}>
+            <Button outline color="success" onClick={handleOpenModal}>Crear partida</Button>
+          </div>
           <Button outline color="success">
             <Link
               to={`/play`}
@@ -61,8 +123,13 @@ const jugadoresList = jugadores.map((jugador) => {
               <th>Puntuaciones</th>
             </tr>
           </thead>
-          <tbody>{jugadoresList}</tbody>
+          {/*<tbody>{jugadoresList}</tbody>*/}
         </Table>
+        <CrearPartidaModal
+                    isVisible={isModalOpen}
+                    onCancel={handleCloseModal}
+                    onConfirm={handleConfirm}
+                />
         </div>
       </div>
     );

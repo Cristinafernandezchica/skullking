@@ -18,10 +18,7 @@ public class Partida extends BaseEntity{
     
     @NotEmpty
     private String nombre;
-    @NotEmpty
     private LocalDateTime inicio;
-    @NotEmpty
     private LocalDateTime fin;
-    @NotEmpty
     private PartidaEstado estado;
 }

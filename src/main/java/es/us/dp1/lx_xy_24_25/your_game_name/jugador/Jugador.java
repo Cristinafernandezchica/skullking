@@ -22,14 +22,13 @@ import lombok.Setter;
 @Entity
 @EqualsAndHashCode(of="id", callSuper = true)
 public class Jugador extends BaseEntity {
-
+    
     private Integer puntos;
 
 
     @Column(name = "partida_id")
     private Integer partidaId;
 
-    // Relacion con el usuario
     // hacer pull
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")

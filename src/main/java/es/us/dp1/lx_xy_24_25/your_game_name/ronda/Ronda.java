@@ -22,14 +22,15 @@ import lombok.Setter;
 
 public class Ronda extends BaseEntity{
     
-    @NotEmpty
+    //@NotEmpty
     private Integer numRonda;
 
     // TO DO : revision de clases 
-    @NotEmpty
+    //@NotEmpty
     private Integer bazaActual;
 
-    @NotEmpty
+    
+    //@NotEmpty
     private Integer numBazas;
 
     @Enumerated(EnumType.STRING)

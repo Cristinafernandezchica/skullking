@@ -37,7 +37,7 @@ public class RondaController {
 
 
     @GetMapping
-    public List<Ronda> getAllRondas(@ParameterObject() @RequestParam(value="idPartida",required = false) Integer idPartida){
+    public List<Ronda> getAllRondas(){
         return rs.getAllRondas();
     }
 

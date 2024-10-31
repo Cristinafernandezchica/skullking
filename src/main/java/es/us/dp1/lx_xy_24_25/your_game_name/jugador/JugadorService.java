@@ -31,9 +31,9 @@ public class JugadorService {
     public Iterable<Jugador> findAll() {
         return jugadorRepository.findAll();
     }
-    //obtener jugador por id de partida
+    //obtener jugadores por id de partida
     @Transactional
-    public Iterable<Jugador> findByPartidaId(Integer partidaId) {
+    public List<Jugador> findByPartidaId(Integer partidaId) {
         return jugadorRepository.findByPartidaId(partidaId);
     }
     //obtener jugador por pk

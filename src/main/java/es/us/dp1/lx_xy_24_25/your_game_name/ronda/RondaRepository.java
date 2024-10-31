@@ -9,9 +9,7 @@ import java.util.List;
 public interface RondaRepository extends CrudRepository<Ronda, Integer>{
 
     List<Ronda> findAll();
-    List<Ronda> findByName(String name);
 
-    // Para mayor eficiencia en la busqueda por partida
     @Query("SELECT r FROM Ronda r WHERE r.partida.id = :id")
     Optional<Ronda> findByPartidaId(@Param("id") Integer id);
 

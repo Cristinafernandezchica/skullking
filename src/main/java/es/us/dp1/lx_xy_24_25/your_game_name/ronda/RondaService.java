@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 
@@ -17,8 +19,9 @@ public class RondaService {
     
     RondaRepository rr;
     PartidaService ps;
-    // ManoService ms;
+    ManoService ms;
     BazaService bs;
+    JugadorService js;
 
     @Autowired
     public RondaService(RondaRepository rr){
@@ -58,7 +61,7 @@ public class RondaService {
         ronda.setNumRonda(1);
         ronda.setBazaActual(1);
         ronda.setPartida(partida);
-        // ms.inicioMano()
+        // ms.iniciarManos(partida.getId(),1);
         // bs.iniciarBazas()
         return rr.save(ronda);
     }
@@ -70,15 +73,19 @@ public class RondaService {
         Ronda ronda = rr.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Ronda no encontrada"));
         Integer nextRonda = ronda.getNumRonda() + 1;
+        ronda.setEstado(RondaEstado.FINALIZADA);
 
         // Comprobación si es la última ronda
         if(nextRonda > 10){
             ps.finalizarPartida(ronda.getPartida().getId());
         } else{
-            ronda.setNumBazas(nextRonda);
             ronda.setNumRonda(nextRonda);
             ronda.setBazaActual(1);
             ronda.setEstado(RondaEstado.JUGANDO);
+            // ms.iniciarManos(partida.getId(),ronda.getNumRonda());
+            // ronda.setNumBazas(ms.getNumCartasARepartir(ronda.getNumRonda(), 
+            // js.findJugadoresByPartidaId(ronda.getPartida().getId()).size()));
+            // bs.iniciarBazas()
         }
         
         return rr.save(ronda);
@@ -93,7 +100,7 @@ public class RondaService {
 
         Ronda ronda = rondaOpt.get();
         ronda.setEstado(RondaEstado.FINALIZADA);
-        // ms.calculoPuntaje();
+        // ms.calculoPuntaje(ronda.getNumBazas());
 
         rr.save(ronda);
     }

@@ -33,8 +33,8 @@ public class JugadorService {
     }
     //obtener jugadores por id de partida
     @Transactional
-    public List<Jugador> findByPartidaId(Integer partidaId) {
-        return jugadorRepository.findByPartidaId(partidaId);
+    public List<Jugador> findJugadoresByPartidaId(Integer partidaId) {
+        return jugadorRepository.findJugadoresByPartidaId(partidaId);
     }
     //obtener jugador por pk
     @Transactional(readOnly = true)

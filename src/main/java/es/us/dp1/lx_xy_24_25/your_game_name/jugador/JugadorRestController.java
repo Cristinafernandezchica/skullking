@@ -38,8 +38,8 @@ public class JugadorRestController {
         this.jugadorService = jugadorService;
     }
     //get jugador por id
-    @GetMapping(value = "{id}" )
-    public ResponseEntity<List<Jugador>> findJugadoresByPartidaId(@PathVariable("id") Integer partidaId) {
+    @GetMapping(value = "/{partidaId}" )
+    public ResponseEntity<List<Jugador>> findJugadoresByPartidaId(@PathVariable("partidaId") Integer partidaId) {
         List<Jugador> res;
         res = (List<Jugador>) jugadorService.findJugadoresByPartidaId(partidaId);
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -54,7 +54,7 @@ public class JugadorRestController {
     }
     
     //update jugador
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Jugador> putMethodName(@PathVariable Integer id, @RequestBody @Valid Jugador jugador) {
         RestPreconditions.checkNotNull(jugadorService.findById(id), "Jugador", "ID", id);

@@ -32,7 +32,7 @@ public class Jugador extends BaseEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private User user;
+    private User usuario;
 
     private Integer turno;
 

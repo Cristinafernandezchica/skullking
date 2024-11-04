@@ -15,6 +15,7 @@ import UserEditAdmin from "./admin/users/UserEditAdmin";
 import SwaggerDocs from "./public/swagger";
 import Play from "./play";
 import Instructions from "./player/instrucciones";
+import PartidaListAdmin from "./admin/partidas/PartidaListAdmin";
 
 
 function ErrorFallback({ error, resetErrorBoundary }) {
@@ -49,7 +50,8 @@ function App() {
       adminRoutes = (
         <>
           <Route path="/users" exact={true} element={<PrivateRoute><UserListAdmin /></PrivateRoute>} />
-          <Route path="/users/:username" exact={true} element={<PrivateRoute><UserEditAdmin /></PrivateRoute>} />          
+          <Route path="/users/:username" exact={true} element={<PrivateRoute><UserEditAdmin /></PrivateRoute>} />
+          <Route path="/partidas" exact={true} element={<PrivateRoute><PartidaListAdmin /></PrivateRoute>} />          
         </>)
     }
     if (role === "PLAYER") {

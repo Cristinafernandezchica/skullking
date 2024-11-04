@@ -1,6 +1,7 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.partida;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,15 +21,9 @@ public class PartidaService {
     PartidaRepository pr;
     // RondaService rs;
 
-    // JugadorRepository jr;
-
-    // CartaService cs;
-
     @Autowired
     public PartidaService(PartidaRepository pr) {
         this.pr = pr;
-        // this.jr = jr;
-        // this.cr = cr;
     }
 
     // Con este método se puede filtrar por nombre y estado
@@ -41,7 +36,10 @@ public class PartidaService {
         } else if(estado != null){
             return pr.findByEstado(estado);
         } else {
-            return pr.findAll();
+            Iterable<Partida> iterablePartidas = pr.findAll();
+            List<Partida> listaPartidas = new ArrayList<>(); 
+            iterablePartidas.forEach(listaPartidas::add);
+            return listaPartidas;
         }
     }
 
@@ -74,6 +72,7 @@ public class PartidaService {
         Partida partida = partidaOpt.get();
         partida.setEstado(PartidaEstado.JUGANDO);
         partida.setInicio(LocalDateTime.now());
+        save(partida);
         // rs.iniciarRonda();      // Llama al método que inicia la primera ronda (en RondaService) --> TODO: Revisar nombre método llamada y si contiene atributos a pasar
 
     }
@@ -89,6 +88,7 @@ public class PartidaService {
         Partida partida = partidaOpt.get();
         partida.setEstado(PartidaEstado.TERMINADA);
         partida.setFin(LocalDateTime.now());
+        save(partida);
 
     }
 

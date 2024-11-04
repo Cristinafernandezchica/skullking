@@ -1,10 +1,11 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.mano;
 
-import java.util.Set;
+import java.util.List;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.model.BaseEntity;
+import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -34,5 +35,9 @@ public class Mano extends BaseEntity{
         joinColumns = @JoinColumn(name = "mano_id"), // Columna que hace referencia a mano
         inverseJoinColumns = @JoinColumn(name = "carta_id") // Columna que hace referencia a carta
     )
-    private Set<Carta> cartas; // Relación Many-to-Many con Carta
+    private List<Carta> cartas; // Relación Many-to-Many con Carta
+
+    public Boolean esApuestaIgualResultado(){
+        return apuesta == resultado;
+    }
 }

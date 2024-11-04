@@ -26,43 +26,56 @@ import jakarta.validation.Valid;
 @SecurityRequirement(name = "bearerAuth")
 public class ManoRestController {
     
-     private final ManoService ManoService;
+     private final ManoService manoService;
 
 
     @Autowired
-    public ManoRestController(ManoService ManoService, AuthoritiesService authService) {
-        this.ManoService = ManoService;
+    public ManoRestController(ManoService manoService, AuthoritiesService authService) {
+        this.manoService = manoService;
     }
     //get todos los Manoes
     @GetMapping
     public ResponseEntity<List<Mano>> findAll() {
         List<Mano> res;
-        res = (List<Mano>) ManoService.findAll();
+        res = (List<Mano>) manoService.findAll();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
     
     //update Mano
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Mano> putMethodName(@PathVariable Integer id, @RequestBody @Valid Mano Mano) {
-        RestPreconditions.checkNotNull(ManoService.findById(id), "Mano", "ID", id);
-		return new ResponseEntity<>(this.ManoService.updateMano(Mano, id), HttpStatus.OK);
+        RestPreconditions.checkNotNull(manoService.findManoById(id), "Mano", "ID", id);
+		return new ResponseEntity<>(this.manoService.updateMano(Mano, id), HttpStatus.OK);
     }
 
     // crear un nuevo Mano
     @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Mano> create(@RequestBody @Valid Mano Mano) {
-		Mano savedMano = ManoService.saveMano(Mano);
+		Mano savedMano = manoService.saveMano(Mano);
 		return new ResponseEntity<>(savedMano, HttpStatus.CREATED);
 	}
     // borrar un Mano por id
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping(value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<MessageResponse> delete(@PathVariable("id") int id) {
-		RestPreconditions.checkNotNull(ManoService.findById(id), "Mano", "ID", id);
-		ManoService.deleteMano(id);
+		RestPreconditions.checkNotNull(manoService.findManoById(id), "Mano", "ID", id);
+		manoService.deleteMano(id);
 		return new ResponseEntity<>(new MessageResponse("Mano deleted!"), HttpStatus.OK);
 	}
+
+    // provisional para apostar, se necesita en controller para que la pueda llamar 
+    // el frontend ya que es algo que eligen los usuarios
+    // PROVISIONAL -->  NO ES CORRECTA
+    /*
+    @PostMapping("/apostar/{manoId}/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Mano> apostar(@PathVariable Integer manoId) {
+        Mano mano = manoService.findManoById(manoId);
+        RestPreconditions.checkNotNull(mano, "Mano", "ID", manoId);
+        return new ResponseEntity<>(manoService.apostar(mano.getId()), HttpStatus.OK);
+    }
+    */
 
 }

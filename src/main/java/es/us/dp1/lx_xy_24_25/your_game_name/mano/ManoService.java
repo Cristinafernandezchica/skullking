@@ -1,89 +1,104 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.mano;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
+import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
+import es.us.dp1.lx_xy_24_25.your_game_name.carta.CartaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import jakarta.validation.Valid;
 
 @Service
 public class ManoService {
     
-private ManoRepository ManoRepository;
+private ManoRepository manoRepository;
+private CartaService cs;
+private JugadorService js;
 
     @Autowired
-    public ManoService(ManoRepository ManoRepository) {
-        this.ManoRepository = ManoRepository;
+    public ManoService(ManoRepository manoRepository) {
+        this.manoRepository = manoRepository;
     }
 
     //save a Mano en la base de datos
     @Transactional
-    public Mano saveMano(Mano Mano) {
-        return ManoRepository.save(Mano);
+    public Mano saveMano(Mano mano) {
+        return manoRepository.save(mano);
     }
     // listar todos los Manoes de la base de datos
     @Transactional(readOnly = true)
     public Iterable<Mano> findAll() {
-        return ManoRepository.findAll();
+        return manoRepository.findAll();
     }
     //obtener Mano por pk
     @Transactional(readOnly = true)
-    public Mano findById(Integer id) {
-        return ManoRepository.findById(id).orElse(null);
+    public Mano findManoById(Integer id) {
+        return manoRepository.findById(id).orElse(null);
     }
     //borrar Mano por pk
     @Transactional
     public void deleteMano(Integer id) {
-        ManoRepository.deleteById(id);
+        manoRepository.deleteById(id);
     }
     
     //actualizar Mano
     @Transactional
 	public Mano updateMano(@Valid Mano Mano, Integer idToUpdate) {
-		Mano toUpdate = findById(idToUpdate);
+		Mano toUpdate = findManoById(idToUpdate);
 		BeanUtils.copyProperties(Mano, toUpdate, "id");
-		ManoRepository.save(toUpdate);
+		manoRepository.save(toUpdate);
 
 		return toUpdate;
 	}
 
-    /* 
+    // para iniciar las manos de los jugadores
     @Transactional
-    public void calculoPuntaje(Integer numBazas, Integer manoId) {
-        Optional<Mano> manoOpt = getManoById(manoId);
-        if (!manoOpt.isPresent()) {
-            throw new ResourceNotFoundException("Mano no encontrada");
+    public void iniciarManos(Integer partidaId, Integer numRonda){
+        Iterable<Carta> iterableCartas = cs.findAll();
+        List<Carta> listaCartas = new ArrayList<>(); 
+        iterableCartas.forEach(listaCartas::add);
+        Collections.shuffle(listaCartas);   // Barajar cartas
+        List<Jugador> jugadores = js.findJugadoresByPartidaId(partidaId);
+        for(Jugador jugador: jugadores){
+            Mano mano = new Mano();
+            List<Carta> cartasBaraja = listaCartas.subList(0,getNumCartasARepartir(numRonda, jugadores.size()));
+            mano.setJugador(jugador);
+            mano.setApuesta(null);  // Esto lo elige el usuario
+            mano.setResultado(null);    // El resultado se establecerá más tarde
+            mano.setCartas(cartasBaraja);
+            manoRepository.save(mano);
+            cartasBaraja.clear();   // Borramos las cartas de la baraja, para repartir al siguiente jugador
         }
-
-        Mano mano = manoOpt.get();
-        Integer apuesta = mano.getApuesta();
-        Integer resultado = mano.getResultado();
-        Boolean resultApuesta = apuesta.equals(resultado);
-        Integer puntajeRonda = 0;
-
-        if(mano.getApuesta()==0){
-            if(resultApuesta){
-                puntajeRonda += 10*numBazas;
-            }else{
-                puntajeRonda -= 10*numBazas;
-            }
-        }else{
-            if(resultApuesta){
-                puntajeRonda += 20*apuesta;
-            }else{
-                puntajeRonda -= 10*Math.abs(apuesta-resultado);
-            }
-        }
-
-        Jugador jugador = mano.getJugador();
-        jugador.setPuntos(jugador.getPuntos()+puntajeRonda);
-
     }
-        */
+
+    // Numero de cartas a repartir en la ronda
+    public Integer getNumCartasARepartir(Integer numRonda, Integer numJugadores){
+        Integer numCartasTotales = 70;
+        Integer cartasARepartir;
+        if(numCartasTotales / numJugadores >= numRonda){
+            cartasARepartir = numRonda;
+        } else{
+            cartasARepartir = numCartasTotales / numJugadores;
+        }
+        return cartasARepartir;
+    }
+
+    // Crear función apuesta, para poner las apuestas de cada uno de los jugadores
+    // Hay que ponerla en el controlador para que se pueda llamar desde frontend
+    // ya que las apuestas se pondrán en función de lo que elija el usuario
+    // Esta es provisional -->  NO ES CORRECTA
+    public void apostar(Integer apuesta, Integer manoId){
+        Mano mano = findManoById(manoId);
+        mano.setApuesta(apuesta);
+        manoRepository.save(mano);
+    }
+
 
 }

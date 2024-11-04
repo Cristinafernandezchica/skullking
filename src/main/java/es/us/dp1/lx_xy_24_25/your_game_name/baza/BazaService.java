@@ -53,6 +53,4 @@ public class BazaService {
         bazaRepository.save(toUpdate);
         return toUpdate;
     }
-
-    
 }

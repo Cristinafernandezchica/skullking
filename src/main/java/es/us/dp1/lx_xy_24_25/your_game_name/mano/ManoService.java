@@ -1,11 +1,14 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.mano;
 
+import java.util.Optional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import jakarta.validation.Valid;
 
 @Service
@@ -48,5 +51,39 @@ private ManoRepository ManoRepository;
 
 		return toUpdate;
 	}
+
+    /* 
+    @Transactional
+    public void calculoPuntaje(Integer numBazas, Integer manoId) {
+        Optional<Mano> manoOpt = getManoById(manoId);
+        if (!manoOpt.isPresent()) {
+            throw new ResourceNotFoundException("Mano no encontrada");
+        }
+
+        Mano mano = manoOpt.get();
+        Integer apuesta = mano.getApuesta();
+        Integer resultado = mano.getResultado();
+        Boolean resultApuesta = apuesta.equals(resultado);
+        Integer puntajeRonda = 0;
+
+        if(mano.getApuesta()==0){
+            if(resultApuesta){
+                puntajeRonda += 10*numBazas;
+            }else{
+                puntajeRonda -= 10*numBazas;
+            }
+        }else{
+            if(resultApuesta){
+                puntajeRonda += 20*apuesta;
+            }else{
+                puntajeRonda -= 10*Math.abs(apuesta-resultado);
+            }
+        }
+
+        Jugador jugador = mano.getJugador();
+        jugador.setPuntos(jugador.getPuntos()+puntajeRonda);
+
+    }
+        */
 
 }

@@ -17,6 +17,9 @@ export default function Play(){
   const handleCloseModal = () => setModalOpen(false);
   const [jugadores, setJugadores] = useState([{id:1 ,puntuacion: "estoy de manera ilustrativa, no funciono :c "}]);
 
+  // Usuario completo para crear al jugador
+  const user = tokenService.getUser();
+
   /*
   useEffect(() => {
     fetchJugadores();
@@ -40,7 +43,8 @@ const jugadoresList = jugadores.map((jugador) => {
   )
 });
 */
-const handleConfirm = async (nombrePartida) => {
+// para crear la partida
+const crearPartida = async (nombrePartida) => {
   try {
       const response = await fetch('/api/v1/partidas', {
           method: 'POST',
@@ -62,7 +66,7 @@ const handleConfirm = async (nombrePartida) => {
       const partida = await response.json();
 
       // Crear el jugador que ha creado la partida  -->  Modificación en backend
-      // await createJugador(partida.id, userId)
+      await createJugador(partida.id)
 
       console.log('Partida creada:', partida);
       handleCloseModal();
@@ -72,7 +76,7 @@ const handleConfirm = async (nombrePartida) => {
 }
 
 // Crear el jugador que ha creado la partida
-const createJugador = async (partidaId, userId) => {
+const createJugador = async (partidaId) => {
   try {
       const response = await fetch('/api/v1/jugadores', {
           method: 'POST',
@@ -81,8 +85,11 @@ const createJugador = async (partidaId, userId) => {
               'Authorization': `Bearer ${jwt}`,
           },
           body: JSON.stringify({
-              usuarioId: userId,
-              partidaId: partidaId
+              puntos: 0,
+              partidaId: partidaId,
+              usuario: user,
+              turno: 0  // se crea con turno 0, ya que se supone que la partida aún no ha comenzado
+              
           }),
       });
 
@@ -128,7 +135,7 @@ const createJugador = async (partidaId, userId) => {
         <CrearPartidaModal
                     isVisible={isModalOpen}
                     onCancel={handleCloseModal}
-                    onConfirm={handleConfirm}
+                    onConfirm={crearPartida}
                 />
         </div>
       </div>

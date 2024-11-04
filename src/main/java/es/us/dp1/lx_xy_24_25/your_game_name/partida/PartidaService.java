@@ -1,6 +1,7 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.partida;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +36,10 @@ public class PartidaService {
         } else if(estado != null){
             return pr.findByEstado(estado);
         } else {
-            return pr.findAll();
+            Iterable<Partida> iterablePartidas = pr.findAll();
+            List<Partida> listaPartidas = new ArrayList<>(); 
+            iterablePartidas.forEach(listaPartidas::add);
+            return listaPartidas;
         }
     }
 

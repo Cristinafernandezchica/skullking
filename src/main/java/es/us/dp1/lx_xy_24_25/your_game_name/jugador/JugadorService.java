@@ -43,7 +43,7 @@ public class JugadorService {
         return jugadorRepository.findById(id).orElse(null);
     }
 
-        //obtener jugador por id de usuario
+        //obtener mas jugador reciente por id de usuario
     @Transactional(readOnly = true)
     public Jugador findJugadorByUsuarioId(Integer usuarioId) {
        List<Jugador> jugadores =jugadorRepository.findJugadorByUsuarioId(usuarioId);

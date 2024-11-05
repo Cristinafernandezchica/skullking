@@ -37,7 +37,7 @@ public class JugadorRestController {
     public JugadorRestController(JugadorService jugadorService, AuthoritiesService authService) {
         this.jugadorService = jugadorService;
     }
-    //get jugador por id
+    //get jugador por partidaId
     @GetMapping(value = "/{partidaId}" )
     public ResponseEntity<List<Jugador>> findJugadoresByPartidaId(@PathVariable("partidaId") Integer partidaId) {
         List<Jugador> res;
@@ -45,6 +45,14 @@ public class JugadorRestController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
     
+        //get jugador por partidaId
+        @GetMapping(value = "/{usuarioId}/usuario" )
+        public ResponseEntity<Jugador> findJugadoresByUsuarioId(@PathVariable("usuarioId") Integer usuarioId) {
+            Jugador res;
+            res = jugadorService.findJugadorByUsuarioId(usuarioId);
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        }
+
     //get todos los jugadores
     @GetMapping
     public ResponseEntity<List<Jugador>> findAll() {

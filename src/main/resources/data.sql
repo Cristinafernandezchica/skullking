@@ -125,9 +125,9 @@ INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUE
 
 -- testeo
 
-INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (1, 4, 5, 3);
-INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (2, 4, 7, 6);
-INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (3, 4, 4, 2);
+INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (1, 1, 1, 1);
+INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (2, 2, 1, 0);
+INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (3, 3, 0, 0);
 
 -- Asignar cartas a la mano 1
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 1);  -- Mano 1 contiene Carta 1
@@ -144,5 +144,5 @@ INSERT INTO carta_mano(mano_id, carta_id) VALUES (3, 4);  -- Mano 3 contiene Car
 
 
 -- Pruebas para Baza
--- INSERT INTO Baza(id, tipo_carta, jugador_id, carta_id, ronda_id) VALUES (1,'triunfo',1,1,1);
--- INSERT INTO Baza(id, tipo_carta, jugador_id, carta_id, ronda_id) VALUES (2,'pirata',3,8,2);
+INSERT INTO Baza(id, tipo_carta, jugador_id, carta_id, ronda_id) VALUES (1,'triunfo',1,1,1);
+INSERT INTO Baza(id, tipo_carta, jugador_id, carta_id, ronda_id) VALUES (2,'pirata',3,8,2);

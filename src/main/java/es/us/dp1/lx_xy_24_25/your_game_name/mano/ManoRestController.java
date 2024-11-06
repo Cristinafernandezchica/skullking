@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.AuthoritiesService;
 import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -27,11 +29,13 @@ import jakarta.validation.Valid;
 public class ManoRestController {
     
      private final ManoService manoService;
+     private TrucoService trucoService;
 
 
     @Autowired
-    public ManoRestController(ManoService manoService) {
+    public ManoRestController(ManoService manoService, AuthoritiesService authService, TrucoService trucoService) {
         this.manoService = manoService;
+        this.trucoService = trucoService;
     }
     //get todos los Manoes
     @GetMapping
@@ -84,5 +88,11 @@ public class ManoRestController {
         return new ResponseEntity<>(manoService.apostar(mano.getId()), HttpStatus.OK);
     }
     */
+
+    // PETICIÓN PARA OBTENER LOS TRUCOS DE UNA MANO CONCRETA
+    @GetMapping(value = "{manoId}/trucos")
+	public ResponseEntity<List<Truco>> findTrucosByManoId(@PathVariable("manoId") int id) {
+		return new ResponseEntity<>(trucoService.findTrucosByManoId(id), HttpStatus.OK);
+	}
 
 }

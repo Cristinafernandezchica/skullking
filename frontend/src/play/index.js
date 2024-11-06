@@ -8,17 +8,19 @@ import { Link } from "react-router-dom";
 import { loginFormInputs } from "../play/form/crearSalaInputs.js";
 import tokenService from '../services/token.service.js';
 import CrearPartidaModal from '../components/modals/CrearPartidaModal.js';
+import { useNavigate } from 'react-router-dom';
+import useFetchState from '../util/useFetchState.js';
 
-
+const user = tokenService.getUser();
 const jwt = tokenService.getLocalAccessToken();
 export default function Play(){
   const [isModalOpen, setModalOpen] = useState(false);
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
   const [jugadores, setJugadores] = useState([{id:1 ,puntuacion: "estoy de manera ilustrativa, no funciono :c "}]);
-
-  // Usuario completo para crear al jugador
-  const user = tokenService.getUser();
+  const[partida, setPartida] = useState();
+  const navigate = useNavigate();
+  //const [jugador, setJugador] = useFetchState([], `/api/v1/`, jwt);
 
   /*
   useEffect(() => {
@@ -55,7 +57,8 @@ const crearPartida = async (nombrePartida) => {
           body: JSON.stringify({
               nombre: nombrePartida,
               inicio: new Date().toISOString(), // Fecha actual en formato ISO
-              estado: "ESPERANDO"
+              estado: "ESPERANDO",
+              //ownerPartida: user.jugador.id
           }),
       });
 
@@ -64,18 +67,26 @@ const crearPartida = async (nombrePartida) => {
       }
 
       const partida = await response.json();
+      console.log('Partida creada:', partida);
 
       // Crear el jugador que ha creado la partida  -->  Modificación en backend
       await createJugador(partida.id)
 
-      console.log('Partida creada:', partida);
+      
+      /*
+      console.log('Redireccionando a la sala de espera...');
+      navigate('/salaEspera/' + partidaCreada.id);
+      */
       handleCloseModal();
+      return partida.id;
   } catch (error) {
       console.error('Error:', error);
+      console.log('Partida creada:', partida);
   }
 }
 
 // Crear el jugador que ha creado la partida
+//TODO: se crean 20 jugadores por la cara
 const createJugador = async (partidaId) => {
   try {
       const response = await fetch('/api/v1/jugadores', {
@@ -89,7 +100,6 @@ const createJugador = async (partidaId) => {
               partidaId: partidaId,
               usuario: user,
               turno: 0  // se crea con turno 0, ya que se supone que la partida aún no ha comenzado
-              
           }),
       });
 
@@ -104,13 +114,10 @@ const createJugador = async (partidaId) => {
   }
 };
 
-
-
-
     return (
       <div className="home-page-container">
         <div className="hero-div">
-          <h1>Lobby</h1>
+          <h1>Crear sala</h1>
           <h3>---</h3>
           <div style = {{marginBottom: 20}}>
             <Button outline color="success" onClick={handleOpenModal}>Crear partida</Button>

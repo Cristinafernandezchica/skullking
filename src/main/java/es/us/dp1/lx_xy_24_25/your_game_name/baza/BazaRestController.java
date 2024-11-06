@@ -8,7 +8,10 @@ import org.springframework.http.ResponseEntity;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +37,7 @@ import jakarta.validation.Valid;
 public class BazaRestController {
     
     private final BazaService bs;
+    private TrucoService trucoService;
 
     @Autowired
     public BazaRestController(BazaService bs){
@@ -85,5 +89,17 @@ public class BazaRestController {
         Baza bazaById = bs.findById(id);
         return bazaById.getGanador();
     }
+
+    // PETICIÓN PARA OBTENER LOS TRUCOS DE UNA BAZA CONCRETA
+    @GetMapping(value = "{bazaId}/trucos")
+	public ResponseEntity<List<Truco>> findTrucosByBazaId(@PathVariable("bazaId") int id) {
+		return new ResponseEntity<>(trucoService.findTrucosByBazaId(id), HttpStatus.OK);
+	}
+
+    // PETICIÓN PARA OBTENER LAS CARTAS DE UNA BAZA POR JUGADOR ORDENADAS POR TURNO
+    @GetMapping(value = "{bazaId}/cartasJugadores")
+	public ResponseEntity<Map<Integer, Integer>> findCartasPorJugadorByBazaId(@PathVariable("bazaId") int id) {
+		return new ResponseEntity<>(trucoService.getCartaByJugador(id), HttpStatus.OK);
+	}
 
 }

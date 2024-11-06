@@ -14,6 +14,7 @@ import UserListAdmin from "./admin/users/UserListAdmin";
 import UserEditAdmin from "./admin/users/UserEditAdmin";
 import SwaggerDocs from "./public/swagger";
 import Play from "./play";
+import SalaEspera from "./salaEspera";
 import Instructions from "./player/instrucciones";
 import PartidaListAdmin from "./admin/partidas/PartidaListAdmin";
 
@@ -57,8 +58,8 @@ function App() {
     if (role === "PLAYER") {
       ownerRoutes = (
         <>
-         
           <Route path="/Play" exact={true} element={<PrivateRoute><Play/></PrivateRoute>} />
+          <Route path="/SalaEspera/:id" exact={true} element={<PrivateRoute><SalaEspera/></PrivateRoute>} />
         </>)
     }    
   })

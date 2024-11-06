@@ -77,4 +77,12 @@ public class JugadorRestController {
 		return new ResponseEntity<>(new MessageResponse("Jugador deleted!"), HttpStatus.OK);
 	}
 
+    //get jugador por usuarioId
+    @GetMapping(value = "/{usuarioId}/usuario" )
+    public ResponseEntity<Jugador> findJugadoresByUsuarioId(@PathVariable("usuarioId") Integer usuarioId) {
+        Jugador res;
+        res = jugadorService.findJugadorByUsuarioId(usuarioId);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
 }

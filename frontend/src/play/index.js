@@ -4,7 +4,7 @@ import '../static/css/home/home.css';
 import FormGenerator from "../components/formGenerator/formGenerator";
 import { Button, Table } from "reactstrap";
 import Modal from '../components/modals/informacionSala.js';
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { loginFormInputs } from "../play/form/crearSalaInputs.js";
 import tokenService from '../services/token.service.js';
 import CrearPartidaModal from '../components/modals/CrearPartidaModal.js';
@@ -15,6 +15,7 @@ export default function Play(){
   const [isModalOpen, setModalOpen] = useState(false);
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
+  const navigate = useNavigate();
   const [jugadores, setJugadores] = useState([{id:1 ,puntuacion: "estoy de manera ilustrativa, no funciono :c "}]);
 
   // Usuario completo para crear al jugador
@@ -64,12 +65,13 @@ const crearPartida = async (nombrePartida) => {
       }
 
       const partida = await response.json();
-
+       console.log('Partida creada:', partida);
       // Crear el jugador que ha creado la partida  -->  Modificación en backend
-      await createJugador(partida.id)
-
+      await createJugador(partida)
+      navigate(`/play/${partida.id}/jugando`);
       console.log('Partida creada:', partida);
       handleCloseModal();
+      
   } catch (error) {
       console.error('Error:', error);
   }
@@ -86,7 +88,7 @@ const createJugador = async (partidaId) => {
           },
           body: JSON.stringify({
               puntos: 0,
-              partidaId: partidaId,
+              partida: partidaId,
               usuario: user,
               turno: 0  // se crea con turno 0, ya que se supone que la partida aún no ha comenzado
               
@@ -103,6 +105,7 @@ const createJugador = async (partidaId) => {
       console.error('Error creando jugador:', error);
   }
 };
+
 
 
 

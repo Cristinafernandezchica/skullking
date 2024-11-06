@@ -25,6 +25,8 @@ public class Mano extends BaseEntity{
     @JoinColumn(name = "jugador_id")
     private Jugador jugador;
 
+    
+
     private Integer apuesta;
 
     private Integer resultado;
@@ -40,4 +42,5 @@ public class Mano extends BaseEntity{
     public Boolean esApuestaIgualResultado(){
         return apuesta == resultado;
     }
+    
 }

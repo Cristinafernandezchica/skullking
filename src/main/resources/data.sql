@@ -21,19 +21,16 @@ INSERT INTO appusers(id,username,password,authority) VALUES (16,'NMY0786','$2a$1
 INSERT INTO appusers(id,username,password,authority) VALUES (17,'PXT3852','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2);
 INSERT INTO appusers(id,username,password,authority) VALUES (18,'DGL2523','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2);
 
-INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (3,30,3,4,1);
-INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (1,15,3,5,1);
-INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (2,15,3,5,1);
-INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (4,30,3,4,1);
+
 
 
 
 -- moradas
 
 
-INSERT INTO Carta(id, numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (1, 1, 'morada', './images/cartas/morada_1.png', './images/cartas/parte_trasera.png');
-INSERT INTO Carta(id, numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (2, 2, 'morada', './images/cartas/morada_2.png', './images/cartas/parte_trasera.png');
-INSERT INTO Carta(id, numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (3, 3, 'morada', './images/cartas/morada_3.png', './images/cartas/parte_trasera.png');
+INSERT INTO Carta(id, numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (1, 1, 'morada', 'morada_1.png', './images/cartas/parte_trasera.png');
+INSERT INTO Carta(id, numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (2, 2, 'morada', 'morada_2.png', './images/cartas/parte_trasera.png');
+INSERT INTO Carta(id, numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (3, 3, 'morada', 'morada_3.png', './images/cartas/parte_trasera.png');
 INSERT INTO Carta(id, numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (4, 4, 'morada', './images/cartas/morada_4.png', './images/cartas/parte_trasera.png');
 INSERT INTO Carta(id, numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (5, 5, 'morada', './images/cartas/morada_5.png', './images/cartas/parte_trasera.png');
 INSERT INTO Carta(id, numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (6, 6, 'morada', './images/cartas/morada_6.png', './images/cartas/parte_trasera.png');
@@ -125,22 +122,24 @@ INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUE
 
 -- testeo
 
+
+INSERT INTO Partida(id,nombre,inicio,fin,estado) VALUES (3,'carmelito',null,null,null);
+
+INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (3,30,3,4,0);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (1,15,3,5,1);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (2,15,3,5,1);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (4,30,3,4,1);
+
+
+
 INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (1, 4, 5, 3);
-INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (2, 4, 7, 6);
-INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (3, 4, 4, 2);
 
 -- Asignar cartas a la mano 1
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 1);  -- Mano 1 contiene Carta 1
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 2);  -- Mano 1 contiene Carta 2
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 3);  -- Mano 1 contiene Carta 2
 
--- Asignar cartas a la mano 2
-INSERT INTO carta_mano(mano_id, carta_id) VALUES (2, 2);  -- Mano 2 contiene Carta 2
-INSERT INTO carta_mano(mano_id, carta_id) VALUES (2, 3);  -- Mano 2 contiene Carta 3
-INSERT INTO carta_mano(mano_id, carta_id) VALUES (2, 4);  -- Mano 2 contiene Carta 4
 
--- Asignar cartas a la mano 3
-INSERT INTO carta_mano(mano_id, carta_id) VALUES (3, 1);  -- Mano 3 contiene Carta 1
-INSERT INTO carta_mano(mano_id, carta_id) VALUES (3, 4);  -- Mano 3 contiene Carta 4
 
 
 -- Pruebas para Baza

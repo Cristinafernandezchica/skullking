@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.model.BaseEntity;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,8 +27,9 @@ public class Jugador extends BaseEntity {
     private Integer puntos;
 
 
-    @Column(name = "partida_id")
-    private Integer partidaId;      // TODO: Hay que mirar la relacion con partida
+    @ManyToOne
+    @JoinColumn(name = "partida_id")
+    private Partida partida;      // TODO: Hay que mirar la relacion con partida
 
     // hacer pull
     @ManyToOne(optional = false)

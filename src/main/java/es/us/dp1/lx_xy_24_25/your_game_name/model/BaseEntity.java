@@ -36,7 +36,7 @@ public class BaseEntity {
 	@Id
 	@SequenceGenerator(name = "entity_seq", 
         sequenceName = "entity_sequence", 
-        initialValue = 1)	// Cambio a id inicial 1
+        initialValue = 100)	// Cambio a id inicial 1
 	@GeneratedValue(strategy = GenerationType.SEQUENCE	, generator = "entity_seq")
 	protected Integer id;
 

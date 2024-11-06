@@ -43,12 +43,12 @@ public class JugadorService {
         return jugadorRepository.findById(id).orElse(null);
     }
 
-        //obtener mas jugador reciente por id de usuario
+    //obtener mas jugador reciente por id de usuario
     @Transactional(readOnly = true)
     public Jugador findJugadorByUsuarioId(Integer usuarioId) {
        List<Jugador> jugadores =jugadorRepository.findJugadorByUsuarioId(usuarioId);
        Jugador jugadoresOrdenados = jugadores.stream()
-                .sorted((j1, j2) -> j2.getUsuario().getId().compareTo(j1.getUsuario().getId())) // Orden descendente
+                .sorted((j1, j2) -> j2.getId().compareTo(j1.getId())) // Orden descendente
                 .findFirst().orElse(null);
                 return jugadoresOrdenados;
     }

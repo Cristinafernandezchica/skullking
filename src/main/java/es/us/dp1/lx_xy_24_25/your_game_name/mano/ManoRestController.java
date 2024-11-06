@@ -30,7 +30,7 @@ public class ManoRestController {
 
 
     @Autowired
-    public ManoRestController(ManoService manoService, AuthoritiesService authService) {
+    public ManoRestController(ManoService manoService) {
         this.manoService = manoService;
     }
     //get todos los Manoes
@@ -64,6 +64,13 @@ public class ManoRestController {
 		manoService.deleteMano(id);
 		return new ResponseEntity<>(new MessageResponse("Mano deleted!"), HttpStatus.OK);
 	}
+
+    @GetMapping("/{jugadorId}")
+    public ResponseEntity<Mano> findManoByJugadorId(@PathVariable("jugadorId") Integer jugadorId) {
+        Mano res;
+        res = manoService.findLastManoByJugadorId(jugadorId);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 
     // provisional para apostar, se necesita en controller para que la pueda llamar 
     // el frontend ya que es algo que eligen los usuarios

@@ -45,7 +45,7 @@ public class JugadorRestController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
     
-        //get jugador por partidaId
+        //get jugador por usuarioId
         @GetMapping(value = "/{usuarioId}/usuario" )
         public ResponseEntity<Jugador> findJugadoresByUsuarioId(@PathVariable("usuarioId") Integer usuarioId) {
             Jugador res;

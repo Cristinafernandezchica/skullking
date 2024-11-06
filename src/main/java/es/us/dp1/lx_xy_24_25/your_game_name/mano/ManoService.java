@@ -23,8 +23,10 @@ private CartaService cs;
 private JugadorService js;
 
     @Autowired
-    public ManoService(ManoRepository manoRepository) {
+    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorService js) {
         this.manoRepository = manoRepository;
+        this.cs = cs;
+        this.js = js;
     }
 
     //save a Mano en la base de datos
@@ -98,6 +100,14 @@ private JugadorService js;
         Mano mano = findManoById(manoId);
         mano.setApuesta(apuesta);
         manoRepository.save(mano);
+    }
+    @Transactional(readOnly = true)
+    public Mano findLastManoByJugadorId(Integer jugadorId){
+        List<Mano> res =manoRepository.findAllManoByJugadorId(jugadorId);
+        Mano ultimaManoCreada = res.stream()
+        .sorted((j1, j2) -> j2.getId().compareTo(j1.getId())) // Orden descendente
+        .findFirst().orElse(null);
+        return ultimaManoCreada;
     }
 
 

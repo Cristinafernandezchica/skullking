@@ -16,7 +16,7 @@ import SwaggerDocs from "./public/swagger";
 import Play from "./play";
 import Instructions from "./player/instrucciones";
 import PartidaListAdmin from "./admin/partidas/PartidaListAdmin";
-
+import Jugando from "./play/jugando";
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
@@ -57,7 +57,7 @@ function App() {
     if (role === "PLAYER") {
       ownerRoutes = (
         <>
-         
+          <Route path="/Play/:partidaId/jugando" exact={true} element={<PrivateRoute><Jugando/></PrivateRoute>} />
           <Route path="/Play" exact={true} element={<PrivateRoute><Play/></PrivateRoute>} />
         </>)
     }    

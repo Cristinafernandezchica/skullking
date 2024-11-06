@@ -1,0 +1,42 @@
+.sala-espera{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background-color: rgba(17, 62, 88, 0.804);
+    background-image: url('../../images/gamelogo_sin_fondo.png');
+    background-repeat: no-repeat; 
+    background-size: contain; 
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.hero-div-sala-espera{
+    background-color: rgba(255, 254, 254, 0.332);
+    padding: 2rem;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+.hero-div-sala-espera h1{
+    font-family:Arial, Helvetica, sans-serif ;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #040400;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.tabla-coqueta { width: 100%; border-collapse: collapse; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); margin: 20px 0; font-size: 1.2em; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; } 
+.tabla-coqueta thead { background-color: #4CAF50; color: white; } 
+.tabla-coqueta th, .tabla-coqueta td { padding: 12px 15px; border: 1px solid #ddd; text-align: left; } 
+.tabla-coqueta tbody tr:nth-child(even) { background-color: #f9f9f9; } 
+.tabla-coqueta tbody tr:hover { background-color: #47c378; } 
+.tabla-container { padding: 20px; border-radius: 10px; background-color: rgba(17, 62, 88, 0.804);}

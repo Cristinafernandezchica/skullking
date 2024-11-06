@@ -4,12 +4,10 @@ import { useNavigate } from 'react-router-dom'; // Asegúrate de importar useNav
 
 export default function CrearPartidaModal({ isVisible, onCancel, onConfirm }) {
     const [nombrePartida, setNombrePartida] = useState('');
-    const navigate = useNavigate(); // Inicializa useNavigate
 
     const handleConfirmClick = async () => {
         const partidaId = await onConfirm(nombrePartida);
         setNombrePartida('');
-        navigate(`/salaEspera/${partidaId}`); // Redirige a /salaEspera después de confirmar
     
     };
 

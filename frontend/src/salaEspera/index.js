@@ -12,10 +12,7 @@ const user = tokenService.getUser();
 
 export default function SalaEspera() {
   const navigate = useNavigate();
-
   const id = getIdFromUrl(2);
-
-
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
   const [jugadores, setJugadores] = useFetchState([], `/api/v1/partidas/${id}/jugadores`, jwt, setMessage, setVisible);
@@ -95,11 +92,10 @@ export default function SalaEspera() {
     <div className="sala-espera">
       <div className="hero-div-sala-espera">
         <h1>Lobby</h1>
-        <div style={{ marginBottom: 20 }}>
-           
+       { partida!==null && partida.ownerPartida ===user.id && <div style={{ marginBottom: 20 }}>
             <Button outline color="success" onClick={iniciarPartida}>Iniciar Partida</Button>
 
-        </div>
+        </div>}
         <div className="tabla-container">
         <Table aria-label="users" className="mt-4">
           <thead>

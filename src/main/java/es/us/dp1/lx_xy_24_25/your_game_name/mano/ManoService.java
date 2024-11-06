@@ -63,9 +63,7 @@ private JugadorService js;
     // para iniciar las manos de los jugadores
     @Transactional
     public void iniciarManos(Integer partidaId, Integer numRonda){
-        Iterable<Carta> iterableCartas = cs.findAll();
-        List<Carta> listaCartas = new ArrayList<>(); 
-        iterableCartas.forEach(listaCartas::add);
+        List<Carta> listaCartas =(List<Carta>) cs.findAll();
         Collections.shuffle(listaCartas);   // Barajar cartas
         List<Jugador> jugadores = js.findJugadoresByPartidaId(partidaId);
         for(Jugador jugador: jugadores){

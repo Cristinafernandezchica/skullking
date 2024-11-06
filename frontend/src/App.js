@@ -58,8 +58,9 @@ function App() {
     if (role === "PLAYER") {
       ownerRoutes = (
         <>
-          <Route path="/Play" exact={true} element={<PrivateRoute><Play/></PrivateRoute>} />
-          <Route path="/SalaEspera/:id" exact={true} element={<PrivateRoute><SalaEspera/></PrivateRoute>} />
+          <Route path="/play" exact={true} element={<PrivateRoute><Play/></PrivateRoute>} />
+          <Route path="/salaEspera/:partidaId" exact={true} element={<PrivateRoute><SalaEspera/></PrivateRoute>} />
+          <Route path="/tablero/:partidaId" exact={true} element={<PrivateRoute><Jugando/></PrivateRoute>} />
         </>)
     }    
   })

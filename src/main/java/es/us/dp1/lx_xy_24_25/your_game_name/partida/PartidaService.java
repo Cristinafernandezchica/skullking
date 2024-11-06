@@ -11,12 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
+import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 
 @Service
 public class PartidaService {
 
     PartidaRepository pr;
-    // RondaService rs;
+    RondaService rs;
 
     @Autowired
     public PartidaService(PartidaRepository pr) {
@@ -71,7 +72,7 @@ public class PartidaService {
         partida.setInicio(LocalDateTime.now());
         partida.setOwnerPartida(null);
         save(partida);
-        // rs.iniciarRonda();      // Llama al método que inicia la primera ronda (en RondaService) --> TODO: Revisar nombre método llamada y si contiene atributos a pasar
+        rs.iniciarRonda(partida);      // Llama al método que inicia la primera ronda (en RondaService) --> TODO: Revisar nombre método llamada y si contiene atributos a pasar
 
     }
 

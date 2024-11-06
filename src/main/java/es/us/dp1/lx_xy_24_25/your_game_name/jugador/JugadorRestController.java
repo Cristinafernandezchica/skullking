@@ -37,17 +37,17 @@ public class JugadorRestController {
     public JugadorRestController(JugadorService jugadorService, AuthoritiesService authService) {
         this.jugadorService = jugadorService;
     }
-    //get jugador por partidaId
-    @GetMapping(value = "/{partidaId}" )
-    public ResponseEntity<List<Jugador>> findJugadoresByPartidaId(@PathVariable("partidaId") Integer partidaId) {
-        List<Jugador> res;
-        res = (List<Jugador>) jugadorService.findJugadoresByPartidaId(partidaId);
+    //get jugador por id
+    @GetMapping(value = "/{id}" )
+    public ResponseEntity<Jugador> findJugadorById(@PathVariable("id") Integer id) {
+        Jugador res;
+        res = jugadorService.findById(id);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
     
         //get jugador por usuarioId
         @GetMapping(value = "/{usuarioId}/usuario" )
-        public ResponseEntity<Jugador> findJugadoresByUsuarioId(@PathVariable("usuarioId") Integer usuarioId) {
+        public ResponseEntity<Jugador> findJugadorByUsuarioId(@PathVariable("usuarioId") Integer usuarioId) {
             Jugador res;
             res = jugadorService.findJugadorByUsuarioId(usuarioId);
             return new ResponseEntity<>(res, HttpStatus.OK);
@@ -84,13 +84,5 @@ public class JugadorRestController {
 		jugadorService.deleteJugador(id);
 		return new ResponseEntity<>(new MessageResponse("Jugador deleted!"), HttpStatus.OK);
 	}
-
-    //get jugador por usuarioId
-    @GetMapping(value = "/{usuarioId}/usuario" )
-    public ResponseEntity<Jugador> findJugadoresByUsuarioId(@PathVariable("usuarioId") Integer usuarioId) {
-        Jugador res;
-        res = jugadorService.findJugadorByUsuarioId(usuarioId);
-        return new ResponseEntity<>(res, HttpStatus.OK);
-    }
 
 }

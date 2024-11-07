@@ -27,6 +27,5 @@ public class Partida extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private PartidaEstado estado;
 
-    @Nullable
     private Integer ownerPartida;
 }

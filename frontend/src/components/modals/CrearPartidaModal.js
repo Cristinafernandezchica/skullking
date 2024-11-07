@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Input, FormGroup, Label } from 'reactstrap';
+import { useNavigate } from 'react-router-dom'; // Asegúrate de importar useNavigate
 
 export default function CrearPartidaModal({ isVisible, onCancel, onConfirm }) {
     const [nombrePartida, setNombrePartida] = useState('');
+    const navigate = useNavigate(); // Inicializa useNavigate
 
-    const handleConfirmClick = () => {
-        onConfirm(nombrePartida);
+    const handleConfirmClick = async () => {
+        const partidaId = await onConfirm(nombrePartida);
         setNombrePartida('');
+        navigate(`/salaEspera/${partidaId}`); // Redirige a /salaEspera después de confirmar
+    
     };
 
     return (
         <Modal isOpen={isVisible} toggle={onCancel}>
-            <ModalHeader toggle={onCancel}>CREAR PARTIDA</ModalHeader>
+            <ModalHeader toggle={onCancel}>Crear partida</ModalHeader>
             <ModalBody>
                 <FormGroup>
                     <Label for="nombrePartida">Nombre de la partida</Label>

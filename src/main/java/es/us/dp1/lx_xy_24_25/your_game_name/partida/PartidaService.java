@@ -9,11 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
-import es.us.dp1.lx_xy_24_25.your_game_name.carta.CartaRepository;
-import es.us.dp1.lx_xy_24_25.your_game_name.carta.CartaService;
+
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
-import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 
 @Service
 public class PartidaService {
@@ -72,6 +69,7 @@ public class PartidaService {
         Partida partida = partidaOpt.get();
         partida.setEstado(PartidaEstado.JUGANDO);
         partida.setInicio(LocalDateTime.now());
+        partida.setOwnerPartida(null);
         save(partida);
         // rs.iniciarRonda();      // Llama al método que inicia la primera ronda (en RondaService) --> TODO: Revisar nombre método llamada y si contiene atributos a pasar
 

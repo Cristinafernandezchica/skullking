@@ -10,6 +10,8 @@ public interface RondaRepository extends CrudRepository<Ronda, Integer>{
 
     List<Ronda> findAll();
 
+    Optional<Ronda> findById(Integer id);
+
     @Query("SELECT r FROM Ronda r WHERE r.partida.id = :id")
     Optional<Ronda> findByPartidaId(@Param("id") Integer id);
 

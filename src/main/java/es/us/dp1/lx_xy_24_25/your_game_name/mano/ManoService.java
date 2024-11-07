@@ -73,7 +73,9 @@ private JugadorService js;
             mano.setJugador(jugador);
             mano.setApuesta(null);  // Esto lo elige el usuario
             mano.setResultado(null);    // El resultado se establecerá más tarde
-            mano.setCartas(cartasBaraja);
+            List<Carta> cartaMano= new ArrayList<Carta>();
+            cartaMano.addAll(cartasBaraja);
+            mano.setCartas(cartaMano);
             mano.setTruco(null);
             mano.setRonda(ronda);
             manoRepository.save(mano);

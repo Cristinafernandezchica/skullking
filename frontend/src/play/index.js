@@ -5,7 +5,6 @@ import { Button, Table } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
 import tokenService from '../services/token.service.js';
 import CrearPartidaModal from '../components/modals/CrearPartidaModal.js';
-import useFetchState from '../util/useFetchState.js';
 import UnirPartidaModal from '../components/modals/UnirPartidaModal.js'
 
 
@@ -15,19 +14,14 @@ export default function Play(){
   const [isModalOpen, setModalOpen] = useState(false);
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
-
-  const[partida, setPartida] = useState();
   const navigate = useNavigate();
-
+  const user = tokenService.getUser();
   // Para modal unirse a partida
   const [isUnionModalOpen, setUnionModalOpen] = useState(false);
   const handleOpenUnionModal = () => setUnionModalOpen(true);
   const handleCloseUnionModal = () => setUnionModalOpen(false);
 
-  /*
-  useEffect(() => {
-    fetchJugadores();
-  }, []);
+
 
 // para crear la partida
 const crearPartida = async (nombrePartida) => {
@@ -51,7 +45,7 @@ const crearPartida = async (nombrePartida) => {
       }
 
       const partida = await response.json();
-       console.log('Partida creada:', partida);
+      console.log('Partida creada:', partida);
       // Crear el jugador que ha creado la partida  -->  Modificación en backend
       await createJugador(partida)
       navigate(`/salaEspera/${partida.id}`);
@@ -134,14 +128,6 @@ const unirseAPartida = async (partidaId) => {
             <Button outline color="success" onClick={handleOpenUnionModal}>Unirse a una partida</Button>
           </div>
 
-          <Table aria-label="jugadores" className="mt-4">
-          <thead>
-            <tr>
-              <th>Puntuaciones</th>
-            </tr>
-          </thead>
-          {/*<tbody>{jugadoresList}</tbody>*/}
-        </Table>
         <CrearPartidaModal
           isVisible={isModalOpen}
           onCancel={handleCloseModal}

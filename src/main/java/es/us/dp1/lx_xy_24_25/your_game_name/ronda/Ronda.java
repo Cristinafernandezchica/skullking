@@ -18,7 +18,6 @@ import lombok.Setter;
 @Setter
 @Entity
 @EqualsAndHashCode(of = "id")
-@Table(name = "rondas")
 
 public class Ronda extends BaseEntity{
     
@@ -34,7 +33,6 @@ public class Ronda extends BaseEntity{
     private Integer numBazas;
 
     @Enumerated(EnumType.STRING)
-    @NotNull
     private RondaEstado estado;
 
     @ManyToOne(optional=false)

@@ -71,7 +71,6 @@ public class BazaRestController {
     public ResponseEntity<Baza> updateBaza(@Valid @RequestBody Baza b,@PathVariable("id")Integer id){
         RestPreconditions.checkNotNull(bs.findById(id), "Baza", "id", id);
 		return new ResponseEntity<>(this.bs.updateBaza(b,id), HttpStatus.OK);
-
     }
 
     // Delete una baza existente
@@ -102,4 +101,9 @@ public class BazaRestController {
 		return new ResponseEntity<>(trucoService.getCartaByJugador(id), HttpStatus.OK);
 	}
 
+    // PETICION PARA OBTENER LA ULTIMA BAZA DE UNA RONDA EN CONCRETA
+    @GetMapping(value = "{rondaId}/ultimaBaza")
+    public ResponseEntity<Baza> findUltimaBazaByRondaId(@PathVariable("rondaId") Integer rondaId) {
+        return new ResponseEntity<>(bs.findUltimaBazaByRondaId(rondaId), HttpStatus.OK);
+    }
 }

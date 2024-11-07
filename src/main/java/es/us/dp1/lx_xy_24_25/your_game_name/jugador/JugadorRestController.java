@@ -38,10 +38,10 @@ public class JugadorRestController {
         this.jugadorService = jugadorService;
     }
     //get jugador por id
-    @GetMapping(value = "/{id}" )
-    public ResponseEntity<Jugador> findJugadorById(@PathVariable("id") Integer id) {
-        Jugador res;
-        res = jugadorService.findById(id);
+    @GetMapping(value = "/{partidaId}" )
+    public ResponseEntity<List<Jugador>> findJugadoresByPartidaid(@PathVariable("partidaId") Integer partidaId) {
+        List<Jugador> res;
+        res = jugadorService.findJugadoresByPartidaId(partidaId);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
     

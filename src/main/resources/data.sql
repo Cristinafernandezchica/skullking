@@ -140,7 +140,9 @@ INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 1);  -- Mano 1 contiene Car
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 2);  -- Mano 1 contiene Carta 2
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 3);  -- Mano 1 contiene Carta 2
 
+INSERT INTO Ronda (id, num_ronda, baza_actual, num_bazas, estado, partida_id)
+VALUES (2, 1, 1, 5, 'JUGANDO', 3);
 
 -- Pruebas para Baza
---INSERT INTO Baza(id, tipo_carta, jugador_id, carta_id, ronda_id) VALUES (1,'triunfo',1,1,1);
+INSERT INTO Baza(id, tipo_carta, jugador_id, carta_id, ronda_id) VALUES (1,'morada',1,1,2);
 --INSERT INTO Baza(id, tipo_carta, jugador_id, carta_id, ronda_id) VALUES (2,'pirata',3,8,2);

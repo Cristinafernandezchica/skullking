@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
@@ -47,11 +48,6 @@ public class RondaService {
         return rr.findById(id);
     }
 
-    @Transactional(readOnly=true)
-    public Optional<Ronda> getRondasByPartidaId(Integer id) {
-        return rr.findByPartidaId(id);
-    }
-
     @Transactional
     public void delete(Integer id) {
         rr.deleteById(id);
@@ -67,7 +63,7 @@ public class RondaService {
         ronda.setEstado(RondaEstado.JUGANDO);
         Ronda res= rr.save(ronda);
        ms.iniciarManos(partida.getId(),res);
-        // bs.iniciarBazas();
+         bs.iniciarBaza(ronda);
         return res;
     }
 
@@ -108,6 +104,15 @@ public class RondaService {
         // ms.calculoPuntaje(ronda.getNumBazas());
 
         rr.save(ronda);
+    }
+
+    @Transactional(readOnly = true)
+    public Ronda findRondaActualByPartidaId(Integer partidaId) {
+        List<Ronda> rondas = rr.findByPartidaId(partidaId);
+        Ronda rondasOrdenadas =rondas.stream()
+                .sorted((j1, j2) -> j2.getId().compareTo(j1.getId())) // Orden descendente
+                .findFirst().orElse(null);
+        return rondasOrdenadas;
     }
 
 }

@@ -18,46 +18,6 @@ export default function SalaEspera() {
   const [jugadores, setJugadores] = useFetchState([], `/api/v1/partidas/${id}/jugadores`, jwt, setMessage, setVisible);
   const [partida, setPartida] = useFetchState(null, `/api/v1/partidas/${id}`, jwt, setMessage, setVisible)
 
-  /*
-  useEffect(() => {
-    const fetchJugadores = async () => {
-      try {
-        const response = await fetch(`/api/v1/partidas/${id}/jugadores`, {
-          headers: {
-            'Authorization': `Bearer ${jwt}`,
-          }
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setJugadores(data);
-      } catch (error) {
-        console.error('Error fetching partida', error);
-      }
-    };
-
-    const fetchPartida = async () => {
-        try {
-          const response = await fetch(`/api/v1/partidas/${id}`, {
-            headers: {
-              'Authorization': `Bearer ${jwt}`,
-            }
-          });
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          setPartida(data);
-        } catch (error) {
-          console.error('Error fetching partida', error);
-        }
-      };
-
-    fetchJugadores();
-    fetchPartida();
-  }, [id, jwt]);
-  */
 
   const jugadoresList = jugadores.map((jugador) => (
     <tr key={jugador.id}>
@@ -74,15 +34,16 @@ export default function SalaEspera() {
         headers: {
           'Authorization': `Bearer ${jwt}`,
           'Content-Type': 'application/json',
-        }
+        },
+        body: JSON.stringify({
+        }),
       });
 
       if (!response.ok) {
+        console.log("algo falla")
         throw new Error('Network response was not ok');
       }
 
-      const partidaIniciada = await response.json();
-      console.log('Partida iniciada:', partidaIniciada);
       navigate(`/tablero/${id}`);
 
     } catch (error) {

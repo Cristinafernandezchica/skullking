@@ -73,4 +73,8 @@ public class RondaController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/{partidaId}/partida")
+    public Ronda getRondaByPartidaId(@PathVariable("partidaId") Integer partidaId) {
+        return rs.findRondaActualByPartidaId(partidaId);
+    }
 }

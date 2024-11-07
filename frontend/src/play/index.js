@@ -19,7 +19,7 @@ export default function Play(){
   const [isModalOpen, setModalOpen] = useState(false);
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
-  const [jugadores, setJugadores] = useState([{id:1 ,puntuacion: "estoy de manera ilustrativa, no funciono :c "}]);
+  //const [jugadores, setJugadores] = useState([{id:1 ,puntuacion: "estoy de manera ilustrativa, no funciono :c "}]);
 
   const[partida, setPartida] = useState();
   const navigate = useNavigate();
@@ -128,7 +128,7 @@ const unirseAPartida = async (partidaId) => {
       },
       body: JSON.stringify({
         puntos: 0,
-        partida: partidaId,
+        partidaId: partidaId,
         usuario: user,
         turno: 0
       }),

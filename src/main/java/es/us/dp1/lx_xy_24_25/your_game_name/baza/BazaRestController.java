@@ -71,6 +71,7 @@ public class BazaRestController {
     public ResponseEntity<Baza> updateBaza(@Valid @RequestBody Baza b,@PathVariable("id")Integer id){
         RestPreconditions.checkNotNull(bs.findById(id), "Baza", "id", id);
 		return new ResponseEntity<>(this.bs.updateBaza(b,id), HttpStatus.OK);
+
     }
 
     // Delete una baza existente
@@ -82,7 +83,7 @@ public class BazaRestController {
 		return new ResponseEntity<>(new MessageResponse("Baza deleted!"), HttpStatus.OK);
 	}
 
-
+    //Get ganador de una baza concreta
     @GetMapping("/{id}/ganador")
     public Jugador findBazaByIdGanador(@PathVariable(value = "id") int id) {
         Baza bazaById = bs.findById(id);

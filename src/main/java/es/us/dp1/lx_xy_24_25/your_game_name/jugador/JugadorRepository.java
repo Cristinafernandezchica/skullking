@@ -5,11 +5,12 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 public interface JugadorRepository extends CrudRepository<Jugador,Integer>{
     
-    @Query("SELECT j FROM Jugador j WHERE j.partidaId = :partidaId")
-    List<Jugador> findJugadoresByPartidaId(Integer partidaId);
+    @Query("SELECT j FROM Jugador j WHERE j.partida.id = :partidaId")
+    List<Jugador> findJugadoresByPartidaId(@Param("partidaId") Integer partidaId);
 
     @Query("SELECT j FROM Jugador j WHERE j.usuario.id = :usuarioId")
     List<Jugador> findJugadorByUsuarioId(Integer usuarioId);

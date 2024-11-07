@@ -29,6 +29,7 @@ public class Baza extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private TipoCarta tipoCarta;
 
+    private Integer numBaza;
 
     @ManyToOne(optional = true)
     @JoinColumn(name = "jugador_id")

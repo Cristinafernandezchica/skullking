@@ -23,9 +23,9 @@ public class Partida extends BaseEntity{
     private String nombre;
     private LocalDateTime inicio;
     private LocalDateTime fin;
-
     @Enumerated(EnumType.STRING)
     private PartidaEstado estado;
 
-    private Integer ownerPartida;
+    @Nullable
+    private  Integer ownerPartida;
 }

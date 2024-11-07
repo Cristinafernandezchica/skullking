@@ -1,6 +1,7 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.jugador;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,7 @@ public class JugadorService {
     public Jugador findById(Integer id) {
         return jugadorRepository.findById(id).orElse(null);
     }
+
     //borrar jugador por pk
     @Transactional
     public void deleteJugador(Integer id) {
@@ -60,7 +62,7 @@ public class JugadorService {
     //obtener mas jugador reciente por id de usuario
     @Transactional(readOnly = true)
     public Jugador findJugadorByUsuarioId(Integer usuarioId) {
-       List<Jugador> jugadores =jugadorRepository.findJugadorByUsuarioId(usuarioId);
+       List<Jugador> jugadores =jugadorRepository.findJugadoresByUsuarioId(usuarioId);
        Jugador jugadoresOrdenados = jugadores.stream()
                 .sorted((j1, j2) -> j2.getId().compareTo(j1.getId())) // Orden descendente
                 .findFirst().orElse(null);

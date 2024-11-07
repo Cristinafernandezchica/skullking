@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import jakarta.validation.Valid;
 
 @Service
@@ -52,5 +54,25 @@ public class BazaService {
         BeanUtils.copyProperties(baza, toUpdate, "id");
         bazaRepository.save(toUpdate);
         return toUpdate;
+    }
+
+    @Transactional
+    public Baza iniciarBaza(Ronda ronda) {
+        Baza bazaIniciada= new Baza();
+        bazaIniciada.setTipoCarta(null);
+        bazaIniciada.setGanador(null);
+        bazaIniciada.setCartaGanadora(null);
+        bazaIniciada.setRonda(ronda);
+        bazaRepository.save(bazaIniciada);
+        return bazaIniciada;
+    }
+
+    @Transactional(readOnly = true)
+    public Baza findUltimaBazaByRondaId(Integer rondaId){
+               List<Baza> Bazas =bazaRepository.findBazasByRondaId(rondaId);
+       Baza BazasOrdenadas = Bazas.stream()
+                .sorted((j1, j2) -> j2.getId().compareTo(j1.getId())) // Orden descendente
+                .findFirst().orElse(null);
+                return BazasOrdenadas;
     }
 }

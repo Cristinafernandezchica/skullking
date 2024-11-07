@@ -26,13 +26,9 @@ public class Jugador extends BaseEntity {
     
     private Integer puntos;
 
-    /*
-    @Column(name = "partida_id")
-    private Integer partidaId;      // TODO: Hay que mirar la relacion con partida
-    */
+
+    @ManyToOne
     @JoinColumn(name = "partida_id")
-    @ManyToOne(optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Partida partida;      // TODO: Hay que mirar la relacion con partida
 
     // hacer pull

@@ -5,7 +5,9 @@ import java.util.List;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.model.BaseEntity;
+import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -25,9 +27,20 @@ public class Mano extends BaseEntity{
     @JoinColumn(name = "jugador_id")
     private Jugador jugador;
 
+    
+
     private Integer apuesta;
 
     private Integer resultado;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "truco_id")
+    private Truco truco;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "ronda_id")
+    private Ronda ronda;
+    
 
     @ManyToMany
     @JoinTable(
@@ -40,4 +53,5 @@ public class Mano extends BaseEntity{
     public Boolean esApuestaIgualResultado(){
         return apuesta == resultado;
     }
+    
 }

@@ -13,6 +13,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.CartaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import jakarta.validation.Valid;
 
 @Service
@@ -23,8 +24,10 @@ private CartaService cs;
 private JugadorService js;
 
     @Autowired
-    public ManoService(ManoRepository manoRepository) {
+    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorService js) {
         this.manoRepository = manoRepository;
+        this.cs = cs;
+        this.js = js;
     }
 
     //save a Mano en la base de datos
@@ -60,19 +63,21 @@ private JugadorService js;
 
     // para iniciar las manos de los jugadores
     @Transactional
-    public void iniciarManos(Integer partidaId, Integer numRonda){
-        Iterable<Carta> iterableCartas = cs.findAll();
-        List<Carta> listaCartas = new ArrayList<>(); 
-        iterableCartas.forEach(listaCartas::add);
+    public void iniciarManos(Integer partidaId, Ronda ronda){
+        List<Carta> listaCartas =(List<Carta>) cs.findAll();
         Collections.shuffle(listaCartas);   // Barajar cartas
         List<Jugador> jugadores = js.findJugadoresByPartidaId(partidaId);
         for(Jugador jugador: jugadores){
             Mano mano = new Mano();
-            List<Carta> cartasBaraja = listaCartas.subList(0,getNumCartasARepartir(numRonda, jugadores.size()));
+            List<Carta> cartasBaraja = listaCartas.subList(0,getNumCartasARepartir(ronda.getNumRonda(), jugadores.size()));
             mano.setJugador(jugador);
             mano.setApuesta(null);  // Esto lo elige el usuario
             mano.setResultado(null);    // El resultado se establecerá más tarde
-            mano.setCartas(cartasBaraja);
+            List<Carta> cartaMano= new ArrayList<Carta>();
+            cartaMano.addAll(cartasBaraja);
+            mano.setCartas(cartaMano);
+            mano.setTruco(null);
+            mano.setRonda(ronda);
             manoRepository.save(mano);
             cartasBaraja.clear();   // Borramos las cartas de la baraja, para repartir al siguiente jugador
         }
@@ -98,6 +103,14 @@ private JugadorService js;
         Mano mano = findManoById(manoId);
         mano.setApuesta(apuesta);
         manoRepository.save(mano);
+    }
+    @Transactional(readOnly = true)
+    public Mano findLastManoByJugadorId(Integer jugadorId){
+        List<Mano> res =manoRepository.findAllManoByJugadorId(jugadorId);
+        Mano ultimaManoCreada = res.stream()
+        .sorted((j1, j2) -> j2.getId().compareTo(j1.getId())) // Orden descendente
+        .findFirst().orElse(null);
+        return ultimaManoCreada;
     }
 
 

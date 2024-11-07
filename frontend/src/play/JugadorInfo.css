@@ -1,0 +1,67 @@
+.lista-jugadores {
+    position: fixed;
+    top: 80px;
+    left: 0px;
+    width: 220px;
+    padding: 15px;
+    background-color: #f0f0f0; /* Fondo gris claro */
+    border: 2px solid #4CAF50; /* Borde verde */
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+    font-family: Arial, sans-serif;
+    overflow-y: auto;
+    max-height: 90vh; /* Limita la altura si hay muchos jugadores */
+  }
+  
+  /* Estilos para cada jugador dentro de la lista */
+  .jugador-info {
+    margin-bottom: 100px;
+    padding: 10px;
+    background-color: #ffffff; /* Fondo blanco para cada jugador */
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .jugador-info h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .jugador-info p {
+    margin: 3px 0;
+    font-size: 14px;
+    color: #666;
+  }
+  .cartas {
+    position: fixed;
+  bottom: 20px; /* Ajusta la distancia desde la parte inferior */
+  left: 50%;
+  transform: translateX(-50%); /* Centra el contenedor horizontalmente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  }
+  
+  .carta {
+    text-align: center;
+  }
+  
+  .imagen-carta {
+    width: 100px;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  .boton-agrandable {
+    padding: 10px;
+    border: none;
+    background-color: transparent; /* Fondo transparente para solo ver la imagen */
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Transición suave al agrandar */
+}
+
+/* Escala el botón al hacer hover */
+.boton-agrandable:hover {
+    transform: scale(1.1); /* Aumenta el tamaño un 10% */
+}

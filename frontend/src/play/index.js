@@ -1,58 +1,28 @@
 import React, {useEffect, useState} from 'react';
 import '../App.css';
 import '../static/css/home/home.css';
-import FormGenerator from "../components/formGenerator/formGenerator";
 import { Button, Table } from "reactstrap";
-import Modal from '../components/modals/informacionSala.js';
-import { Link } from "react-router-dom";
-import { loginFormInputs } from "../play/form/crearSalaInputs.js";
+import { Link, useNavigate } from "react-router-dom";
 import tokenService from '../services/token.service.js';
 import CrearPartidaModal from '../components/modals/CrearPartidaModal.js';
-import { useNavigate } from 'react-router-dom';
-import useFetchState from '../util/useFetchState.js';
 import UnirPartidaModal from '../components/modals/UnirPartidaModal.js'
 
-const user = tokenService.getUser();
+
 const jwt = tokenService.getLocalAccessToken();
 export default function Play(){
   // Para modal creación partida
   const [isModalOpen, setModalOpen] = useState(false);
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
-  const [jugadores, setJugadores] = useState([{id:1 ,puntuacion: "estoy de manera ilustrativa, no funciono :c "}]);
-
-  const[partida, setPartida] = useState();
-  
   const navigate = useNavigate();
-
+  const user = tokenService.getUser();
   // Para modal unirse a partida
   const [isUnionModalOpen, setUnionModalOpen] = useState(false);
   const handleOpenUnionModal = () => setUnionModalOpen(true);
   const handleCloseUnionModal = () => setUnionModalOpen(false);
 
-  /*
-  useEffect(() => {
-    fetchJugadores();
-  }, []);
 
-const fetchJugadores = async () => {
-  try {
-    const response = await fetch('/api/v1/jugadores/3', jwt);
-    const jugadores = await response.json();
-    setJugadores(jugadores);
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
 
-const jugadoresList = jugadores.map((jugador) => {
-  return (
-    <tr key={jugador.id}>
-      <td>{jugador.puntuacion}</td>
-    </tr>
-  )
-});
-*/
 // para crear la partida
 const crearPartida = async (nombrePartida) => {
   try {
@@ -76,25 +46,19 @@ const crearPartida = async (nombrePartida) => {
 
       const partida = await response.json();
       console.log('Partida creada:', partida);
-      console.log(user)
-
       // Crear el jugador que ha creado la partida  -->  Modificación en backend
-      await createJugador(partida.id)
-
-      /*
-      console.log('Redireccionando a la sala de espera...');
-      navigate('/salaEspera/' + partidaCreada.id);
-      */
-
+      await createJugador(partida)
+      navigate(`/salaEspera/${partida.id}`);
+      console.log('Partida creada:', partida);
       handleCloseModal();
-      return partida.id;
+      
   } catch (error) {
       console.error('Error:', error);
-      console.log('Partida creada:', partida);
   }
 }
 
 // Crear el jugador que ha creado la partida
+
 const createJugador = async (partidaId) => {
   try {
       const response = await fetch('/api/v1/jugadores', {
@@ -105,9 +69,10 @@ const createJugador = async (partidaId) => {
           },
           body: JSON.stringify({
               puntos: 0,
-              partida: { id: partidaId },
+              partida: partidaId,
               usuario: user,
               turno: 0  // se crea con turno 0, ya que se supone que la partida aún no ha comenzado
+              
           }),
       });
 
@@ -156,7 +121,8 @@ const unirseAPartida = async (partidaId) => {
     return (
       <div className="home-page-container">
         <div className="hero-div">
-          <h1>Crear sala</h1>
+          <h1>Lobby</h1>
+          <h3>---</h3>
           <div style = {{marginBottom: 20}}>
             <Button outline color="success" onClick={handleOpenModal}>Crear partida</Button>
           </div>
@@ -164,14 +130,6 @@ const unirseAPartida = async (partidaId) => {
             <Button outline color="success" onClick={handleOpenUnionModal}>Unirse a una partida</Button>
           </div>
 
-          <Table aria-label="jugadores" className="mt-4">
-          <thead>
-            <tr>
-              <th>Puntuaciones</th>
-            </tr>
-          </thead>
-          {/*<tbody>{jugadoresList}</tbody>*/}
-        </Table>
         <CrearPartidaModal
           isVisible={isModalOpen}
           onCancel={handleCloseModal}

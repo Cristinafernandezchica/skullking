@@ -108,7 +108,7 @@ public class PartidaRestController {
 
     // Para iniciar una partida desde frontend
     @PostMapping("/{id}/iniciar-partida")
-    public ResponseEntity<Void> iniciarPartida(@PathVariable("id")Integer id){
+    public ResponseEntity<Void> iniciarPartida(@PathVariable("id") Integer id){
         ps.iniciarPartida(id);
         return ResponseEntity.ok().build();
     }

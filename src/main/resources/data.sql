@@ -132,9 +132,9 @@ INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (4,30,3,4,1);
 
 
 
-INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (1, 4, 5, 3);
-INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (2, 2, 1, 0);
-INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (3, 3, 0, 0);
+INSERT INTO Mano(id, jugador_id, apuesta, resultado,truco_id,ronda_id) VALUES (1, 4, 5, 3,null,null);
+INSERT INTO Mano(id, jugador_id, apuesta, resultado,truco_id,ronda_id) VALUES (2, 2, 1, 0,null,null);
+INSERT INTO Mano(id, jugador_id, apuesta, resultado,truco_id,ronda_id) VALUES (3, 3, 0, 0,null,null);
 -- Asignar cartas a la mano 1
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 1);  -- Mano 1 contiene Carta 1
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 2);  -- Mano 1 contiene Carta 2
@@ -142,5 +142,5 @@ INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 3);  -- Mano 1 contiene Car
 
 
 -- Pruebas para Baza
-INSERT INTO Baza(id, tipo_carta, jugador_id, carta_id, ronda_id) VALUES (1,'triunfo',1,1,1);
-INSERT INTO Baza(id, tipo_carta, jugador_id, carta_id, ronda_id) VALUES (2,'pirata',3,8,2);
+--INSERT INTO Baza(id, tipo_carta, jugador_id, carta_id, ronda_id) VALUES (1,'triunfo',1,1,1);
+--INSERT INTO Baza(id, tipo_carta, jugador_id, carta_id, ronda_id) VALUES (2,'pirata',3,8,2);

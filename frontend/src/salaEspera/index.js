@@ -16,8 +16,9 @@ export default function SalaEspera() {
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
   const [jugadores, setJugadores] = useFetchState([], `/api/v1/partidas/${id}/jugadores`, jwt, setMessage, setVisible);
-  const [partida, setPartida] = useState(null);
+  const [partida, setPartida] = useFetchState(null, `/api/v1/partidas/${id}`, jwt, setMessage, setVisible)
 
+  /*
   useEffect(() => {
     const fetchJugadores = async () => {
       try {
@@ -56,6 +57,7 @@ export default function SalaEspera() {
     fetchJugadores();
     fetchPartida();
   }, [id, jwt]);
+  */
 
   const jugadoresList = jugadores.map((jugador) => (
     <tr key={jugador.id}>
@@ -66,14 +68,13 @@ export default function SalaEspera() {
 
   const iniciarPartida = async () => {
     try {
-      const response = await fetch(`/api/v1/partidas/${id}`, {
-        method: 'PUT',
+      console.log(id);
+      const response = await fetch(`/api/v1/partidas/${id}/iniciar-partida`, {
+        method: 'POST',
         headers: {
           'Authorization': `Bearer ${jwt}`,
-        },
-        body: JSON.stringify({
-          estado: 'JUGANDO',
-        }),
+          'Content-Type': 'application/json',
+        }
       });
 
       if (!response.ok) {
@@ -81,8 +82,9 @@ export default function SalaEspera() {
       }
 
       const partidaIniciada = await response.json();
-      navigate(`/tablero/${id}`);
       console.log('Partida iniciada:', partidaIniciada);
+      navigate(`/tablero/${id}`);
+
     } catch (error) {
       console.error('Error:', error);
     }

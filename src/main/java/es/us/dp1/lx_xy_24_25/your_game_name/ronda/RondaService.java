@@ -24,8 +24,11 @@ public class RondaService {
     JugadorService js;
 
     @Autowired
-    public RondaService(RondaRepository rr){
+    public RondaService(RondaRepository rr, ManoService ms, BazaService bs, JugadorService js){
         this.rr = rr;
+        this.ms = ms;
+        this.bs = bs;
+        this.js = js;
     }
 
     @Transactional(readOnly=true)
@@ -61,9 +64,11 @@ public class RondaService {
         ronda.setNumRonda(1);
         ronda.setBazaActual(1);
         ronda.setPartida(partida);
-        ms.iniciarManos(partida.getId(),1);
+        ronda.setEstado(RondaEstado.JUGANDO);
+        Ronda res= rr.save(ronda);
+       ms.iniciarManos(partida.getId(),res);
         // bs.iniciarBazas();
-        return rr.save(ronda);
+        return res;
     }
 
 
@@ -82,9 +87,9 @@ public class RondaService {
             ronda.setNumRonda(nextRonda);
             ronda.setBazaActual(1);
             ronda.setEstado(RondaEstado.JUGANDO);
-            // ms.iniciarManos(partida.getId(),ronda.getNumRonda());
+           //  ms.iniciarManos(partida.getId(),ronda.getNumRonda());
             // ronda.setNumBazas(ms.getNumCartasARepartir(ronda.getNumRonda(), 
-            // js.findJugadoresByPartidaId(ronda.getPartida().getId()).size()));
+           //  js.findJugadoresByPartidaId(ronda.getPartida().getId()).size()));
             // bs.iniciarBazas()
         }
         

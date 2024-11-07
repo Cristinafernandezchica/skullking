@@ -13,6 +13,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.CartaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import jakarta.validation.Valid;
 
 @Service
@@ -62,17 +63,19 @@ private JugadorService js;
 
     // para iniciar las manos de los jugadores
     @Transactional
-    public void iniciarManos(Integer partidaId, Integer numRonda){
+    public void iniciarManos(Integer partidaId, Ronda ronda){
         List<Carta> listaCartas =(List<Carta>) cs.findAll();
         Collections.shuffle(listaCartas);   // Barajar cartas
         List<Jugador> jugadores = js.findJugadoresByPartidaId(partidaId);
         for(Jugador jugador: jugadores){
             Mano mano = new Mano();
-            List<Carta> cartasBaraja = listaCartas.subList(0,getNumCartasARepartir(numRonda, jugadores.size()));
+            List<Carta> cartasBaraja = listaCartas.subList(0,getNumCartasARepartir(ronda.getNumRonda(), jugadores.size()));
             mano.setJugador(jugador);
             mano.setApuesta(null);  // Esto lo elige el usuario
             mano.setResultado(null);    // El resultado se establecerá más tarde
             mano.setCartas(cartasBaraja);
+            mano.setTruco(null);
+            mano.setRonda(ronda);
             manoRepository.save(mano);
             cartasBaraja.clear();   // Borramos las cartas de la baraja, para repartir al siguiente jugador
         }

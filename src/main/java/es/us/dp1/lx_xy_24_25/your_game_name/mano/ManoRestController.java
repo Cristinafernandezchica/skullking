@@ -33,7 +33,7 @@ public class ManoRestController {
 
 
     @Autowired
-    public ManoRestController(ManoService manoService, AuthoritiesService authService, TrucoService trucoService) {
+    public ManoRestController(ManoService manoService, TrucoService trucoService) {
         this.manoService = manoService;
         this.trucoService = trucoService;
     }

@@ -20,8 +20,9 @@ public class PartidaService {
     RondaService rs;
 
     @Autowired
-    public PartidaService(PartidaRepository pr) {
+    public PartidaService(PartidaRepository pr,RondaService rs) {
         this.pr = pr;
+        this.rs = rs;
     }
 
     // Con este método se puede filtrar por nombre y estado

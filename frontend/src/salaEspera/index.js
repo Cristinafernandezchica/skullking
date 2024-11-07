@@ -6,14 +6,20 @@ import tokenService from '../services/token.service.js';
 import { useNavigate } from 'react-router-dom';
 import getIdFromUrl from '../util/getIdFromUrl.js';
 import useFetchState from '../util/useFetchState.js'; 
+import InicioPartidaModal from '../components/modals/InicioPartidaModal.js';
 
 const jwt = tokenService.getLocalAccessToken();
 const user = tokenService.getUser();
 
 export default function SalaEspera() {
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const id = getIdFromUrl(2);
+
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleOpenModal = () => setModalOpen(true);
+  const handleCloseModal = () => setModalOpen(false);
 
 
   // const [message, setMessage] = useState(null);
@@ -75,7 +81,7 @@ export default function SalaEspera() {
           'Authorization': `Bearer ${jwt}`,
         },
         body: JSON.stringify({
-          estado: 'JUGANDO',
+          estado: "JUGANDO",
         }),
       });
 
@@ -84,8 +90,8 @@ export default function SalaEspera() {
       }
 
       const partidaIniciada = await response.json();
-      navigate(`/tablero/${id}`);
       console.log('Partida iniciada:', partidaIniciada);
+      navigate(`/tablero/${id}`);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -96,7 +102,9 @@ export default function SalaEspera() {
       <div className="hero-div-sala-espera">
         <h1>Lobby</h1>
         <div style={{ marginBottom: 20 }}>
-            <Button outline color="success" onClick={iniciarPartida}>Iniciar Partida</Button>
+            {( partida && partida.ownerPartida === user.id &&
+            <Button outline color="success" onClick={handleOpenModal}>Iniciar Partida</Button>
+            )}
         </div>
         <div className="tabla-container">
         <Table aria-label="users" className="mt-4">
@@ -110,7 +118,11 @@ export default function SalaEspera() {
         </Table>
       </div>
       </div>
-
+      <InicioPartidaModal 
+        isVisible={isModalOpen} 
+        onCancel={handleCloseModal} 
+        onConfirm={iniciarPartida} 
+      />
     </div>
   );
 }

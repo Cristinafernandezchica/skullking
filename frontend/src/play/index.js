@@ -37,7 +37,6 @@ const crearPartida = async (nombrePartida) => {
               inicio: new Date().toISOString(), // Fecha actual en formato ISO
               estado: "ESPERANDO",
               ownerPartida: user.id
-              ownerPartida: user.id
           }),
       });
 
@@ -59,7 +58,7 @@ const crearPartida = async (nombrePartida) => {
 }
 
 // Crear el jugador que ha creado la partida
-const createJugador = async (partidaId) => {
+
 const createJugador = async (partidaId) => {
   try {
       const response = await fetch('/api/v1/jugadores', {

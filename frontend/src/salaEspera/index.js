@@ -61,23 +61,7 @@ export default function SalaEspera() {
             <Button outline color="success" onClick={iniciarPartida}>Iniciar Partida</Button>
 
         </div>}
-        <div className="tabla-container">
-        <Table aria-label="users" className="mt-4">
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Turno</th>
-            </tr>
-          </thead>
-          <tbody>{jugadoresList}</tbody>
-        </Table>
       </div>
-      </div>
-      <InicioPartidaModal 
-        isVisible={isModalOpen} 
-        onCancel={handleCloseModal} 
-        onConfirm={iniciarPartida} 
-      />
     </div>
   );
 }

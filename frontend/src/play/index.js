@@ -22,8 +22,8 @@ export default function Play(){
   const [jugadores, setJugadores] = useState([{id:1 ,puntuacion: "estoy de manera ilustrativa, no funciono :c "}]);
 
   const[partida, setPartida] = useState();
+  
   const navigate = useNavigate();
-  //const [jugador, setJugador] = useFetchState([], `/api/v1/`, jwt);
 
   // Para modal unirse a partida
   const [isUnionModalOpen, setUnionModalOpen] = useState(false);
@@ -76,9 +76,10 @@ const crearPartida = async (nombrePartida) => {
 
       const partida = await response.json();
       console.log('Partida creada:', partida);
+      console.log(user)
 
       // Crear el jugador que ha creado la partida  -->  Modificación en backend
-      await createJugador(partida)
+      await createJugador(partida.id)
 
       /*
       console.log('Redireccionando a la sala de espera...');
@@ -94,7 +95,6 @@ const crearPartida = async (nombrePartida) => {
 }
 
 // Crear el jugador que ha creado la partida
-//TODO: se crean 20 jugadores por la cara -->  ?????
 const createJugador = async (partidaId) => {
   try {
       const response = await fetch('/api/v1/jugadores', {
@@ -105,7 +105,7 @@ const createJugador = async (partidaId) => {
           },
           body: JSON.stringify({
               puntos: 0,
-              partida: partida,
+              partida: { id: partidaId },
               usuario: user,
               turno: 0  // se crea con turno 0, ya que se supone que la partida aún no ha comenzado
           }),

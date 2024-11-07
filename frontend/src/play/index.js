@@ -19,7 +19,7 @@ export default function Play(){
   const [isModalOpen, setModalOpen] = useState(false);
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
-  //const [jugadores, setJugadores] = useState([{id:1 ,puntuacion: "estoy de manera ilustrativa, no funciono :c "}]);
+  const [jugadores, setJugadores] = useState([{id:1 ,puntuacion: "estoy de manera ilustrativa, no funciono :c "}]);
 
   const[partida, setPartida] = useState();
   const navigate = useNavigate();
@@ -78,7 +78,12 @@ const crearPartida = async (nombrePartida) => {
       console.log('Partida creada:', partida);
 
       // Crear el jugador que ha creado la partida  -->  Modificación en backend
-      await createJugador(partida.id)
+      await createJugador(partida)
+
+      /*
+      console.log('Redireccionando a la sala de espera...');
+      navigate('/salaEspera/' + partidaCreada.id);
+      */
 
       handleCloseModal();
       return partida.id;
@@ -89,6 +94,7 @@ const crearPartida = async (nombrePartida) => {
 }
 
 // Crear el jugador que ha creado la partida
+//TODO: se crean 20 jugadores por la cara -->  ?????
 const createJugador = async (partidaId) => {
   try {
       const response = await fetch('/api/v1/jugadores', {
@@ -99,7 +105,7 @@ const createJugador = async (partidaId) => {
           },
           body: JSON.stringify({
               puntos: 0,
-              partidaId: partidaId,
+              partida: partida,
               usuario: user,
               turno: 0  // se crea con turno 0, ya que se supone que la partida aún no ha comenzado
           }),
@@ -108,8 +114,7 @@ const createJugador = async (partidaId) => {
       if (!response.ok) {
           throw new Error('Network response was not ok');
       }
-      console.log('Crear Partida - user:', user);
-      console.log('Crear Partida - partidaId:', partidaId);      
+
       const jugador = await response.json();
       console.log('Jugador creado:', jugador);
   } catch (error) {
@@ -128,7 +133,7 @@ const unirseAPartida = async (partidaId) => {
       },
       body: JSON.stringify({
         puntos: 0,
-        partidaId: partidaId,
+        partida: { id: partidaId },
         usuario: user,
         turno: 0
       }),
@@ -141,13 +146,12 @@ const unirseAPartida = async (partidaId) => {
     const jugador = await response.json();
     console.log('Jugador creado en partida:', jugador);
     handleCloseUnionModal(); // Cierra el modal después de unirse a la partida
-    navigate('/salaEspera/' + partidaId); // Redirecciona a la sala de espera
   } catch (error) {
     console.error('Error creando jugador:', error);
   }
 };
 
-
+    
     return (
       <div className="home-page-container">
         <div className="hero-div">

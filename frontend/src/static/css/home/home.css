@@ -13,7 +13,7 @@
 }
 
 .hero-div{
-    background-color: rgba(255, 254, 254, 0.332);
+    background-color: rgba(255, 254, 254, 0.651);
     padding: 2rem;
     border-radius: 25px;
     backdrop-filter: blur(10px);
@@ -23,15 +23,29 @@
     align-items: center;
 }
 
+.hero{
+    background-color: #4b5186eb ;
+    padding: 2rem;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    border: none;
+    box-shadow: none;
+}
+
 .hero-div h1{
     font-family:Arial, Helvetica, sans-serif ;
     font-size: 3rem;
     font-weight: 700;
-    color: #2f324f;
+    color: rgba(89, 89, 89, 0.9);
     text-align: center;
-    text-transform: uppercase;
 }
 
 .hero-div h3{
     text-align: center;
+    font-family:Arial, Helvetica, sans-serif ;
 }

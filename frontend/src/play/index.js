@@ -22,8 +22,8 @@ export default function Play(){
   const [jugadores, setJugadores] = useState([{id:1 ,puntuacion: "estoy de manera ilustrativa, no funciono :c "}]);
 
   const[partida, setPartida] = useState();
+  
   const navigate = useNavigate();
-  //const [jugador, setJugador] = useFetchState([], `/api/v1/`, jwt);
 
   // Para modal unirse a partida
   const [isUnionModalOpen, setUnionModalOpen] = useState(false);
@@ -66,7 +66,7 @@ const crearPartida = async (nombrePartida) => {
               nombre: nombrePartida,
               inicio: new Date().toISOString(), // Fecha actual en formato ISO
               estado: "ESPERANDO",
-              //ownerPartida: user.jugador.id
+              // ownerPartida: user
           }),
       });
 
@@ -76,15 +76,16 @@ const crearPartida = async (nombrePartida) => {
 
       const partida = await response.json();
       console.log('Partida creada:', partida);
+      console.log(user)
 
       // Crear el jugador que ha creado la partida  -->  Modificación en backend
-      await createJugador(partida)
+      await createJugador(partida.id)
 
-      
       /*
       console.log('Redireccionando a la sala de espera...');
       navigate('/salaEspera/' + partidaCreada.id);
       */
+
       handleCloseModal();
       return partida.id;
   } catch (error) {
@@ -94,8 +95,7 @@ const crearPartida = async (nombrePartida) => {
 }
 
 // Crear el jugador que ha creado la partida
-//TODO: se crean 20 jugadores por la cara -->  ?????
-const createJugador = async (partida) => {
+const createJugador = async (partidaId) => {
   try {
       const response = await fetch('/api/v1/jugadores', {
           method: 'POST',
@@ -105,7 +105,7 @@ const createJugador = async (partida) => {
           },
           body: JSON.stringify({
               puntos: 0,
-              partida: partida,
+              partida: { id: partidaId },
               usuario: user,
               turno: 0  // se crea con turno 0, ya que se supone que la partida aún no ha comenzado
           }),
@@ -151,12 +151,11 @@ const unirseAPartida = async (partidaId) => {
   }
 };
 
-
+    
     return (
       <div className="home-page-container">
         <div className="hero-div">
           <h1>Crear sala</h1>
-          <h3>---</h3>
           <div style = {{marginBottom: 20}}>
             <Button outline color="success" onClick={handleOpenModal}>Crear partida</Button>
           </div>

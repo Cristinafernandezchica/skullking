@@ -118,11 +118,10 @@ const createJugador = async (partidaId) => {
       <div className="home-page-container">
         <div className="hero-div">
           <h1>Crear sala</h1>
-          <h3>---</h3>
           <div style = {{marginBottom: 20}}>
             <Button outline color="success" onClick={handleOpenModal}>Crear partida</Button>
           </div>
-          <Button outline color="success">
+          <Button outline color="success" >
             <Link
               to={`/play`}
               className="btn sm"

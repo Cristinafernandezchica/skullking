@@ -37,6 +37,7 @@ const crearPartida = async (nombrePartida) => {
               inicio: new Date().toISOString(), // Fecha actual en formato ISO
               estado: "ESPERANDO",
               ownerPartida: user.id
+              ownerPartida: user.id
           }),
       });
 
@@ -58,6 +59,7 @@ const crearPartida = async (nombrePartida) => {
 }
 
 // Crear el jugador que ha creado la partida
+const createJugador = async (partidaId) => {
 const createJugador = async (partidaId) => {
   try {
       const response = await fetch('/api/v1/jugadores', {
@@ -109,13 +111,14 @@ const unirseAPartida = async (partidaId) => {
 
     const jugador = await response.json();
     console.log('Jugador creado en partida:', jugador);
+    navigate('/salaEspera/' + partidaId); 
     handleCloseUnionModal(); // Cierra el modal después de unirse a la partida
   } catch (error) {
     console.error('Error creando jugador:', error);
   }
 };
 
-
+    
     return (
       <div className="home-page-container">
         <div className="hero-div">

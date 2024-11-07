@@ -5,12 +5,14 @@ import { Button, Table } from "reactstrap";
 import tokenService from '../services/token.service.js';
 import { useNavigate } from 'react-router-dom';
 import getIdFromUrl from '../util/getIdFromUrl.js';
-import useFetchState from '../util/useFetchState.js'; // Importar correctamente
+import useFetchState from '../util/useFetchState.js'; 
+import InicioPartidaModal from '../components/modals/InicioPartidaModal.js';
 
 const jwt = tokenService.getLocalAccessToken();
 const user = tokenService.getUser();
 
 export default function SalaEspera() {
+
   const navigate = useNavigate();
   const id = getIdFromUrl(2);
   const [message, setMessage] = useState(null);
@@ -71,7 +73,11 @@ export default function SalaEspera() {
         </Table>
       </div>
       </div>
-
+      <InicioPartidaModal 
+        isVisible={isModalOpen} 
+        onCancel={handleCloseModal} 
+        onConfirm={iniciarPartida} 
+      />
     </div>
   );
 }

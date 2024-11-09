@@ -62,8 +62,8 @@ public class RondaService {
         ronda.setPartida(partida);
         ronda.setEstado(RondaEstado.JUGANDO);
         Ronda res= rr.save(ronda);
-       ms.iniciarManos(partida.getId(),res);
-         bs.iniciarBaza(ronda);
+        ms.iniciarManos(partida.getId(),res);
+        // bs.iniciarBaza(ronda);
         return res;
     }
 

@@ -92,4 +92,10 @@ public class PartidaService {
 
     }
 
+    // Para Validator
+    public Boolean usuarioPartidaEnJuegoEsperando(Integer ownerId){
+        List<Partida> partidasEnProgresoEsperando = pr.findByOwnerPartidaAndEstado(ownerId, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO));
+        return !partidasEnProgresoEsperando.isEmpty();
+    }
+
 }

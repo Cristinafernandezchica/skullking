@@ -1,10 +1,13 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.jugador;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,8 +18,10 @@ import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,6 +42,13 @@ public class JugadorRestController {
     public JugadorRestController(JugadorService jugadorService, AuthoritiesService authService) {
         this.jugadorService = jugadorService;
     }
+
+    // Para Validator
+    @InitBinder
+    public void initJugadorBinder(WebDataBinder dataBinder){
+        dataBinder.setValidator(new JugadorValidator(jugadorService));
+    }
+
     //get jugador por id
     @GetMapping(value = "/{partidaId}" )
     public ResponseEntity<List<Jugador>> findJugadoresByPartidaid(@PathVariable("partidaId") Integer partidaId) {
@@ -70,12 +82,29 @@ public class JugadorRestController {
     }
 
     // crear un nuevo jugador
+    /* 
     @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Jugador> create(@RequestBody @Valid Jugador jugador) {
 		Jugador savedJugador = jugadorService.saveJugador(jugador);
 		return new ResponseEntity<>(savedJugador, HttpStatus.CREATED);
 	}
+    */
+
+    @PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<?> create(@RequestBody @Valid Jugador jugador, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            List<String> errorMessages = bindingResult.getAllErrors().stream()
+            .map(error -> ((FieldError) error).getField() + ": " + error.getDefaultMessage())
+            .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errorMessages);
+        }
+        Jugador savedJugador = jugadorService.saveJugador(jugador);
+        return new ResponseEntity<>(savedJugador, HttpStatus.CREATED);
+        
+    }
+
     // borrar un jugador por id
     @DeleteMapping(value = "{id}")
 	@ResponseStatus(HttpStatus.OK)

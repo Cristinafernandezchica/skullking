@@ -3,14 +3,19 @@ package es.us.dp1.lx_xy_24_25.your_game_name.partida;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -45,6 +50,12 @@ public class PartidaRestController {
         // this.rs = rs;
     }
 
+    // Para Validator
+    @InitBinder("partida")
+    public void initPartidaBinder(WebDataBinder dataBinder){
+        dataBinder.setValidator(new PartidaValidator(ps));
+    }
+
     // @RequestParam es para filtrar por esos valores, por tanto no hacen falta los métodos PartidasByName y PartidasByEstado
     @GetMapping
     public List<Partida> getAllPartidas(@ParameterObject() @RequestParam(value="nombre", required = false) String nombre, @ParameterObject @RequestParam(value="estado",required = false) PartidaEstado estado){
@@ -59,6 +70,7 @@ public class PartidaRestController {
         return p.get();
     }
 
+    /*
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Partida> createPartida(@Valid @RequestBody Partida p){
@@ -69,6 +81,21 @@ public class PartidaRestController {
                     .buildAndExpand(p.getId())
                 .toUri();
         return ResponseEntity.created(location).body(p);
+    }
+    */
+
+    @PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<?> createPartida(@RequestBody @Valid Partida partida, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            List<String> errorMessages = bindingResult.getAllErrors().stream()
+            .map(error -> ((FieldError) error).getField() + ": " + error.getDefaultMessage())
+            .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errorMessages);
+        }
+        Partida savedPartida = ps.save(partida);
+        return new ResponseEntity<>(savedPartida, HttpStatus.CREATED);
+        
     }
 
     @PutMapping(value="/{id}")

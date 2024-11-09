@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
+import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 import jakarta.validation.Valid;
 
 @Service
@@ -68,5 +70,16 @@ public class JugadorService {
                 .findFirst().orElse(null);
                 return jugadoresOrdenados;
     }
+
+
+    // Para Validator
+    public Boolean usuarioMultiplesJugadoresEnPartida(User usuario, Partida partida){
+        List<Jugador> jugadoresUsuario =jugadorRepository.findJugadoresByUsuarioId(usuario.getId());
+        long count = jugadoresUsuario.stream()
+                .filter(jugador -> jugador.getPartida().equals(partida))
+                .count();
+        return count > 1;
+    }
+    
     
 }

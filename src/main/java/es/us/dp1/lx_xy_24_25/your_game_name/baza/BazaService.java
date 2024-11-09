@@ -97,13 +97,18 @@ public class BazaService {
 
         // Comprobación si es la última baza
         if(nextBaza > ronda.getNumBazas()){
+            // Si es la última ronda, finalizar la partida
             if(nextRonda > 10){
                 partidaService.finalizarPartida(ronda.getPartida().getId());
                 ronda.setEstado(RondaEstado.FINALIZADA);
+                // Guardar el estado de la ronda si ha sido finalizada
+                rondaService.save(ronda);
             } else {
+                // Iniciar nueva ronda
                 rondaService.iniciarRonda(ronda.getPartida());
             }
         } else{
+            // Configurar para la siguiente baza
             baza.setCartaGanadora(null);
             baza.setGanador(null);
             baza.setNumBaza(nextBaza);

@@ -24,7 +24,6 @@ export default function SalaEspera() {
   const jugadoresList = jugadores.map((jugador) => (
     <tr key={jugador.id}>
       <td>{jugador.usuario.username}</td>
-      <td>{jugador.turno}</td>
     </tr>
   ));
 
@@ -57,10 +56,27 @@ export default function SalaEspera() {
     <div className="sala-espera">
       <div className="hero-div-sala-espera">
         <h1>Lobby</h1>
-       { partida!==null && partida.ownerPartida ===user.id && <div style={{ marginBottom: 20 }}>
-            <Button outline color="success" onClick={iniciarPartida}>Iniciar Partida</Button>
-
-        </div>}
+        {partida !== null && partida.ownerPartida === user.id && (
+          <div style={{ marginBottom: 20 }}>
+            <Button outline color="success" onClick={iniciarPartida}>
+              Iniciar Partida
+            </Button>
+          </div>
+        )}
+  
+        <div>
+          <h2>Jugadores en la partida</h2>
+          <Table striped>
+            <thead>
+              <tr>
+                <th>Nombre de Usuario</th>
+              </tr>
+            </thead>
+            <tbody>
+              {jugadoresList}
+            </tbody>
+          </Table>
+        </div>
       </div>
     </div>
   );

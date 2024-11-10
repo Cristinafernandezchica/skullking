@@ -10,16 +10,20 @@ import org.springframework.transaction.annotation.Transactional;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoRepository;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import jakarta.validation.Valid;
 
 @Service
 public class BazaService {
     
     private BazaRepository bazaRepository;
+    private TrucoService trucoService;
 
     @Autowired
-    public BazaService(BazaRepository bazaRepository) {
+    public BazaService(BazaRepository bazaRepository, TrucoService trucoService) {
         this.bazaRepository = bazaRepository;
+        this.trucoService = trucoService;
     }
 
     //Save las bazas en la base de datos
@@ -63,8 +67,9 @@ public class BazaService {
         bazaIniciada.setGanador(null);
         bazaIniciada.setCartaGanadora(null);
         bazaIniciada.setRonda(ronda);
-        bazaRepository.save(bazaIniciada);
-        return bazaIniciada;
+        Baza res = bazaRepository.save(bazaIniciada);
+        trucoService.iniciarTruco(res, ronda.getPartida().getId());
+        return res;
     }
 
     @Transactional(readOnly = true)

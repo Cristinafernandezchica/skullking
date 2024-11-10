@@ -19,7 +19,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 @Entity
 @Getter
 @Setter
-// @EqualsAndHashCode(of = "id", callSuper = true)
+@EqualsAndHashCode(of = "id")
 @Table(name = "trucos")
 public class Truco extends BaseEntity{
 
@@ -41,10 +41,6 @@ public class Truco extends BaseEntity{
 	@OnDelete(action = OnDeleteAction.CASCADE)
     // @Column(name = "mano")
 	private Mano mano;
-
-    // Jugador sacado de la relación con la entidad Mano
-    // @Column(name = "id_jugador")
-    private Integer jugador;
 
 
     // Carta sacada de la relación con la entidad Mano

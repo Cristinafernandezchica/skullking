@@ -21,9 +21,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -36,6 +41,8 @@ public class PartidaRestController {
 
     PartidaService ps;
     JugadorService js;
+    private ManoService ms;
+    private BazaService bs;
     // RondaService rs;
 
     @Autowired
@@ -111,6 +118,14 @@ public class PartidaRestController {
     public ResponseEntity<Void> iniciarPartida(@PathVariable("id")Integer id){
         ps.iniciarPartida(id);
         return ResponseEntity.ok().build();
+    }
+
+    // Para crear los trucos pertenecientes a una baza concreta
+    @PostMapping("/{partidaId}/rondas/{rondaId}/baza/{bazaId}/trucos")
+    public ResponseEntity<MessageResponse> crearTrucosDeBaza(@PathVariable("partidaId") int idPartida, @PathVariable("rondaId") int idRonda, @PathVariable("bazaId") int idBaza) {
+        List<Jugador> jugadores = js.findJugadoresByPartidaId(idPartida);
+        bs.crearTrucosBaza(idRonda, idBaza, jugadores);
+        return new ResponseEntity<>(new MessageResponse("Trucos creados"), HttpStatus.CREATED);
     }
     
 

@@ -41,4 +41,7 @@ public class Baza extends BaseEntity{
     //@ManyToOne(optional = true)
 	//@JoinColumn(name = "ronda_id")
 	//private Ronda ronda;
+
+    public Baza() {}
+
 }

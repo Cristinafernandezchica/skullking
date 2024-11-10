@@ -57,6 +57,7 @@ const crearPartida = async (nombrePartida) => {
         showError(errorData.message || errorData);
         // throw new Error('Error creando jugador:', errorData);
         // throw new Error('Network response was not ok');
+        // TODO: Navegar a pantalla de sala de espera correspondiente o a la pantalla de juego (se va a necesitar método en backend creo)
       }
 
       const partida = await response.json();
@@ -126,6 +127,7 @@ const unirseAPartida = async (partidaId) => {
       showError(errorData.message || errorData);
       // throw new Error('Error creando jugador:', errorData);
       // throw new Error('Network response was not ok');
+      // TODO: Tener en cuenta que puede que esté en juego y que entonces tenga que navegar a la pantalla de juego
       setTimeout(() => {
         navigate('/salaEspera/' + partidaId);
       }, 5000);

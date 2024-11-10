@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import jakarta.persistence.JoinColumn;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 
 @Entity
 @Getter
@@ -59,5 +60,14 @@ public class Truco extends BaseEntity{
 		return mano.getCartas().contains(idCarta);
 	}
 
+    public Truco() {}
+
+    public Truco(Baza baza, Mano mano, Integer jugador, Integer idCarta, Integer turno) {
+        this.baza = baza;
+        this.mano = mano;
+        this.jugador = jugador;
+        this.idCarta = idCarta;
+        this.turno = turno;
+    }
     
 }

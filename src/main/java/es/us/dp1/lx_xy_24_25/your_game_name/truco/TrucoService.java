@@ -126,6 +126,8 @@ public class TrucoService {
             ));
     }
 
+	
+
     // Inicial Truco
     // Next Truco
     

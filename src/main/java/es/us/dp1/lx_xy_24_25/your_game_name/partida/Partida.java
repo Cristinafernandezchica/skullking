@@ -22,19 +22,20 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(of = "id")
 public class Partida extends BaseEntity{
     
-    @NotBlank
+    @NotBlank(message = "El nombre de la partida no puede estar vacío")
     @NotNull
-    @Size(min = 1)
+    @Size(min = 1, max = 50, message = "El nombre de la partida puede tener como máximo 50 caracteres")
     private String nombre;
 
     @NotNull
     private LocalDateTime inicio;
 
+    @Nullable
     private LocalDateTime fin;
 
     @Enumerated(EnumType.STRING)
     private PartidaEstado estado;
 
-    @Nullable
+    @NotNull
     private  Integer ownerPartida;
 }

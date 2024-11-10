@@ -5,60 +5,50 @@ import { Button, Table } from "reactstrap";
 import tokenService from '../services/token.service.js';
 import { useNavigate } from 'react-router-dom';
 import getIdFromUrl from '../util/getIdFromUrl.js';
-import useFetchState from '../util/useFetchState.js'; // Importar correctamente
+import useFetchState from '../util/useFetchState.js'; 
+import InicioPartidaModal from '../components/modals/InicioPartidaModal.js';
 
 const jwt = tokenService.getLocalAccessToken();
 const user = tokenService.getUser();
 
 export default function SalaEspera() {
+
   const navigate = useNavigate();
-
   const id = getIdFromUrl(2);
-
-
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
-  const [jugadores, setJugadores] = useFetchState([], `/api/v1/partidas/${id}/jugadores`, jwt, setMessage, setVisible);
-  const [partida, setPartida] = useState(null);
+  //const [jugadores, setJugadores] = useFetchState([], `/api/v1/partidas/${id}/jugadores`, jwt, setMessage, setVisible);
+  const [partida, setPartida] = useFetchState(null, `/api/v1/partidas/${id}`, jwt, setMessage, setVisible);
+  const [jugadores, setJugadores] = useState([]);
 
-  useEffect(() => {
-    const fetchJugadores = async () => {
-      try {
-        const response = await fetch(`/api/v1/partidas/${id}/jugadores`, {
-          headers: {
-            'Authorization': `Bearer ${jwt}`,
-          }
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+  const fetchJugadores = async () => {
+    try {
+      const response = await fetch(`/api/v1/partidas/${id}/jugadores`, {
+        headers: {
+          'Authorization': `Bearer ${jwt}`
         }
-        const data = await response.json();
-        setJugadores(data);
-      } catch (error) {
-        console.error('Error fetching partida', error);
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-    };
+      const data = await response.json();
+      setJugadores(data);
+    } catch (error) {
+      console.error('Error fetching jugadores:', error);
+      setMessage('Error fetching jugadores');
+      setVisible(true);
+    }
+  };
 
-    const fetchPartida = async () => {
-        try {
-          const response = await fetch(`/api/v1/partidas/${id}`, {
-            headers: {
-              'Authorization': `Bearer ${jwt}`,
-            }
-          });
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          setPartida(data);
-        } catch (error) {
-          console.error('Error fetching partida', error);
-        }
-      };
-
+  // Para que se actualice la lista de jugadores que se van uniendo
+  useEffect(() => {
     fetchJugadores();
-    fetchPartida();
-  }, [id, jwt]);
+
+    const intervalId = setInterval(fetchJugadores, 3000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
 
   const jugadoresList = jugadores.map((jugador) => (
     <tr key={jugador.id}>
@@ -69,23 +59,24 @@ export default function SalaEspera() {
 
   const iniciarPartida = async () => {
     try {
-      const response = await fetch(`/api/v1/partidas/${id}`, {
-        method: 'PUT',
+      console.log(id);
+      const response = await fetch(`/api/v1/partidas/${id}/iniciar-partida`, {
+        method: 'POST',
         headers: {
           'Authorization': `Bearer ${jwt}`,
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          estado: 'JUGANDO',
         }),
       });
 
       if (!response.ok) {
+        console.log("algo falla")
         throw new Error('Network response was not ok');
       }
 
-      const partidaIniciada = await response.json();
       navigate(`/tablero/${id}`);
-      console.log('Partida iniciada:', partidaIniciada);
+
     } catch (error) {
       console.error('Error:', error);
     }
@@ -95,24 +86,24 @@ export default function SalaEspera() {
     <div className="sala-espera">
       <div className="hero-div-sala-espera">
         <h1>Lobby</h1>
-        <div style={{ marginBottom: 20 }}>
-           
+       { partida!==null && partida.ownerPartida ===user.id && <div style={{ marginBottom: 20 }}>
             <Button outline color="success" onClick={iniciarPartida}>Iniciar Partida</Button>
 
+        </div>}
+        <div className="jugadores-lista"> 
+          <Table> 
+            <thead> 
+              <tr> 
+                <th>Username</th> 
+                <th>Turno</th> 
+              </tr> 
+            </thead> 
+            <tbody> 
+              {jugadoresList} 
+            </tbody> 
+          </Table> 
         </div>
-        <div className="tabla-container">
-        <Table aria-label="users" className="mt-4">
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Turno</th>
-            </tr>
-          </thead>
-          <tbody>{jugadoresList}</tbody>
-        </Table>
       </div>
-      </div>
-
     </div>
   );
 }

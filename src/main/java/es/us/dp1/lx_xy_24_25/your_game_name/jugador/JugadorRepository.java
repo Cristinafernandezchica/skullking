@@ -8,11 +8,11 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface JugadorRepository extends CrudRepository<Jugador,Integer>{
     
-    @Query("SELECT j FROM Jugador j WHERE j.partidaId = :partidaId")
+    @Query("SELECT j FROM Jugador j WHERE j.partida.id = :partidaId")
     List<Jugador> findJugadoresByPartidaId(Integer partidaId);
 
     @Query("SELECT j FROM Jugador j WHERE j.usuario.id = :usuarioId")
-    List<Jugador> findJugadorByUsuarioId(Integer usuarioId);
-    
+    List<Jugador> findJugadoresByUsuarioId(Integer usuarioId);
+
     Optional<Jugador> findById(Integer id);
 }

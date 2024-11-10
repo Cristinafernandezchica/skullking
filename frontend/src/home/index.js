@@ -19,10 +19,30 @@ export default function Home(){
     return(
         <div className="home-page-container">
             <div className="hero-div">
-                <h1>Your game</h1>
-                <h3>---</h3>
-                <img src={logo}/>
-                <h3>Do you want to play?</h3>
+                <h1>¿Quieres jugar a Skull King?</h1>
+                {!jwt &&(
+                    <div className = "hero">
+                        <Button outline color="success" style={{ borderColor: 'white', color: 'white' }}>
+                        <Link
+                            to={`/register`}
+                            className="btn sm"
+                            style={{ textDecoration: "none" }}
+                        >
+                            Regístrate
+                        </Link>
+                        </Button>
+                        <h3>o</h3>
+                        <Button outline color="success" style={{ borderColor: 'white', color: 'white' }}>
+                        <Link
+                            to={`/login`}
+                            className="btn sm"
+                            style={{ textDecoration: "none" }}
+                        >
+                            Inicia sesión
+                        </Link>
+                        </Button>
+                    </div>
+                )}
                 {roles.includes('PLAYER') && (
                     <Button outline color="success">
                         <Link

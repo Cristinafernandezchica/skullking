@@ -87,7 +87,7 @@ public class BazaRestController {
 		return new ResponseEntity<>(new MessageResponse("Baza deleted!"), HttpStatus.OK);
 	}
 
-
+    //Get ganador de una baza concreta
     @GetMapping("/{id}/ganador")
     public Jugador findBazaByIdGanador(@PathVariable(value = "id") int id) {
         Baza bazaById = bs.findById(id);
@@ -107,4 +107,9 @@ public class BazaRestController {
 	}
 
 
+    // PETICION PARA OBTENER LA ULTIMA BAZA DE UNA RONDA EN CONCRETA
+    @GetMapping(value = "{rondaId}/ultimaBaza")
+    public ResponseEntity<Baza> findUltimaBazaByRondaId(@PathVariable("rondaId") Integer rondaId) {
+        return new ResponseEntity<>(bs.findUltimaBazaByRondaId(rondaId), HttpStatus.OK);
+    }
 }

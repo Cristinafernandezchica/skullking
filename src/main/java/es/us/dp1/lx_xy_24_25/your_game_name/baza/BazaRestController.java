@@ -112,4 +112,11 @@ public class BazaRestController {
     public ResponseEntity<Baza> findUltimaBazaByRondaId(@PathVariable("rondaId") Integer rondaId) {
         return new ResponseEntity<>(bs.findUltimaBazaByRondaId(rondaId), HttpStatus.OK);
     }
+
+    // Para crear los trucos pertenecientes a una baza concreta
+    @PostMapping("/{bazaId}/trucos")
+    public ResponseEntity<MessageResponse> crearTrucosDeBaza(@PathVariable("bazaId") int idBaza) {
+        trucoService.crearTrucosBaza(idBaza);
+        return new ResponseEntity<>(new MessageResponse("Trucos creados"), HttpStatus.CREATED);
+    }
 }

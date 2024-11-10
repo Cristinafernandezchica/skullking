@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
@@ -29,6 +30,7 @@ public class BazaService {
     private ManoRepository manoRepository;
     private RondaService rondaService;
     private PartidaService partidaService;
+    private JugadorService jugadorService;
 
     @Autowired
     public BazaService(BazaRepository bazaRepository) {
@@ -69,27 +71,6 @@ public class BazaService {
         return toUpdate;
     }
 
-    // Crear Trucos de una Baza y guardarlas en la base de datos
-    @Transactional
-    public void crearTrucosBaza(Integer idRonda, Integer idBaza, List<Jugador> jugadores) {
-        Baza baza = findById(idBaza);
-        // Crear y guardar cada instancia de Truco de dicha Baza
-        for (int i = 0; i < jugadores.size(); i++) {
-            Integer jugador = jugadores.get(i).getId();
-            Optional<Mano> posibleMano = manoRepository.findManoByJugadorIdRondaId(idRonda, jugador);
-            Mano mano = null;
-            if (posibleMano != null) {
-                mano = posibleMano.get();
-            } else {
-                throw new ResourceNotFoundException("Mano", "jugadorId", jugador);
-            }
-            Integer turno = i; 
-            Integer idCarta = null;
-            
-            Truco truco = new Truco(baza, mano, jugador, idCarta, turno);
-            trucoRepository.save(truco);
-        }
-    }
     @Transactional(readOnly = true)
     public Baza findUltimaBazaByRondaId(Integer rondaId){
                List<Baza> Bazas =bazaRepository.findBazasByRondaId(rondaId);

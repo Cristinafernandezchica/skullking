@@ -1,6 +1,7 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.baza;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,20 +10,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoRepository;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
-import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import jakarta.validation.Valid;
 
 @Service
 public class BazaService {
     
     private BazaRepository bazaRepository;
+    private TrucoRepository trucoRepository;
+    private ManoRepository manoRepository;
     private RondaService rondaService;
     private PartidaService partidaService;
-    private TrucoService trucoService;
+    private JugadorService jugadorService;
 
     @Autowired
     public BazaService(BazaRepository bazaRepository) {

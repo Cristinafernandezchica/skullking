@@ -146,14 +146,6 @@ public class PartidaRestController {
         ps.iniciarPartida(id);
         return ResponseEntity.ok().build();
     }
-
-    // Para crear los trucos pertenecientes a una baza concreta
-    @PostMapping("/{partidaId}/rondas/{rondaId}/baza/{bazaId}/trucos")
-    public ResponseEntity<MessageResponse> crearTrucosDeBaza(@PathVariable("partidaId") int idPartida, @PathVariable("rondaId") int idRonda, @PathVariable("bazaId") int idBaza) {
-        List<Jugador> jugadores = js.findJugadoresByPartidaId(idPartida);
-        bs.crearTrucosBaza(idRonda, idBaza, jugadores);
-        return new ResponseEntity<>(new MessageResponse("Trucos creados"), HttpStatus.CREATED);
-    }
     
 
 }

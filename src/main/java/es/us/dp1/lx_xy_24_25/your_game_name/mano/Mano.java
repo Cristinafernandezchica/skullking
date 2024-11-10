@@ -33,9 +33,12 @@ public class Mano extends BaseEntity{
 
     private Integer resultado;
 
+    // Esto no tiene que estar aquí  -->  TODO: MIRAR RELACIÓN BIEN
+    /*
     @ManyToOne(optional = true)
     @JoinColumn(name = "truco_id")
     private Truco truco;
+    */
 
     @ManyToOne(optional = true)
     @JoinColumn(name = "ronda_id")

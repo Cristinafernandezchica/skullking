@@ -39,6 +39,4 @@ public class Ronda extends BaseEntity{
     @JoinColumn(name = "partida_id")
     private Partida partida;
 
-    
-
 }

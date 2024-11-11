@@ -50,7 +50,32 @@ export default function Jugando() {
       fetchMano(tu.id);}
   }, [tu]);
 
-/*
+  /*
+  useEffect(() => {
+    const fetchRondaActual = async (partidaId) => {
+        try {
+            const response = await fetch(`/api/v1/rondas/${partidaId}/partida`, {
+                headers: {
+                    "Authorization": `Bearer ${jwt}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+            setRonda(data);
+            
+        } catch (error) {
+            console.error("Error fetching partidas:", error);
+            setMessage(error.message);
+            setVisible(true);
+        }
+    };
+    fetchRondaActual(id);
+}, []);
+
+
   const jugarTruco = async () => {
     try {
       console.log(id);
@@ -78,7 +103,7 @@ export default function Jugando() {
 
 */
   console.log("mano encontrada",mano);
-
+  console.log("ronda encontrada",ronda);
    console.log(jugador);
   console.log(id);
   return (

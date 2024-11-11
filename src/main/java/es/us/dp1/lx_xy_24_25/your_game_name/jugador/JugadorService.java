@@ -63,7 +63,7 @@ public class JugadorService {
         Partida partida = jugador.getPartida();
         List<Jugador> jugadoresPartida = findJugadoresByPartidaId(partida.getId());
 
-        if(jugadoresPartida.size() == 10){
+        if(jugadoresPartida.size() == 8){
             throw new MaximoJugadoresPartidaException("La partida está completa.");
         } else if(jugador.getUsuario().getId() == partida.getOwnerPartida() || jugadorEnPartida(jugadoresPartida, jugador)){
             throw new UsuarioMultiplesJugadoresEnPartidaException("El usuario ya tiene un jugador en la partida.");
@@ -146,7 +146,7 @@ public class JugadorService {
        List<Jugador> jugadores =jugadorRepository.findJugadoresByUsuarioId(usuarioId);
        Jugador jugadoresOrdenados = jugadores.stream()
                 .sorted((j1, j2) -> j2.getId().compareTo(j1.getId())) // Orden descendente
-                .findFirst().orElse(null);
+                .findFirst().orElseThrow(()-> new ResourceNotFoundException( "no se ha encontrado ningun jugador cuya usuarioId sea " + usuarioId));
                 return jugadoresOrdenados;
     }
 

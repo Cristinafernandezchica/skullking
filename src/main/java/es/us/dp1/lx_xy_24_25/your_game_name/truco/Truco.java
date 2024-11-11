@@ -57,7 +57,7 @@ public class Truco extends BaseEntity{
     private Integer turno;
 
     public Boolean esCartaDeMano() {
-		return mano.getCartas().contains(idCarta);
+		return (mano.getCartas().stream().map(c-> c.getId()).toList()).contains(idCarta);
 	}
 
     public Truco() {}

@@ -5,12 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.AccessDeniedException;
+import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.NoCartaDeManoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoRepository;
-import es.us.dp1.lx_xy_24_25.your_game_name.truco.exceptions.NoCartaDeManoException;
+import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
+import es.us.dp1.lx_xy_24_25.your_game_name.user.UserService;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
@@ -30,6 +34,7 @@ public class TrucoService {
 	private BazaRepository bazaRepository;
 	private ManoRepository manoRepository;
 	private JugadorService jugadorService;
+	private UserService userService;
 
 
     @Autowired
@@ -81,38 +86,35 @@ public class TrucoService {
 
     @Transactional
 	public Truco saveTruco(Truco truco) throws DataAccessException {
-        Truco trucoComprobado = getTrucoWithImposibleIdCarta(truco);
-		if (trucoComprobado.equals(null)) {
-			throw new NoCartaDeManoException();
-		} else
-            //trucoRepository.save(truco);
-            trucoRepository.save(trucoComprobado);
-		// return truco;
-        return trucoComprobado;
-	}
+		Boolean cartaEnMano = truco.getMano().getCartas().stream()
+            .anyMatch(carta -> carta.getId().equals(truco.getIdCarta()));
 
-    private Truco getTrucoWithImposibleIdCarta(Truco truco) {
-        List<Integer> cartas = truco.getMano().getCartas().stream().map(Carta::getId).collect(Collectors.toList());
-		Integer idCarta = truco.getIdCarta();
-        Boolean cartaValida = false;
-		for (Integer c : cartas) {
-			if (idCarta.equals(c)) {
-				cartaValida = true;
-			}
-		}
-        Truco res = cartaValida.equals(false) ? null : truco;
-		return res;
+    	if (!cartaEnMano) {
+        	throw new NoCartaDeManoException();
+    	}
+        
+		trucoRepository.save(truco);
+        return truco;
 	}
 
     @Transactional
 	public Truco updateTruco(Truco truco, int trucoId) throws DataAccessException {
-		Truco toUpdate = findTrucoById(trucoId);
-        Truco trucoComprobado = getTrucoWithImposibleIdCarta(truco);
-		if (trucoComprobado.equals(null)) {
+        Boolean cartaEnMano = truco.getMano().getCartas().stream()
+            .anyMatch(carta -> carta.getId().equals(truco.getIdCarta()));
+		if (!cartaEnMano) {
 			throw new NoCartaDeManoException();
-		} else
-            BeanUtils.copyProperties(trucoComprobado, toUpdate, "id", "jugador");
-		    trucoRepository.save(toUpdate);
+		}
+
+		Truco toUpdate = findTrucoById(trucoId);
+		User user = userService.findCurrentUser();
+		Jugador jugador = jugadorService.findJugadorByUsuarioId(user.getId());
+
+		if (toUpdate.getJugador()!= jugador.getId()) {
+			throw new AccessDeniedException("Un jugador no puede modificar un truco que no es suyo");
+		}
+        
+		BeanUtils.copyProperties(truco, toUpdate, "id");
+		trucoRepository.save(toUpdate);
 
 		return toUpdate;
 	}

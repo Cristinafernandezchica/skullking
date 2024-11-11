@@ -3,10 +3,13 @@ package es.us.dp1.lx_xy_24_25.your_game_name.ronda;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
@@ -14,6 +17,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
+import jakarta.validation.Valid;
 
 @Service
 public class RondaService {
@@ -44,13 +48,21 @@ public class RondaService {
     }
 
     @Transactional(readOnly=true)
-    public Optional<Ronda> getRondaById(Integer id){
-        return rr.findById(id);
+    public Ronda getRondaById(Integer id) throws DataAccessException{
+        return rr.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ronda", "id", id));
     }
 
     @Transactional
     public void delete(Integer id) {
         rr.deleteById(id);
+    }
+
+    @Transactional
+    public Ronda updateRonda(@Valid Ronda ronda, Integer idToUpdate) throws DataAccessException{
+        Ronda toUpdate = getRondaById(idToUpdate);
+        BeanUtils.copyProperties(ronda, toUpdate, "id");
+        rr.save(toUpdate);
+        return toUpdate;
     }
 
     @Transactional
@@ -63,15 +75,15 @@ public class RondaService {
         ronda.setEstado(RondaEstado.JUGANDO);
         Ronda res= rr.save(ronda);
         ms.iniciarManos(partida.getId(),res);
-        bs.iniciarBazas(ronda);
+        // bs.iniciarBazas(ronda);
         return res;
     }
 
 
     // Partida accederá a dicha función proporcionándo el id de la ronda actual
     @Transactional
-    public Ronda nextRonda(Integer id) {
-        Ronda ronda = rr.findById(id)
+    public Ronda nextRonda(Integer rondaId) {
+        Ronda ronda = rr.findById(rondaId)
             .orElseThrow(() -> new ResourceNotFoundException("Ronda no encontrada"));
         Integer nextRonda = ronda.getNumRonda() + 1;
         ronda.setEstado(RondaEstado.FINALIZADA);
@@ -83,10 +95,10 @@ public class RondaService {
             ronda.setNumRonda(nextRonda);
             ronda.setBazaActual(1);
             ronda.setEstado(RondaEstado.JUGANDO);
-           //  ms.iniciarManos(partida.getId(),ronda.getNumRonda());
-            // ronda.setNumBazas(ms.getNumCartasARepartir(ronda.getNumRonda(), 
-           //  js.findJugadoresByPartidaId(ronda.getPartida().getId()).size()));
-            // bs.iniciarBazas()
+            ms.iniciarManos(ronda.getPartida().getId(),ronda);
+            ronda.setNumBazas(ms.getNumCartasARepartir(ronda.getNumRonda(), 
+                    js.findJugadoresByPartidaId(ronda.getPartida().getId()).size()));
+            // bs.iniciarBazas(ronda);
         }
         
         return rr.save(ronda);
@@ -94,14 +106,10 @@ public class RondaService {
 
     @Transactional
     public void finalizarRonda(Integer rondaId){
-        Optional<Ronda> rondaOpt = getRondaById(rondaId);
-        if (!rondaOpt.isPresent()) {
-            throw new ResourceNotFoundException("Ronda no encontrada");
-        }
+        Ronda ronda = getRondaById(rondaId);
 
-        Ronda ronda = rondaOpt.get();
         ronda.setEstado(RondaEstado.FINALIZADA);
-        // ms.calculoPuntaje(ronda.getNumBazas());
+        ms.calculoPuntaje(ronda.getNumBazas(), rondaId);
 
         rr.save(ronda);
     }

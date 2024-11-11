@@ -63,7 +63,6 @@ public class BazaService {
         return toUpdate;
     }
 
-    
 
     @Transactional(readOnly = true)
     public Baza findUltimaBazaByRondaId(Integer rondaId){

@@ -77,7 +77,6 @@ public class RondaService {
         return res;
     }
 
-
     // Partida accederá a dicha función proporcionándo el id de la ronda actual
     @Transactional
     public Ronda nextRonda(Integer rondaId) {

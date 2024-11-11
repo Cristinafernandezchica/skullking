@@ -34,6 +34,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
+import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -58,10 +59,12 @@ public class PartidaRestController {
     }
 
     // Para Validator
+    /*
     @InitBinder("partida")
     public void initPartidaBinder(WebDataBinder dataBinder){
         dataBinder.setValidator(new PartidaValidator(ps));
     }
+    */
 
     // @RequestParam es para filtrar por esos valores, por tanto no hacen falta los métodos PartidasByName y PartidasByEstado
     @GetMapping
@@ -71,13 +74,11 @@ public class PartidaRestController {
 
     @GetMapping("/{id}")
     public Partida getPartidaById(@PathVariable("id")Integer id){
-        Optional<Partida> p = ps.getPartidaById(id);
-        if(!p.isPresent())
-            throw new ResourceNotFoundException("Partida", "id", id);
-        return p.get();
+        Partida p = ps.getPartidaById(id);
+        return p;
     }
 
-    /*
+    
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Partida> createPartida(@Valid @RequestBody Partida p){
@@ -89,8 +90,8 @@ public class PartidaRestController {
                 .toUri();
         return ResponseEntity.created(location).body(p);
     }
-    */
 
+    /*
     @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createPartida(@RequestBody @Valid Partida partida, BindingResult bindingResult){
@@ -104,10 +105,12 @@ public class PartidaRestController {
         return new ResponseEntity<>(savedPartida, HttpStatus.CREATED);
         
     }
+    */
 
     @PutMapping(value="/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> updatePartida(@Valid @RequestBody Partida p, @PathVariable("id") Integer id){
+        RestPreconditions.checkNotNull(ps.getPartidaById(id), "Partida", "ID", id);
         Partida pToUpdate = getPartidaById(id);
         BeanUtils.copyProperties(p, pToUpdate, "id");
         ps.save(pToUpdate);
@@ -115,16 +118,15 @@ public class PartidaRestController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Void> deletePartida(@PathVariable("id")Integer id){
-        if(getPartidaById(id)!=null)
-            ps.delete(id);
-        return ResponseEntity.noContent().build();
-        
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<MessageResponse> deletePartida(@PathVariable("id")Integer id){
+        RestPreconditions.checkNotNull(ps.getPartidaById(id), "Partida", "ID", id);
+        ps.delete(id);
+        return new ResponseEntity<>(new MessageResponse("Partida eliminada"), HttpStatus.NO_CONTENT); 
     }
 
     // Relación de uno a muchos con la clase Jugador, mirar los nombres de los métodos
-    // TENER EN CUENTA
+    // TENER EN CUENTA  -->  Habrá que hacer un DTO seguramente
     // Te devulve el jugador con la contraseña incluida, para frontend solo queremos el username
     @GetMapping("/{id}/jugadores")
     public ResponseEntity<List<Jugador>> getJugadoresByPartidaId(@PathVariable("id")Integer id){

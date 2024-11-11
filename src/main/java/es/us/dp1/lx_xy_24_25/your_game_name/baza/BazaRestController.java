@@ -8,10 +8,6 @@ import org.springframework.http.ResponseEntity;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
-import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
-import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
-import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
@@ -44,8 +40,9 @@ public class BazaRestController {
     private TrucoService trucoService;
 
     @Autowired
-    public BazaRestController(BazaService bs){
+    public BazaRestController(BazaService bs, TrucoService trucoService){
         this.bs=bs;
+        this.trucoService=trucoService;
     }
 
     // Get todas las bazas
@@ -74,7 +71,7 @@ public class BazaRestController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Baza> updateBaza(@Valid @RequestBody Baza b,@PathVariable("id")Integer id){
         RestPreconditions.checkNotNull(bs.findById(id), "Baza", "id", id);
-		return new ResponseEntity<>(this.bs.updateBaza(b,id), HttpStatus.OK);
+		return new ResponseEntity<>(this.bs.updateBaza(b,id), HttpStatus.NO_CONTENT);
 
     }
 
@@ -84,7 +81,7 @@ public class BazaRestController {
 	public ResponseEntity<MessageResponse> deleteBaza(@PathVariable("id") int id) {
 		RestPreconditions.checkNotNull(bs.findById(id), "Baza", "ID", id);
 		bs.deleteBaza(id);
-		return new ResponseEntity<>(new MessageResponse("Baza deleted!"), HttpStatus.OK);
+		return new ResponseEntity<>(new MessageResponse("Baza eliminada!"), HttpStatus.NO_CONTENT);
 	}
 
     //Get ganador de una baza concreta
@@ -94,20 +91,21 @@ public class BazaRestController {
         return bazaById.getGanador();
     }
 
-    // PETICIÓN PARA OBTENER LOS TRUCOS DE UNA BAZA CONCRETA
-    @GetMapping(value = "{bazaId}/trucos")
-	public ResponseEntity<List<Truco>> findTrucosByBazaId(@PathVariable("bazaId") int id) {
+    // Los tests de esto donde va ¿?
+
+    // Get todos los trucos de una baza concreta
+    @GetMapping(value = "{id}/trucos")
+	public ResponseEntity<List<Truco>> findTrucosByBazaId(@PathVariable("id") int id) {
 		return new ResponseEntity<>(trucoService.findTrucosByBazaId(id), HttpStatus.OK);
 	}
 
-    // PETICIÓN PARA OBTENER LAS CARTAS DE UNA BAZA POR JUGADOR ORDENADAS POR TURNO
-    @GetMapping(value = "{bazaId}/cartasJugadores")
-	public ResponseEntity<Map<Integer, Integer>> findCartasPorJugadorByBazaId(@PathVariable("bazaId") int id) {
+    // Get todas las cartas de una baza por jugador ordenadas por turno
+    @GetMapping(value = "{id}/cartasJugadores")
+	public ResponseEntity<Map<Integer, Integer>> findCartasPorJugadorByBazaId(@PathVariable("id") int id) {
 		return new ResponseEntity<>(trucoService.getCartaByJugador(id), HttpStatus.OK);
 	}
 
-
-    // PETICION PARA OBTENER LA ULTIMA BAZA DE UNA RONDA EN CONCRETA
+    // Get la ultima baza de una ronda concreta por id
     @GetMapping(value = "{rondaId}/ultimaBaza")
     public ResponseEntity<Baza> findUltimaBazaByRondaId(@PathVariable("rondaId") Integer rondaId) {
         return new ResponseEntity<>(bs.findUltimaBazaByRondaId(rondaId), HttpStatus.OK);

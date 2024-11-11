@@ -20,6 +20,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -39,11 +40,14 @@ public class BazaServiceTest {
     @Mock
     private BazaRepository bazaRepository;
 
+    @Mock
+    private RondaService rondaService;
+
+    @Mock
+    private TrucoService trucoService;
 
     @InjectMocks
     private BazaService bazaService;
-    private RondaService rondaService;
-    private PartidaService partidaService;
 
     private Baza baza;
     private Baza bazaV;
@@ -56,7 +60,6 @@ public class BazaServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-
         // Configuración de entidades relacionadas
         jugador = new Jugador();
         jugador.setId(1);
@@ -84,7 +87,7 @@ public class BazaServiceTest {
         ronda.setId(1);
         ronda.setBazaActual(3);
         ronda.setEstado(RondaEstado.JUGANDO);
-        ronda.setNumBazas(4);
+        ronda.setNumBazas(3);
         ronda.setNumRonda(4);
         ronda.setPartida(partida);
 
@@ -208,32 +211,73 @@ public class BazaServiceTest {
         assertEquals(2, ultimaBaza.getId()); // Debería devolver la última baza por ID (orden descendente)
         verify(bazaRepository, times(1)).findBazasByRondaId(1);
     }
-    /*
-    // Test: Iniciar nueva ronda cuando se supera el número de bazas de la ronda actual
+    
+    
     @Test
-    void testNextBaza_IniciarNuevaRonda() {
-        baza.setNumBaza(5); // Última baza de la ronda
-        when(bazaRepository.findById(1)).thenReturn(Optional.of(baza));
+    void testFindByRondaIdAndNumBaza() {
+        when(bazaRepository.findByRondaIdAndNumBaza(1, 3)).thenReturn(Optional.of(baza));
 
-        bazaService.nextBaza(1);
+        Baza foundBaza = bazaService.findByRondaIdAndNumBaza(1, 3);
 
-        verify(rondaService, times(1)).iniciarRonda(partida);
-        verify(partidaService, never()).finalizarPartida(anyInt());
+        assertNotNull(foundBaza);
+        assertEquals(1, foundBaza.getId());
+        assertEquals(3, foundBaza.getNumBaza());
     }
 
-    // Test: Finalizar partida cuando se supera el número de rondas (más de 10)
+       // Test para iniciar una nueva Baza
+       @Test
+       void testIniciarBazas() {
+           when(bazaRepository.save(any(Baza.class))).thenAnswer(invocation -> invocation.getArgument(0));
+   
+           Baza nuevaBaza = bazaService.iniciarBazas(ronda);
+   
+           assertNotNull(nuevaBaza);
+           assertEquals(1, nuevaBaza.getNumBaza());
+           assertNull(nuevaBaza.getCartaGanadora());
+           assertNull(nuevaBaza.getGanador());
+           assertEquals(ronda, nuevaBaza.getRonda());
+   
+           //Cuando esté hecho iniciarTrucos, descomentar y probar (antes de esta implementacion funciona todo :D)
+           verify(trucoService, times(1)).crearTrucosBaza(nuevaBaza.getId());
+
+           verify(bazaRepository, times(1)).save(nuevaBaza);
+       }
+
+
+    // Test para nextBaza: Incrementar numBaza dentro de la misma ronda
     @Test
-    void testNextBaza_FinalizarPartida() {
-        ronda.setNumRonda(10); // Última ronda
-        baza.setNumBaza(10); // Última baza
+    void testNextBaza_IncrementarNumBaza() {
+        baza.setNumBaza(1);
         when(bazaRepository.findById(1)).thenReturn(Optional.of(baza));
+        when(bazaRepository.save(any(Baza.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        bazaService.nextBaza(1);
+        Baza resultado = bazaService.nextBaza(1);
 
-        verify(partidaService, times(1)).finalizarPartida(partida.getId());
-        verify(rondaService, times(1)).save(ronda);
+        assertNotNull(resultado);
+        assertEquals(2, resultado.getNumBaza());
+        assertNull(resultado.getCartaGanadora());
+        assertNull(resultado.getGanador());
+
+        verify(bazaRepository, times(1)).save(baza);
+        verify(rondaService, never()).nextRonda(anyInt());
     }
-    */
+
+    // Test para nextBaza: Cambiar a la siguiente ronda cuando se alcanza la última baza
+    @Test
+    void testNextBaza_CambiarARondaSiguiente() {
+        baza.setNumBaza(3);
+        when(bazaRepository.findById(1)).thenReturn(Optional.of(baza));
+        when(bazaRepository.save(any(Baza.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Baza resultado = bazaService.nextBaza(1);
+
+        assertNotNull(resultado);
+        assertEquals(3, resultado.getNumBaza());
+
+        verify(rondaService, times(1)).nextRonda(ronda.getId());
+        verify(bazaRepository, times(1)).save(baza);
+    }
+    
     // Test: Excepción cuando la baza no se encuentra
     @Test
     void testNextBaza_BazaNoEncontrada() {

@@ -76,7 +76,7 @@ private JugadorService js;
             List<Carta> cartaMano= new ArrayList<Carta>();
             cartaMano.addAll(cartasBaraja);
             mano.setCartas(cartaMano);
-            mano.setTruco(null);
+            // mano.setTruco(null);
             mano.setRonda(ronda);
             manoRepository.save(mano);
             cartasBaraja.clear();   // Borramos las cartas de la baraja, para repartir al siguiente jugador
@@ -104,6 +104,30 @@ private JugadorService js;
         mano.setApuesta(apuesta);
         manoRepository.save(mano);
     }
+
+    public void calculoPuntaje(Integer numBazas, Integer rondaId){
+         List<Mano> manos = manoRepository.findAllByRondaId(rondaId);
+         for(Mano m:manos){
+            Integer puntaje = 0;
+            Jugador jugador = m.getJugador();
+            if(m.getApuesta()==0){
+                if(m.getApuesta().equals(m.getResultado())){
+                    puntaje += 10*numBazas;
+                }else{
+                    puntaje -= 10*numBazas;
+                }
+            }else{
+                if(m.getApuesta().equals(m.getResultado())){
+                    puntaje += 20*m.getApuesta();
+                }else{
+                    puntaje -= 10*Math.abs(m.getApuesta()-m.getResultado());
+                }
+            }
+            jugador.setPuntos(jugador.getPuntos() + puntaje);
+         }
+    }
+
+    
     @Transactional(readOnly = true)
     public Mano findLastManoByJugadorId(Integer jugadorId){
         List<Mano> res =manoRepository.findAllManoByJugadorId(jugadorId);
@@ -112,6 +136,5 @@ private JugadorService js;
         .findFirst().orElse(null);
         return ultimaManoCreada;
     }
-
 
 }

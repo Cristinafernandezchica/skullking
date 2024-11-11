@@ -3,6 +3,7 @@ package es.us.dp1.lx_xy_24_25.your_game_name.partida;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -48,6 +49,7 @@ public class PartidaServiceTest {
     private Partida partidaJugando;
     private Partida partida1;
     private Partida partida2;
+    private Partida updatedPartida;
 
     @BeforeEach
     void setUp() {
@@ -87,6 +89,10 @@ public class PartidaServiceTest {
         partida2.setEstado(PartidaEstado.ESPERANDO);
         partida2.setInicio(LocalDateTime.now());
         partida2.setOwnerPartida(1);
+
+        updatedPartida = partida;
+        updatedPartida.setNombre("Partida Actualizada");
+        updatedPartida.setEstado(PartidaEstado.JUGANDO);
     }
 
     // Test para obtener todas las partidas
@@ -177,21 +183,62 @@ public class PartidaServiceTest {
         verify(partidaRepository, times(1)).deleteById(1);
     }
 
+    // Test para actualizar una partida (caso positivo)
+    @Test
+    void testUpdatePartida() {
+        when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
+        when(partidaRepository.save(any(Partida.class))).thenReturn(partida);
+
+        partida.setNombre("Partida Actualizada");
+        partida.setEstado(PartidaEstado.JUGANDO);
+
+        Partida result = partidaService.update(updatedPartida, 1);
+
+        assertNotNull(result);
+        assertEquals("Partida Actualizada", result.getNombre());
+        assertEquals(PartidaEstado.JUGANDO, result.getEstado());
+        assertEquals(1, result.getId()); // La ID original debe mantenerse
+        assertEquals(1, result.getOwnerPartida()); // La id del owner debe mantenerse
+        verify(partidaRepository, times(1)).findById(1);
+        verify(partidaRepository, times(1)).save(any(Partida.class));
+    }
+
+    // Test para actualizar una partida (excepción)
+    @Test
+    void testUpdatePartidaNotFound() {
+        when(partidaRepository.findById(99)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> partidaService.update(updatedPartida, 99));
+        verify(partidaRepository, times(1)).findById(99);
+        verify(partidaRepository, times(0)).save(any(Partida.class)); // No se debe llamar al save si no se encuentra la partida
+    }
+
+
     // Test para iniciar una partida (caso positivo)
     @Test
     public void testIniciarPartidaConTresOMasJugadores() {
         Partida partida = new Partida();
         partida.setId(1);
 
+        // Simular los comportamientos esperados
         when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
         when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(List.of(new Jugador(), new Jugador(), new Jugador())); // 3 jugadores
-        when(partidaRepository.save(partida)).thenReturn(partida);
+        when(partidaRepository.save(any(Partida.class))).thenReturn(partida);
 
+        // Llamar al método bajo prueba
         partidaService.iniciarPartida(1);
 
+        // Verificaciones
         assertEquals(PartidaEstado.JUGANDO, partida.getEstado());
-        verify(rondaService).iniciarRonda(partida);
+        assertNotNull(partida.getInicio()); // Verificar que se haya establecido la hora de inicio
+        verify(partidaRepository, times(2)).findById(1); // La llamada a findById sucede dos veces
+        verify(jugadorService).findJugadoresByPartidaId(1);
+        verify(partidaRepository, times(1)).save(any(Partida.class));
+        verify(rondaService).iniciarRonda(partida); // Verificar que se inicie la ronda
     }
+
+
+
 
     // Test para iniciar una partida (exception)
     @Test
@@ -203,7 +250,12 @@ public class PartidaServiceTest {
         when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(List.of(new Jugador(), new Jugador())); // Solo 2 jugadores
 
         assertThrows(MinJugadoresPartidaException.class, () -> partidaService.iniciarPartida(1));
+
+        verify(partidaRepository, times(1)).findById(1);
+        verify(partidaRepository, times(0)).save(any(Partida.class)); // No se debe guardar la partida
+        verify(rondaService, times(0)).iniciarRonda(any(Partida.class)); // No se debe iniciar la ronda
     }
+
 
     // Test para finalizar una partida
     @Test
@@ -213,8 +265,11 @@ public class PartidaServiceTest {
         partidaService.finalizarPartida(1);
 
         assertEquals(PartidaEstado.TERMINADA, partida.getEstado());
+        assertNotNull(partida.getFin()); // Verificar que se haya establecido la hora de fin
+        verify(partidaRepository, times(2)).findById(1); // La llamada a findById sucede dos veces
         verify(partidaRepository, times(1)).save(partida);
     }
+
 
     // Test para validar si el usuario tiene partidas en espera o en juego
     @Test

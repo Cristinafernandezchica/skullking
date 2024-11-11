@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
@@ -58,14 +59,6 @@ public class PartidaRestController {
         // this.rs = rs;
     }
 
-    // Para Validator
-    /*
-    @InitBinder("partida")
-    public void initPartidaBinder(WebDataBinder dataBinder){
-        dataBinder.setValidator(new PartidaValidator(ps));
-    }
-    */
-
     // @RequestParam es para filtrar por esos valores, por tanto no hacen falta los métodos PartidasByName y PartidasByEstado
     @GetMapping
     public List<Partida> getAllPartidas(@ParameterObject() @RequestParam(value="nombre", required = false) String nombre, @ParameterObject @RequestParam(value="estado",required = false) PartidaEstado estado){
@@ -91,30 +84,11 @@ public class PartidaRestController {
         return ResponseEntity.created(location).body(p);
     }
 
-    /*
-    @PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> createPartida(@RequestBody @Valid Partida partida, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            List<String> errorMessages = bindingResult.getAllErrors().stream()
-            .map(error -> ((FieldError) error).getField() + ": " + error.getDefaultMessage())
-            .collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(errorMessages);
-        }
-        Partida savedPartida = ps.save(partida);
-        return new ResponseEntity<>(savedPartida, HttpStatus.CREATED);
-        
-    }
-    */
-
     @PutMapping(value="/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Void> updatePartida(@Valid @RequestBody Partida p, @PathVariable("id") Integer id){
+    public ResponseEntity<Partida> updatePartida(@Valid @RequestBody Partida p, @PathVariable("id") Integer id){
         RestPreconditions.checkNotNull(ps.getPartidaById(id), "Partida", "ID", id);
-        Partida pToUpdate = getPartidaById(id);
-        BeanUtils.copyProperties(p, pToUpdate, "id");
-        ps.save(pToUpdate);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(this.ps.update(p,id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -143,7 +117,7 @@ public class PartidaRestController {
     */
 
     // Para iniciar una partida desde frontend
-    @PostMapping("/{id}/iniciar-partida")
+    @PutMapping("/{id}/iniciar-partida")
     public ResponseEntity<Void> iniciarPartida(@PathVariable("id") Integer id){
         ps.iniciarPartida(id);
         return ResponseEntity.ok().build();

@@ -24,32 +24,41 @@ Siguiendo la jerarquía, hallamos el palo de triunfos con cartas numeradas del 1
 
 #### Bandera Blanca
 ![Bandera Blanca](/src/main/resources/images/cartas/bandera_blanca.png)
+
  Las 5 cartas de bandera blanca pueden ser jugadas para ‘no ganar’ al considerarse de valor 0. Pierden con el resto de cartas. Son muy útiles para aseguraros no ganar más bazas de las que se han pujado.
 
 #### Pirata
 ![Pirata](/src/main/resources/images/cartas/pirata_1.png)
+
 Las cartas de Pirata superan a todas las cartas numeradas. Todas son de igual valor, por lo que si se juegan más de una en la misma baza, quien haya jugado el primer pirata ganará la baza.
 
 #### Tigresa
 ![Tigresa](/src/main/resources/images/cartas/tigresa.png)
+
 Al jugar la Tigresa, debéis declarar si contará como Pirata o como Huida. Asume todas la características de un pirata o de una huida.
 
 #### Skull King
 ![Skull King](/src/main/resources/images/cartas/skull_king.png)
+
 El Skull King vence a todas las cartas numeradas y todos los Piratas (incluida la Tigresa al ser jugada como Pirata). Las únicas que puede derrotarle son las Sirenas.
 
 #### Sirena
 ![Sirena](/src/main/resources/images/cartas/sirena_1.png)
+
 Las Sirenas vencen a todos los palos numerados pero pierden con todos los Piratas,con la excepción del Skull King. Si se juegan ambas Sirenas en la misma baza, la primera que fue jugada ganará la baza.
 
 #### Palos normales (amarillo, verde y morado)
 ![Palo amarillo](/src/main/resources/images/cartas/amarilla_14.png)
+
 ![Palo verde](/src/main/resources/images/cartas/morada_9.png)
+
 ![Palo morado](/src/main/resources/images/cartas/verde_2.png)
+
 Hay tres palos normales: amarillo (Cofre del Tesoro), verde (Loro) y morado (Mapa del Tesoro).
 
 #### Palo Triunfo
 ![Palo Triunfo](/src/main/resources/images/cartas/triunfo_4.png)
+
 Las cartas triunfo son superiores a la de las otras tres palos.
 
 ### PUNTUACIÓN:

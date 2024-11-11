@@ -24,14 +24,13 @@ public class ManoService {
 private ManoRepository manoRepository;
 private CartaService cs;
 private JugadorService js;
-private TrucoService ts;
+
 
     @Autowired
-    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorService js, TrucoService ts) {
+    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorService js) {
         this.manoRepository = manoRepository;
         this.cs = cs;
         this.js = js;
-        this.ts = ts;
     }
 
     //save a Mano en la base de datos

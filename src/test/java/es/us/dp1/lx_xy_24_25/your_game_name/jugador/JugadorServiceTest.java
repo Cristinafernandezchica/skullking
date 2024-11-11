@@ -77,11 +77,7 @@ void setUp() {
     jugador2.setUsuario(usuario2);
     jugador2.setPartida(partida2);
 
-    Jugador jugador3 = new Jugador();
-    jugador3.setId(3);
-    jugador3.setUsuario(usuario2);
-    jugador3.setPartida(partida2);
-    jugadorService.saveJugador(jugador2);
+
 
 }
     @Test
@@ -95,17 +91,22 @@ void setUp() {
 		assertEquals("player3", jugador2.getUsuario().getUsername());
 		assertEquals("player1", jugador3.getUsuario().getUsername());
 	}
-	@Test
+
+    @Test
 	void shouldSaveAJugadorWithcorrect() {
 		// Asegúrate de que el nombre del mock es el correcto
 		when(jugadorRepository.save(jugador2)).thenReturn(jugador2);
 		Jugador jugador = jugadorService.saveJugador(jugador2);  // Asegúrate de pasar el jugador correctamente
 		assertEquals(jugador2, jugador);
 	}
-
 	@Test
 	void shouldnotSave2JugadorWithTheSameUser(){
 
+        Jugador jugador3 = new Jugador();
+        jugador3.setId(3);
+        jugador3.setUsuario(usuario2);
+        jugador3.setPartida(partida2);
+        jugadorService.saveJugador(jugador2);
         when(jugadorRepository.save(jugador3)).thenReturn(jugador3);
 		assertThrows(UsuarioPartidaEnJuegoEsperandoException.class,
          () -> jugadorService.saveJugador(jugador3));
@@ -118,16 +119,11 @@ void setUp() {
 
 	@Test
 	void shouldFindAJugadorWithAExistingUser() {
-		Jugador jugador = jugadorService.findJugadorByUsuarioId(6);
+        when(jugadorRepository.findById(usuario.getId()).get()).thenReturn(jugador2);
+		Jugador jugador = jugadorService.findJugadorByUsuarioId(1);
 		assertEquals("player3", jugador.getUsuario().getUsername());
     }
 	
-@Test
-	void shouldSaveAJugadorWithcorrect() {
-		// Asegúrate de que el nombre del mock es el correcto
-		when(jugadorRepository.save(jugador2)).thenReturn(jugador2);
-		Jugador jugador = jugadorService.saveJugador(jugador2);  // Asegúrate de pasar el jugador correctamente
-		assertEquals(jugador2, jugador);
-	}
+
 
 }

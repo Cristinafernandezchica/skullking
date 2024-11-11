@@ -10,7 +10,10 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 
 @Getter
@@ -19,13 +22,20 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(of = "id")
 public class Partida extends BaseEntity{
     
-    @NotEmpty
+    @NotBlank(message = "El nombre de la partida no puede estar vacío")
+    @NotNull
+    @Size(min = 1, max = 50, message = "El nombre de la partida puede tener como máximo 50 caracteres")
     private String nombre;
+
+    @NotNull
     private LocalDateTime inicio;
+
+    @Nullable
     private LocalDateTime fin;
+
     @Enumerated(EnumType.STRING)
     private PartidaEstado estado;
 
-    @Nullable
+    @NotNull
     private  Integer ownerPartida;
 }

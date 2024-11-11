@@ -17,8 +17,37 @@ export default function SalaEspera() {
   const id = getIdFromUrl(2);
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
-  const [jugadores, setJugadores] = useFetchState([], `/api/v1/partidas/${id}/jugadores`, jwt, setMessage, setVisible);
-  const [partida, setPartida] = useFetchState(null, `/api/v1/partidas/${id}`, jwt, setMessage, setVisible)
+  //const [jugadores, setJugadores] = useFetchState([], `/api/v1/partidas/${id}/jugadores`, jwt, setMessage, setVisible);
+  const [partida, setPartida] = useFetchState(null, `/api/v1/partidas/${id}`, jwt, setMessage, setVisible);
+  const [jugadores, setJugadores] = useState([]);
+
+  const fetchJugadores = async () => {
+    try {
+      const response = await fetch(`/api/v1/partidas/${id}/jugadores`, {
+        headers: {
+          'Authorization': `Bearer ${jwt}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setJugadores(data);
+    } catch (error) {
+      console.error('Error fetching jugadores:', error);
+      setMessage('Error fetching jugadores');
+      setVisible(true);
+    }
+  };
+
+  // Para que se actualice la lista de jugadores que se van uniendo
+  useEffect(() => {
+    fetchJugadores();
+
+    const intervalId = setInterval(fetchJugadores, 3000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
 
   const jugadoresList = jugadores.map((jugador) => (
@@ -56,26 +85,22 @@ export default function SalaEspera() {
     <div className="sala-espera">
       <div className="hero-div-sala-espera">
         <h1>Lobby</h1>
-        {partida !== null && partida.ownerPartida === user.id && (
-          <div style={{ marginBottom: 20 }}>
-            <Button outline color="success" onClick={iniciarPartida}>
-              Iniciar Partida
-            </Button>
-          </div>
-        )}
-  
-        <div>
-          <h2>Jugadores en la partida</h2>
-          <Table striped>
-            <thead>
-              <tr>
-                <th>Nombre de Usuario</th>
-              </tr>
-            </thead>
-            <tbody>
-              {jugadoresList}
-            </tbody>
-          </Table>
+       { partida!==null && partida.ownerPartida ===user.id && <div style={{ marginBottom: 20 }}>
+            <Button outline color="success" onClick={iniciarPartida}>Iniciar Partida</Button>
+
+        </div>}
+        <div className="jugadores-lista"> 
+          <Table> 
+            <thead> 
+              <tr> 
+                <th>Username</th> 
+                <th>Turno</th> 
+              </tr> 
+            </thead> 
+            <tbody> 
+              {jugadoresList} 
+            </tbody> 
+          </Table> 
         </div>
       </div>
     </div>

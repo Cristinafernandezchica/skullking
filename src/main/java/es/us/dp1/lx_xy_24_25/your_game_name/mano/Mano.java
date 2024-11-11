@@ -2,6 +2,7 @@ package es.us.dp1.lx_xy_24_25.your_game_name.mano;
 
 import java.util.List;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.model.BaseEntity;
@@ -27,15 +28,16 @@ public class Mano extends BaseEntity{
     @JoinColumn(name = "jugador_id")
     private Jugador jugador;
 
-    
-
     private Integer apuesta;
 
     private Integer resultado;
 
+    // Esto no tiene que estar aquí  -->  TODO: MIRAR RELACIÓN BIEN
+    /*
     @ManyToOne(optional = true)
     @JoinColumn(name = "truco_id")
     private Truco truco;
+    */
 
     @ManyToOne(optional = true)
     @JoinColumn(name = "ronda_id")

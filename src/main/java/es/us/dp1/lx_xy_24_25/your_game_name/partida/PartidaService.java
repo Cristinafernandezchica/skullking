@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.UsuarioPartidaEnJuegoEsperandoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 
 @Service
@@ -27,7 +29,7 @@ public class PartidaService {
 
     // Con este método se puede filtrar por nombre y estado
     @Transactional(readOnly=true)
-    public List<Partida> getAllPartidas(String nombre, PartidaEstado estado){
+    public List<Partida> getAllPartidas(String nombre, PartidaEstado estado) throws DataAccessException{
         if(nombre != null && estado != null){
             return pr.findByNombreAndEstado(nombre, estado);
         } else if(nombre != null){
@@ -42,19 +44,44 @@ public class PartidaService {
         }
     }
 
+    /*
     @Transactional(readOnly = true)
     public Optional<Partida> getPartidaById(Integer id){
         return pr.findById(id);
     }
+    */
 
+    @Transactional(readOnly = true)
+    public Partida getPartidaById(Integer id) throws DataAccessException{
+        Optional<Partida> partida = pr.findById(id);
+        if(partida.isPresent()){
+            return partida.get();
+        } else{
+            throw new ResourceNotFoundException("Partida", "id", id);
+        }
+    }
+
+    /*
     @Transactional
-    public Partida save(Partida p){
+    public Partida save(Partida p) throws DataAccessException{
         pr.save(p);
         return p;
     }
+    */
 
     @Transactional
-    public void delete(Integer id){
+public Partida save(Partida p) throws DataAccessException {
+    Integer ownerId = p.getOwnerPartida();
+    boolean partidaEsperandoJugando = usuarioPartidaEnJuegoEsperando(ownerId);
+    if (partidaEsperandoJugando) {
+        throw new UsuarioPartidaEnJuegoEsperandoException("El usuario ya tiene una partida en espera o en juego.");
+    }
+    return pr.save(p);
+}
+
+
+    @Transactional
+    public void delete(Integer id) throws DataAccessException{
         pr.deleteById(id);
     }
 
@@ -63,33 +90,37 @@ public class PartidaService {
     // Inciamos la partida
     @Transactional
     public void iniciarPartida(Integer partidaId){
-        Optional<Partida> partidaOpt = getPartidaById(partidaId);
-        if (!partidaOpt.isPresent()) {
+        Partida partida = getPartidaById(partidaId);
+        if (partida == null) {
             throw new ResourceNotFoundException("Partida", "id", partidaId);
         }
 
-        Partida partida = partidaOpt.get();
         partida.setEstado(PartidaEstado.JUGANDO);
         partida.setInicio(LocalDateTime.now());
         partida.setOwnerPartida(null);
         save(partida);
-        rs.iniciarRonda(partida);      // Llama al método que inicia la primera ronda (en RondaService) --> TODO: Revisar nombre método llamada y si contiene atributos a pasar
+        rs.iniciarRonda(partida);
 
     }
 
     // Finalizamos la partida
     @Transactional
     public void finalizarPartida(Integer partidaId){
-        Optional<Partida> partidaOpt = getPartidaById(partidaId);
-        if (!partidaOpt.isPresent()) {
+        Partida partida = getPartidaById(partidaId);
+        if (partida == null) {
             throw new ResourceNotFoundException("Partida", "id", partidaId);
         }
 
-        Partida partida = partidaOpt.get();
         partida.setEstado(PartidaEstado.TERMINADA);
         partida.setFin(LocalDateTime.now());
         save(partida);
 
+    }
+
+    // Para Validator
+    public Boolean usuarioPartidaEnJuegoEsperando(Integer ownerId){
+        List<Partida> partidasEnProgresoEsperando = pr.findByOwnerPartidaAndEstado(ownerId, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO));
+        return !partidasEnProgresoEsperando.isEmpty();
     }
 
 }

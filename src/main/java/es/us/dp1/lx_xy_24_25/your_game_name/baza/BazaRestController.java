@@ -8,6 +8,10 @@ import org.springframework.http.ResponseEntity;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
@@ -71,6 +75,7 @@ public class BazaRestController {
     public ResponseEntity<Baza> updateBaza(@Valid @RequestBody Baza b,@PathVariable("id")Integer id){
         RestPreconditions.checkNotNull(bs.findById(id), "Baza", "id", id);
 		return new ResponseEntity<>(this.bs.updateBaza(b,id), HttpStatus.OK);
+
     }
 
     // Delete una baza existente
@@ -82,7 +87,7 @@ public class BazaRestController {
 		return new ResponseEntity<>(new MessageResponse("Baza deleted!"), HttpStatus.OK);
 	}
 
-
+    //Get ganador de una baza concreta
     @GetMapping("/{id}/ganador")
     public Jugador findBazaByIdGanador(@PathVariable(value = "id") int id) {
         Baza bazaById = bs.findById(id);
@@ -101,9 +106,17 @@ public class BazaRestController {
 		return new ResponseEntity<>(trucoService.getCartaByJugador(id), HttpStatus.OK);
 	}
 
+
     // PETICION PARA OBTENER LA ULTIMA BAZA DE UNA RONDA EN CONCRETA
     @GetMapping(value = "{rondaId}/ultimaBaza")
     public ResponseEntity<Baza> findUltimaBazaByRondaId(@PathVariable("rondaId") Integer rondaId) {
         return new ResponseEntity<>(bs.findUltimaBazaByRondaId(rondaId), HttpStatus.OK);
+    }
+
+    // Para crear los trucos pertenecientes a una baza concreta
+    @PostMapping("/{bazaId}/trucos")
+    public ResponseEntity<MessageResponse> crearTrucosDeBaza(@PathVariable("bazaId") int idBaza) {
+        trucoService.crearTrucosBaza(idBaza);
+        return new ResponseEntity<>(new MessageResponse("Trucos creados"), HttpStatus.CREATED);
     }
 }

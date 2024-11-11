@@ -76,7 +76,7 @@ private JugadorService js;
             List<Carta> cartaMano= new ArrayList<Carta>();
             cartaMano.addAll(cartasBaraja);
             mano.setCartas(cartaMano);
-            mano.setTruco(null);
+            // mano.setTruco(null);
             mano.setRonda(ronda);
             manoRepository.save(mano);
             cartasBaraja.clear();   // Borramos las cartas de la baraja, para repartir al siguiente jugador

@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import '../App.css';
 import '../static/css/home/home.css';
-import { Button, Table } from "reactstrap";
+import { Alert, Button, Table } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
 import tokenService from '../services/token.service.js';
 import CrearPartidaModal from '../components/modals/CrearPartidaModal.js';
 import UnirPartidaModal from '../components/modals/UnirPartidaModal.js'
+import './slideAlerts.css';
 
 
 const jwt = tokenService.getLocalAccessToken();
@@ -20,7 +21,16 @@ export default function Play(){
   const [isUnionModalOpen, setUnionModalOpen] = useState(false);
   const handleOpenUnionModal = () => setUnionModalOpen(true);
   const handleCloseUnionModal = () => setUnionModalOpen(false);
+  // Para manejo de errores (unirse a partida)
+  const [errors, setErrors] = useState([]);
 
+
+  const showError = (error) => { 
+    setErrors([error]); 
+    setTimeout(() => { 
+      setErrors([]); 
+    }, 5000); // La alerta desaparece después de 5000 milisegundos (5 segundos) 
+  };
 
 
 // para crear la partida
@@ -41,7 +51,13 @@ const crearPartida = async (nombrePartida) => {
       });
 
       if (!response.ok) {
-          throw new Error('Network response was not ok');
+        const errorData = await response.json();
+        setErrors(errorData);
+        handleCloseModal();
+        showError(errorData.message || errorData);
+        // throw new Error('Error creando jugador:', errorData);
+        // throw new Error('Network response was not ok');
+        // TODO: Navegar a pantalla de sala de espera correspondiente o a la pantalla de juego (se va a necesitar método en backend creo)
       }
 
       const partida = await response.json();
@@ -58,7 +74,6 @@ const crearPartida = async (nombrePartida) => {
 }
 
 // Crear el jugador que ha creado la partida
-
 const createJugador = async (partidaId) => {
   try {
       const response = await fetch('/api/v1/jugadores', {
@@ -105,8 +120,18 @@ const unirseAPartida = async (partidaId) => {
     });
 
 
-    if (!response.ok) throw new Error('Network response was not ok');
-
+    if (!response.ok) {
+      const errorData = await response.json();
+      setErrors(errorData);
+      handleCloseUnionModal();
+      showError(errorData.message || errorData);
+      // throw new Error('Error creando jugador:', errorData);
+      // throw new Error('Network response was not ok');
+      // TODO: Tener en cuenta que puede que esté en juego y que entonces tenga que navegar a la pantalla de juego
+      setTimeout(() => {
+        navigate('/salaEspera/' + partidaId);
+      }, 5000);
+    }
 
     const jugador = await response.json();
     console.log('Jugador creado en partida:', jugador);
@@ -119,28 +144,37 @@ const unirseAPartida = async (partidaId) => {
 
     
     return (
-      <div className="home-page-container">
-        <div className="hero-div">
-          <h1>Lobby</h1>
-          <h3>---</h3>
-          <div style = {{marginBottom: 20}}>
-            <Button outline color="success" onClick={handleOpenModal}>Crear partida</Button>
-          </div>
-          <div style = {{marginBottom: 20}}>
-            <Button outline color="success" onClick={handleOpenUnionModal}>Unirse a una partida</Button>
-          </div>
-
-        <CrearPartidaModal
-          isVisible={isModalOpen}
-          onCancel={handleCloseModal}
-          onConfirm={crearPartida}
-                />
-        <UnirPartidaModal
-          isVisible={isUnionModalOpen}
-          onCancel={handleCloseUnionModal}
-          onConfirm={unirseAPartida}
-        />
+      <>
+        <div className="validation-errors"> 
+          {errors.length > 0 && errors.map((error, index) => ( 
+            <Alert key={index} color="danger" className="slide-down-alert"> 
+              {error} 
+            </Alert> 
+          ))} 
         </div>
-      </div>
+        <div className="home-page-container">
+          <div className="hero-div">
+            <h1>Lobby</h1>
+            <h3>---</h3>
+            <div style = {{marginBottom: 20}}>
+              <Button outline color="success" onClick={handleOpenModal}>Crear partida</Button>
+            </div>
+            <div style = {{marginBottom: 20}}>
+              <Button outline color="success" onClick={handleOpenUnionModal}>Unirse a una partida</Button>
+            </div>
+
+            <CrearPartidaModal
+              isVisible={isModalOpen}
+              onCancel={handleCloseModal}
+              onConfirm={crearPartida}
+                    />
+            <UnirPartidaModal
+              isVisible={isUnionModalOpen}
+              onCancel={handleCloseUnionModal}
+              onConfirm={unirseAPartida}
+            />
+          </div>
+        </div>
+      </>
     );
 }

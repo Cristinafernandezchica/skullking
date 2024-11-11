@@ -62,6 +62,8 @@ public class BazaService {
         return toUpdate;
     }
 
+    
+
     @Transactional(readOnly = true)
     public Baza findUltimaBazaByRondaId(Integer rondaId){
                List<Baza> Bazas =bazaRepository.findBazasByRondaId(rondaId);

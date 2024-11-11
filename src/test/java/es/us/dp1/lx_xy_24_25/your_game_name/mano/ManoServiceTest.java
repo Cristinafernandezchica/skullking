@@ -2,6 +2,7 @@ package es.us.dp1.lx_xy_24_25.your_game_name.mano;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.CartaService;
+import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
@@ -120,10 +121,7 @@ public class ManoServiceTest {
     @Test
     public void testFindManoByIdNotFound() {
         when(manoRepository.findById(1)).thenReturn(Optional.empty());
-
-        Mano foundMano = manoService.findManoById(1);
-        assertNull(foundMano);
-        verify(manoRepository, times(1)).findById(1);
+        assertThrows(ResourceNotFoundException.class, () -> manoService.findManoById(1));
     }
 
     @Test

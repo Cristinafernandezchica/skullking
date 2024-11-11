@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,8 +46,8 @@ private JugadorService js;
     }
     //obtener Mano por pk
     @Transactional(readOnly = true)
-    public Mano findManoById(Integer id) {
-        return manoRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("mano","id",(id)));
+    public Mano findManoById(Integer id) throws DataAccessException{
+        return manoRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Mano","id",(id)));
     }
     //borrar Mano por pk
     @Transactional

@@ -1,7 +1,6 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.ronda;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +8,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
-//import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
-import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
@@ -25,14 +22,14 @@ public class RondaService {
     RondaRepository rr;
     PartidaService ps;
     ManoService ms;
-    //BazaService bs;
+    BazaService bs;
     JugadorService js;
 
     @Autowired
-    public RondaService(RondaRepository rr, ManoService ms, JugadorService js){ //, BazaService bs
+    public RondaService(RondaRepository rr, ManoService ms, BazaService bs, JugadorService js){
         this.rr = rr;
         this.ms = ms;
-        //this.bs = bs;
+        this.bs = bs;
         this.js = js;
     }
 
@@ -86,7 +83,7 @@ public class RondaService {
         Ronda ronda = rr.findById(rondaId)
             .orElseThrow(() -> new ResourceNotFoundException("Ronda no encontrada"));
         Integer nextRonda = ronda.getNumRonda() + 1;
-        ronda.setEstado(RondaEstado.FINALIZADA);
+        finalizarRonda(rondaId);
 
         // Comprobación si es la última ronda
         if(nextRonda > 10){
@@ -98,7 +95,7 @@ public class RondaService {
             ms.iniciarManos(ronda.getPartida().getId(),ronda);
             ronda.setNumBazas(ms.getNumCartasARepartir(ronda.getNumRonda(), 
                     js.findJugadoresByPartidaId(ronda.getPartida().getId()).size()));
-            // bs.iniciarBazas(ronda);
+            bs.iniciarBazas(ronda);
         }
         
         return rr.save(ronda);

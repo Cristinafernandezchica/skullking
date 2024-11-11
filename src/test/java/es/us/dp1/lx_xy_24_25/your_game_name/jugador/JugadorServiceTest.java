@@ -100,8 +100,8 @@ void setUp() {
 		assertEquals("player3", jugador.getUsuario().getUsername());
     }
 	
-	@Test
-	void shouldSaveAJugadorWithTheCorrectData() {
+@Test
+	void shouldSaveAJugadorWithcorrect() {
 		// Asegúrate de que el nombre del mock es el correcto
 		when(jugadorRepository.save(jugador2)).thenReturn(jugador2);
 		Jugador jugador = jugadorService.saveJugador(jugador2);  // Asegúrate de pasar el jugador correctamente

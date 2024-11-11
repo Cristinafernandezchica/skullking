@@ -15,12 +15,14 @@ public interface TrucoRepository extends CrudRepository<Truco, Integer> {
     @Query("SELECT t.idCarta FROM Truco t WHERE t.baza.id = :bazaId ORDER BY t.turno ASC")
 	public List<Integer> findCartaIdByBazaId(Integer bazaId);
 
-    @Query("SELECT t FROM Truco t WHERE t.jugador = :jugadorId")
+    
+    @Query("SELECT t FROM Truco t WHERE t.mano.jugador.id = :jugadorId")
 	public List<Truco> findByJugadorId(Integer jugadorId);
 
     @Query("SELECT t FROM Truco t WHERE t.mano.id = :manoId")
 	public List<Truco> findByManoId(Integer manoId);
 
+    /* 
     // REVISAR Y QUIZAS QUITAR
     @Query("SELECT DISTINCT t FROM Truco t WHERE t.baza.id = :bazaId AND t.idCarta = :cartaId")
 	public Optional<Truco> findTrucoByBazaIdCartaId(Integer bazaId, Integer cartaId);
@@ -28,5 +30,5 @@ public interface TrucoRepository extends CrudRepository<Truco, Integer> {
     // REVISAR Y QUIZAS QUITAR
     @Query("SELECT DISTINCT t.jugador FROM Truco t WHERE t.baza.id = :bazaId AND t.idCarta = :cartaId")
 	public Optional<Integer> findJugadorIdByBazaIdCartaId(Integer bazaId, Integer cartaId);
-    
+    */
 }

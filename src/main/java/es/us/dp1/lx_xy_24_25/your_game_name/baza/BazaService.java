@@ -1,7 +1,6 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.baza;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,28 +9,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
-import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
-import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
-import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
-import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoRepository;
-import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
-import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoRepository;
-import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
-import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import jakarta.validation.Valid;
 
 @Service
 public class BazaService {
     
     private BazaRepository bazaRepository;
-    private TrucoRepository trucoRepository;
-    private ManoRepository manoRepository;
     private RondaService rondaService;
-    private PartidaService partidaService;
-    private JugadorService jugadorService;
     private TrucoService trucoService;
 
     @Autowired
@@ -95,8 +82,15 @@ public class BazaService {
                 return BazasOrdenadas;
     }
 
+    // Buscar una Baza por Ronda ID y número de Baza
+    @Transactional(readOnly = true)
+    public Baza findByRondaIdAndNumBaza(Integer rondaId, Integer numBaza) {
+        return bazaRepository.findByRondaIdAndNumBaza(rondaId, numBaza)
+                .orElseThrow(() -> new ResourceNotFoundException("Baza", "numBaza", numBaza));
+    }
 
-/*
+
+
     // Iniciar una Baza
     @Transactional
     public Baza iniciarBazas (Ronda ronda) {
@@ -106,30 +100,20 @@ public class BazaService {
         baza.setGanador(null);
         baza.setTipoCarta(null);
         baza.setRonda(ronda);
-        trucoService.iniciarTrucos();
+        //trucoService.iniciarTrucos(baza);
         return bazaRepository.save(baza);
     }
-*/
+
     // Next Baza
     @Transactional
     public Baza nextBaza(Integer id) {
-        Baza baza = bazaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Baza", "id", id));
+        Baza baza = findById(id);
         Ronda ronda = baza.getRonda();
         Integer nextBaza = baza.getNumBaza() + 1;
-        Integer nextRonda = ronda.getNumRonda() + 1;
 
         // Comprobación si es la última baza
         if(nextBaza > ronda.getNumBazas()){
-            // Si es la última ronda, finalizar la partida
-            if(nextRonda > 10){
-                partidaService.finalizarPartida(ronda.getPartida().getId());
-                ronda.setEstado(RondaEstado.FINALIZADA);
-                // Guardar el estado de la ronda si ha sido finalizada
-                rondaService.save(ronda);
-            } else {
-                // Iniciar nueva ronda
-                rondaService.iniciarRonda(ronda.getPartida());
-            }
+            rondaService.nextRonda(ronda.getId());
         } else{
             // Configurar para la siguiente baza
             baza.setCartaGanadora(null);

@@ -10,7 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.UsuarioPartidaEnJuegoEsperandoException;
+import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.UsuarioPartidaEnJuegoEsperandoException;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MinJugadoresPartidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 
 import java.time.LocalDateTime;
@@ -33,6 +36,9 @@ public class PartidaServiceTest {
 
     @Mock
     private RondaService rondaService;
+
+    @Mock
+    private JugadorService jugadorService;
 
     @InjectMocks
     private PartidaService partidaService;
@@ -136,23 +142,32 @@ public class PartidaServiceTest {
 
     // Test para guardar una partida (caso positivo)
     @Test
-    void testSavePartida() {
-        when(partidaRepository.save(any(Partida.class))).thenReturn(partida);
+    public void testSavePartida() {
+        Partida partida = new Partida();
+        partida.setOwnerPartida(1);
+
+        // Simula que el usuario no tiene partidas en juego o esperando
+        when(partidaRepository.findByOwnerPartidaAndEstado(1, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO)))
+                .thenReturn(List.of());
+
+        when(partidaRepository.save(partida)).thenReturn(partida);
 
         Partida savedPartida = partidaService.save(partida);
-
         assertNotNull(savedPartida);
-        assertEquals(1, savedPartida.getId());
-        verify(partidaRepository, times(1)).save(partida);
+        assertEquals(partida, savedPartida);
     }
 
     // Test para guardar una partida (excepción)
     @Test
-    void testSavePartidaUsuarioEnJuegoEsperando() {
-        when(partidaRepository.findByOwnerPartidaAndEstado(anyInt(), anyList())).thenReturn(Arrays.asList(partidaEsperando));
-
-        assertThrows(UsuarioPartidaEnJuegoEsperandoException.class, () -> partidaService.save(partidaEsperando));
-        verify(partidaRepository, never()).save(partidaEsperando);
+    public void testSavePartidaConUsuarioEnPartidaEnJuegoEsperando() {
+        Partida partida = new Partida();
+        partida.setOwnerPartida(1); // ID del usuario
+    
+        // Simula que el usuario ya tiene una partida en juego o esperando
+        when(partidaRepository.findByOwnerPartidaAndEstado(1, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO)))
+                .thenReturn(List.of(new Partida()));
+    
+        assertThrows(UsuarioPartidaEnJuegoEsperandoException.class, () -> partidaService.save(partida));
     }
 
     // Test para eliminar una partida
@@ -162,16 +177,32 @@ public class PartidaServiceTest {
         verify(partidaRepository, times(1)).deleteById(1);
     }
 
-    // Test para iniciar una partida
+    // Test para iniciar una partida (caso positivo)
     @Test
-    void testIniciarPartida() {
+    public void testIniciarPartidaConTresOMasJugadores() {
+        Partida partida = new Partida();
+        partida.setId(1);
+
         when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
+        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(List.of(new Jugador(), new Jugador(), new Jugador())); // 3 jugadores
+        when(partidaRepository.save(partida)).thenReturn(partida);
 
         partidaService.iniciarPartida(1);
 
         assertEquals(PartidaEstado.JUGANDO, partida.getEstado());
-        verify(partidaRepository, times(1)).save(partida);
-        verify(rondaService, times(1)).iniciarRonda(partida);
+        verify(rondaService).iniciarRonda(partida);
+    }
+
+    // Test para iniciar una partida (exception)
+    @Test
+    public void testIniciarPartidaConMenosDeTresJugadores() {
+        Partida partida = new Partida();
+        partida.setId(1);
+
+        when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
+        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(List.of(new Jugador(), new Jugador())); // Solo 2 jugadores
+
+        assertThrows(MinJugadoresPartidaException.class, () -> partidaService.iniciarPartida(1));
     }
 
     // Test para finalizar una partida

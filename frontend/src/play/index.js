@@ -63,10 +63,23 @@ const crearPartida = async (nombrePartida) => {
       const partida = await response.json();
       console.log('Partida creada:', partida);
       // Crear el jugador que ha creado la partida  -->  Modificación en backend
+      /*
       await createJugador(partida)
       navigate(`/salaEspera/${partida.id}`);
       console.log('Partida creada:', partida);
       handleCloseModal();
+      */
+      // Crear el jugador de la partida creada (si salta excepción, borra la partida)
+      try {
+        await createJugador(partida);
+        navigate(`/salaEspera/${partida.id}`);
+        handleCloseModal();
+    } catch (error) {
+        // Si falla la creación del jugador, eliminar la partida
+        await eliminarPartida(partida.id);
+        showError("Error al crear jugador: " + error.message);
+        console.error("Error al crear jugador:", error);
+    }
       
   } catch (error) {
       console.error('Error:', error);
@@ -74,7 +87,7 @@ const crearPartida = async (nombrePartida) => {
 }
 
 // Crear el jugador que ha creado la partida
-const createJugador = async (partidaId) => {
+const createJugador = async (partida) => {
   try {
       const response = await fetch('/api/v1/jugadores', {
           method: 'POST',
@@ -84,14 +97,15 @@ const createJugador = async (partidaId) => {
           },
           body: JSON.stringify({
               puntos: 0,
-              partida: partidaId,
-              usuario: user,
-              turno: 0  // se crea con turno 0, ya que se supone que la partida aún no ha comenzado
-              
+              partida: { id: partida.id },
+              usuario: { id: user.id },
+              turno: 0
           }),
       });
 
       if (!response.ok) {
+          const errorData = await response.json();
+          showError(errorData.message || errorData);
           throw new Error('Network response was not ok');
       }
 
@@ -101,6 +115,29 @@ const createJugador = async (partidaId) => {
       console.error('Error creando jugador:', error);
   }
 };
+
+// Eliminar partida en caso de que el jugador ya tenga una
+const eliminarPartida = async (partidaId) => {
+  try {
+      const response = await fetch(`/api/v1/partidas/${partidaId}`, {
+          method: 'DELETE',
+          headers: {
+              'Authorization': `Bearer ${jwt}`,
+          },
+      });
+
+      if (!response.ok) {
+          console.error('Error eliminando la partida:', await response.json());
+          showError("Error al intentar borrar la partida después del fallo.");
+      } else {
+          console.log('Partida eliminada exitosamente:', partidaId);
+      }
+  } catch (error) {
+      console.error('Error en la solicitud de eliminación de partida:', error);
+      showError("Error en la conexión al intentar borrar la partida.");
+  }
+};
+
 
 // Confirmar unión a partida con el id específico
 const unirseAPartida = async (partidaId) => {
@@ -125,12 +162,12 @@ const unirseAPartida = async (partidaId) => {
       setErrors(errorData);
       handleCloseUnionModal();
       showError(errorData.message || errorData);
-      // throw new Error('Error creando jugador:', errorData);
-      // throw new Error('Network response was not ok');
-      // TODO: Tener en cuenta que puede que esté en juego y que entonces tenga que navegar a la pantalla de juego
+      // TODO: Mirar como navegar a la pantalla correspondiente
+      /*
       setTimeout(() => {
         navigate('/salaEspera/' + partidaId);
       }, 5000);
+      */
     }
 
     const jugador = await response.json();

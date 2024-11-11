@@ -78,6 +78,7 @@ public class PartidaRestController {
         return p;
     }
 
+    
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Partida> createPartida(@Valid @RequestBody Partida p){
@@ -117,11 +118,11 @@ public class PartidaRestController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<MessageResponse> deletePartida(@PathVariable("id")Integer id){
         RestPreconditions.checkNotNull(ps.getPartidaById(id), "Partida", "ID", id);
         ps.delete(id);
-        return new ResponseEntity<>(new MessageResponse("Partida eliminada"), HttpStatus.OK); 
+        return new ResponseEntity<>(new MessageResponse("Partida eliminada"), HttpStatus.NO_CONTENT); 
     }
 
     // Relación de uno a muchos con la clase Jugador, mirar los nombres de los métodos

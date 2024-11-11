@@ -1,6 +1,10 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.partida;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -29,12 +33,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.configuration.SecurityConfiguration;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
+import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.UsuarioPartidaEnJuegoEsperandoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaRestController;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
+import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 @WebMvcTest(controllers = PartidaRestController.class)
 public class PartidaControllerTest {
 
@@ -117,14 +123,16 @@ public class PartidaControllerTest {
         newPartida.setInicio(LocalDateTime.now());
         newPartida.setOwnerPartida(1);
         newPartida.setEstado(PartidaEstado.ESPERANDO);
-
+    
         when(partidaService.save(any(Partida.class))).thenReturn(newPartida);
-
+    
         mockMvc.perform(post(BASE_URL).with(csrf())
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(newPartida)))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.nombre").value("Nueva Partida"));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(newPartida)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.nombre").value("Nueva Partida"));
+    
+        verify(partidaService, times(1)).save(any(Partida.class));
     }
 
     @Test
@@ -152,7 +160,7 @@ public class PartidaControllerTest {
         doNothing().when(partidaService).delete(TEST_PARTIDA_ID);
 
         mockMvc.perform(delete(BASE_URL + "/{id}", TEST_PARTIDA_ID).with(csrf()))
-            .andExpect(status().isOk())
+            .andExpect(status().isNoContent())
             .andExpect(jsonPath("$.message").value("Partida eliminada"));
     }
 

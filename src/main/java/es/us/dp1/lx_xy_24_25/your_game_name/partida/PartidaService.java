@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.UsuarioPartidaEnJuegoEsperandoException;
+import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.UsuarioPartidaEnJuegoEsperandoException;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MinJugadoresPartidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 
 @Service
@@ -20,11 +22,13 @@ public class PartidaService {
 
     PartidaRepository pr;
     RondaService rs;
+    JugadorService js;
 
     @Autowired
-    public PartidaService(PartidaRepository pr,RondaService rs) {
+    public PartidaService(PartidaRepository pr, RondaService rs, JugadorService js) {
         this.pr = pr;
         this.rs = rs;
+        this.js = js;
     }
 
     // Con este método se puede filtrar por nombre y estado
@@ -70,14 +74,14 @@ public class PartidaService {
     */
 
     @Transactional
-public Partida save(Partida p) throws DataAccessException {
-    Integer ownerId = p.getOwnerPartida();
-    boolean partidaEsperandoJugando = usuarioPartidaEnJuegoEsperando(ownerId);
-    if (partidaEsperandoJugando) {
-        throw new UsuarioPartidaEnJuegoEsperandoException("El usuario ya tiene una partida en espera o en juego.");
+    public Partida save(Partida p) throws DataAccessException {
+        Integer ownerId = p.getOwnerPartida();
+        boolean partidaEsperandoJugando = usuarioPartidaEnJuegoEsperando(ownerId);
+        if (partidaEsperandoJugando) {
+            throw new UsuarioPartidaEnJuegoEsperandoException("El usuario ya tiene una partida en espera o en juego.");
+        }
+        return pr.save(p);
     }
-    return pr.save(p);
-}
 
 
     @Transactional
@@ -93,6 +97,11 @@ public Partida save(Partida p) throws DataAccessException {
         Partida partida = getPartidaById(partidaId);
         if (partida == null) {
             throw new ResourceNotFoundException("Partida", "id", partidaId);
+        }
+
+        Integer numJugadoresPartida = js.findJugadoresByPartidaId(partidaId).size();
+        if(numJugadoresPartida < 3) {
+            throw new MinJugadoresPartidaException("Tiene que haber un mínimo de 3 jugadores en la sala para empezar la partida");
         }
 
         partida.setEstado(PartidaEstado.JUGANDO);
@@ -117,7 +126,7 @@ public Partida save(Partida p) throws DataAccessException {
 
     }
 
-    // Para Validator
+    // Para Excepción
     public Boolean usuarioPartidaEnJuegoEsperando(Integer ownerId){
         List<Partida> partidasEnProgresoEsperando = pr.findByOwnerPartidaAndEstado(ownerId, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO));
         return !partidasEnProgresoEsperando.isEmpty();

@@ -14,7 +14,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
-import es.us.dp1.lx_xy_24_25.your_game_name.truco.exceptions.NoCartaDeManoException;
+import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.NoCartaDeManoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
@@ -73,8 +73,6 @@ public class TrucoService {
 		return trucoRepository.findByManoId(manoId);
 	}
 
-
-	/* 
     // REVISAR Y QUIZAS QUITAR
     @Transactional(readOnly = true)
 	public Truco findTrucoByBazaIdCartaId(int bazaId, int cartaId) throws DataAccessException {

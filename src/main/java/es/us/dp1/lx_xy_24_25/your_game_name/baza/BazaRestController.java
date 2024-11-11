@@ -72,20 +72,20 @@ public class BazaRestController {
 
     // Update una baza existente
     @PutMapping(value="/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Baza> updateBaza(@Valid @RequestBody Baza b,@PathVariable("id")Integer id){
         RestPreconditions.checkNotNull(bs.findById(id), "Baza", "id", id);
-		return new ResponseEntity<>(this.bs.updateBaza(b,id), HttpStatus.OK);
+		return new ResponseEntity<>(this.bs.updateBaza(b,id), HttpStatus.NO_CONTENT);
 
     }
 
     // Delete una baza existente
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<MessageResponse> deleteBaza(@PathVariable("id") int id) {
 		RestPreconditions.checkNotNull(bs.findById(id), "Baza", "ID", id);
 		bs.deleteBaza(id);
-		return new ResponseEntity<>(new MessageResponse("Baza deleted!"), HttpStatus.OK);
+		return new ResponseEntity<>(new MessageResponse("Baza eliminada"), HttpStatus.NO_CONTENT);
 	}
 
     //Get ganador de una baza concreta

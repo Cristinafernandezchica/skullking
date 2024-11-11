@@ -279,6 +279,7 @@ public class RondaServiceTest {
         verify(rr, times(2)).findById(2);
         verify(rr, times(2)).save(any(Ronda.class));
         verify(ms, times(1)).iniciarManos(ronda.getPartida().getId(), ronda);
+        verify(bs, times(1)).iniciarBazas(ronda);
         verify(ms, times(1)).getNumCartasARepartir(ronda.getNumRonda(), js.findJugadoresByPartidaId(ronda.getPartida().getId()).size());
         verify(ps, never()).finalizarPartida(anyInt());
     }

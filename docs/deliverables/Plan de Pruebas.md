@@ -9,17 +9,19 @@ Este documento describe el plan de pruebas para el proyecto **Skull King** desar
 El alcance de este plan de pruebas incluye:
 
 - Pruebas unitarias.
-  - Pruebas unitarias de backend incluyendo pruebas servicios o repositorios
+  - Pruebas unitarias de backend incluyendo pruebas servicios o repositorios.
   - Pruebas unitarias de frontend: pruebas de las funciones javascript creadas en frontend.
   - Pruebas unitarias de interfaz de usuario. Usan la interfaz de  usuario de nuestros componentes frontend.
-- Pruebas de integración.  En nuestro caso principalmente son pruebas de controladores.
+- Pruebas de integración: En nuestro caso principalmente son pruebas de controladores.
 
 ## 3. Estrategia de Pruebas
 
 ### 3.1 Tipos de Pruebas
 
 #### 3.1.1 Pruebas Unitarias
-Las pruebas unitarias se realizarán para verificar el correcto funcionamiento de los componentes individuales del software. Se utilizarán herramientas de automatización de pruebas como **JUnit** en background y .
+Las pruebas unitarias se realizarán para verificar el correcto funcionamiento de los componentes individuales del software. Se utilizarán herramientas de automatización de pruebas como **JUnit** o **Mockito** en background. Aún está por determinar la herramienta a usar en frontend.
+
+Actualmente, tenemos implementadas pruebas unitarias para todas las entidades excepto para Carta, pues esta entidad solo tiene implementadas las funciones CRUD, las cuales no se usan pues las cartas se han añadido directamente a la base de datos. En la matriz de trazabilidad, por el momento, solo hemos incluído aquellas pruebas que están directamente relacionadas con las historias de usuario ya implementadas.
 
 #### 3.1.2 Pruebas de Integración
 Las pruebas de integración se enfocarán en evaluar la interacción entre los distintos módulos o componentes del sistema, nosotros las realizaremos a nivel de API, probando nuestros controladores Spring.
@@ -32,6 +34,7 @@ Las pruebas de integración se enfocarán en evaluar la interacción entre los d
 - **Jacoco**: Generación de informes de cobertura de código.
 - **Jest**: Framework para pruebas unitarias en javascript.
 - **React-test**: Liberaría para la creación de pruebas unitarias de componentes React.
+- **Mockito**: Librería de Java para la creación de mocks en pruebas unitarias.
 
 ### 4.2 Entorno de Pruebas
 Las pruebas se ejecutarán en el entorno de desarrollo y, eventualmente, en el entorno de pruebas del servidor de integración continua.

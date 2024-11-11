@@ -33,7 +33,7 @@ Siguiendo la jerarquía, hallamos el palo de triunfos con cartas numeradas del 1
 Las cartas de Pirata superan a todas las cartas numeradas. Todas son de igual valor, por lo que si se juegan más de una en la misma baza, quien haya jugado el primer pirata ganará la baza.
 
 #### Tigresa
-![Tigresa](/src/main/resources/images/cartas/tigresa.png)
+![Tigresa](/src/main/resources/images/cartas/trigresa.png)
 
 Al jugar la Tigresa, debéis declarar si contará como Pirata o como Huida. Asume todas la características de un pirata o de una huida.
 

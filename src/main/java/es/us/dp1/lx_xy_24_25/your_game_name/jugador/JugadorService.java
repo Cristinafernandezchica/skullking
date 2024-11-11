@@ -33,31 +33,6 @@ public class JugadorService {
         this.pr = pr;
     }
 
-    //save a jugador en la base de datos
-    /*
-    @Transactional
-    public Jugador saveJugador(Jugador jugador) {
-        return jugadorRepository.save(jugador);
-    }
-    */
-
-    /*
-    @Transactional
-    public Jugador saveJugador(Jugador jugador) throws DataAccessException {
-        User usuario = jugador.getUsuario();
-        Partida partida = jugador.getPartida();
-
-        if (usuario != null && partida != null) {
-            boolean tieneMultiplesJugadores = usuarioMultiplesJugadoresEnPartida(usuario, partida);
-            if (tieneMultiplesJugadores) {
-                throw new UsuarioMultiplesJugadoresEnPartidaException("El usuario no puede tener múltiples jugadores en la misma partida.");
-            }
-        }
-        return jugadorRepository.save(jugador);
-    }
-    */
-
-
     @Transactional
     public Jugador saveJugador(Jugador jugador) throws DataAccessException {
         Partida partida = jugador.getPartida();

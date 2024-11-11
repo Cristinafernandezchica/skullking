@@ -28,11 +28,11 @@ INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (2,15,3,5,1);
 INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (4,30,3,4,1);
 */
 
-INSERT INTO Partida(id, nombre, inicio, fin, estado) VALUES (3, 'Partida Ejemplo', '2024-11-05 13:00:00', '2024-11-05 15:00:00', 'ESPERANDO');
-INSERT INTO Partida(id, nombre, inicio, fin, estado) VALUES (4, 'Partida Random', '2024-11-07 12:00:00', '2024-11-05 14:00:00', 'TERMINADA');
+INSERT INTO Partida(id, nombre, inicio, fin, estado, owner_partida) VALUES (3, 'Partida Ejemplo', '2024-11-05 13:00:00', '2024-11-05 15:00:00', 'ESPERANDO', 6);
+INSERT INTO Partida(id, nombre, inicio, fin, estado, owner_partida) VALUES (4, 'Partida Random', '2024-11-07 12:00:00', '2024-11-05 14:00:00', 'TERMINADA', 5);
 
 
-INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (3,30,3,4,1);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (3,30,3,8,1);
 INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (1,15,3,5,2);
 INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (2,15,3,6,3);
 INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (4,30,4,7,4);

@@ -15,6 +15,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,9 +29,13 @@ import lombok.Setter;
 
 public class Baza extends BaseEntity{
 
+    //@NotEmpty
     @Enumerated(EnumType.STRING)
     private TipoCarta tipoCarta;
 
+    //@NotEmpty
+    @Min(0)
+    @Max(10)
     private Integer numBaza;
 
     @ManyToOne(optional = true)

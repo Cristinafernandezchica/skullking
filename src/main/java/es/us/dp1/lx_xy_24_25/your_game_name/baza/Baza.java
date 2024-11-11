@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,11 +30,10 @@ import lombok.Setter;
 
 public class Baza extends BaseEntity{
 
-    //@NotEmpty
     @Enumerated(EnumType.STRING)
     private TipoCarta tipoCarta;
 
-    //@NotEmpty
+    @NotNull
     @Min(0)
     @Max(10)
     private Integer numBaza;

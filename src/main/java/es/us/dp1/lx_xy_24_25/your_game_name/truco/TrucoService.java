@@ -33,8 +33,11 @@ public class TrucoService {
 
 
     @Autowired
-	public TrucoService(TrucoRepository trucoRepository) {
+	public TrucoService(TrucoRepository trucoRepository, BazaRepository bazaRepository,ManoRepository manoRepository, JugadorService jugadorService) {
 		this.trucoRepository = trucoRepository;
+        this.bazaRepository = bazaRepository;
+        this.manoRepository = manoRepository;
+        this.jugadorService = jugadorService;
 	}
 
     @Transactional(readOnly = true)
@@ -49,8 +52,8 @@ public class TrucoService {
 
     // Para BazaRestController
     @Transactional(readOnly = true)
-	public List<Truco> findTrucosByBazaId(int bazaId) throws DataAccessException {
-		return trucoRepository.findByBazaId(bazaId);
+	public List<Truco> findTrucosByBazaId(int id) throws DataAccessException {
+		return trucoRepository.findByBazaId(id);
 	}
 
     // Para JugadorRestController
@@ -162,7 +165,7 @@ public class TrucoService {
             } else {
                 throw new ResourceNotFoundException("Mano", "jugadorId", jugador);
             }
-            Integer turno = i; 
+            Integer turno = i+1; 
             Integer idCarta = null;
             
             Truco truco = new Truco(baza, mano, jugador, idCarta, turno);

@@ -1,0 +1,93 @@
+@startuml name 
+
+hide circle
+
+package "Presentation Layer" as Presentation {
+    hide members
+    class PartidaRestController
+    class RondaRestController
+    class ManoRestController
+    class BazaRestController
+    class TrucoRestController
+    class CartaRestController
+    class JugadorRestController
+    class UserRestController
+}
+
+package "Business Logic Layer" as BusinessLogic {
+    hide members
+    class PartidaService
+    class RondaService
+    class ManoService
+    class BazaService
+    class TrucoService
+    class CartaService
+    class JugadorService
+    class UserService
+}
+
+package "Resources Layer" as Resources {
+    hide attributes
+    interface PartidaRepository
+    interface RondaRepository
+    interface ManoRepository
+    interface BazaRepository
+    interface TrucoRepository
+    interface CartaRepository
+    interface JugadorRepository
+    interface UserRepository
+}
+
+PartidaRestController ..> PartidaService
+PartidaRestController ..> JugadorService
+PartidaRestController ..> ManoService
+PartidaRestController ..> BazaService
+
+RondaRestController ..> RondaService
+
+ManoRestController ..> ManoService
+ManoRestController ..> TrucoService
+
+BazaRestController ..> BazaService
+BazaRestController ..> TrucoService
+
+TrucoRestController ..> TrucoService
+
+CartaRestController ..> CartaService
+
+JugadorRestController ..> JugadorService
+
+UserRestController ..> UserService
+UserRestController ..> AuthoritiesService
+
+PartidaService ..> PartidaRepository
+PartidaService ..> RondaService
+PartidaService ..> JugadorService
+
+RondaService ..> RondaRepository
+RondaService ..> PartidaService
+RondaService ..> ManoService
+RondaService ..> BazaService
+RondaService ..> JugadorService
+
+ManoService ..> ManoRepository
+ManoService ..> CartaService
+ManoService ..> JugadorService
+
+BazaService ..> BazaRepository
+BazaService ..> RondaService
+BazaService ..> TrucoService
+
+TrucoService ..> TrucoRepository
+TrucoService ..> BazaRepository
+TrucoService ..> ManoRepository
+TrucoService ..> JugadorService
+
+CartaService ..> CartaRepository
+
+JugadorService ..> JugadorRepository
+JugadorService ..> PartidaRepository
+
+UserService ..> UserRepository
+
+@enduml

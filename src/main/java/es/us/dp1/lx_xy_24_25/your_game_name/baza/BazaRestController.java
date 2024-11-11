@@ -44,8 +44,9 @@ public class BazaRestController {
     private TrucoService trucoService;
 
     @Autowired
-    public BazaRestController(BazaService bs){
+    public BazaRestController(BazaService bs, TrucoService trucoService){
         this.bs=bs;
+        this.trucoService=trucoService;
     }
 
     // Get todas las bazas
@@ -106,12 +107,14 @@ public class BazaRestController {
 		return new ResponseEntity<>(trucoService.getCartaByJugador(id), HttpStatus.OK);
 	}
 
-
+    /* 
     // PETICION PARA OBTENER LA ULTIMA BAZA DE UNA RONDA EN CONCRETA
     @GetMapping(value = "{rondaId}/ultimaBaza")
     public ResponseEntity<Baza> findUltimaBazaByRondaId(@PathVariable("rondaId") Integer rondaId) {
         return new ResponseEntity<>(bs.findUltimaBazaByRondaId(rondaId), HttpStatus.OK);
     }
+    */
+    
 
     // Para crear los trucos pertenecientes a una baza concreta
     @PostMapping("/{bazaId}/trucos")

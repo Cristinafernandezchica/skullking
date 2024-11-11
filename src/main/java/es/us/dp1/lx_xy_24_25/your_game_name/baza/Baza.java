@@ -15,6 +15,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +33,9 @@ public class Baza extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private TipoCarta tipoCarta;
 
+    @NotNull
+    @Min(0)
+    @Max(10)
     private Integer numBaza;
 
     @ManyToOne(optional = true)
@@ -39,12 +46,6 @@ public class Baza extends BaseEntity{
 	@JoinColumn(name = "carta_id")
     private Carta cartaGanadora;
 
-
-    //@ManyToOne(optional = true)
-	//@JoinColumn(name = "ronda_id")
-	//private Ronda ronda;
-
-    public Baza() {}
 
     @ManyToOne(optional = true)
 	@JoinColumn(name = "ronda_id")

@@ -3,12 +3,14 @@ package es.us.dp1.lx_xy_24_25.your_game_name.baza;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
@@ -17,6 +19,8 @@ import es.us.dp1.lx_xy_24_25.your_game_name.configuration.SecurityConfiguration;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRestController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -39,6 +43,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
 
 @WebMvcTest(controllers = BazaRestController.class)
 @ActiveProfiles("test") // Usa un perfil de configuración de prueba
@@ -66,48 +72,58 @@ public class BazaRestControllerTest {
     private Carta carta;
     private Partida partida;
     private Ronda ronda;
+    private Mano mano;
+
 
     @BeforeEach
     void setUp() {
-        
+
         jugador = new Jugador();
-            jugador.setId(1);
-            jugador.setPuntos(12);
-            jugador.setTurno(1);
-            jugador.setUsuario(null);
-            jugador.setPartida(partida);
+        jugador.setId(1);
+        jugador.setPuntos(12);
+        jugador.setTurno(1);
+        jugador.setUsuario(null);
+        jugador.setPartida(partida);
     
-            carta = new Carta();
-            carta.setId(1);
-            carta.setImagenFrontal("./images/cartas/morada_1.png");
-            carta.setImagenTrasera("./images/cartas/parte_trasera.png");
-            carta.setNumero(1);
-            carta.setTipoCarta(TipoCarta.morada);
+        carta = new Carta();
+        carta.setId(1);
+        carta.setImagenFrontal("./images/cartas/morada_1.png");
+        carta.setImagenTrasera("./images/cartas/parte_trasera.png");
+        carta.setNumero(1);
+        carta.setTipoCarta(TipoCarta.morada);
     
-            ronda = new Ronda();
-            ronda.setId(1);
-            ronda.setBazaActual(3);
-            ronda.setEstado(RondaEstado.JUGANDO);
-            ronda.setNumBazas(4);
-            ronda.setNumRonda(4);
-            ronda.setPartida(partida);
+        ronda = new Ronda();
+        ronda.setId(1);
+        ronda.setBazaActual(3);
+        ronda.setEstado(RondaEstado.JUGANDO);
+        ronda.setNumBazas(4);
+        ronda.setNumRonda(4);
+        ronda.setPartida(partida);
     
-            partida = new Partida();
-            partida.setEstado(PartidaEstado.JUGANDO);
-            partida.setFin(LocalDateTime.now());
-            partida.setId(5);
-            partida.setInicio(LocalDateTime.now());
-            partida.setNombre("Partida Test");
-            partida.setOwnerPartida(1);
+        partida = new Partida();
+        partida.setEstado(PartidaEstado.JUGANDO);
+        partida.setFin(LocalDateTime.now());
+        partida.setId(5);
+        partida.setInicio(LocalDateTime.now());
+        partida.setNombre("Partida Test");
+        partida.setOwnerPartida(1);
     
-            baza = new Baza();
-            baza.setId(1);
-            baza.setTipoCarta(TipoCarta.morada);
-            baza.setNumBaza(3);
-            baza.setGanador(jugador);
-            baza.setCartaGanadora(carta);
-            baza.setRonda(ronda);
-        /*
+        baza = new Baza();
+        baza.setId(1);
+        baza.setTipoCarta(TipoCarta.morada);
+        baza.setNumBaza(3);
+        baza.setGanador(jugador);
+        baza.setCartaGanadora(carta);
+        baza.setRonda(ronda);
+
+        mano =new Mano();
+        mano.setApuesta(1);
+        mano.setCartas(List.of(carta));
+        mano.setId(1);
+        mano.setJugador(jugador);
+        mano.setResultado(5);
+        mano.setRonda(ronda);
+        
         truco = new Truco();
         truco.setId(1);
         truco.setBaza(baza);
@@ -115,7 +131,7 @@ public class BazaRestControllerTest {
         truco.setJugador(1);
         truco.setMano(null);
         truco.setTurno(1);
-        */
+        
     }
 
     @Test
@@ -185,15 +201,43 @@ public class BazaRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(jugador.getId()));
     }
-/*
+
     @Test
     void testFindTrucosByBazaId() throws Exception {
         List<Truco> trucos = Arrays.asList(truco);
-        when(trucoService.findTrucosByBazaId(anyInt())).thenReturn(trucos);
+        when(trucoService.findTrucosByBazaId(1)).thenReturn(trucos);
 
-        mockMvc.perform(get("/api/v1/bazas/{id}/trucos", 1))
+        mockMvc.perform(get("/api/v1/bazas/1/trucos")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].id").value(truco.getId()));
     }
-          */    
+          
+    // Test para obtener cartas por jugador de una baza
+    @Test
+    void testFindCartasPorJugadorByBazaId() throws Exception {
+        Map<Integer, Integer> cartasPorJugador = new LinkedHashMap<>();
+        cartasPorJugador.put(1, 100); 
+        cartasPorJugador.put(2, 200); 
+
+        when(trucoService.getCartaByJugador(1)).thenReturn(cartasPorJugador);
+
+        mockMvc.perform(get("/api/v1/bazas/{id}/cartasJugadores", 1)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.1").value(100))
+                .andExpect(jsonPath("$.2").value(200));
+    }
+
+
+    // Test para obtener la última baza de una ronda
+    @Test
+    void testFindUltimaBazaByRondaId() throws Exception {
+        when(bazaService.findUltimaBazaByRondaId(1)).thenReturn(baza);
+
+        mockMvc.perform(get("/api/v1/bazas/{rondaId}/ultimaBaza", 1))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(baza.getId()));
+    }
 }

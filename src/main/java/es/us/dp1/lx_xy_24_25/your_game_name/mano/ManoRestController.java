@@ -29,7 +29,7 @@ import jakarta.validation.Valid;
 public class ManoRestController {
     
      private final ManoService manoService;
-     private TrucoService trucoService;
+     private final TrucoService trucoService;
 
 
     @Autowired

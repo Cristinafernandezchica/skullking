@@ -141,22 +141,75 @@ Se considerará parte del documento de diseño del sistema la documentación gen
 Si lo desea puede aplicar la aproximación descrita en https://vmaks.github.io/2020/02/09/how-to-export-swagger-specification-as-html-or-word-document/ para generar una versión en formato Word de la especificación de la API generada por OpenAPI, colgarla en el propio repositorio y enlazarla en esta sección del documento.  En caso contrario debe asegurarse de que la interfaz de la documentación open-api de su aplicación está accesible, funciona correctamente, y está especificada conforme a las directrices descritas arriba.
 
 ## Patrones de diseño y arquitectónicos aplicados
-En esta sección de especificar el conjunto de patrones de diseño y arquitectónicos aplicados durante el proyecto. Para especificar la aplicación de cada patrón puede usar la siguiente plantilla:
+En esta sección de especificar el conjunto de patrones de diseño y arquitectónicos aplicados durante el proyecto.
 
-### Patrón: < Nombre del patrón >
+### Patrón: < Modelo Vista Controlador (MVC) >
+*Tipo*: Arquitectónico
+
+*Contexto de Aplicación*
+
+Se utiliza en toda la aplicación, separa los datos de la aplicación, la interfaz de usuario y la lógica de negocio en 3 componentes.
+
+Modelo: Representación específica de la información con la que se opera, incluye los datos y la lógica para operar con ellos. Dentro del modelo se incluyen: entidades, repositorios y servicios.
+
+Controlador: Responde a eventos de la interfaz de usuario e invoca cambios en el modelo y probablemente en la vista (intermediario entre vista y modelo).
+
+Vista: Presentación del modelo de forma adecuada para interactuar con ella, representando la información proporcionada por el controlador.
+
+*Clases o paquetes creados*
+
+Respecto a los paquetes, cada entidad tiene su paquete. En ellos se encuentra la entidad y sus respectivos repository, service y rest controller.
+
+Respecto a las vistas, por el momento, se han creado los paquetes play, salaEspera y player. En ellos se encuentran, respectivamente, el manejo de creación y unión a partidas, la sala de espera donde se van uniendo los jugadores, y las instrucciones.
+
+*Ventajas alcanzadas al aplicar el patrón*
+
+Ofrece soporte para múltiples vistas, favorece la alta cohesión, el bajo acoplamiento y la separación de responsabilidades. Facilita el desarrollo y las pruebas de cada tipo de componente.
+
+### Patrón: < Arquitectura centrada en datos >
+*Tipo*: Diseño
+
+*Contexto de Aplicación*
+
+Se ha implementado una base de datos donde se encuentrán almacenadors datos de uusarios y todas las cartas del juego. Aquí también se puden almacenar datos de todas las entidades para probar las distintas excepciones de manera rápida.
+
+*Clases o paquetes creados*
+
+En el repositorio del proyecto inicialmente venía incluida una clase data.sql.
+
+*Ventajas alcanzadas al aplicar el patrón*
+
+La principal ventaja es la posibilidad de o¡introducir todas las cartas directamente en base de datos, evitando así tener que crearlas una a una cada vez que se inicia una partida.
+
+### Patrón: < Dependency Injection >
+*Tipo*: Diseño
+
+*Contexto de Aplicación*
+
+Se utiliza el patrón de Inyección de Dependencias para gestionar las dependencias entre componentes de manera flexible. Este patrón facilita la creación de sistemas modulares y mantenibles al desacoplar los objetos y permitir la configuración externa de sus dependencias.
+
+*Clases o paquetes creados*
+
+Las clases mencionadas en el patrón MVC. Normalmente los servicios son las clases que se inyectan en los controladores, y los repositorios se inyectan en los servicios.
+
+*Ventajas alcanzadas al aplicar el patrón*
+
+Nos aseguramos de que se cree solo una instancia de estas clases y que todas las clases que la necesiten puedan acceder a ella. Hacer esto sin un contenedor de inversión de control (Spring en este caso) resulta complicado. Permitimos que el framework realice operaciones complejas facilitando y ayudando mucho al programador en numerosas clases.
+
+### Patrón: < Layer Super Type >
 *Tipo*: Arquitectónico | de Diseño
 
 *Contexto de Aplicación*
 
-Describir las partes de la aplicación donde se ha aplicado el patrón. Si se considera oportuno especificar el paquete donde se han incluido los elementos asociados a la aplicación del patrón.
+Este patrón se utiliza para compartir comportamientos comunes y atributos entre clases en una jerarquía, generalmente situados en la capa superior de dicha jerarquía. Nos ha sido esencial la utilidad de este patrón para la codificación de la aplicación ya que varios objetos java de nuestro modelo de dominio hacen uso de este concepto.
 
 *Clases o paquetes creados*
 
-Indicar las clases o paquetes creados como resultado de la aplicación del patrón.
+Se ha usado la clase BaseEntity.java.
 
 *Ventajas alcanzadas al aplicar el patrón*
 
-Describir porqué era interesante aplicar el patrón.
+El patrón Layer Super type ofrece beneficios en el diseño de software al facilitar la reutilización de código, promover la consistencia, mejorar la mantenibilidad y proporcionar claridad en la jerarquía de clases. Además, se evita la duplicación de código y se simplifica el mantenimiento al tener un único punto de modificación para elementos compartidos.
 
 ## Decisiones de diseño
 _En esta sección describiremos las decisiones de diseño que se han tomado a lo largo del desarrollo de la aplicación que vayan más allá de la mera aplicación de patrones de diseño o arquitectónicos._

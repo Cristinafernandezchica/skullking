@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class BazaService {
     private TrucoService trucoService;
 
     @Autowired
-    public BazaService(BazaRepository bazaRepository, RondaService rondaService, TrucoService trucoService) {
+    public BazaService(BazaRepository bazaRepository, @Lazy RondaService rondaService, TrucoService trucoService) {
         this.bazaRepository = bazaRepository;
         this.rondaService = rondaService;
         this.trucoService = trucoService;
@@ -62,7 +63,6 @@ public class BazaService {
         return toUpdate;
     }
 
-    
 
     @Transactional(readOnly = true)
     public Baza findUltimaBazaByRondaId(Integer rondaId){

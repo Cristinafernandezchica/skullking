@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
-import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
+//import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
@@ -25,14 +25,14 @@ public class RondaService {
     RondaRepository rr;
     PartidaService ps;
     ManoService ms;
-    BazaService bs;
+    //BazaService bs;
     JugadorService js;
 
     @Autowired
-    public RondaService(RondaRepository rr, ManoService ms, BazaService bs, JugadorService js){
+    public RondaService(RondaRepository rr, ManoService ms, JugadorService js){ //, BazaService bs
         this.rr = rr;
         this.ms = ms;
-        this.bs = bs;
+        //this.bs = bs;
         this.js = js;
     }
 

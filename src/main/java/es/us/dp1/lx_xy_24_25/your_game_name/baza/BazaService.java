@@ -22,8 +22,9 @@ public class BazaService {
     private TrucoService trucoService;
 
     @Autowired
-    public BazaService(BazaRepository bazaRepository, TrucoService trucoService) {
+    public BazaService(BazaRepository bazaRepository, RondaService rondaService, TrucoService trucoService) {
         this.bazaRepository = bazaRepository;
+        this.rondaService = rondaService;
         this.trucoService = trucoService;
     }
 
@@ -90,9 +91,8 @@ public class BazaService {
         baza.setGanador(null);
         baza.setTipoCarta(null);
         baza.setRonda(ronda);
-        Baza bazaguardada =bazaRepository.save(baza);
-        trucoService.iniciarTruco(bazaguardada, ronda.getPartida().getId());
-        return bazaguardada;
+        trucoService.crearTrucosBaza(baza.getId());
+        return bazaRepository.save(baza);
     }
 
     // Next Baza

@@ -44,8 +44,9 @@ public class BazaRestController {
     private TrucoService trucoService;
 
     @Autowired
-    public BazaRestController(BazaService bs){
+    public BazaRestController(BazaService bs, TrucoService trucoService){
         this.bs=bs;
+        this.trucoService=trucoService;
     }
 
     // Get todas las bazas

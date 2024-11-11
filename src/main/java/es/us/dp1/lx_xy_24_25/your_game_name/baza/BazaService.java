@@ -22,8 +22,10 @@ public class BazaService {
     private TrucoService trucoService;
 
     @Autowired
-    public BazaService(BazaRepository bazaRepository) {
+    public BazaService(BazaRepository bazaRepository, RondaService rondaService, TrucoService trucoService) {
         this.bazaRepository = bazaRepository;
+        this.rondaService = rondaService;
+        this.trucoService = trucoService;
     }
 
     //Save las bazas en la base de datos
@@ -87,7 +89,7 @@ public class BazaService {
         baza.setGanador(null);
         baza.setTipoCarta(null);
         baza.setRonda(ronda);
-        //trucoService.iniciarTrucos(baza);
+        trucoService.crearTrucosBaza(baza.getId());
         return bazaRepository.save(baza);
     }
 

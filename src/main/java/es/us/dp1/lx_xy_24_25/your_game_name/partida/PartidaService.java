@@ -5,17 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.UsuarioPartidaEnJuegoEsperandoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MinJugadoresPartidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
+import jakarta.validation.Valid;
 
 @Service
 public class PartidaService {
@@ -48,13 +50,6 @@ public class PartidaService {
         }
     }
 
-    /*
-    @Transactional(readOnly = true)
-    public Optional<Partida> getPartidaById(Integer id){
-        return pr.findById(id);
-    }
-    */
-
     @Transactional(readOnly = true)
     public Partida getPartidaById(Integer id) throws DataAccessException{
         Optional<Partida> partida = pr.findById(id);
@@ -64,15 +59,7 @@ public class PartidaService {
             throw new ResourceNotFoundException("Partida", "id", id);
         }
     }
-
-    /*
-    @Transactional
-    public Partida save(Partida p) throws DataAccessException{
-        pr.save(p);
-        return p;
-    }
-    */
-
+    
     @Transactional
     public Partida save(Partida p) throws DataAccessException {
         Integer ownerId = p.getOwnerPartida();
@@ -81,6 +68,14 @@ public class PartidaService {
             throw new UsuarioPartidaEnJuegoEsperandoException("El usuario ya tiene una partida en espera o en juego.");
         }
         return pr.save(p);
+    }
+
+    @Transactional
+    public Partida update(@Valid Partida partida, Integer idToUpdate) throws DataAccessException{
+        Partida toUpdate = getPartidaById(idToUpdate);
+        BeanUtils.copyProperties(partida, toUpdate, "id");
+        pr.save(toUpdate);
+        return toUpdate;
     }
 
 
@@ -106,8 +101,7 @@ public class PartidaService {
 
         partida.setEstado(PartidaEstado.JUGANDO);
         partida.setInicio(LocalDateTime.now());
-        partida.setOwnerPartida(null);
-        save(partida);
+        update(partida, partidaId);
         rs.iniciarRonda(partida);
 
     }
@@ -122,8 +116,7 @@ public class PartidaService {
 
         partida.setEstado(PartidaEstado.TERMINADA);
         partida.setFin(LocalDateTime.now());
-        save(partida);
-
+        update(partida, partidaId);
     }
 
     // Para Excepción

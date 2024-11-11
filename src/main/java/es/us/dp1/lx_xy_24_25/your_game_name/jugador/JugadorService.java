@@ -67,7 +67,7 @@ public class JugadorService {
        List<Jugador> jugadores =jugadorRepository.findJugadoresByUsuarioId(usuarioId);
        Jugador jugadoresOrdenados = jugadores.stream()
                 .sorted((j1, j2) -> j2.getId().compareTo(j1.getId())) // Orden descendente
-                .findFirst().orElse(null);
+                .findFirst().orElseThrow(()-> new ResourceNotFoundException("no se encontro ningun jugador cuyo usuarioId sea" + usuarioId));
                 return jugadoresOrdenados;
     }
 
@@ -80,6 +80,4 @@ public class JugadorService {
                 .count();
         return count > 1;
     }
-    
-    
 }

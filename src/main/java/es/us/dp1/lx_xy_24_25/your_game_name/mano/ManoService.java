@@ -11,9 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.CartaService;
+import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import jakarta.validation.Valid;
 
 @Service
@@ -22,12 +24,14 @@ public class ManoService {
 private ManoRepository manoRepository;
 private CartaService cs;
 private JugadorService js;
+private TrucoService ts;
 
     @Autowired
-    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorService js) {
+    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorService js, TrucoService ts) {
         this.manoRepository = manoRepository;
         this.cs = cs;
         this.js = js;
+        this.ts = ts;
     }
 
     //save a Mano en la base de datos
@@ -43,7 +47,7 @@ private JugadorService js;
     //obtener Mano por pk
     @Transactional(readOnly = true)
     public Mano findManoById(Integer id) {
-        return manoRepository.findById(id).orElse(null);
+        return manoRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("mano","id",(id)));
     }
     //borrar Mano por pk
     @Transactional
@@ -57,9 +61,17 @@ private JugadorService js;
 		Mano toUpdate = findManoById(idToUpdate);
 		BeanUtils.copyProperties(Mano, toUpdate, "id");
 		manoRepository.save(toUpdate);
-
 		return toUpdate;
 	}
+
+    @Transactional(readOnly = true)
+    public Mano findLastManoByJugadorId(Integer jugadorId){
+        List<Mano> res =manoRepository.findAllManoByJugadorId(jugadorId);
+        Mano ultimaManoCreada = res.stream()
+        .sorted((j1, j2) -> j2.getId().compareTo(j1.getId())) // Orden descendente
+        .findFirst().orElse(null);
+        return ultimaManoCreada;
+    }
 
     // para iniciar las manos de los jugadores
     @Transactional
@@ -76,10 +88,10 @@ private JugadorService js;
             List<Carta> cartaMano= new ArrayList<Carta>();
             cartaMano.addAll(cartasBaraja);
             mano.setCartas(cartaMano);
-            // mano.setTruco(null);
             mano.setRonda(ronda);
             manoRepository.save(mano);
             cartasBaraja.clear();   // Borramos las cartas de la baraja, para repartir al siguiente jugador
+            
         }
     }
 
@@ -103,14 +115,6 @@ private JugadorService js;
         Mano mano = findManoById(manoId);
         mano.setApuesta(apuesta);
         manoRepository.save(mano);
-    }
-    @Transactional(readOnly = true)
-    public Mano findLastManoByJugadorId(Integer jugadorId){
-        List<Mano> res =manoRepository.findAllManoByJugadorId(jugadorId);
-        Mano ultimaManoCreada = res.stream()
-        .sorted((j1, j2) -> j2.getId().compareTo(j1.getId())) // Orden descendente
-        .findFirst().orElse(null);
-        return ultimaManoCreada;
     }
 
 

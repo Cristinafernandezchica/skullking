@@ -137,6 +137,7 @@ public class TrucoService {
 			trucoIniciado.setBaza(Baza);
 			Mano mano =manoService.findLastManoByJugadorId(jugador.getId());
 			trucoIniciado.setMano(mano);
+			trucoIniciado.setJugador(jugador.getId());
 			trucoIniciado.setTurno(turno);
 			trucoIniciado.setIdCarta(null);
 			trucoRepository.save(trucoIniciado);
@@ -145,7 +146,7 @@ public class TrucoService {
 	}
 	
 
-	/*
+
     // Para BazaRestController
     public Map<Integer, Integer> getCartaByJugador(int bazaId) {
         List<Truco> trucos = trucoRepository.findByBazaId(bazaId);
@@ -160,7 +161,7 @@ public class TrucoService {
     }
 	
 
-	*/
+
 	// Crear Trucos de una Baza y guardarlas en la base de datos
     @Transactional
     public void crearTrucosBaza(Integer idBaza) {

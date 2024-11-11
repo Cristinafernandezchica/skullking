@@ -33,6 +33,7 @@ public class Truco extends BaseEntity{
     // @Column(name = "baza")
 	private Baza baza;
 
+    private Integer jugador;
 
     // Asociación con la entidad Mano
 

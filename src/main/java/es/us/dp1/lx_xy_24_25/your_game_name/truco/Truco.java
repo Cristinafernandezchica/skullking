@@ -41,7 +41,6 @@ public class Truco extends BaseEntity{
 	@ManyToOne(optional = false)
     @JoinColumn(name = "mano_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
-    // @Column(name = "mano")
 	private Mano mano;
 
 

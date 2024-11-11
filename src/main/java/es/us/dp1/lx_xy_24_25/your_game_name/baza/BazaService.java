@@ -61,17 +61,7 @@ public class BazaService {
         return toUpdate;
     }
 
-    @Transactional
-    public Baza iniciarBaza(Ronda ronda) {
-        Baza bazaIniciada= new Baza();
-        bazaIniciada.setTipoCarta(null);
-        bazaIniciada.setGanador(null);
-        bazaIniciada.setCartaGanadora(null);
-        bazaIniciada.setRonda(ronda);
-        Baza res = bazaRepository.save(bazaIniciada);
-        trucoService.iniciarTruco(res, ronda.getPartida().getId());
-        return res;
-    }
+    
 
     @Transactional(readOnly = true)
     public Baza findUltimaBazaByRondaId(Integer rondaId){
@@ -100,8 +90,9 @@ public class BazaService {
         baza.setGanador(null);
         baza.setTipoCarta(null);
         baza.setRonda(ronda);
-        //trucoService.iniciarTrucos(baza);
-        return bazaRepository.save(baza);
+        Baza bazaguardada =bazaRepository.save(baza);
+        trucoService.iniciarTruco(bazaguardada, ronda.getPartida().getId());
+        return bazaguardada;
     }
 
     // Next Baza

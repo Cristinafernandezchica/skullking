@@ -10,4 +10,7 @@ public interface ManoRepository extends CrudRepository<Mano, Integer> {
     
     @Query("SELECT m FROM Mano m WHERE m.jugador.id = :jugadorId")
     List<Mano> findAllManoByJugadorId(Integer jugadorId);
+
+    @Query("SELECT m FROM Mano m WHERE m.ronda.id = :rondaId")
+    List<Mano> findAllByRondaId(Integer rondaId);
 }

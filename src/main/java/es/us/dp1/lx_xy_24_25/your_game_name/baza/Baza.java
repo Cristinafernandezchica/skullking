@@ -50,5 +50,4 @@ public class Baza extends BaseEntity{
 	@JoinColumn(name = "ronda_id")
 	private Ronda ronda;
 
-    public Baza() {}
 }

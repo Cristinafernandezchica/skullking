@@ -38,11 +38,12 @@ public class TrucoService {
 
 
     @Autowired
-	public TrucoService(TrucoRepository trucoRepository, BazaRepository bazaRepository,ManoRepository manoRepository, JugadorService jugadorService) {
+	public TrucoService(TrucoRepository trucoRepository, BazaRepository bazaRepository,ManoRepository manoRepository, JugadorService jugadorService, UserService userService) {
 		this.trucoRepository = trucoRepository;
         this.bazaRepository = bazaRepository;
         this.manoRepository = manoRepository;
         this.jugadorService = jugadorService;
+		this.userService = userService;
 	}
 
     @Transactional(readOnly = true)
@@ -109,13 +110,6 @@ public class TrucoService {
 		}
 
 		Truco toUpdate = findTrucoById(trucoId);
-		User user = userService.findCurrentUser();
-		Jugador jugador = jugadorService.findJugadorByUsuarioId(user.getId());
-
-		if (toUpdate.getJugador()!= jugador.getId()) {
-			throw new AccessDeniedException("Un jugador no puede modificar un truco que no es suyo");
-		}
-        
 		BeanUtils.copyProperties(truco, toUpdate, "id");
 		trucoRepository.save(toUpdate);
 

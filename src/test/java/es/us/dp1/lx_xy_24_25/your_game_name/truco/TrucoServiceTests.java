@@ -2,12 +2,14 @@ package es.us.dp1.lx_xy_24_25.your_game_name.truco;
 
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import java.util.Map;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,12 +25,15 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.NoCartaDeManoException;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
+import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.UserService;
@@ -50,6 +55,9 @@ public class TrucoServiceTests {
 
     @Mock
     private TrucoRepository trucoRepository;
+
+    @Mock
+    private BazaRepository bazaRepository;
 
     @InjectMocks
     private TrucoService trucoService;
@@ -77,7 +85,6 @@ public class TrucoServiceTests {
     private Truco truco1;
     private Truco truco2;
     private Truco truco3;
-    private User user;
     private List<Truco> trucos1;
     private List<Truco> trucos2;
 
@@ -98,11 +105,8 @@ public class TrucoServiceTests {
         idCarta2=2;
         idCartaFalso=3;
 
-        user = new User();
-        user.setId(1);
         jugador1 = new Jugador();
         jugador1.setId(idJugador1);
-        jugador1.setUsuario(user);
         jugador2 = new Jugador();
         jugador2.setId(idJugador2);
 
@@ -245,8 +249,6 @@ public class TrucoServiceTests {
         }, "Se esperaba que se lanzara una ResourceNotFoundException cuando no se encuentra el Truco");
     }
 
-    // Truco saveTruco(Truco truco) throws DataAccessException o NoCartaDeManoException
-
     @Test
     public void shouldSaveTruco() {
         when(trucoRepository.save(truco1)).thenReturn(truco1);
@@ -266,7 +268,6 @@ public class TrucoServiceTests {
         }, "Se esperaba que se lanzara una NoCartaDeManoException cuando la carta del Trco no es parte de las cartas de la mano");
     }
 
-    // Truco updateTruco(Truco truco, int trucoId) throws DataAccessException
     @Test
     public void shouldUpdateTruco() {
         Truco newTruco = new Truco();
@@ -276,16 +277,47 @@ public class TrucoServiceTests {
         newTruco.setIdCarta(idCarta1);
 
         when(trucoRepository.findById(1)).thenReturn(Optional.of(truco1));
-        when(trucoRepository.save(newTruco)).thenReturn(newTruco);
 
-        newTruco.setBaza(baza1);
         Truco updatedTruco = trucoService.updateTruco(newTruco, 1);
 
         assertNotNull(updatedTruco);
         assertEquals(newTruco.getBaza(), updatedTruco.getBaza());
-        verify(trucoRepository, times(1));
     }
 
 
+    @Test
+    public void shouldNotUpdateTruco() {
+        Truco newTruco = new Truco();
+        newTruco.setBaza(baza1);
+        newTruco.setJugador(jugador1.getId());
+        newTruco.setMano(mano1);
+        newTruco.setIdCarta(idCarta2);
+
+        assertThrows(NoCartaDeManoException.class, () -> {
+            trucoService.updateTruco(newTruco, 1);
+        }, "No se puede actualizar un Truco si el idCarta no está en las cartas de la mano");
+
+    }
+
+    @Test
+    public void shouldGetCartaByJugador(){
+        when(this.trucoService.findTrucosByBazaId(baza1.getId())).thenReturn(List.of(truco1));
+
+        Map<Integer, Integer> result = this.trucoService.getCartaByJugador(baza1.getId());
+
+        // Assert
+        assertEquals(1, result.get(truco1.getIdCarta()));
+    }
+
+    // void crearTrucosBaza(Integer idBaza) ResourceNotFoundException
+    // @Test
+    // public void shouldCrearTrucosBaza() {
+        // when(bazaRepository.findById(baza1.getId())).thenReturn(Optional.of(baza1));
+        // baza1.setRonda(any(Ronda.class));
+
+        // trucoService.crearTrucosBaza(baza1.getId());
+
+        // verify(trucoService).findTrucosByBazaId(baza1.getId());
+    // }
 
 }

@@ -33,37 +33,12 @@ public class JugadorService {
         this.pr = pr;
     }
 
-    //save a jugador en la base de datos
-    /*
-    @Transactional
-    public Jugador saveJugador(Jugador jugador) {
-        return jugadorRepository.save(jugador);
-    }
-    */
-
-    /*
-    @Transactional
-    public Jugador saveJugador(Jugador jugador) throws DataAccessException {
-        User usuario = jugador.getUsuario();
-        Partida partida = jugador.getPartida();
-
-        if (usuario != null && partida != null) {
-            boolean tieneMultiplesJugadores = usuarioMultiplesJugadoresEnPartida(usuario, partida);
-            if (tieneMultiplesJugadores) {
-                throw new UsuarioMultiplesJugadoresEnPartidaException("El usuario no puede tener múltiples jugadores en la misma partida.");
-            }
-        }
-        return jugadorRepository.save(jugador);
-    }
-    */
-
-
     @Transactional
     public Jugador saveJugador(Jugador jugador) throws DataAccessException {
         Partida partida = jugador.getPartida();
         List<Jugador> jugadoresPartida = findJugadoresByPartidaId(partida.getId());
 
-        if(jugadoresPartida.size() == 10){
+        if(jugadoresPartida.size() == 8){
             throw new MaximoJugadoresPartidaException("La partida está completa.");
         } else if(jugador.getUsuario().getId() == partida.getOwnerPartida() || jugadorEnPartida(jugadoresPartida, jugador)){
             throw new UsuarioMultiplesJugadoresEnPartidaException("El usuario ya tiene un jugador en la partida.");
@@ -146,7 +121,7 @@ public class JugadorService {
        List<Jugador> jugadores =jugadorRepository.findJugadoresByUsuarioId(usuarioId);
        Jugador jugadoresOrdenados = jugadores.stream()
                 .sorted((j1, j2) -> j2.getId().compareTo(j1.getId())) // Orden descendente
-                .findFirst().orElse(null);
+                .findFirst().orElseThrow(()-> new ResourceNotFoundException("no se encontro ningun jugador cuyo usuarioId sea" + usuarioId));
                 return jugadoresOrdenados;
     }
 

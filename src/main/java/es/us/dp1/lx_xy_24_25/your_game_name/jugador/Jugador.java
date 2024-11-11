@@ -14,6 +14,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,19 +26,22 @@ import lombok.Setter;
 @EqualsAndHashCode(of="id", callSuper = true)
 public class Jugador extends BaseEntity {
     
+    @NotNull
     private Integer puntos;
 
 
     @ManyToOne
     @JoinColumn(name = "partida_id")
-    private Partida partida;      // TODO: Hay que mirar la relacion con partida
+    private Partida partida;      
 
     // hacer pull
+    @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User usuario;
 
+    @Min(0)
     private Integer turno;
 
 }

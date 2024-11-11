@@ -81,4 +81,8 @@ public class RondaRestController {
         return new ResponseEntity<>(new MessageResponse("Ronda eliminada"), HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/{partidaId}/partida")
+    public Ronda getRondaByPartidaId(@PathVariable("partidaId") Integer partidaId) {
+        return rs.findRondaActualByPartidaId(partidaId);
+    }
 }

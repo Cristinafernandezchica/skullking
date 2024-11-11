@@ -20,6 +20,47 @@ En la cúspide de la jerarquía se encuentran las cartas de personaje: pirata, s
 
 Siguiendo la jerarquía, hallamos el palo de triunfos con cartas numeradas del 1 al 14. Por debajo, se sitúan el resto de palos, morado, amarillo y verde, numerados de la misma forma. Finalmente, se encuentran las banderas blancas, las cuales pierden la baza independientemente del resto de cartas jugadas.
 
+### CARTAS:
+
+#### Bandera Blanca
+![Bandera Blanca](/src/main/resources/images/cartas/bandera_blanca.png)
+
+ Las 5 cartas de bandera blanca pueden ser jugadas para ‘no ganar’ al considerarse de valor 0. Pierden con el resto de cartas. Son muy útiles para aseguraros no ganar más bazas de las que se han pujado.
+
+#### Pirata
+![Pirata](/src/main/resources/images/cartas/pirata_1.png)
+
+Las cartas de Pirata superan a todas las cartas numeradas. Todas son de igual valor, por lo que si se juegan más de una en la misma baza, quien haya jugado el primer pirata ganará la baza.
+
+#### Tigresa
+![Tigresa](/src/main/resources/images/cartas/trigresa.png)
+
+Al jugar la Tigresa, debéis declarar si contará como Pirata o como Huida. Asume todas la características de un pirata o de una huida.
+
+#### Skull King
+![Skull King](/src/main/resources/images/cartas/skull_king.png)
+
+El Skull King vence a todas las cartas numeradas y todos los Piratas (incluida la Tigresa al ser jugada como Pirata). Las únicas que puede derrotarle son las Sirenas.
+
+#### Sirena
+![Sirena](/src/main/resources/images/cartas/sirena_1.png)
+
+Las Sirenas vencen a todos los palos numerados pero pierden con todos los Piratas,con la excepción del Skull King. Si se juegan ambas Sirenas en la misma baza, la primera que fue jugada ganará la baza.
+
+#### Palos normales (amarillo, verde y morado)
+![Palo amarillo](/src/main/resources/images/cartas/amarilla_14.png)
+
+![Palo verde](/src/main/resources/images/cartas/morada_9.png)
+
+![Palo morado](/src/main/resources/images/cartas/verde_2.png)
+
+Hay tres palos normales: amarillo (Cofre del Tesoro), verde (Loro) y morado (Mapa del Tesoro).
+
+#### Palo Triunfo
+![Palo Triunfo](/src/main/resources/images/cartas/triunfo_4.png)
+
+Las cartas triunfo son superiores a la de las otras tres palos.
+
 ### PUNTUACIÓN:
 
 A la hora de apostar se decide cómo se ganarán puntos. Por un lado, se puede apostar todo a perder, el jugador deberá perder todas las bazas. En el caso de acertar su apuesta se multiplicará por 10 el número de cartas de la ronda, y si se equivoca, se multiplicará por -10 el número anterior. Por otro lado, se puede realizar una apuesta normal en la cual las bazas ganadas se multiplicarán por 20 si se acierta la apuesta, en caso de que esta sea errónea, se multiplicará por -10 aquellas bazas no acertadas.
@@ -67,35 +108,62 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Editar perfil](../mockups/Editar_perfil.png)|
 |  |
 
- ### HGA1-(ISSUE#30): Listado usuaios registrados ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/30#issue-2561421045]())
-| "Como admin quiero ver el listado de usuarios registrados para llevar un control sobre la cantidad de usuarios en el sistema."| 
+ ### HGA1-(ISSUE#30): Listado usuarios registrados ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/30#issue-2561421045]())
+| "Como administrador quiero ver el listado de usuarios registrados para llevar un control sobre la cantidad de usuarios en el sistema."| 
 |-----|
 |![Listado de usuarios](../mockups/Listado_usuarios.png)|
 |Se despliega una lista de todos los usuarios registrados en el sistema.|
 
- ### HGA2-(ISSUE#53): CRUD de usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/53#issue-2565933479]())
-| "Como administrador quiero poder crear, ver, actualizar y borrar usuarios para llevar un control adecuado de los usuarios del sistema."|
+ ### HGA2-(ISSUE#53): Borrar un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/53#issue-2565933479]())
+| "Como administrador quiero poder borrar usuarios para llevar un control adecuado de los usuarios del sistema."|
 |-----|
-|![Listado de usuarios](../mockups/Listado_usuarios.png)|
+|![Borrar usuario](../mockups/Listado_usuarios.png)|
 |En la lista de usuarios tienes las opciones para editar los datos de los usuarios usando el boton "edit", crear uno con el boton "add user" y eliminarlo usando "delete", ademas haciendo click en el nombre del usuario puedes ver su perfil.|
 
- ### HGA3-(ISSUE#54): Restablecer contraseña ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/54#issue-2565956464]())
-| "Como administrador quiero poder restablecer la contraseña de un usuario para ayudar a los jugadores que hayan olvidado sus credenciales."|
+ ### HGA3-(ISSUE#54): Editar un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/54#issue-2565956464]())
+| "Como administrador quiero poder editar el perfil de un usuario para ayudar a los jugadores que hayan olvidado sus credenciales."|
 |-----|
-|![cambio de credenciales](../mockups/Cambio_de_credenciales.png)|
-|En el formulario que aparece puedes modificar los datos en el apartado de contraseña para cambiar las credenciales del usuario especificado.|
+|![Edición jugador](../mockups/Cambio_de_credenciales.png)|
+|En el formulario que aparece puedes modificar los datos del usuario especificado.|
+
+ ### HGA4-(ISSUE#53): Crear un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/53#issue-2565933479]())
+| "Como administrador quiero poder crear un usuario para llevar una administración del sistema"|
+|-----|
+|![Creación jugador](../mockups/Listado_usuarios.png)|
+|Pulsando el botón "Add User", el administrador deberá rellenar los datos correspondientes y confirmar la creación.|
 
 ### HJJ8-(ISSUE#47): Conocer reglas de juego ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/47#issue-2565864686]())
-| "Como Jugador quiero conocer las reglas del juego para poder jugar correctamente."| 
+| "Como jugador quiero conocer las reglas del juego para poder jugar correctamente."| 
 |-----|
 |![Ver instrucciones](../mockups/Ver_Instrucciones.png)|
 |Puedes acceder al pdf con todas las reglas del juego e incluso descargar dicho pdf para tenerlo en tu computadora.|
+
+ ### HJJ13-(ISSUE#109): Ver jugadores en la sala ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/109]())
+| "Como jugador quiero poder ver los jugadores que se unen a la partida para poder saber con quienes voy a jugar."| 
+|-----|
+|![Lobby](../mockups/iniciar_partida.png)|
+|Una vez el jugador se encuentre en la sala de espera de la partida, el jugador podrá ver los jugadores que hay en la partida. Estos se van actualizando conforme se van uniendo.|
 
  ### HJJ9-(ISSUE#48): Crear partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/48#issue-2565866251]())
 | "Como jugador quiero poder crear partidas para poder jugar."| 
 |-----|
 |![Lobby](../mockups/Lobby_partidas.png)|
-|Puedes presionar en el botón "crear partida", para crear una sala en la que las personas puedan entrar.|
+|Puedes presionar en el botón "Crear partida" para crear una sala en la que las personas puedan entrar.|
+|Caso negativo: Si ya estás en una partida en estado "JUGANDO" o "ESPERANDO", se lanzará una excepción y no podrás crear otra partida.|
+
+ ### HJJ11-(ISSUE#106): Unirse a partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/106]())
+| "Como jugador quiero poder unirme a una partida para poder jugar."| 
+|-----|
+|![Lobby](../mockups/Lobby_partidas.png)|
+|Puedes presionar en el botón "Unirse a partida" para unirte a una partida que esté en estado "ESPERANDO".|
+|Caso negativo: Si ya estás en una partida en estado "JUGANDO" o "ESPERANDO", se lanzará una excepción y no podrás unirte a otra partida.|
+
+ ### HJJ12-(ISSUE#108): Iniciar partida creada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/108]())
+| "Como jugador quiero poder iniciar una partida que he creado para poder jugar."| 
+|-----|
+|![Lobby](../mockups/iniciar_partida.png)|
+|Una vez el jugador se encuentre en la sala de espera de la partida, si ha creado la partida, puede presionar el botón "Iniciar Prtida".|
+|Caso negativo: Si en la partida hay menos de 3 jugadores, no se podrá iniciar, aparecerá una excepción que lo indique.|
 
  ### HJJ10-(ISSUE#43): Hacer apuestas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/43]())
 | "Como jugador quiero poder hacer apuestas sobre cuántas bazas ganaré para poder planificar mi estrategia."| 
@@ -103,17 +171,11 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Hacer apuestas](../mockups/Hacer_apuesta_sobre_cuantas_bazas_ganare.png)|
 |Al inicio de cada ronda aparecerá una ventana emergente con botones del 0 al número de cartas repartidas en la ronda actual, el jugador deberá pulsar uno de los números en función de la predicción de bazas que cree que va a ganar en la ronda.|
 
- ### HJA1-(ISSUE#44): Ver listado de partidas en curso ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/44]())
-| "Como administrador quiero poder ver el listado de partidas en curso, incluyendo creador y usuarios participantes para llevar un control sobre las partidas en curso."| 
+ ### HJA1-(ISSUE#44): Ver listado de partidas filtradas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/44]())
+| "Como administrador quiero poder ver el listado de partidas, incluyendo nombre de la partida, creador, estado y jugadores participantes para llevar un control sobre las partidas."| 
 |-----|
-|![Listado de partidas en curso](../mockups/Listado_partidas_en_curso.png)|
-|El administrador, en la parte superior de la pantalla, tendrá un desplegable 'Partidas' del que salen las categorías 'En Curso' y 'Terminadas'. Debe pulsar en 'En Curso', esto le llevará a una pantalla con el listado de partidas en curso.|
-
-### HJA2-(ISSUE#45): Ver listado de partidas finalizadas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/45]())
-| "Como administrador quiero poder ver el listado de partidas finalizadas, incluyendo creador y usuarios participantes para llevar un control sobre las partidas ya finalizadas."| 
-|-----|
-|![Listado de partidas finalizadas](../mockups/Listado_partidas_terminadas.png)|
-|El administrador, en la parte superior de la pantalla, tendrá un desplegable 'Partidas' del que salen las categorías 'En Curso' y 'Terminadas'. Debe pulsar en 'Terminadas', esto le llevará a una pantalla con el listado de partidas ya finalizadas.|
+|![Listado de partidas en curso](../mockups/listado_partidas.png)|
+|El administrador, en la parte superior de la pantalla, tendrá un botón 'Partidas'. Dentro de esta pantalla encontrará una barra de búsqueda para filtrar las partidas por nombre. Además, encontrará diversos botones para filtrar en función del estado de las partidas.|
 
 ### HJJ5-(ISSUE#40): Ver apuestas de la ronda ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/40]())
 | "Como jugador quiero poder ver todas las apuestas realizadas en la ronda actual para poder perjudicar las apuestas de otros jugadores."| 
@@ -232,58 +294,61 @@ La partida finaliza una vez se haya calculado la puntuación final.
 ### R21 - Cálculo de puntos de ronda  
 El cálculo de los puntos de la ronda se realizará al finalizar esta.
 
-### R22 - Relación jugador - usuario  
-Cada usuario tendrá asociado un jugador al entrar en partida. El jugador no debe ser necesariamente el mismo al de una partida anterior, pueden ser distintos.
+### R22 - Usuario un jugador por partida
+Cada usuario tendrá asociado un solo jugador en una partida.
 
-### R23 - Usuario con varios jugadores  
-El usuario en la aplicación, a medida que juegue partidas podrá tener distintos jugadores, sin embargo, nunca podrán haber dos jugadores del mismo usuario jugando al mismo tiempo.
+### R23 - Usuario jugador distinto por partida
+El jugador asociado al usuario será distinto en cada partida.
 
-### R24 - 3 Cartas de personajes distintas  
+### R24 - Usuario con varios jugadores  
+El usuario en la aplicación, a medida que juegue partidas podrá tener distintos jugadores. Sin embargo, nunca podrán haber dos jugadores del mismo usuario jugando al mismo tiempo, es decir, un usuario no podrá tener varios jugadores que se encuentren en partidas con estado "ESPERANDO" o "JUGANDO".
+
+### R25 - 3 Cartas de personajes distintas  
 En el caso de que en mesa se hayan jugado las 3 cartas de personaje (Skull King, Pirata y Sirena), la primera sirena jugada ganará la ronda.
 
-### R25 - Todas las cartas banderas blancas  
+### R26 - Todas las cartas banderas blancas  
 En el caso de que en mesa todos los jugadores hayan jugado bandera blanca (también puede ser la tigresa jugada como bandera blanca), ganará el truco tirada en primer lugar.
 
-### R26 - Relación Skull King - Pirata  
+### R27 - Relación Skull King - Pirata  
 En el caso de que en mesa se haya jugado un Skull King y uno o varios piratas, ganará el Skull King.
 
-### R27 - Relación Pirata - Sirena  
+### R28 - Relación Pirata - Sirena  
 En el caso de que en mesa se hayan jugado uno o varios piratas y una o varias sirenas, ganará el primer pirata jugado.
 
-### R28 - Cartas triunfo  
+### R29 - Cartas triunfo  
 En el caso de que no se haya jugado ninguna carta de personaje y haya en mesa uno o más triunfos, ganará el de mayor número.
 
-### R29 - Cartas del palo principal  
+### R30 - Cartas del palo principal  
 En el caso de que no se haya jugado ninguna carta de personaje ni triunfo, ganará el truco de mayor número del palo principal.
 
-### R30 - Apostar a ganar: acierto de apuesta  
+### R31 - Apostar a ganar: acierto de apuesta  
 Si el jugador establece que ganará al menos 1 baza, y acierta la apuesta, el número de bazas ganadas se multiplicará por 20 puntos.
 
-### R31 - Apostar a ganar: apuesta no acertada  
+### R32 - Apostar a ganar: apuesta no acertada  
 Si el jugador establece que ganará al menos 1 baza, y no acierta la apuesta, el número de bazas apostadas a ganar y no se han ganado se multiplicará por -10 puntos.
 
-### R32 - Apostar a perder: acierto de apuesta  
+### R33 - Apostar a perder: acierto de apuesta  
 Si el jugador establece que perderá todas las bazas de la ronda, y acierta la apuesta, el número de bazas de la ronda se multiplicará por 10 puntos.
 
-### R33 - Apostar a perder: apuesta no acertada  
+### R34 - Apostar a perder: apuesta no acertada  
 Si el jugador establece que perderá todas las bazas de la ronda, y no acierta la apuesta, el número de bazas de la ronda se multiplicará por -10 puntos.
 
-### R34 - Puntos de bonificación: carta 14 de palo  
+### R35 - Puntos de bonificación: carta 14 de palo  
 Una vez se compruebe que se ha acertado la apuesta, si el jugador ha ganado alguna baza que incluya alguna carta 14 de los palos normales, se sumarán 10 puntos por cada una a su puntuación de la ronda.
 
-### R35 - Puntos de bonificación: carta 14 de triunfo  
+### R36 - Puntos de bonificación: carta 14 de triunfo  
 Una vez se compruebe que se ha acertado la apuesta, si el jugador ha ganado alguna baza que incluya alguna carta 14 de triunfo, se sumarán 20 puntos a su puntuación de la ronda.
 
-### R36 - Puntos de bonificación: sirena capturada  
+### R37 - Puntos de bonificación: sirena capturada  
 Una vez se compruebe que se ha acertado la apuesta, si el jugador ha ganado alguna baza que incluya alguna carta de sirena, se sumarán 20 puntos por cada una a su puntuación de la ronda.
 
-### R37 - Puntos de bonificación: pirata capturado  
+### R38 - Puntos de bonificación: pirata capturado  
 Una vez se compruebe que se ha acertado la apuesta, si el jugador ha ganado alguna baza que incluya alguna carta de pirata, se sumarán 20 puntos por cada uno a su puntuación de la ronda.
 
-### R38 - Puntos de bonificación: Skull King capturado  
+### R39 - Puntos de bonificación: Skull King capturado  
 Una vez se compruebe que se ha acertado la apuesta, si el jugador ha ganado alguna baza que incluya la carta de Skull King, se sumarán 40 puntos a su puntuación de la ronda.
 
-### R39 - Puntos de bonificación: 3 cartas de personaje distintos  
+### R40 - Puntos de bonificación: 3 cartas de personaje distintos  
 Una vez se compruebe que se ha acertado la apuesta, si el jugador ha ganado alguna baza que incluya los 3 tipos de personaje, se aplicará la regla de puntos de bonificación de Skull King capturado.
 
 

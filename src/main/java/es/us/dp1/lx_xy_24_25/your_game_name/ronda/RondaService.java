@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +27,7 @@ public class RondaService {
     JugadorService js;
 
     @Autowired
-    public RondaService(RondaRepository rr, ManoService ms, BazaService bs, JugadorService js){
+    public RondaService(RondaRepository rr, ManoService ms, @Lazy BazaService bs, JugadorService js){
         this.rr = rr;
         this.ms = ms;
         this.bs = bs;

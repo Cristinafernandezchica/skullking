@@ -1,5 +1,6 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.partida;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
@@ -71,6 +72,8 @@ public class PartidaControllerTest {
         partida.setId(TEST_PARTIDA_ID);
         partida.setNombre("Partida Test");
         partida.setEstado(PartidaEstado.ESPERANDO);
+        partida.setOwnerPartida(1);
+        
     }
 
     @Test
@@ -138,20 +141,22 @@ public class PartidaControllerTest {
     @Test
     @WithMockUser("admin")
     void shouldUpdatePartida() throws Exception {
-        Partida updatedPartida = new Partida();
-        updatedPartida.setNombre("Partida Actualizada");
-        updatedPartida.setInicio(LocalDateTime.now());
-        updatedPartida.setOwnerPartida(1);
-        updatedPartida.setEstado(PartidaEstado.ESPERANDO);
+        partida.setInicio(LocalDateTime.now());
+        partida.setEstado(PartidaEstado.ESPERANDO);
 
         when(partidaService.getPartidaById(TEST_PARTIDA_ID)).thenReturn(partida);
-        when(partidaService.save(any(Partida.class))).thenReturn(updatedPartida);
+        when(partidaService.update(any(Partida.class), eq(TEST_PARTIDA_ID))).thenReturn(partida);
 
         mockMvc.perform(put(BASE_URL + "/{id}", TEST_PARTIDA_ID).with(csrf())
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(updatedPartida)))
-            .andExpect(status().isNoContent());
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(partida)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombre").value(partida.getNombre()))
+                .andExpect(jsonPath("$.estado").value(partida.getEstado().toString()))
+                .andExpect(jsonPath("$.ownerPartida").value(partida.getOwnerPartida()));
     }
+
+
 
     @Test
     @WithMockUser("admin")
@@ -189,7 +194,7 @@ public class PartidaControllerTest {
     void shouldIniciarPartida() throws Exception {
         doNothing().when(partidaService).iniciarPartida(TEST_PARTIDA_ID);
 
-        mockMvc.perform(post(BASE_URL + "/{id}/iniciar-partida", TEST_PARTIDA_ID).with(csrf()))
+        mockMvc.perform(put(BASE_URL + "/{id}/iniciar-partida", TEST_PARTIDA_ID).with(csrf()))
             .andExpect(status().isOk());
     }
 

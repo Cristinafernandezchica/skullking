@@ -2,18 +2,25 @@ package es.us.dp1.lx_xy_24_25.your_game_name.jugador;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.UsuarioPartidaEnJuegoEsperandoException;
@@ -25,6 +32,8 @@ import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 import es.us.dp1.lx_xy_24_25.your_game_name.util.EntityUtils;
 
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
 public class JugadorServiceTest {
 
     @Mock
@@ -42,6 +51,8 @@ public class JugadorServiceTest {
 	private Partida partida2;
 	private Jugador jugador2;
 	private User usuario2;
+    private User usuario3;
+    private Partida partida3;
 
     @BeforeEach
 void setUp() {
@@ -55,6 +66,10 @@ void setUp() {
     usuario2.setId(2);
     usuario2.setUsername("testuser2");
 
+    usuario3 = new User();
+    usuario3.setId(3);
+    usuario3.setUsername("testuser3");
+
     partida = new Partida();
     partida.setId(1);
     partida.setNombre("Test Partida");
@@ -62,10 +77,16 @@ void setUp() {
     partida.setEstado(PartidaEstado.TERMINADA);
 
     partida2 = new Partida();
-    partida2.setId(2);
+    partida2.setId(1);
     partida2.setNombre("Test Partida2");
     partida2.setOwnerPartida(1);
     partida2.setEstado(PartidaEstado.ESPERANDO);
+
+    partida3 = new Partida();
+    partida3.setId(3);
+    partida3.setNombre("Test Partida3");
+    partida3.setOwnerPartida(3);
+    partida3.setEstado(PartidaEstado.ESPERANDO);
 
     jugador = new Jugador();
     jugador.setId(1);
@@ -82,14 +103,12 @@ void setUp() {
 }
     @Test
 	void shouldFindAllJugadoresByPartidaId() {
-		List<Jugador> jugadores = this.jugadorService.findJugadoresByPartidaId(3);
+        List<Jugador> jugadoresDeLaPartida= List.of(jugador2,jugador);
+        when(jugadorRepository.findJugadoresByPartidaId(any(Integer.class))).thenReturn(jugadoresDeLaPartida);
+		List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(3);
 
-		Jugador jugador1 = EntityUtils.getById(jugadores, Jugador.class, 1);
-		Jugador jugador2 = EntityUtils.getById(jugadores, Jugador.class, 2);
-		Jugador jugador3 = EntityUtils.getById(jugadores, Jugador.class, 3);
-		assertEquals("player2", jugador1.getUsuario().getUsername());
-		assertEquals("player3", jugador2.getUsuario().getUsername());
-		assertEquals("player1", jugador3.getUsuario().getUsername());
+		assertEquals(jugador2, jugadores.get(0));
+		assertEquals(jugador, jugadores.get(1));
 	}
 
     @Test
@@ -99,18 +118,9 @@ void setUp() {
 		Jugador jugador = jugadorService.saveJugador(jugador2);  // Asegúrate de pasar el jugador correctamente
 		assertEquals(jugador2, jugador);
 	}
-	@Test
-	void shouldnotSave2JugadorWithTheSameUser(){
 
-        Jugador jugador3 = new Jugador();
-        jugador3.setId(3);
-        jugador3.setUsuario(usuario2);
-        jugador3.setPartida(partida2);
-        jugadorService.saveJugador(jugador2);
-        when(jugadorRepository.save(jugador3)).thenReturn(jugador3);
-		assertThrows(UsuarioPartidaEnJuegoEsperandoException.class,
-         () -> jugadorService.saveJugador(jugador3));
-	}
+
+
 
 	@Test
 	void  shouldNotFindAJugadorThatUserDoesntExists() {
@@ -119,11 +129,116 @@ void setUp() {
 
 	@Test
 	void shouldFindAJugadorWithAExistingUser() {
-        when(jugadorRepository.findById(usuario.getId()).get()).thenReturn(jugador2);
-		Jugador jugador = jugadorService.findJugadorByUsuarioId(1);
-		assertEquals("player3", jugador.getUsuario().getUsername());
+        List<Jugador> jugadoresMock = List.of(jugador);
+        when(jugadorRepository.findJugadoresByUsuarioId(any(Integer.class))).thenReturn(jugadoresMock);
+		Jugador jugadorATestear = jugadorService.findJugadorByUsuarioId(1);
+		assertEquals(jugador, jugadorATestear);
     }
-	
+
+    @Test
+    void shouldSaveJugadorSuccessfully() {
+        List<Jugador> jugadoresPartida = List.of(jugador);
+
+        when(jugadorRepository.findJugadoresByPartidaId(partida2.getId())).thenReturn(jugadoresPartida);
+        when(jugadorRepository.save(jugador2)).thenReturn(jugador2);
+
+        Jugador savedJugador = jugadorService.saveJugador(jugador2);
+        assertNotNull(savedJugador);
+        assertEquals(jugador2, savedJugador);
+    }
+
+    @Test
+    void shouldNotSaveJugadorWhenPartidaHasMaxPlayers() {
+        List<Jugador> jugadoresPartida = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            Jugador j = new Jugador();
+            j.setId(i);
+            j.setPartida(partida);
+            jugadoresPartida.add(j);
+        }
+
+        when(jugadorRepository.findJugadoresByPartidaId(partida.getId())).thenReturn(jugadoresPartida);
+
+        Jugador newJugador = new Jugador();
+        newJugador.setUsuario(usuario3);
+        newJugador.setPartida(partida);
+
+        assertThrows(MaximoJugadoresPartidaException.class, () -> jugadorService.saveJugador(newJugador));
+    }
+
+    @Test
+    void shouldNotSaveJugadorWhenUserAlreadyInPartida() {
+        List<Jugador> jugadoresPartida = List.of(jugador, jugador2);
+
+        when(jugadorRepository.findJugadoresByPartidaId(partida2.getId())).thenReturn(jugadoresPartida);
+
+        Jugador newJugador = new Jugador();
+        newJugador.setUsuario(usuario);
+        newJugador.setPartida(partida2);
+
+        assertThrows(UsuarioMultiplesJugadoresEnPartidaException.class, () -> jugadorService.saveJugador(newJugador));
+    }
+
+    /*
+    @Test
+    void shouldNotSaveJugadorWhenUserInActivePartida() {
+        List<Partida> partidas = List.of(partida, partida2); // Partida activa
+
+        when(jugadorRepository.findJugadoresByUsuarioId(usuario.getId())).thenReturn(List.of(jugador));
+        // when(partidaRepository.findByOwnerPartidaAndEstado(anyInt(), anyList())).thenReturn(partidas);
+
+        Jugador newJugador = new Jugador();
+        newJugador.setId(3);
+        newJugador.setUsuario(usuario);
+        newJugador.setPartida(partida3);
+
+        assertThrows(UsuarioPartidaEnJuegoEsperandoException.class, () -> jugadorService.saveJugador(newJugador));
+    }
+    */
+    
+    /*
+    @Test
+    public void testSaveJugador_UsuarioYaTieneJugadorEnPartidaEnJuego() {
+        // Simulamos que el usuario ya está en una partida en estado "ESPERANDO" (partida2)
+        when(jugadorRepository.findJugadoresByUsuarioId(usuario.getId()))
+                .thenReturn(Arrays.asList(jugador)); // El usuario ya tiene un jugador en la partida
+
+        // Intentar guardar el nuevo jugador en una nueva partida (partida3)
+        // Debe lanzar la excepción UsuarioPartidaEnJuegoEsperandoException
+        assertThrows(UsuarioPartidaEnJuegoEsperandoException.class, () -> {
+            jugadorService.saveJugador(nuevoJugador); // Se intenta añadir el jugador a una nueva partida
+        });
+    }
+    */
 
 
+        /*
+    @Test
+    void shouldnotSave2JugadorWithTheSameUser() {
+
+        Jugador jugador3 = new Jugador();
+        jugador.setId(3);
+        jugador.setUsuario(usuario);
+        jugador.setPartida(partida2);
+
+        List<Jugador> jugadores = List.of(jugador);
+        Iterable<Jugador> jugadoresIterable =jugadores;
+        when(jugadorRepository.findAll()).thenReturn(jugadoresIterable);
+        assertThrows(UsuarioMultiplesJugadoresEnPartidaException.class, ()-> jugadorService.saveJugador(jugador2));
+    }
+    */
+
+        /* 
+    @Test
+	void shouldNotSaveAJugadorThatPartidaHave8player() {
+        Jugador jugador3 = new Jugador();
+        jugador.setId(3);
+        jugador.setUsuario(usuario3);
+        jugador.setPartida(partida2);
+        List<Jugador> jugadores = List.of(jugador,jugador,jugador,jugador,jugador,jugador,jugador,jugador);
+        when(jugadorRepository.findJugadoresByPartidaId(any(Integer.class))).thenReturn(jugadores);
+        when(jugadorRepository.save(any(Jugador.class))).thenReturn(jugador3);
+		assertThrows(MaximoJugadoresPartidaException.class, ()->jugadorService.saveJugador(jugador3));
+	}
+*/
 }

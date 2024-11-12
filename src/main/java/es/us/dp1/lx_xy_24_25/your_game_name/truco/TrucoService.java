@@ -5,13 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.AccessDeniedException;
+import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.NoCartaDeManoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
-import es.us.dp1.lx_xy_24_25.your_game_name.truco.exceptions.NoCartaDeManoException;
+import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.NoCartaDeManoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
@@ -70,7 +73,6 @@ public class TrucoService {
 		return trucoRepository.findByManoId(manoId);
 	}
 
-	/* 
     // REVISAR Y QUIZAS QUITAR
     @Transactional(readOnly = true)
 	public Truco findTrucoByBazaIdCartaId(int bazaId, int cartaId) throws DataAccessException {
@@ -78,6 +80,7 @@ public class TrucoService {
 				.orElseThrow(() -> new ResourceNotFoundException("Truco", "Baza", bazaId));
 	}
 
+	/* 
     // REVISAR Y QUIZAS QUITAR
     @Transactional(readOnly = true)
 	public Integer findJugadorIdByBazaIdCartaId(int bazaId, int cartaId) throws DataAccessException {
@@ -87,38 +90,28 @@ public class TrucoService {
  */
     @Transactional
 	public Truco saveTruco(Truco truco) throws DataAccessException {
-        Truco trucoComprobado = getTrucoWithImposibleIdCarta(truco);
-		if (trucoComprobado.equals(null)) {
-			throw new NoCartaDeManoException();
-		} else
-            //trucoRepository.save(truco);
-            trucoRepository.save(trucoComprobado);
-		// return truco;
-        return trucoComprobado;
-	}
+		Boolean cartaEnMano = truco.getMano().getCartas().stream()
+            .anyMatch(carta -> carta.getId().equals(truco.getIdCarta()));
 
-    private Truco getTrucoWithImposibleIdCarta(Truco truco) {
-        List<Integer> cartas = truco.getMano().getCartas().stream().map(Carta::getId).collect(Collectors.toList());
-		Integer idCarta = truco.getIdCarta();
-        Boolean cartaValida = false;
-		for (Integer c : cartas) {
-			if (idCarta.equals(c)) {
-				cartaValida = true;
-			}
-		}
-        Truco res = cartaValida.equals(false) ? null : truco;
-		return res;
+    	if (!cartaEnMano) {
+        	throw new NoCartaDeManoException();
+    	}
+        
+		trucoRepository.save(truco);
+        return truco;
 	}
 
     @Transactional
 	public Truco updateTruco(Truco truco, int trucoId) throws DataAccessException {
-		Truco toUpdate = findTrucoById(trucoId);
-        Truco trucoComprobado = getTrucoWithImposibleIdCarta(truco);
-		if (trucoComprobado.equals(null)) {
+        Boolean cartaEnMano = truco.getMano().getCartas().stream()
+            .anyMatch(carta -> carta.getId().equals(truco.getIdCarta()));
+		if (!cartaEnMano) {
 			throw new NoCartaDeManoException();
-		} else
-            BeanUtils.copyProperties(trucoComprobado, toUpdate, "id", "jugador");
-		    trucoRepository.save(toUpdate);
+		}
+
+		Truco toUpdate = findTrucoById(trucoId);
+		BeanUtils.copyProperties(truco, toUpdate, "id");
+		trucoRepository.save(toUpdate);
 
 		return toUpdate;
 	}
@@ -168,13 +161,11 @@ public class TrucoService {
     public void crearTrucosBaza(Integer idBaza) {
         // Determinamos Baza, Ronda, Partida y Jugadores a los que pertenecen los Trucos
         Optional<Baza> posibleBaza = bazaRepository.findById(idBaza);
-        Baza baza = null;
-        if(posibleBaza != null) {
-            baza = posibleBaza.get();
-        } else {
-            throw new ResourceNotFoundException("Baza", "id", idBaza);
+        if(!posibleBaza.isPresent()) {
+			throw new ResourceNotFoundException("Baza", "id", idBaza);
         }
-        
+
+		Baza baza = posibleBaza.get();
         Integer idRonda = baza.getRonda().getId();
         Integer idPartida = baza.getRonda().getPartida().getId();
         List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(idPartida);
@@ -183,12 +174,10 @@ public class TrucoService {
         for (int i = 0; i < jugadores.size(); i++) {
             Integer jugador = jugadores.get(i).getId();
             Optional<Mano> posibleMano = manoRepository.findManoByJugadorIdRondaId(idRonda, jugador);
-            Mano mano = null;
-            if (posibleMano != null) {
-                mano = posibleMano.get();
-            } else {
+            if (!posibleMano.isPresent()) {
                 throw new ResourceNotFoundException("Mano", "jugadorId", jugador);
             }
+			Mano mano = posibleMano.get();
             Integer turno = i+1; 
             Integer idCarta = null;
             

@@ -39,7 +39,7 @@ public class JugadorRestController {
 
 
     @Autowired
-    public JugadorRestController(JugadorService jugadorService, AuthoritiesService authService) {
+    public JugadorRestController(JugadorService jugadorService) {
         this.jugadorService = jugadorService;
     }
 
@@ -54,6 +54,9 @@ public class JugadorRestController {
     public ResponseEntity<List<Jugador>> findJugadoresByPartidaid(@PathVariable("partidaId") Integer partidaId) {
         List<Jugador> res;
         res = jugadorService.findJugadoresByPartidaId(partidaId);
+        if(res == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
     
@@ -62,6 +65,9 @@ public class JugadorRestController {
         public ResponseEntity<Jugador> findJugadorByUsuarioId(@PathVariable("usuarioId") Integer usuarioId) {
             Jugador res;
             res = jugadorService.findJugadorByUsuarioId(usuarioId);
+            if(res == null){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
             return new ResponseEntity<>(res, HttpStatus.OK);
         }
 
@@ -76,7 +82,7 @@ public class JugadorRestController {
     //update jugador
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Jugador> putMethodName(@PathVariable Integer id, @RequestBody @Valid Jugador jugador) {
+    public ResponseEntity<Jugador> putMethodName(@PathVariable("id") Integer id, @RequestBody @Valid Jugador jugador) {
         RestPreconditions.checkNotNull(jugadorService.findById(id), "Jugador", "ID", id);
 		return new ResponseEntity<>(this.jugadorService.updateJugador(jugador, id), HttpStatus.OK);
     }

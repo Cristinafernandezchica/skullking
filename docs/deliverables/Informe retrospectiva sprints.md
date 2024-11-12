@@ -82,11 +82,11 @@ Fernández Chica, Cristina; Chávez Malavé, Luis Emmanuel; Gutiérrez González
 
  ### ¿Qué cosas hay que mejorar para el siguiente sprint?
 
-La comunicación. Debido a la decisión tomada, la comuniación era clave para la viabilidad del proyecto, y creemos que se ha visto reflejado en los problemas que han surgido a lo largo del sprint.
+La comunicación. Debido a la decisión tomada, la comunicación era clave para la viabilidad del proyecto, y creemos que se ha visto reflejado en los problemas que han surgido a lo largo del sprint.
 
 ### Medición del tiempo trabajado
 
-En cuanto a la medición del tiempo trabajado, hemos solucionado el problema del sprint anterior, y todos hemos empleado la herramienta Clockify:
+En cuanto a la medición del tiempo trabajado, hemos solucionado el problema del sprint anterior, y todos hemos hecho uso de la herramienta Clockify:
 
 #### Sprint Rueda (todos)
 

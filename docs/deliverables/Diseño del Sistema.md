@@ -75,40 +75,11 @@ Si se halla alguna carta 14 de los palos normales, se deberá sumar 10 puntos po
 
 ### Diagrama de Dominio/Diseño
 
-_En esta sección debe proporcionar un diagrama UML de clases que describa el modelo de dominio, recuerda que debe estar basado en el diagrama conceptual del documento de análisis de requisitos del sistema pero que debe:_
-•	_Especificar la direccionalidad de las relaciones (a no ser que sean bidireccionales)_
-•	_Especificar la cardinalidad de las relaciones_
-•	_Especificar el tipo de los atributos_
-•	_Especificar las restricciones simples aplicadas a cada atributo de cada clase de domino_
-•	_Incluir las clases específicas de la tecnología usada, como por ejemplo BaseEntity, NamedEntity, etc._
-•	_Incluir los validadores específicos creados para las distintas clases de dominio (indicando en su caso una relación de uso con el estereotipo <<validates>>._
+![Diagrama de Dominio](/docs/diagrams/Diagrama_de_dominio_UML.png)
 
-_Un ejemplo de diagrama para los ejercicios planteados en los boletines de laboratorio sería (hemos omitido las generalizaciones hacia BaseEntity para simplificar el diagrama):_
+En este diagrama de capas podemos ver las relaciones entre las distintas entidades. Como podemos observar hemos realizado todas las relaciones con unidireccionalidad de forma que se han implementado clases que funcionan como clases intermedias, ahorrandonos asociaciones many-to-many. Se ha obviado comentar el tipo de la entidad en la clase, pues todas las entidades implementan "BaseEntity".
 
-
-_Ej:_
-
-```mermaid
-classDiagram
-    note "From Duck till Zebra"
-    Animal <|-- Duck
-    note for Duck "can fly\ncan swim\ncan dive\ncan help in debugging"
-    Animal <|-- Fish
-    Animal <|-- Zebra
-    Animal : age
-    Animal : gender
-    class Duck{
-        beakColor        
-    }
-    class Fish{
-       sizeInFeet
-    }
-    class Zebra{
-        is_wild
-        
-    }
-```
-_En este caso hemos vuelto a usar mermaid para crear el diagrama de dominio/diseño, pero recuerda que puedes usar cualquier otra herramienta que consideres oportuno para crear tus diagramas e inclurlos en este document como imagen tal y como se explica en [este tutorial](https://www.baeldung.com/ops/github-readme-insert-image)_
+Las entidades implicadas son: Partida, Ronda, Baza, Mano, Truco, Carta, Jugador y Usuario.
 
 ### Diagrama de Capas (incluyendo Controladores, Servicios y Repositorios)
 

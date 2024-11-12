@@ -2,6 +2,9 @@ package es.us.dp1.lx_xy_24_25.your_game_name.jugador;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
@@ -49,6 +52,7 @@ public class JugadorServiceTest {
 	private Jugador jugador2;
 	private User usuario2;
     private User usuario3;
+    private Partida partida3;
 
     @BeforeEach
 void setUp() {
@@ -73,10 +77,16 @@ void setUp() {
     partida.setEstado(PartidaEstado.TERMINADA);
 
     partida2 = new Partida();
-    partida2.setId(2);
+    partida2.setId(1);
     partida2.setNombre("Test Partida2");
     partida2.setOwnerPartida(1);
     partida2.setEstado(PartidaEstado.ESPERANDO);
+
+    partida3 = new Partida();
+    partida3.setId(3);
+    partida3.setNombre("Test Partida3");
+    partida3.setOwnerPartida(3);
+    partida3.setEstado(PartidaEstado.ESPERANDO);
 
     jugador = new Jugador();
     jugador.setId(1);
@@ -124,8 +134,82 @@ void setUp() {
 		Jugador jugadorATestear = jugadorService.findJugadorByUsuarioId(1);
 		assertEquals(jugador, jugadorATestear);
     }
-	
 
+    @Test
+    void shouldSaveJugadorSuccessfully() {
+        List<Jugador> jugadoresPartida = List.of(jugador);
+
+        when(jugadorRepository.findJugadoresByPartidaId(partida2.getId())).thenReturn(jugadoresPartida);
+        when(jugadorRepository.save(jugador2)).thenReturn(jugador2);
+
+        Jugador savedJugador = jugadorService.saveJugador(jugador2);
+        assertNotNull(savedJugador);
+        assertEquals(jugador2, savedJugador);
+    }
+
+    @Test
+    void shouldNotSaveJugadorWhenPartidaHasMaxPlayers() {
+        List<Jugador> jugadoresPartida = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            Jugador j = new Jugador();
+            j.setId(i);
+            j.setPartida(partida);
+            jugadoresPartida.add(j);
+        }
+
+        when(jugadorRepository.findJugadoresByPartidaId(partida.getId())).thenReturn(jugadoresPartida);
+
+        Jugador newJugador = new Jugador();
+        newJugador.setUsuario(usuario3);
+        newJugador.setPartida(partida);
+
+        assertThrows(MaximoJugadoresPartidaException.class, () -> jugadorService.saveJugador(newJugador));
+    }
+
+    @Test
+    void shouldNotSaveJugadorWhenUserAlreadyInPartida() {
+        List<Jugador> jugadoresPartida = List.of(jugador, jugador2);
+
+        when(jugadorRepository.findJugadoresByPartidaId(partida2.getId())).thenReturn(jugadoresPartida);
+
+        Jugador newJugador = new Jugador();
+        newJugador.setUsuario(usuario);
+        newJugador.setPartida(partida2);
+
+        assertThrows(UsuarioMultiplesJugadoresEnPartidaException.class, () -> jugadorService.saveJugador(newJugador));
+    }
+
+    /*
+    @Test
+    void shouldNotSaveJugadorWhenUserInActivePartida() {
+        List<Partida> partidas = List.of(partida, partida2); // Partida activa
+
+        when(jugadorRepository.findJugadoresByUsuarioId(usuario.getId())).thenReturn(List.of(jugador));
+        // when(partidaRepository.findByOwnerPartidaAndEstado(anyInt(), anyList())).thenReturn(partidas);
+
+        Jugador newJugador = new Jugador();
+        newJugador.setId(3);
+        newJugador.setUsuario(usuario);
+        newJugador.setPartida(partida3);
+
+        assertThrows(UsuarioPartidaEnJuegoEsperandoException.class, () -> jugadorService.saveJugador(newJugador));
+    }
+    */
+    
+    /*
+    @Test
+    public void testSaveJugador_UsuarioYaTieneJugadorEnPartidaEnJuego() {
+        // Simulamos que el usuario ya está en una partida en estado "ESPERANDO" (partida2)
+        when(jugadorRepository.findJugadoresByUsuarioId(usuario.getId()))
+                .thenReturn(Arrays.asList(jugador)); // El usuario ya tiene un jugador en la partida
+
+        // Intentar guardar el nuevo jugador en una nueva partida (partida3)
+        // Debe lanzar la excepción UsuarioPartidaEnJuegoEsperandoException
+        assertThrows(UsuarioPartidaEnJuegoEsperandoException.class, () -> {
+            jugadorService.saveJugador(nuevoJugador); // Se intenta añadir el jugador a una nueva partida
+        });
+    }
+    */
 
 
         /*

@@ -121,19 +121,17 @@ Las entidades implicadas son: Partida, Ronda, Baza, Mano, Truco, Carta, Jugador 
 ## Descomposición del mockups del tablero de juego en componentes
 
 En esta sección procesaremos el mockup del tablero de juego (o los mockups si el tablero cambia en las distintas fases del juego). Etiquetaremos las zonas de cada una de las pantallas para identificar componentes a implementar. Para cada mockup se especificará el árbol de jerarquía de componentes, así como, para cada componente el estado que necesita mantener, las llamadas a la API que debe realizar y los parámetros de configuración global que consideramos que necesita usar cada componente concreto. 
-Por ejemplo, para la pantalla de visualización de métricas del usuario en un hipotético módulo de juego social:
 
-![Descomposición en componentes de la interfaz de estadísticas](https://github.com/gii-is-DP1/react-petclinic/assets/756431/12b36c37-39ed-422e-b8d9-56c94753cbdc)
+**Descomposición en componentes de la interfaz de creación y unión a partidas**
+
+![Descomposición en componentes de la interfaz de creación y unión a partidas](../mockups/descomposicion_mockup_creacion_union.png)
 
   - App – Componente principal de la aplicación
-    - $\color{orange}{\textsf{NavBar – Barra de navegación lateral}}$
-      - $\color{darkred}{\textsf{[ NavButton ]. Muestra un botón de navegación con un icono asociado.}}$
-    - $\color{darkblue}{\textsf{UserNotificationArea – Área de notificaciones e identificación del usuario actual}}$
-    - $\color{blue}{\textsf{MetricsBar – En este componente se muestran las métricas principales del juego. Se mostrarán 4 métricas: partidas jugadas, puntos logrados, tiempo total, y cartas jugadas.}}$
-      - $\color{darkgreen}{\textsf{[ MetricWell ] – Proporciona el valor y el incremento semanal de una métrica concreta. }}$
-    - $\color{purple}{\textsf{GamesEvolutionChart – Muestra la tendencia de evolución en ellos últimos 4 meses en cuanto a partida jugadas, ganadas, perdidas y abandonadas.}}$
-    - $\color{yellow}{\textsf{PopularCardsChart – Muestra la proporción de las N (parámetro de configuración) cartas más jugadas en el juego por el jugador.}}$
-    - $\color{red}{\textsf{FrequentCoPlayersTable – Muestra los jugadores  con los que más se  ha jugado (de M en M donde M es un parámetro definido por la configuración del componente). Concretamente, se mostrarán la el nombre, la fecha de la última partida, la localización del jugador el porcentaje de partidas jugadas por ambos en las que el usuario ha ganado y si el jugador es amigo o no del usuario.}}$
+    - $\color{#ff9800}{\textsf{NavBar – Barra de navegación superior}}$
+      - $\color{#f44336}{\textsf{[ NavButton ]. Muestra un botón de navegación con un icono asociado.}}$
+    - $\color{#3f51b5}{\textsf{UserIdentificationArea – Área de identificación del usuario actual}}$
+    - $\color{#9c27b0}{\textsf{PlayUnionBar – En este componente se muestran los botones para crear o unirse a una partida}}$
+      - $\color{#e91e63}{\textsf{[ NavButton ] – Muestra un botón de navegación a los distintos modales con un texto asociado. }}$
 
 ## Documentación de las APIs
 Se considerará parte del documento de diseño del sistema la documentación generada para las APIs, que debe incluir como mínimo, una descripción general de las distintas APIs/tags  proporcionadas. Una descripción de los distintos endpoints y operaciones soportadas. Y la especificación de las políticas de seguridad especificadas para cada endpoint y operación. Por ejemplo: “la operación POST sobre el endpoint /api/v1/game, debe realizarse por parte de un usuario autenticado como Player”.
@@ -211,59 +209,146 @@ Se ha usado la clase BaseEntity.java.
 
 El patrón Layer Super type ofrece beneficios en el diseño de software al facilitar la reutilización de código, promover la consistencia, mejorar la mantenibilidad y proporcionar claridad en la jerarquía de clases. Además, se evita la duplicación de código y se simplifica el mantenimiento al tener un único punto de modificación para elementos compartidos.
 
+
+
 ## Decisiones de diseño
 _En esta sección describiremos las decisiones de diseño que se han tomado a lo largo del desarrollo de la aplicación que vayan más allá de la mera aplicación de patrones de diseño o arquitectónicos._
 
-### Decisión X
-#### Descripción del problema:*
+### Decisión 1: Clases regulares para implementar las clases asociaciones
+#### Descripción del problema
+En el diseño del sistema se detectó la necesidad de establecer relaciones entre las entidades de manera clara y controlada. Las asociaciones ManyToMany suelen generar complejidad adicional en navegabilidad y mantenimiento, por lo que se han buscado alternativas que mejoren la claridad y el control de estas relaciones a la hora de realizar la arquitectura del sistema.
 
-Describir el problema de diseño que se detectó, o el porqué era necesario plantearse las posibilidades de diseño disponibles para implementar la funcionalidad asociada a esta decisión de diseño.
+#### Alternativas de solución evaluadas
+1. Utilizar relaciones ManyToMany estándar:
+   - *Ventajas*: Simplicidad en la definición de relaciones directas entre entidades.
+   - *Inconvenientes: Complejidad en la gestión de la navegabilidad y dificultades para agregar atributos adicionales a la relación y para poder relacionar propiedades entre clases.
 
-#### Alternativas de solución evaluadas:
-Especificar las distintas alternativas que se evaluaron antes de seleccionar el diseño concreto implementado finalmente en el sistema. Si se considera oportuno se pude incluir las ventajas e inconvenientes de cada alternativa
+2. Usar clases intermedias para representar asociaciones:
+   - *Ventajas*: Mayor flexibilidad al poder añadir atributos y propiedades adicionales en la clase intermedia, facilitando la navegabilidad y reduciendo el acoplamiento.
+   - *Inconvenientes*: Incremento en el número de clases del modelo, lo que puede hacer más complejo el diseño inicial.
 
 #### Justificación de la solución adoptada
+Se optó por utilizar clases intermedias para representar asociaciones, evitando las relaciones ManyToMany directas y reduciendo el acoplamiento entre entidades. Esta decisión mejora la claridad en la estructura del modelo de datos y facilita la gestión de asociaciones con atributos adicionales. Estas clases intermedias jugarán un rol crucial en la representación de asociaciones, definiendo claramente cuáles serán mandatorias y cuáles opcionales.
 
-Describir porqué se escogió la solución adoptada. Si se considera oportuno puede hacerse en función de qué  ventajas/inconvenientes de cada una de las soluciones consideramos más importantes.
-Os recordamos que la decisión sobre cómo implementar las distintas reglas de negocio, cómo informar de los errores en el frontend, y qué datos devolver u obtener a través de las APIs y cómo personalizar su representación en caso de que sea necesario son decisiones de diseño relevantes.
 
-_Ejemplos de uso de la plantilla con otras decisiones de diseño:_
 
-### Decisión 1: Importación de datos reales para demostración
-#### Descripción del problema:
+### Decisión 2: Mandatory/Opcional en clases
 
-Como grupo nos gustaría poder hacer pruebas con un conjunto de datos reales suficientes, porque resulta más motivador. El problema es al incluir todos esos datos como parte del script de inicialización de la base de datos, el arranque del sistema para desarrollo y pruebas resulta muy tedioso.
+#### Descripción del problema
+El modelo de dominio requiere la capacidad de especificar relaciones obligatorias y opcionales entre entidades, lo que puede influir en la integridad de los datos en el sistema.
 
-#### Alternativas de solución evaluadas:
+#### Alternativas de solución evaluadas
+1. Definir todas las relaciones como opcionales:
+   - *Ventajas*: Mayor flexibilidad.
+   - *Inconvenientes*: Riesgo de inconsistencias de datos debido a relaciones no definidas.
 
-*Alternativa 1.a*: Incluir los datos en el propio script de inicialización de la BD (data.sql).
+2. Definir relaciones como obligatorias u opcionales según corresponda:
+   - *Ventajas*: Mejora la integridad de los datos y garantiza que las asociaciones críticas estén siempre definidas.
+   - *Inconvenientes*: Mayor complejidad en la validación y manejo de errores.
 
-*Ventajas:*
-•	Simple, no requiere nada más que escribir el SQL que genere los datos.
-*Inconvenientes:*
-•	Ralentiza todo el trabajo con el sistema para el desarrollo. 
-•	Tenemos que buscar nosotros los datos reales
+#### Justificación de la solución adoptada
+Se optó por definir las relaciones como obligatorias u opcionales según las necesidades del sistema, asegurando un balance entre flexibilidad y control de los datos.
 
-*Alternativa 1.b*: Crear un script con los datos adicionales a incluir (extra-data.sql) y un controlador que se encargue de leerlo y lanzar las consultas a petición cuando queramos tener más datos para mostrar.
-*Ventajas:*
-•	Podemos reutilizar parte de los datos que ya tenemos especificados en (data.sql).
-•	No afecta al trabajo diario de desarrollo y pruebas de la aplicación
-*Inconvenientes:*
-•	Puede suponer saltarnos hasta cierto punto la división en capas si no creamos un servicio de carga de datos. 
-•	Tenemos que buscar nosotros los datos reales adicionales
 
-*Alternativa 1.c*: Crear un controlador que llame a un servicio de importación de datos, que a su vez invoca a un cliente REST de la API de datos oficiales de XXXX para traerse los datos, procesarlos y poder grabarlos desde el servicio de importación.
 
-*Ventajas:*
-•	No necesitamos inventarnos ni buscar nosotros lo datos.
-•	Cumple 100% con la división en capas de la aplicación.
-•	No afecta al trabajo diario de desarrollo y pruebas de la aplicación
-*Inconvenientes:*
-•	Supone mucho más trabajo. 
-•	Añade cierta complejidad al proyecto
+### Decisión 3: Asociaciones de mapeo unidireccionales usando peticiones HTTP
 
-*Justificación de la solución adoptada*
-Como consideramos que la división en capas es fundamental y no queremos renunciar a un trabajo ágil durante el desarrollo de la aplicación, seleccionamos la alternativa de diseño 1.c.
+#### Descripción del problema
+Las relaciones bidireccionales aumentan el acoplamiento entre entidades, lo que reduce la flexibilidad del sistema. Por lo tanto, se planteó la necesidad de simplificar estas asociaciones.
+
+#### Alternativas de solución evaluadas
+1. Uso de relaciones bidireccionales estándar**:
+   - *Ventajas*: Navegabilidad directa entre entidades relacionadas.
+   - *Inconvenientes*: Aumento del acoplamiento y de dependencias circulares.
+
+2. Asociaciones unidireccionales utilizando peticiones HTTP**:
+   - *Ventajas*: Mayor flexibilidad y menor acoplamiento entre componentes.
+   - *Inconvenientes*: Complejidad añadida en la gestión de las peticiones HTTP.
+
+#### Justificación de la solución adoptada
+Se decidió utilizar asociaciones unidireccionales mediante peticiones HTTP para reducir el acoplamiento y aumentar la modularidad del sistema, favoreciendo la escalabilidad y el desacoplamiento a la hora de la integración de servicios y entidades.
+
+
+
+### Decisión 4: Modelo de dominio (Datos y Comportamientos)
+
+#### Descripción del problema
+Es necesario un enfoque que combine tanto datos como comportamientos en las entidades del modelo para mejorar la cohesión del sistema y facilitar la lógica de negocio.
+
+#### Alternativas de solución evaluadas
+1. Modelo de dominio centrado solo en datos:
+   - *Ventajas*: Simplicidad en la definición de entidades.
+   - *Inconvenientes*: Lógica de negocio dispersa en diferentes capas.
+
+2. Modelo de dominio que combina datos y comportamientos:
+   - *Ventajas*: Mayor cohesión y encapsulación de la lógica de negocio.
+   - *Inconvenientes*: Aumento de la complejidad en el diseño inicial.
+
+#### Justificación de la solución adoptada
+Se optó por un modelo de dominio que incluya tanto datos como comportamientos, promoviendo una arquitectura orientada a objetos más robusta y coherente.
+
+
+
+### Decisión 5: Implementación de capa de servicio usando Data Mapper
+
+#### Descripción del problema
+Era necesario implementar una capa de servicio para gestionar operaciones, transacciones, llamadas a sistemas externos y coordinación de entidades de dominio, evitando acoplamientos directos con el modelo de dominio.
+
+#### Alternativas de solución evaluadas
+1. Uso directo del modelo de dominio en controladores:
+   - *Ventajas: Menor complejidad inicial.
+   - *Inconvenientes: Aumento del acoplamiento y dificultades en la escalabilidad.
+
+2. Implementación de capa de servicio con Data Mapper:
+   - *Ventajas*: Mejora la independencia de las bases de datos y reduce el acoplamiento.
+   - *Inconvenientes*: Complejidad adicional en la implementación.
+
+#### Justificación de la solución adoptada
+Se decidió implementar una capa de servicio utilizando el patrón Data Mapper para lograr una mejor separación entre el modelo de dominio y la capa de mapeador.
+
+
+
+### Decisión 6: Implementación de herencia completa y disjunta
+#### Descripción del problema
+El sistema necesita una estrategia de herencia que permita extender entidades base de forma clara y sin ambigüedades asegurando que cada entidad especializada tenga un propósito claro y no se solapen las responsabilidades entre subclases.
+
+#### Alternativas de solución evaluadas
+1. Herencia solapada e incompleta:
+   - *Ventajas*: Diseño más simple.
+   - *Inconvenientes*: Menor flexibilidad y posible repetición de código.
+
+2. Herencia solapada y completa:
+   - *Ventajas*: Mayor reutilización.
+   - *Inconvenientes*: Riesgo de ambigüedades y complejidad en consultas.
+
+3. Herencia completa y disjunta:
+   - *Ventajas*: Claridad en la especialización y facilidad en el mantenimiento.
+   - *Inconvenientes*: Mayor esfuerzo de análisis y diseño inicial.
+
+#### Justificación de la solución adoptada
+Se adoptó una herencia completa y disjunta, asegurando que cada entidad pertenezca a un único subtipo, mejorando la claridad y gestión de los modelos específicos. Esta decisión reduce ambigüedades dando un enfoque más claro en la implementación de reglas de negocio y consultas.
+
+
+
+### Decisión 7: Uso de BaseEntity en lugar de NamedEntity
+
+#### Descripción del problema
+Buscábamos implementar una clase Entity para facilitar la implementación del identificador, por lo tanto nos decantamos en un principio por usar de entre ellas la clase “NamedEntity”, la cuál limitaba la flexibilidad al requerir nombres para todas las entidades de 3 a 50 letras. Se buscaba una alternativa más versátil.
+
+#### Justificación de la solución adoptada
+Se decidió extender todas las entidades de “BaseEntity” en lugar de “NamedEntity” para mejorar la flexibilidad en la gestión de identificadores y atributos opcionales, pues de igual forma podemos utilizar el atributo “nombre” pero no de manera obligatoria ni restrictiva.
+
+
+
+### Decisión 8: Reglas de negocio con excepciones controladas y validaciones
+
+#### Descripción del problema
+Necesitamos garantizar el cumplimiento de las reglas de negocio y requisitos del sistema de manera robusta.
+
+#### Justificación de la solución adoptada
+Se optó por implementarlo mediante validaciones y excepciones controladas para asegurar que los datos cumplan con las reglas de negocio, priorizando las validaciones en anotaciones y delegando a Validators lo que no pueda expresarse directamente en ellas como pueden ser reglas de negocio en las que unas propiedades dependan o limiten a otras de clases distintas.
+
+
 
 ## Refactorizaciones aplicadas
 

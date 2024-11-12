@@ -1,4 +1,4 @@
-## Informe de retrospectiva de los Sprints
+# Informe de retrospectiva de los Sprints
 
 Documento sobre la retrospectiva del trabajo durante la Sprint 1 del equipo L7 - 05
 Los miembros del equipo son:
@@ -11,7 +11,7 @@ Gutiérrez González, Candela Jazmín
 
 Project Manager: Fernández Chica, Cristina
 
-### Sprint 1
+## Sprint 1
 ### ¿Qué ha funcionado bien?
 Durante este sprint, hemos llegado al alcance que nos habíamos propuesto al principio. Las actividades se distribuyeron en parejas, lo que permitió que todos trabajáramos en la mayoría de los temas abordados durante el Sprint, logrando así cumplir con el objetivo dentro del plazo previsto.
 
@@ -28,3 +28,91 @@ Todo el grupo - 2 horas - 01/10/2024 - (17:40-19:40)
 Todo el grupo - 4 horas - 02/10/2024 - (10:30-14:30)
 Todo el grupo - 2,5 horas - 04/10/2024 - (11:30-14:00)
 Todo el grupo - 2,5 horas - 07/10/2024 - (10:00-12:30)
+
+## Sprint 2
+### ¿Qué ha funcionado bien?
+
+ Durante este sprint se ha alcanzado lo solicitado de cada entregable. Para ello, hemos decidido comenzar con la asignación de una clase a cada integrante. Además, algunas entidades han sido implementadas por algunas parejas, así como las distintas dependencias entre las entidades, lo que se debe a las relaciones en cadena de las clases. Se ha procedido con la implementación de algunas historias de usuario, y, finalmente, se ha completado la documentación y se han realizado las pruebas unitarias correspondientes. En paralelo, se han ido incorporando los cambios realizados al diagrama de clases.
+
+### Asignación de tareas
+#### Diagrama de clases
+Aguilar Morcillo, Marta;  Amo Sánchez, Ángel
+
+#### Diagrama de capas
+
+Gutiérrez González, Candela Jazmín
+
+#### Patrones de diseño y arquitectónicos aplicados
+
+Fernández Chica, Cristina;  Aguilar Morcillo, Marta
+
+#### Decisiones de diseño
+
+Amo Sánchez, Ángel
+
+#### Plan de pruebas y matriz de trazabilidad
+
+Fernández Chica, Cristina
+
+#### Clases
+Partida: Fernández Chica, Cristina
+
+Ronda: Gutiérrez González, Candela Jazmín
+
+Baza: Amo Sánchez, Ángel
+
+Mano: Fernández Chica, Cristina;  Gutiérrez González, Candela Jazmín;  Chávez Malavé, Luis Emmanuel;  Amo Sánchez, Ángel
+
+Truco: Aguilar Morcillo, Marta
+
+Carta: Fernández Chica, Cristina;  Chávez Malavé, Luis Emmanuel
+
+Jugador: Chávez Malavé, Luis Emmanuel
+
+#### Frontend
+
+Fernández Chica, Cristina; Chávez Malavé, Luis Emmanuel; Gutiérrez González; Candela;  Amo Sánchez, Ángel
+
+#### Las asignaciones son orientativas,  ya que han habido aportaciones de distintas personas en cada apartado por la complejidad del proyecto.
+
+
+ ### ¿Problemas que hayamos tenido para poder progresar correctamente en el último Sprint?
+
+ Al haber seguido una organización de asignación de clases, han surgido numerosos problemas, pues como se ha explicado, el proyecto sigue una organizacion en cadena, lo cual hace imposible una implementacion limpia. 
+
+ ### ¿Qué cosas hay que mejorar para el siguiente sprint?
+
+La comunicación. Debido a la decisión tomada, la comunicación era clave para la viabilidad del proyecto, y creemos que se ha visto reflejado en los problemas que han surgido a lo largo del sprint.
+
+### Medición del tiempo trabajado
+
+En cuanto a la medición del tiempo trabajado, hemos solucionado el problema del sprint anterior, y todos hemos hecho uso de la herramienta Clockify:
+
+#### Sprint Rueda (todos)
+
+![Sprint2 Rueda](/docs/deliverables/reportesClockify/Sprint2/Sprint2_TODOS.jpg)
+
+#### Sprint Gráfica (todos)
+
+![Sprint2 Gráfica](/docs/deliverables/reportesClockify/Sprint2/Sprint2_GRÁfICA.jpg)
+
+#### Sprint Gráfica Aguilar Morcillo, Marta
+
+![Sprint2 Marta](/docs/deliverables/reportesClockify/Sprint2/Sprint2_MARTA.jpg)
+
+#### Sprint Gráfica  Amo Sánchez, Ángel
+
+![Sprint2 Angel](/docs/deliverables/reportesClockify/Sprint2/Sprint2_ANGEL.jpg)
+
+#### Sprint Gráfica Fernández Chica, Cristina
+
+![Sprint2 Cristina](/docs/deliverables/reportesClockify/Sprint2/Sprint2_CRISTINA.jpg)
+
+#### Sprint Gráfica Gutiérrez González, Candela Jazmín
+
+![Sprint2 Candela](/docs/deliverables/reportesClockify/Sprint2/Sprint2_CANDELA.jpg)
+
+#### Sprint Gráfica Chávez Malavé, Luis Emmanuel
+
+![Sprint2 Emmanuel](/docs/deliverables/reportesClockify/Sprint2/Sprint2_EMMANUEL.jpg)
+ 

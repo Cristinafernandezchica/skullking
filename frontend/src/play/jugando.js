@@ -122,7 +122,7 @@ export default function Jugando() {
               <div key={carta.id} className="carta">
                 <button className='boton-agrandable'>
                 <img 
-                  src={manito} 
+                  src={carta.imagenFrontal} 
                   alt={`Carta ${carta.tipoCarta}`} 
                   className="imagen-carta" 
                 />

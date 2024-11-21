@@ -157,6 +157,51 @@ public class TrucoServiceTests {
 
     }
 
+    @Test
+    void shouldFindAllTrucos() {
+        Iterable<Truco> trucoList = Arrays.asList(truco1, truco2);
+        when(trucoRepository.findAll()).thenReturn(trucoList);
+
+        Iterable<Truco> trucosDevueltos = trucoService.findAllTrucos();
+        List<Truco> result = (List<Truco>) trucosDevueltos;
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals(truco1, result.get(0));
+        verify(trucoRepository, times(1)).findAll();
+    }
+
+    @Test
+    void shouldNotFindAllTrucos() {
+        when(trucoRepository.findAll()).thenReturn(Collections.emptyList());
+
+        Iterable<Truco> trucosDevueltos = trucoService.findAllTrucos();
+        List<Truco> result = (List<Truco>) trucosDevueltos;
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void shouldFindTrucoById() {
+        when(trucoRepository.findById(truco1.getId())).thenReturn(Optional.of(truco1));
+
+        Truco result = trucoService.findTrucoById(truco1.getId());
+
+        assertNotNull(result);
+        assertEquals(truco1.getId(), result.getId());
+        verify(trucoRepository, times(1)).findById(truco1.getId());
+    }
+
+    @Test
+    void shouldNotFindTrucoById() {
+        when(trucoRepository.findById(999)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            trucoService.findTrucoById(999);
+        }, "Se esperaba que se lanzara una ResourceNotFoundException cuando no se encuentra el Truco");
+    }
+
 	@Test
     public void shouldFindTrucosByBazaId() throws DataAccessException {
         // Arrange
@@ -244,6 +289,8 @@ public class TrucoServiceTests {
 
     @Test
     public void shouldNotFindTrucoByBazaIdCartaId(){
+        when(trucoRepository.findTrucoByBazaIdCartaId(idBazaFalsa, idCartaFalso)).thenReturn(Optional.empty());
+
         assertThrows(ResourceNotFoundException.class, () -> {
             trucoService.findTrucoByBazaIdCartaId(idBazaFalsa, idCartaFalso);
         }, "Se esperaba que se lanzara una ResourceNotFoundException cuando no se encuentra el Truco");
@@ -286,8 +333,11 @@ public class TrucoServiceTests {
 
 
     @Test
-    public void shouldNotUpdateTruco() {
+    public void shouldNotUpdateTrucoIncorrecto() {
+        when(trucoRepository.findById(1)).thenReturn(Optional.of(truco1));
+
         Truco newTruco = new Truco();
+        newTruco.setId(1);
         newTruco.setBaza(baza1);
         newTruco.setJugador(jugador1.getId());
         newTruco.setMano(mano1);
@@ -297,6 +347,34 @@ public class TrucoServiceTests {
             trucoService.updateTruco(newTruco, 1);
         }, "No se puede actualizar un Truco si el idCarta no está en las cartas de la mano");
 
+    }
+
+    @Test
+    public void shouldNotUpdateTrucoInexistente() {
+        Truco newTruco = new Truco();
+        newTruco.setId(999);
+        when(trucoRepository.findById(999)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            trucoService.updateTruco(newTruco, 999);
+        }, "No se puede actualizar un Truco si su id no esté en la base de datos");
+    }
+
+    @Test
+    void shouldDeleteTruco() {
+        when(trucoRepository.findById(truco1.getId())).thenReturn(Optional.of(truco1));
+
+        trucoService.deleteTruco(truco1.getId());
+        verify(trucoRepository, times(1)).delete(truco1);
+    }
+
+    @Test
+    void shouldNotDeleteTruco() {
+        when(trucoRepository.findById(999)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            trucoService.deleteTruco(999);
+        }, "No se puede borrar un Truco que no existe");
     }
 
     @Test

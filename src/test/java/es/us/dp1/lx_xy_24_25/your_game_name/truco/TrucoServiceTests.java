@@ -30,14 +30,20 @@ import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.NoCartaDeManoException;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoRepository;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.UserService;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorRepository;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+
 import java.util.Collections;
 import java.util.Optional;
 
@@ -59,6 +65,18 @@ public class TrucoServiceTests {
     @Mock
     private BazaRepository bazaRepository;
 
+    @Mock
+    private BazaService bazaService;
+
+    @Mock
+    private JugadorRepository jugadorRepository;
+
+    @Mock
+    private JugadorService jugadorService;
+
+    @Mock
+    private ManoRepository manoRepository;
+
     @InjectMocks
     private TrucoService trucoService;
 
@@ -74,6 +92,8 @@ public class TrucoServiceTests {
     private Integer idCarta1;
     private Integer idCarta2;
     private Integer idCartaFalso;
+    private Partida partida;
+    private Ronda ronda;
     private Carta carta1;
     private Carta carta2;
     private Baza baza1;
@@ -105,13 +125,22 @@ public class TrucoServiceTests {
         idCarta2=2;
         idCartaFalso=3;
 
+        ronda = new Ronda();
+        ronda.setId(1);
+        ronda.setPartida(partida);
+
+        partida = new Partida();
+        partida.setId(1);
         jugador1 = new Jugador();
         jugador1.setId(idJugador1);
+        jugador1.setPartida(partida);
         jugador2 = new Jugador();
         jugador2.setId(idJugador2);
+        jugador2.setPartida(partida);
 
         baza1 = new Baza();
         baza1.setId(idBaza1);
+        baza1.setRonda(ronda);
         baza2 = new Baza();
         baza2.setId(idBaza2);
 
@@ -123,10 +152,12 @@ public class TrucoServiceTests {
         List<Carta> cartas2 = Arrays.asList(carta2);
 
         mano1 = new Mano();
+        mano1.setRonda(ronda);
         mano1.setId(idMano1);
         mano1.setJugador(jugador1);
         mano1.setCartas(cartas1);
         mano2 = new Mano();
+        mano2.setRonda(ronda);
         mano2.setId(idMano2);
         mano2.setJugador(jugador2);
         mano2.setCartas(cartas2);
@@ -388,14 +419,20 @@ public class TrucoServiceTests {
     }
 
     // void crearTrucosBaza(Integer idBaza) ResourceNotFoundException
-    // @Test
-    // public void shouldCrearTrucosBaza() {
-        // when(bazaRepository.findById(baza1.getId())).thenReturn(Optional.of(baza1));
-        // baza1.setRonda(any(Ronda.class));
+    @Test
+    public void shouldCrearTrucosBaza() {
+    
+        ronda.setPartida(partida);
+        baza1.setRonda(ronda);
+        when(bazaRepository.findById(baza1.getId())).thenReturn(Optional.of(baza1));
+        when(bazaService.findById(baza1.getId())).thenReturn(baza1);
+        when(jugadorRepository.findJugadoresByPartidaId(partida.getId())).thenReturn(List.of(jugador1, jugador2));
+        when(manoRepository.findAllManoByJugadorId(jugador1.getId())).thenReturn(List.of(mano1));
+        when(manoRepository.findAllManoByJugadorId(jugador2.getId())).thenReturn(List.of(mano2));
 
-        // trucoService.crearTrucosBaza(baza1.getId());
+        trucoService.crearTrucosBaza(baza1.getId());
 
-        // verify(trucoService).findTrucosByBazaId(baza1.getId());
-    // }
+        verify(trucoService).findTrucosByBazaId(baza1.getId());
+    }
 
 }

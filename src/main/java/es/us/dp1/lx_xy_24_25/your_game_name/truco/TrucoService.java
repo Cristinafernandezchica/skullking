@@ -17,6 +17,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.NoCartaDeManoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 
 import java.util.Comparator;
@@ -31,16 +32,16 @@ import java.util.stream.Collectors;
 public class TrucoService {
     
     private TrucoRepository trucoRepository;
-	private BazaRepository bazaRepository;
+	private BazaService bazaService;
 	private ManoRepository manoRepository;
 	private JugadorService jugadorService;
 	private ManoService manoService;
 
 
     @Autowired
-	public TrucoService(TrucoRepository trucoRepository, BazaRepository bazaRepository,ManoRepository manoRepository, JugadorService jugadorService) {
+	public TrucoService(TrucoRepository trucoRepository, BazaService bazaService,ManoRepository manoRepository, JugadorService jugadorService) {
 		this.trucoRepository = trucoRepository;
-        this.bazaRepository = bazaRepository;
+        this.bazaService = bazaService;
         this.manoRepository = manoRepository;
         this.jugadorService = jugadorService;
 	}
@@ -139,8 +140,6 @@ public class TrucoService {
 			turno += 1;
 		}
 	}
-	
-
 
     // Para BazaRestController
     public Map<Integer, Integer> getCartaByJugador(int bazaId) {
@@ -161,24 +160,15 @@ public class TrucoService {
     @Transactional
     public void crearTrucosBaza(Integer idBaza) {
         // Determinamos Baza, Ronda, Partida y Jugadores a los que pertenecen los Trucos
-        Optional<Baza> posibleBaza = bazaRepository.findById(idBaza);
-        if(!posibleBaza.isPresent()) {
-			throw new ResourceNotFoundException("Baza", "id", idBaza);
-        }
-
-		Baza baza = posibleBaza.get();
-        Integer idRonda = baza.getRonda().getId();
+        Baza baza = bazaService.findById(idBaza);
         Integer idPartida = baza.getRonda().getPartida().getId();
-        List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(idPartida);
+        // List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(idPartida);
+		List<Jugador> jugadores = jugadorService.findJugadoresOrdenadosByPartidaId(idPartida);
 
         // Crear y guardar cada instancia de Truco de dicha Baza
         for (int i = 0; i < jugadores.size(); i++) {
             Integer jugador = jugadores.get(i).getId();
-            Optional<Mano> posibleMano = manoRepository.findManoByJugadorIdRondaId(idRonda, jugador);
-            if (!posibleMano.isPresent()) {
-                throw new ResourceNotFoundException("Mano", "jugadorId", jugador);
-            }
-			Mano mano = posibleMano.get();
+			Mano mano = manoService.findLastManoByJugadorId(jugador);
             Integer turno = i+1; 
             Integer idCarta = null;
             

@@ -1,5 +1,6 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.jugador;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -19,6 +20,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.jugador.exceptions.UsuarioMultiplesJ
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaRepository;
+import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 import jakarta.validation.Valid;
 
@@ -26,11 +28,13 @@ import jakarta.validation.Valid;
 public class JugadorService {
     private JugadorRepository jugadorRepository;
     private PartidaRepository pr;
+    private RondaService rondaService;
 
     @Autowired
-    public JugadorService(JugadorRepository jugadorRepository, PartidaRepository pr) {
+    public JugadorService(JugadorRepository jugadorRepository, PartidaRepository pr, RondaService rondaService) {
         this.jugadorRepository = jugadorRepository;
         this.pr = pr;
+        this.rondaService = rondaService;
     }
 
     @Transactional
@@ -149,6 +153,16 @@ public class JugadorService {
     public boolean usuarioPartidaEnJuegoEsperando(Integer usuarioId) {
         List<Partida> partidas = pr.findByOwnerPartidaAndEstado(usuarioId, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO));
         return !partidas.isEmpty();
+    }
+
+    @Transactional
+    public List<Jugador> findJugadoresOrdenadosByPartidaId(Integer partidaId) {
+        List<Jugador> jugadores = findJugadoresByPartidaId(partidaId);
+        Integer numRonda = (rondaService.findRondaActualByPartidaId(partidaId)).getNumRonda();
+        if (jugadores.size() > 1) {
+            Collections.rotate(jugadores, numRonda % jugadores.size());
+        }
+        return jugadores;
     }
     
 }

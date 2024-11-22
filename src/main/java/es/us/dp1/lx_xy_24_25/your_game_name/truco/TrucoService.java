@@ -2,6 +2,7 @@ package es.us.dp1.lx_xy_24_25.your_game_name.truco;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.NoCartaDeManoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 
 import java.util.Comparator;
@@ -35,14 +37,16 @@ public class TrucoService {
 	private ManoRepository manoRepository;
 	private JugadorService jugadorService;
 	private ManoService manoService;
+	// private BazaService bazaService;	// Para turnos
 
 
     @Autowired
-	public TrucoService(TrucoRepository trucoRepository, BazaRepository bazaRepository,ManoRepository manoRepository, JugadorService jugadorService) {
+	public TrucoService(TrucoRepository trucoRepository, BazaRepository bazaRepository,ManoRepository manoRepository, JugadorService jugadorService) { // , @Lazy BazaService bazaService
 		this.trucoRepository = trucoRepository;
         this.bazaRepository = bazaRepository;
         this.manoRepository = manoRepository;
         this.jugadorService = jugadorService;
+		// this.bazaService = bazaService;
 	}
 
     @Transactional(readOnly = true)
@@ -191,5 +195,59 @@ public class TrucoService {
 
     // Next Truco
     
+	// La he creado de nuevo por si no funciona tener la anterior
+	// Crear trucos con asociación de turnos correcta
+	@Transactional
+	public void crearTrucosBazaConTurno(Integer idBaza) {
+		Optional<Baza> posibleBaza = bazaRepository.findById(idBaza);
+		if (!posibleBaza.isPresent()) {
+			throw new ResourceNotFoundException("Baza", "id", idBaza);
+		}
+		Baza baza = posibleBaza.get();
+		Integer idPartida = baza.getRonda().getPartida().getId();
+		Baza bazaAnterior = bazaRepository.findBazaAnterior(baza.getId(), baza.getRonda().getId()).orElse(null);
+
+		// Calcular turnos
+		List<Integer> turnos = calcularTurnosNuevaBaza(idPartida, bazaAnterior);
+
+		for (int i = 0; i < turnos.size(); i++) {
+			Integer jugadorId = turnos.get(i);
+			Optional<Mano> posibleMano = manoRepository.findManoByJugadorIdRondaId(baza.getRonda().getId(), jugadorId);
+			if (!posibleMano.isPresent()) {
+				throw new ResourceNotFoundException("Mano", "jugadorId", jugadorId);
+			}
+			Mano mano = posibleMano.get();
+
+			Truco truco = new Truco(baza, mano, jugadorId, null, i + 1); // Turno = posición en la lista
+			trucoRepository.save(truco);
+		}
+	}
+
+	// Calcular turnos
+    public List<Integer> calcularTurnosNuevaBaza(int partidaId, Baza bazaAnterior) {
+        List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partidaId);
+
+        // Si es la primera baza, el orden es el orden de unión de los jugadores
+        if (bazaAnterior == null) {
+            return jugadores.stream().map(Jugador::getId).collect(Collectors.toList());
+        }
+
+        // Identificar al ganador de la baza anterior
+        Integer ganadorId = bazaAnterior.getGanador().getId();
+
+        // Reorganizar turnos: ganador primero, seguido por el resto
+        List<Integer> ordenAnterior = jugadores.stream().map(Jugador::getId).collect(Collectors.toList());
+        List<Integer> turnosNuevaBaza = ordenAnterior.stream()
+            .dropWhile(id -> !id.equals(ganadorId))  // Los jugadores a partir del ganador
+            .collect(Collectors.toList());
+
+        // Añadir los jugadores que estaban antes del ganador al final de la lista
+        turnosNuevaBaza.addAll(
+            ordenAnterior.stream().takeWhile(id -> !id.equals(ganadorId)).collect(Collectors.toList())
+        );
+
+        return turnosNuevaBaza;
+    }
+
 
 }

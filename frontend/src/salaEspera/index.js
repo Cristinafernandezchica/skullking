@@ -17,9 +17,14 @@ export default function SalaEspera() {
   const id = getIdFromUrl(2);
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
-  //const [jugadores, setJugadores] = useFetchState([], `/api/v1/partidas/${id}/jugadores`, jwt, setMessage, setVisible);
   const [partida, setPartida] = useFetchState(null, `/api/v1/partidas/${id}`, jwt, setMessage, setVisible);
   const [jugadores, setJugadores] = useState([]);
+
+  const revisarEstadoPartida = (partida) => {
+    if(partida.estado==="JUGANDO"){
+      navigate(`/tablero/${id}`);
+    }
+  }
 
   const fetchJugadores = async () => {
     try {
@@ -43,11 +48,19 @@ export default function SalaEspera() {
   // Para que se actualice la lista de jugadores que se van uniendo
   useEffect(() => {
     fetchJugadores();
-
+    
     const intervalId = setInterval(fetchJugadores, 3000);
 
     return () => clearInterval(intervalId);
   }, []);
+
+  // Revisión de estado cada vez que se modifique partida
+  useEffect(() => {
+    if(partida!==null){
+      revisarEstadoPartida(partida);
+    }
+    
+  }, [partida]);
 
 
   const jugadoresList = jugadores.map((jugador) => (
@@ -61,7 +74,7 @@ export default function SalaEspera() {
     try {
       console.log(id);
       const response = await fetch(`/api/v1/partidas/${id}/iniciar-partida`, {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Authorization': `Bearer ${jwt}`,
           'Content-Type': 'application/json',
@@ -74,8 +87,8 @@ export default function SalaEspera() {
         console.log("algo falla")
         throw new Error('Network response was not ok');
       }
-
-      navigate(`/tablero/${id}`);
+      setPartida(response.json())
+      console.log(partida);
 
     } catch (error) {
       console.error('Error:', error);

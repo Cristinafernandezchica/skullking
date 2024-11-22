@@ -83,7 +83,7 @@ private JugadorService js;
             Mano mano = new Mano();
             List<Carta> cartasBaraja = listaCartas.subList(0,getNumCartasARepartir(ronda.getNumRonda(), jugadores.size()));
             mano.setJugador(jugador);
-            mano.setApuesta(null);  // Esto lo elige el usuario
+            mano.setApuesta(0);  // Esto lo elige el usuario, si no lo elige será 0
             mano.setResultado(null);    // El resultado se establecerá más tarde
             List<Carta> cartaMano= new ArrayList<Carta>();
             cartaMano.addAll(cartasBaraja);

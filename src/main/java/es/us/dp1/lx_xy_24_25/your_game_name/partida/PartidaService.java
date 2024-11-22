@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.UsuarioPartidaEnJuegoEsperandoException;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MinJugadoresPartidaException;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MismoNombrePartidaNoTerminadaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import jakarta.validation.Valid;
 
@@ -64,11 +68,16 @@ public class PartidaService {
     public Partida save(Partida p) throws DataAccessException {
         Integer ownerId = p.getOwnerPartida();
         boolean partidaEsperandoJugando = usuarioPartidaEnJuegoEsperando(ownerId);
-        if (partidaEsperandoJugando) {
-            throw new UsuarioPartidaEnJuegoEsperandoException("El usuario ya tiene una partida en espera o en juego.");
+        if(mismoNombrePartidaNoTerminada(p)){
+            throw new MismoNombrePartidaNoTerminadaException("Ya existe una partida no finalizada con ese nombre.");
+        } if (partidaEsperandoJugando) {
+            throw new UsuarioPartidaEnJuegoEsperandoException("No puede crear otra partida, ya tiene una en espera o en juego.");
+        } else if(usuarioJugadorEnPartida(p)){
+            throw new UsuarioPartidaEnJuegoEsperandoException("No puede crear una partia, ya tiene una en espera o en juego.");
         }
         return pr.save(p);
     }
+
 
     @Transactional
     public Partida update(@Valid Partida partida, Integer idToUpdate) throws DataAccessException{
@@ -119,10 +128,36 @@ public class PartidaService {
         update(partida, partidaId);
     }
 
-    // Para Excepción
+    // Para Excepción: Si ya tiene una partida creada en juego o esperando, no podrá crear otra partida
     public Boolean usuarioPartidaEnJuegoEsperando(Integer ownerId){
         List<Partida> partidasEnProgresoEsperando = pr.findByOwnerPartidaAndEstado(ownerId, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO));
         return !partidasEnProgresoEsperando.isEmpty();
+    }
+
+    // Excepción: Para que no pueda crear una partida si ya se ha unido a una en juego o esperando (TODO: PROBAR)
+    public Boolean usuarioJugadorEnPartida(Partida partidaCrear) throws DataAccessException{
+        Boolean lanzarExcepcion = false;
+        Iterable<Jugador> jugadores = js.findAll();
+        List<Jugador> jugadoresFiltrados = StreamSupport.stream(jugadores.spliterator(), false)
+        .filter(jugador -> jugador.getUsuario().getId() == partidaCrear.getOwnerPartida() 
+        && (jugador.getPartida().getEstado().equals(PartidaEstado.ESPERANDO) 
+            || jugador.getPartida().getEstado().equals(PartidaEstado.JUGANDO)))
+            .collect(Collectors.toList());
+        if(jugadoresFiltrados.size() > 0){
+            lanzarExcepcion = true;
+        }
+        return lanzarExcepcion;
+    }
+
+    // Excepción: No puede haber dos partidas (no finalizadas) con el mismo nombre TODO: PPROBAR
+    public Boolean mismoNombrePartidaNoTerminada(Partida partidaCrear) throws DataAccessException{
+        Boolean lanzarExcepcion = false;
+        List<Partida> partidasFiltradasEsperando = pr.findByNombreAndEstado(partidaCrear.getNombre(), PartidaEstado.ESPERANDO);
+        List<Partida> partidasFiltradasJugando = pr.findByNombreAndEstado(partidaCrear.getNombre(), PartidaEstado.JUGANDO);
+        if(partidasFiltradasEsperando.size() > 0 || partidasFiltradasJugando.size() > 0){
+            lanzarExcepcion = true;
+        }
+        return lanzarExcepcion;
     }
 
 }

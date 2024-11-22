@@ -49,7 +49,7 @@ public class JugadorService {
         }
     }
 
-    // Comprueba si el usuario ya tiene un jugador en la partida en la que se quiere meter
+    // Comprueba si el usuario ya tiene un jugador en la partida en la que se quiere meter (CREAR PRUEBA)
     @Transactional
     public Boolean jugadorEnPartida(List<Jugador> jugadoresPartida, Jugador jugadorCrear) throws DataAccessException{
         Boolean lanzarExcepcion = false;
@@ -61,7 +61,7 @@ public class JugadorService {
         return lanzarExcepcion;
     }
 
-    // Comprueba si el jugador tiene alguna partida en juego o en espera
+    // Comprueba si el jugador tiene alguna partida en juego o en espera (CREAR PRUEBA)
     public Boolean partidaEnJuegoEspera(Jugador jugadorCrear) throws DataAccessException{
         Boolean lanzarExcepcion = false;
         Iterable<Partida> partidas = pr.findAll();

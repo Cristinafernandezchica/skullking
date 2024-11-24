@@ -6,7 +6,7 @@ export default function CrearPartidaModal({ isVisible, onCancel, onConfirm }) {
     const [nombrePartida, setNombrePartida] = useState('');
 
     const handleConfirmClick = async () => {
-        const partidaId = await onConfirm(nombrePartida);
+        await onConfirm(nombrePartida);
         setNombrePartida('');
     
     };

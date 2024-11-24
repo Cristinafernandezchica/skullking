@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,8 +29,10 @@ public class Mano extends BaseEntity{
     @JoinColumn(name = "jugador_id")
     private Jugador jugador;
 
+    @PositiveOrZero(message = "El valor de la apuesta no puede ser menor que 0")
     private Integer apuesta;
 
+    @PositiveOrZero
     private Integer resultado;
 
     @ManyToOne(optional = true)

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
+import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
@@ -99,12 +100,6 @@ public class BazaRestController {
     @GetMapping(value = "{bazaId}/trucos")
 	public ResponseEntity<List<Truco>> findTrucosByBazaId(@PathVariable("bazaId") int id) {
 		return new ResponseEntity<>(trucoService.findTrucosByBazaId(id), HttpStatus.OK);
-	}
-
-    // PETICIÓN PARA OBTENER LAS CARTAS DE UNA BAZA POR JUGADOR ORDENADAS POR TURNO
-    @GetMapping(value = "{bazaId}/cartasJugadores")
-	public ResponseEntity<Map<Integer, Integer>> findCartasPorJugadorByBazaId(@PathVariable("bazaId") int id) {
-		return new ResponseEntity<>(trucoService.getCartaByJugador(id), HttpStatus.OK);
 	}
 
     /* 

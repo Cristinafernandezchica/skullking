@@ -16,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +42,7 @@ public class Jugador extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User usuario;
 
-    @Min(0)
+    @Positive
     private Integer turno;
 
 }

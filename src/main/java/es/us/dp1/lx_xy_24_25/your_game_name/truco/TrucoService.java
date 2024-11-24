@@ -12,11 +12,9 @@ import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
-import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.NoCartaDeManoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
-import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 
@@ -33,16 +31,14 @@ public class TrucoService {
     
     private TrucoRepository trucoRepository;
 	private BazaService bazaService;
-	private ManoRepository manoRepository;
 	private JugadorService jugadorService;
 	private ManoService manoService;
 
 
     @Autowired
-	public TrucoService(TrucoRepository trucoRepository, BazaService bazaService,ManoRepository manoRepository, JugadorService jugadorService) {
+	public TrucoService(TrucoRepository trucoRepository, BazaService bazaService, JugadorService jugadorService) {
 		this.trucoRepository = trucoRepository;
         this.bazaService = bazaService;
-        this.manoRepository = manoRepository;
         this.jugadorService = jugadorService;
 	}
 
@@ -81,18 +77,10 @@ public class TrucoService {
 				.orElseThrow(() -> new ResourceNotFoundException("Truco", "Baza", bazaId));
 	}
 
-	/* 
-    // REVISAR Y QUIZAS QUITAR
-    @Transactional(readOnly = true)
-	public Integer findJugadorIdByBazaIdCartaId(int bazaId, int cartaId) throws DataAccessException {
-		return trucoRepository.findJugadorIdByBazaIdCartaId(bazaId, cartaId)
-				.orElseThrow(() -> new ResourceNotFoundException("Truco", "Baza", bazaId));
-	}
- */
     @Transactional
 	public Truco saveTruco(Truco truco) throws DataAccessException {
-		Boolean cartaEnMano = truco.getMano().getCartas().stream()
-            .anyMatch(carta -> carta.getId().equals(truco.getIdCarta()));
+		Boolean cartaEnMano = truco.getCarta() == null || 
+			truco.getMano().getCartas().stream().anyMatch(carta -> carta.equals(truco.getCarta()));
 
     	if (!cartaEnMano) {
         	throw new NoCartaDeManoException();
@@ -105,9 +93,10 @@ public class TrucoService {
     @Transactional
 	public Truco updateTruco(Truco truco, int trucoId) throws DataAccessException {
 		Truco toUpdate = findTrucoById(trucoId);
-		
-        Boolean cartaEnMano = truco.getMano().getCartas().stream()
-            .anyMatch(carta -> carta.getId().equals(truco.getIdCarta()));
+
+		Boolean cartaEnMano = truco.getCarta() == null || 
+			truco.getMano().getCartas().stream().anyMatch(carta -> carta.equals(truco.getCarta()));
+
 		if (!cartaEnMano) {
 			throw new NoCartaDeManoException();
 		}
@@ -133,22 +122,22 @@ public class TrucoService {
 			trucoIniciado.setBaza(Baza);
 			Mano mano =manoService.findLastManoByJugadorId(jugador.getId());
 			trucoIniciado.setMano(mano);
-			trucoIniciado.setJugador(jugador.getId());
+			trucoIniciado.setJugador(jugador);
 			trucoIniciado.setTurno(turno);
-			trucoIniciado.setIdCarta(null);
+			trucoIniciado.setCarta(null);
 			trucoRepository.save(trucoIniciado);
 			turno += 1;
 		}
 	}
 
     // Para BazaRestController
-    public Map<Integer, Integer> getCartaByJugador(int bazaId) {
-        List<Truco> trucos = trucoRepository.findByBazaId(bazaId);
+    public Map<Carta, Jugador> getCartaByJugador(int bazaId) {
+        List<Truco> trucos = findTrucosByBazaId(bazaId);
         List<Truco> trucosOrdenados = trucos.stream().sorted(Comparator.comparing(t-> t.getTurno())).toList();
         return trucosOrdenados.stream()
             .collect(Collectors.toMap(
-                Truco::getJugador,   
-                Truco::getIdCarta,    
+                Truco::getCarta,   
+                Truco::getJugador,    
                 (v1, v2) -> v1,      
                 LinkedHashMap::new
             ));
@@ -167,17 +156,15 @@ public class TrucoService {
 
         // Crear y guardar cada instancia de Truco de dicha Baza
         for (int i = 0; i < jugadores.size(); i++) {
-            Integer jugador = jugadores.get(i).getId();
-			Mano mano = manoService.findLastManoByJugadorId(jugador);
+            Jugador jugador = jugadores.get(i);
+			Mano mano = manoService.findLastManoByJugadorId(jugador.getId());
             Integer turno = i+1; 
-            Integer idCarta = null;
+            Carta carta = null;
             
-            Truco truco = new Truco(baza, mano, jugador, idCarta, turno);
+            Truco truco = new Truco(baza, mano, jugador, carta, turno);
             trucoRepository.save(truco);
         }
     }
-
-    // Inicial Truco
 
     // Next Truco
     

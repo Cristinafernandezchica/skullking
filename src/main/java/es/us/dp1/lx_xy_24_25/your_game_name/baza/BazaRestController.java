@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
-import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
@@ -102,6 +101,7 @@ public class BazaRestController {
 		return new ResponseEntity<>(trucoService.findTrucosByBazaId(id), HttpStatus.OK);
 	}
 
+
     /* 
     // PETICION PARA OBTENER LA ULTIMA BAZA DE UNA RONDA EN CONCRETA
     @GetMapping(value = "{rondaId}/ultimaBaza")
@@ -109,4 +109,12 @@ public class BazaRestController {
         return new ResponseEntity<>(bs.findUltimaBazaByRondaId(rondaId), HttpStatus.OK);
     }
     */
+    
+
+    // Para crear los trucos pertenecientes a una baza concreta
+    @PostMapping("/{bazaId}/trucos")
+    public ResponseEntity<MessageResponse> crearTrucosDeBaza(@PathVariable("bazaId") int idBaza) {
+        trucoService.crearTrucosBaza(idBaza);
+        return new ResponseEntity<>(new MessageResponse("Trucos creados"), HttpStatus.CREATED);
+    }
 }

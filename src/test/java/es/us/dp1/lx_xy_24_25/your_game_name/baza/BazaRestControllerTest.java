@@ -214,6 +214,7 @@ public class BazaRestControllerTest {
                 .andExpect(jsonPath("$[0].id").value(truco.getId()));
     }
 
+
     // Test para obtener la última baza de una ronda
     /* 
     @Test

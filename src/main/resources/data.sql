@@ -144,7 +144,7 @@ INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 1);  -- Mano 1 contiene Car
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 2);  -- Mano 1 contiene Carta 2
 
 -- Asignar cartas a la mano 2
--- INSERT INTO carta_mano(mano_id, carta_id) VALUES (2, 2);  -- Mano 2 contiene Carta 2
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (2, 2);  -- Mano 2 contiene Carta 2
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (2, 3);  -- Mano 2 contiene Carta 3
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (2, 4);  -- Mano 2 contiene Carta 4
 
@@ -155,21 +155,4 @@ INSERT INTO carta_mano(mano_id, carta_id) VALUES (3, 4);  -- Mano 3 contiene Car
 
 -- Pruebas para Baza
 -- INSERT INTO Baza(id, numBaza, tipo_carta, jugador_id, carta_id, ronda_id) VALUES (1,2,'triunfo',1,1,1);
--- INSERT INTO Baza(id, numBaza, tipo_carta, jugador_id, carta_id, ronda_id) VALUES (2,3,'pirata',2,4,1);
-
--- Pruebas para TrucoRepositoryTests
--- INSERT INTO Partida(id, nombre, inicio, fin, estado, owner_partida) VALUES (3, 'Partida Ejemplo', '2024-11-05 13:00:00', '2024-11-05 15:00:00', 'ESPERANDO', 6);
--- INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (1,15,3,5,2);
--- INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (2,15,3,6,3);
--- INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (1, 1, 1, 1);
--- INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (2, 2, 1, 0);
--- INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 1);  -- Mano 1 contiene Carta 1
--- INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 2);  -- Mano 1 contiene Carta 2
--- INSERT INTO carta_mano(mano_id, carta_id) VALUES (2, 3);  -- Mano 2 contiene Carta 3
--- INSERT INTO carta_mano(mano_id, carta_id) VALUES (2, 4);  -- Mano 2 contiene Carta 4
-
--- INSERT INTO Ronda(id, numRonda, bazaActual, numBazas, rondaEstado, partida) VALUES (1, 2, 1, 2, "JUGANDO", 3);
--- INSERT INTO Baza(id, numBaza, tipo_carta, jugador_id, carta_id, ronda_id) VALUES (1,1,'triunfo',1,1,1);
--- INSERT INTO Truco(id, baza_id, jugador_id, mano_id, carta_id, turno) VALUES (1, 1, 1, 1, 1, 1);
--- INSERT INTO Truco(id, baza_id, jugador_id, mano_id, carta_id, turno) VALUES (2, 1, 2, 2, 3, 2);
-
+-- INSERT INTO Baza(id, numBaza, tipo_carta, jugador_id, carta_id, ronda_id) VALUES (2,3,'pirata',3,8,2);

@@ -3,6 +3,7 @@ package es.us.dp1.lx_xy_24_25.your_game_name.mano;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.exceptions.ApuestaNoValidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
-import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import jakarta.validation.Valid;
 
 @Service

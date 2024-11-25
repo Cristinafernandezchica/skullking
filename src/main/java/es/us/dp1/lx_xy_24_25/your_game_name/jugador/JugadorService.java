@@ -154,16 +154,6 @@ public class JugadorService {
         List<Partida> partidas = pr.findByOwnerPartidaAndEstado(usuarioId, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO));
         return !partidas.isEmpty();
     }
-
-    @Transactional
-    public List<Jugador> findJugadoresOrdenadosByPartidaId(Integer partidaId) {
-        List<Jugador> jugadores = findJugadoresByPartidaId(partidaId);
-        Integer numRonda = (rondaService.findRondaActualByPartidaId(partidaId)).getNumRonda();
-        if (jugadores.size() > 1) {
-            Collections.rotate(jugadores, numRonda % jugadores.size());
-        }
-        return jugadores;
-    }
     
 }
 

@@ -34,19 +34,20 @@ public class TrucoService {
     
     private TrucoRepository trucoRepository;
 	private BazaRepository bazaRepository;
-	private ManoRepository manoRepository;
+	// private ManoRepository manoRepository;
 	private JugadorService jugadorService;
 	private ManoService manoService;
 	// private BazaService bazaService;	// Para turnos
 
 
     @Autowired
-	public TrucoService(TrucoRepository trucoRepository, BazaRepository bazaRepository,ManoRepository manoRepository, JugadorService jugadorService) { // , @Lazy BazaService bazaService
+	public TrucoService(TrucoRepository trucoRepository, BazaRepository bazaRepository, ManoService manoService, JugadorService jugadorService) { // , @Lazy BazaService bazaService ,ManoRepository manoRepository
 		this.trucoRepository = trucoRepository;
         this.bazaRepository = bazaRepository;
-        this.manoRepository = manoRepository;
+        // this.manoRepository = manoRepository;
         this.jugadorService = jugadorService;
 		// this.bazaService = bazaService;
+		this.manoService = manoService;
 	}
 
     @Transactional(readOnly = true)
@@ -84,18 +85,10 @@ public class TrucoService {
 				.orElseThrow(() -> new ResourceNotFoundException("Truco", "Baza", bazaId));
 	}
 
-	/* 
-    // REVISAR Y QUIZAS QUITAR
-    @Transactional(readOnly = true)
-	public Integer findJugadorIdByBazaIdCartaId(int bazaId, int cartaId) throws DataAccessException {
-		return trucoRepository.findJugadorIdByBazaIdCartaId(bazaId, cartaId)
-				.orElseThrow(() -> new ResourceNotFoundException("Truco", "Baza", bazaId));
-	}
- */
     @Transactional
 	public Truco saveTruco(Truco truco) throws DataAccessException {
-		Boolean cartaEnMano = truco.getMano().getCartas().stream()
-            .anyMatch(carta -> carta.getId().equals(truco.getIdCarta()));
+		Boolean cartaEnMano = truco.getCarta() == null || 
+			truco.getMano().getCartas().stream().anyMatch(carta -> carta.equals(truco.getCarta()));
 
     	if (!cartaEnMano) {
         	throw new NoCartaDeManoException();
@@ -109,8 +102,8 @@ public class TrucoService {
 	public Truco updateTruco(Truco truco, int trucoId) throws DataAccessException {
 		Truco toUpdate = findTrucoById(trucoId);
 		
-        Boolean cartaEnMano = truco.getMano().getCartas().stream()
-            .anyMatch(carta -> carta.getId().equals(truco.getIdCarta()));
+        Boolean cartaEnMano = truco.getCarta() == null || 
+			truco.getMano().getCartas().stream().anyMatch(carta -> carta.equals(truco.getCarta()));
 		if (!cartaEnMano) {
 			throw new NoCartaDeManoException();
 		}
@@ -136,9 +129,9 @@ public class TrucoService {
 			trucoIniciado.setBaza(Baza);
 			Mano mano =manoService.findLastManoByJugadorId(jugador.getId());
 			trucoIniciado.setMano(mano);
-			trucoIniciado.setJugador(jugador.getId());
+			trucoIniciado.setJugador(jugador);
 			trucoIniciado.setTurno(turno);
-			trucoIniciado.setIdCarta(null);
+			trucoIniciado.setCarta(null);
 			trucoRepository.save(trucoIniciado);
 			turno += 1;
 		}
@@ -147,20 +140,20 @@ public class TrucoService {
 
 
     // Para BazaRestController
-    public Map<Integer, Integer> getCartaByJugador(int bazaId) {
-        List<Truco> trucos = trucoRepository.findByBazaId(bazaId);
+    public Map<Carta, Jugador> getCartaByJugador(Integer bazaId) {
+        List<Truco> trucos = findTrucosByBazaId(bazaId);
         List<Truco> trucosOrdenados = trucos.stream().sorted(Comparator.comparing(t-> t.getTurno())).toList();
         return trucosOrdenados.stream()
             .collect(Collectors.toMap(
-                Truco::getJugador,   
-                Truco::getIdCarta,    
+                Truco::getCarta,   
+                Truco::getJugador,    
                 (v1, v2) -> v1,      
                 LinkedHashMap::new
             ));
     }
 	
 
-
+	/*	
 	// Crear Trucos de una Baza y guardarlas en la base de datos
     @Transactional
     public void crearTrucosBaza(Integer idBaza) {
@@ -190,6 +183,32 @@ public class TrucoService {
             trucoRepository.save(truco);
         }
     }
+	*/
+
+	@Transactional
+    public void crearTrucosBaza(Integer idBaza) {
+        // Determinamos Baza, Ronda, Partida y Jugadores a los que pertenecen los Trucos
+        Optional<Baza> posibleBaza = bazaRepository.findById(idBaza);
+        if(!posibleBaza.isPresent()) {
+			throw new ResourceNotFoundException("Baza", "id", idBaza);
+        }
+		Baza baza = posibleBaza.get();
+
+        Integer idPartida = baza.getRonda().getPartida().getId();
+        List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(idPartida);
+		//List<Jugador> jugadores = jugadorService.findJugadoresOrdenadosByPartidaId(idPartida);
+
+        // Crear y guardar cada instancia de Truco de dicha Baza
+        for (int i = 0; i < jugadores.size(); i++) {
+            Jugador jugador = jugadores.get(i);
+			Mano mano = manoService.findLastManoByJugadorId(jugador.getId());
+            Integer turno = i+1; 
+            Carta carta = null;
+
+            Truco truco = new Truco(baza, mano, jugador, carta, turno);
+            trucoRepository.save(truco);
+        }
+	}
 
     // Inicial Truco
 
@@ -212,24 +231,44 @@ public class TrucoService {
 
 		for (int i = 0; i < turnos.size(); i++) {
 			Integer jugadorId = turnos.get(i);
+			Jugador jugador = jugadorService.findById(jugadorId);
+			/*
 			Optional<Mano> posibleMano = manoRepository.findManoByJugadorIdRondaId(baza.getRonda().getId(), jugadorId);
 			if (!posibleMano.isPresent()) {
 				throw new ResourceNotFoundException("Mano", "jugadorId", jugadorId);
 			}
 			Mano mano = posibleMano.get();
+			*/
+			Mano mano = manoService.findLastManoByJugadorId(jugador.getId());
 
-			Truco truco = new Truco(baza, mano, jugadorId, null, i + 1); // Turno = posición en la lista
+			Truco truco = new Truco(baza, mano, jugador, null, i + 1); // Turno = posición en la lista
 			trucoRepository.save(truco);
 		}
 	}
 
+	// Caluclar primer turno
+	@Transactional
+	public Integer primerTurno(List<Integer> turnos){
+		return turnos.get(0);
+	}
+
+	@Transactional
+	public Integer siguienteTurno(List<Integer> turnos, Integer turnoActual){
+		Integer indexTurnoActual = turnos.indexOf(turnoActual);
+		Integer indexSiguienteTurno = indexTurnoActual + 1;
+		return turnos.get(indexSiguienteTurno);
+	}
+
 	// Calcular turnos
+	@Transactional
     public List<Integer> calcularTurnosNuevaBaza(int partidaId, Baza bazaAnterior) {
         List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partidaId);
 
         // Si es la primera baza, el orden es el orden de unión de los jugadores
         if (bazaAnterior == null) {
-            return jugadores.stream().map(Jugador::getId).collect(Collectors.toList());
+			List<Integer> turnosJugadores = jugadores.stream().map(Jugador::getId).collect(Collectors.toList());
+			asignarTurnoAJugadores(jugadores, turnosJugadores);
+            return turnosJugadores;
         }
 
         // Identificar al ganador de la baza anterior
@@ -245,9 +284,25 @@ public class TrucoService {
         turnosNuevaBaza.addAll(
             ordenAnterior.stream().takeWhile(id -> !id.equals(ganadorId)).collect(Collectors.toList())
         );
+		asignarTurnoAJugadores(jugadores, turnosNuevaBaza);
 
         return turnosNuevaBaza;
     }
+
+	@Transactional
+	public void asignarTurnoAJugadores(List<Jugador> jugadores, List<Integer> turnos){
+		Integer turno = 1;
+		for (Integer turnoJugadorId: turnos){
+			for(Jugador jugador: jugadores){
+				if(turnoJugadorId == jugador.getId()){
+					jugador.setTurno(turno);
+                    jugadorService.updateJugador(jugador, jugador.getId());
+				}
+			}
+			turno++;
+		}
+
+	}
 
 
 }

@@ -101,11 +101,6 @@ public class BazaRestController {
 		return new ResponseEntity<>(trucoService.findTrucosByBazaId(id), HttpStatus.OK);
 	}
 
-    // PETICIÓN PARA OBTENER LAS CARTAS DE UNA BAZA POR JUGADOR ORDENADAS POR TURNO
-    @GetMapping(value = "{bazaId}/cartasJugadores")
-	public ResponseEntity<Map<Integer, Integer>> findCartasPorJugadorByBazaId(@PathVariable("bazaId") int id) {
-		return new ResponseEntity<>(trucoService.getCartaByJugador(id), HttpStatus.OK);
-	}
 
     /* 
     // PETICION PARA OBTENER LA ULTIMA BAZA DE UNA RONDA EN CONCRETA

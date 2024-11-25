@@ -1,6 +1,7 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.jugador;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -62,6 +63,7 @@ public class JugadorService {
     }
 
     // Comprueba si el jugador tiene alguna partida en juego o en espera (CREAR PRUEBA)
+    @Transactional
     public Boolean partidaEnJuegoEspera(Jugador jugadorCrear) throws DataAccessException{
         Boolean lanzarExcepcion = false;
         Iterable<Partida> partidas = pr.findAll();
@@ -125,18 +127,17 @@ public class JugadorService {
                 return jugadoresOrdenados;
     }
 
-
-    // Para Validator
     /*
-    public Boolean usuarioMultiplesJugadoresEnPartida(User usuario, Partida partida){
-        List<Jugador> jugadoresUsuario =jugadorRepository.findJugadoresByUsuarioId(usuario.getId());
-        long count = jugadoresUsuario.stream()
-                .filter(jugador -> jugador.getPartida().equals(partida))
-                .count();
-        return count > 1;
-    }*/
+    // Para ver el turno del jugador
+    @Transactional(readOnly = true)
+    public Integer findTurnoByJugadorId(Integer jugadorId) {
+        Optional<Jugador> jugador = jugadorRepository.findById(jugadorId);
+        return jugador.isPresent()? jugador.get().getTurno() : null;
+    }
+    */
 
     // Método para verificar si un usuario tiene múltiples jugadores en la misma partida
+    /*
     public boolean usuarioMultiplesJugadoresEnPartida(User usuario, Partida partida) {
         List<Jugador> jugadoresUsuario = jugadorRepository.findJugadoresByUsuarioId(usuario.getId());
         long count = jugadoresUsuario.stream()
@@ -144,12 +145,15 @@ public class JugadorService {
                 .count();
         return count > 1;
     }
+    */
 
     // Método para verificar si un usuario tiene una partida en juego o esperando
+    /*
     public boolean usuarioPartidaEnJuegoEsperando(Integer usuarioId) {
         List<Partida> partidas = pr.findByOwnerPartidaAndEstado(usuarioId, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO));
         return !partidas.isEmpty();
     }
+    */
     
 }
 

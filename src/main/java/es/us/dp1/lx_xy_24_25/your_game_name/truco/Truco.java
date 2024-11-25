@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import jakarta.persistence.JoinColumn;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
+import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 
 @Entity
@@ -30,39 +31,37 @@ public class Truco extends BaseEntity{
 	@ManyToOne(optional = false)
     @JoinColumn(name = "baza_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
-    // @Column(name = "baza")
 	private Baza baza;
 
-    private Integer jugador;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "jugador_id")
+    private Jugador jugador;
 
     // Asociación con la entidad Mano
 
     // @Valid
 	@ManyToOne(optional = false)
     @JoinColumn(name = "mano_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Mano mano;
 
 
     // Carta sacada de la relación con la entidad Mano
     // @Column(name = "id_carta")
-    private Integer idCarta;
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "carta_id")
+    private Carta carta;
 
     // Turno correspondiente a la posición del id_jugador en la lista listaJugadores del id_partida
     // @Column(name = "turno")
     private Integer turno;
 
-    public Boolean esCartaDeMano() {
-		return (mano.getCartas().stream().map(c-> c.getId()).toList()).contains(idCarta);
-	}
-
     public Truco() {}
 
-    public Truco(Baza baza, Mano mano, Integer jugador, Integer idCarta, Integer turno) {
+    public Truco(Baza baza, Mano mano, Jugador jugador, Carta carta, Integer turno) {
         this.baza = baza;
         this.mano = mano;
         this.jugador = jugador;
-        this.idCarta = idCarta;
+        this.carta = carta;
         this.turno = turno;
     }
     

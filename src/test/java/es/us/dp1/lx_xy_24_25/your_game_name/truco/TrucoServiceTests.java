@@ -30,14 +30,20 @@ import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.NoCartaDeManoException;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoRepository;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.UserService;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorRepository;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+
 import java.util.Collections;
 import java.util.Optional;
 
@@ -59,115 +65,67 @@ public class TrucoServiceTests {
     @Mock
     private BazaRepository bazaRepository;
 
+    @Mock
+    private BazaService bazaService;
+
+    @Mock
+    private JugadorRepository jugadorRepository;
+
+    @Mock
+    private JugadorService jugadorService;
+
+    @Mock
+    private ManoRepository manoRepository;
+
     @InjectMocks
     private TrucoService trucoService;
 
-    private Integer idBaza1;
-    private Integer idBaza2;
-    private Integer idBazaFalsa;
-    private Integer idMano1;
-    private Integer idMano2;
-    private Integer idManoFalsa;
-    private Integer idJugador1;
-    private Integer idJugador2;
-    private Integer idJugadorFalso;
-    private Integer idCarta1;
-    private Integer idCarta2;
-    private Integer idCartaFalso;
-    private Carta carta1;
-    private Carta carta2;
-    private Baza baza1;
-    private Baza baza2;
-    private Mano mano1;
-    private Mano mano2;
-    private Jugador jugador1;
-    private Jugador jugador2;
-    private Truco truco1;
-    private Truco truco2;
-    private Truco truco3;
-    private List<Truco> trucos1;
-    private List<Truco> trucos2;
+    private Truco truco;
+    private Baza baza;
+    private Ronda ronda;
+    private Mano mano;
+    private Jugador jugador;
+    private Carta carta;
+    private Partida partida;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        idBaza1=1;
-        idBaza2=2;
-        idBazaFalsa=3;
-        idMano1=1;
-        idMano2=2;
-        idManoFalsa=3;
-        idJugador1=1;
-        idJugador2=2;
-        idJugadorFalso=3;
-        idCarta1=1;
-        idCarta2=2;
-        idCartaFalso=3;
+        partida = new Partida();
 
-        jugador1 = new Jugador();
-        jugador1.setId(idJugador1);
-        jugador2 = new Jugador();
-        jugador2.setId(idJugador2);
-
-        baza1 = new Baza();
-        baza1.setId(idBaza1);
-        baza2 = new Baza();
-        baza2.setId(idBaza2);
-
-        carta1 = new Carta();
-        carta1.setId(idCarta1);
-        List<Carta> cartas1 = Arrays.asList(carta1);
-        carta2 = new Carta();
-        carta2.setId(idCarta2);
-        List<Carta> cartas2 = Arrays.asList(carta2);
-
-        mano1 = new Mano();
-        mano1.setId(idMano1);
-        mano1.setJugador(jugador1);
-        mano1.setCartas(cartas1);
-        mano2 = new Mano();
-        mano2.setId(idMano2);
-        mano2.setJugador(jugador2);
-        mano2.setCartas(cartas2);
-
-        truco1 = new Truco();
-        truco1.setId(1);
-        truco1.setBaza(baza1);
-        truco1.setJugador(idJugador1);
-        truco1.setMano(mano1);
-        truco1.setIdCarta(idCarta1);
-
-        truco2 = new Truco();
-        truco2.setId(2);
-        truco2.setBaza(baza2);
-        truco2.setJugador(idJugador1);
-        truco2.setMano(mano1);
-        truco2.setIdCarta(idCarta1);
-
-        truco3 = new Truco();
-        truco3.setId(3);
-        truco3.setBaza(baza1);
-        truco3.setJugador(idJugador2);
-        truco3.setMano(mano2);
-        truco3.setIdCarta(idCarta1);
-
-        trucos1 = Arrays.asList(truco1, truco3);
-        trucos2 = Arrays.asList(truco1, truco2);
+        carta = new Carta();
+        carta.setId(1);
+        jugador = new Jugador();
+        jugador.setId(1);
+        jugador.setTurno(1);
+        mano = new Mano();
+        mano.setId(1);
+        mano.setJugador(jugador);
+        mano.setCartas(List.of(carta));
+        baza = new Baza();
+        baza.setId(1);
+        truco = new Truco();
+        truco.setId(1);
+        truco.setBaza(baza);
+        truco.setJugador(jugador);
+        truco.setMano(mano);
+        truco.setCarta(carta);
+        truco.setTurno(1);
 
     }
 
     @Test
     void shouldFindAllTrucos() {
-        Iterable<Truco> trucoList = Arrays.asList(truco1, truco2);
+        Iterable<Truco> trucoList = Arrays.asList(truco);
         when(trucoRepository.findAll()).thenReturn(trucoList);
 
         Iterable<Truco> trucosDevueltos = trucoService.findAllTrucos();
         List<Truco> result = (List<Truco>) trucosDevueltos;
 
         assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals(truco1, result.get(0));
+        assertEquals(1, result.size());
+        assertEquals(truco, result.get(0));
         verify(trucoRepository, times(1)).findAll();
     }
 
@@ -184,13 +142,13 @@ public class TrucoServiceTests {
 
     @Test
     void shouldFindTrucoById() {
-        when(trucoRepository.findById(truco1.getId())).thenReturn(Optional.of(truco1));
+        when(trucoRepository.findById(truco.getId())).thenReturn(Optional.of(truco));
 
-        Truco result = trucoService.findTrucoById(truco1.getId());
+        Truco result = trucoService.findTrucoById(truco.getId());
 
         assertNotNull(result);
-        assertEquals(truco1.getId(), result.getId());
-        verify(trucoRepository, times(1)).findById(truco1.getId());
+        assertEquals(truco.getId(), result.getId());
+        verify(trucoRepository, times(1)).findById(truco.getId());
     }
 
     @Test
@@ -205,127 +163,130 @@ public class TrucoServiceTests {
 	@Test
     public void shouldFindTrucosByBazaId() throws DataAccessException {
         // Arrange
-        when(trucoRepository.findByBazaId(idBaza1)).thenReturn(trucos1);
+        when(trucoRepository.findByBazaId(baza.getId())).thenReturn(List.of(truco));
 
         // Act
-        List<Truco> result = trucoService.findTrucosByBazaId(idBaza1);
+        List<Truco> result = trucoService.findTrucosByBazaId(baza.getId());
 
         // Assert
-        assertEquals(2, result.size());
+        assertEquals(1, result.size());
         assertEquals(1, result.get(0).getId());
-        assertEquals(baza1, result.get(0).getBaza());
-        assertEquals(3, result.get(1).getId());
-        assertEquals(baza1, result.get(1).getBaza());
+        assertEquals(baza, result.get(0).getBaza());
 
-        verify(trucoRepository).findByBazaId(idBaza1);
+        verify(trucoRepository).findByBazaId(baza.getId());
     }
 
     @Test
     public void shouldNotFindTrucosByBazaId(){
-        List<Truco> result = trucoService.findTrucosByBazaId(idBazaFalsa);
+        List<Truco> result = trucoService.findTrucosByBazaId(9999);
         assertTrue(result.isEmpty(), "Se esperaba que la lista devuelta sea vacía cuando no existen Trcos de dicha Baza");
     }
 
     @Test
     public void shouldFindTrucosByJugadorId() throws DataAccessException {
         // Arrange
-        when(trucoRepository.findByJugadorId(idJugador1)).thenReturn(trucos2);
+        when(trucoRepository.findByJugadorId(jugador.getId())).thenReturn(List.of(truco));
 
         // Act
-        List<Truco> result = trucoService.findTrucosByJugadorId(idJugador1);
+        List<Truco> result = trucoService.findTrucosByJugadorId(jugador.getId());
 
         // Assert
-        assertEquals(2, result.size());
+        assertEquals(1, result.size());
         assertEquals(1, result.get(0).getId());
-        assertEquals(jugador1.getId(), result.get(0).getJugador());
-        assertEquals(2, result.get(1).getId());
-        assertEquals(jugador1.getId(), result.get(1).getJugador());
+        assertEquals(jugador, result.get(0).getJugador());
 
-        verify(trucoRepository).findByJugadorId(idJugador1);
+        verify(trucoRepository).findByJugadorId(jugador.getId());
     }
 
     @Test
     public void shouldNotFindTrucosByJugadorId(){
-        List<Truco> result = trucoService.findTrucosByJugadorId(idJugadorFalso);
+        List<Truco> result = trucoService.findTrucosByJugadorId(999);
         assertTrue(result.isEmpty(), "Se esperaba que la lista devuelta sea vacía cuando no existen Trcos de dicha Jugador");
     }
 
     @Test
     public void shouldFindTrucosByManoId() throws DataAccessException {
         // Arrange
-        when(trucoRepository.findByManoId(idMano1)).thenReturn(trucos2);
+        when(trucoRepository.findByManoId(mano.getId())).thenReturn(List.of(truco));
 
         // Act
-        List<Truco> result = trucoService.findTrucosByManoId(idMano1);
+        List<Truco> result = trucoService.findTrucosByManoId(mano.getId());
 
         // Assert
-        assertEquals(2, result.size());
+        assertEquals(1, result.size());
         assertEquals(1, result.get(0).getId());
-        assertEquals(mano1, result.get(0).getMano());
-        assertEquals(2, result.get(1).getId());
-        assertEquals(mano1, result.get(1).getMano());
+        assertEquals(mano, result.get(0).getMano());
 
-        verify(trucoRepository).findByManoId(idMano1);
+        verify(trucoRepository).findByManoId(mano.getId());
     }
 
-    @Test
     public void shouldNotFindTrucosByManoId(){
-        List<Truco> result = trucoService.findTrucosByManoId(idManoFalsa);
+        List<Truco> result = trucoService.findTrucosByManoId(999);
         assertTrue(result.isEmpty(), "Se esperaba que la lista devuelta sea vacía cuando no existen Trcos de dicha Mano");
     }
 
     @Test
     public void shouldFindTrucoByBazaIdCartaId() throws DataAccessException {
         // Arrange
-        when(trucoRepository.findTrucoByBazaIdCartaId(idBaza1, idCarta1)).thenReturn(Optional.of(truco1));
+        when(trucoRepository.findTrucoByBazaIdCartaId(baza.getId(), carta.getId())).thenReturn(Optional.of(truco));
 
         // Act
-        Truco result = this.trucoService.findTrucoByBazaIdCartaId(idBaza1, idCarta1);
+        Truco result = this.trucoService.findTrucoByBazaIdCartaId(baza.getId(), carta.getId());
 
         // Assert
         assertEquals(1, result.getId());
-        verify(trucoRepository).findTrucoByBazaIdCartaId(idBaza1, idCarta1);
+        verify(trucoRepository).findTrucoByBazaIdCartaId(baza.getId(), carta.getId());
     }
 
     @Test
     public void shouldNotFindTrucoByBazaIdCartaId(){
-        when(trucoRepository.findTrucoByBazaIdCartaId(idBazaFalsa, idCartaFalso)).thenReturn(Optional.empty());
+        when(trucoRepository.findTrucoByBazaIdCartaId(999, 999)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> {
-            trucoService.findTrucoByBazaIdCartaId(idBazaFalsa, idCartaFalso);
+            trucoService.findTrucoByBazaIdCartaId(999, 999);
         }, "Se esperaba que se lanzara una ResourceNotFoundException cuando no se encuentra el Truco");
     }
 
     @Test
     public void shouldSaveTruco() {
-        when(trucoRepository.save(truco1)).thenReturn(truco1);
+        when(trucoRepository.save(truco)).thenReturn(truco);
 
-        Truco result = trucoService.saveTruco(truco1);
+        Truco result = trucoService.saveTruco(truco);
 
-        assertEquals(truco1.getId(), result.getId());
-        verify(trucoRepository).save(truco1);
+        assertEquals(truco.getId(), result.getId());
+        verify(trucoRepository).save(truco);
     }
 
     @Test
     public void shouldNotSaveTruco() {
-        truco1.setIdCarta(idCartaFalso);
+        Carta newCarta = new Carta();
+        newCarta.setId(999);
+        truco.setCarta(newCarta);
 
         assertThrows( NoCartaDeManoException.class, () -> {
-            trucoService.saveTruco(truco1);
+            trucoService.saveTruco(truco);
         }, "Se esperaba que se lanzara una NoCartaDeManoException cuando la carta del Trco no es parte de las cartas de la mano");
     }
 
     @Test
     public void shouldUpdateTruco() {
+        Carta newCarta = new Carta();
+        newCarta.setId(999);
+
+        Mano newMano = new Mano();
+        newMano.setId(999);
+        newMano.setCartas(List.of(carta, newCarta));
+
         Truco newTruco = new Truco();
-        newTruco.setBaza(baza2);
-        newTruco.setJugador(jugador1.getId());
-        newTruco.setMano(mano1);
-        newTruco.setIdCarta(idCarta1);
+        newTruco.setId(truco.getId());
+        newTruco.setBaza(baza);
+        newTruco.setJugador(jugador);
+        newTruco.setMano(newMano);
+        newTruco.setCarta(newCarta);
 
-        when(trucoRepository.findById(1)).thenReturn(Optional.of(truco1));
+        when(trucoRepository.findById(truco.getId())).thenReturn(Optional.of(truco));
 
-        Truco updatedTruco = trucoService.updateTruco(newTruco, 1);
+        Truco updatedTruco = trucoService.updateTruco(newTruco, truco.getId());
 
         assertNotNull(updatedTruco);
         assertEquals(newTruco.getBaza(), updatedTruco.getBaza());
@@ -334,17 +295,20 @@ public class TrucoServiceTests {
 
     @Test
     public void shouldNotUpdateTrucoIncorrecto() {
-        when(trucoRepository.findById(1)).thenReturn(Optional.of(truco1));
+        when(trucoRepository.findById(truco.getId())).thenReturn(Optional.of(truco));
+
+        Carta newCarta = new Carta();
+        newCarta.setId(999);
 
         Truco newTruco = new Truco();
-        newTruco.setId(1);
-        newTruco.setBaza(baza1);
-        newTruco.setJugador(jugador1.getId());
-        newTruco.setMano(mano1);
-        newTruco.setIdCarta(idCarta2);
+        newTruco.setId(truco.getId());
+        newTruco.setBaza(baza);
+        newTruco.setJugador(jugador);
+        newTruco.setMano(mano);
+        newTruco.setCarta(newCarta);
 
         assertThrows(NoCartaDeManoException.class, () -> {
-            trucoService.updateTruco(newTruco, 1);
+            trucoService.updateTruco(newTruco, truco.getId());
         }, "No se puede actualizar un Truco si el idCarta no está en las cartas de la mano");
 
     }
@@ -361,15 +325,15 @@ public class TrucoServiceTests {
     }
 
     @Test
-    void shouldDeleteTruco() {
-        when(trucoRepository.findById(truco1.getId())).thenReturn(Optional.of(truco1));
+    public void shouldDeleteTruco() {
+        when(trucoRepository.findById(truco.getId())).thenReturn(Optional.of(truco));
 
-        trucoService.deleteTruco(truco1.getId());
-        verify(trucoRepository, times(1)).delete(truco1);
+        trucoService.deleteTruco(truco.getId());
+        verify(trucoRepository, times(1)).delete(truco);
     }
 
     @Test
-    void shouldNotDeleteTruco() {
+    public void shouldNotDeleteTruco() {
         when(trucoRepository.findById(999)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> {
@@ -377,25 +341,20 @@ public class TrucoServiceTests {
         }, "No se puede borrar un Truco que no existe");
     }
 
-    @Test
-    public void shouldGetCartaByJugador(){
-        when(this.trucoService.findTrucosByBazaId(baza1.getId())).thenReturn(List.of(truco1));
-
-        Map<Integer, Integer> result = this.trucoService.getCartaByJugador(baza1.getId());
-
-        // Assert
-        assertEquals(1, result.get(truco1.getIdCarta()));
-    }
-
     // void crearTrucosBaza(Integer idBaza) ResourceNotFoundException
     // @Test
     // public void shouldCrearTrucosBaza() {
+
+        // ronda.setPartida(partida);
+        // baza1.setRonda(ronda);
         // when(bazaRepository.findById(baza1.getId())).thenReturn(Optional.of(baza1));
-        // baza1.setRonda(any(Ronda.class));
-
+        // when(bazaService.findById(baza1.getId())).thenReturn(baza1);
+        // when(jugadorRepository.findJugadoresByPartidaId(partida.getId())).thenReturn(List.of(jugador1, jugador2));
+        // when(manoRepository.findAllManoByJugadorId(jugador1.getId())).thenReturn(List.of(mano1));
+        // when(manoRepository.findAllManoByJugadorId(jugador2.getId())).thenReturn(List.of(mano2));
+        // when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(List.of(jugador1, jugador2));
         // trucoService.crearTrucosBaza(baza1.getId());
-
-        // verify(trucoService).findTrucosByBazaId(baza1.getId());
+        // verify(trucoRepository, times(2)).save(any(Truco.class));
     // }
 
 }

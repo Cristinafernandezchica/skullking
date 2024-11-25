@@ -80,7 +80,13 @@ public class BazaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Baza", "numBaza", numBaza));
     }
 
-
+    // Si se usa este método se crea dependencia circular en Truco
+    /*
+    @Transactional(readOnly = true)
+    public Baza findBazaAnterior(Integer bazaId, Integer rondaId){
+        return bazaRepository.findBazaAnterior(bazaId, rondaId).get();
+    }
+    */
 
     // Iniciar una Baza
     @Transactional

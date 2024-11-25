@@ -127,8 +127,8 @@ public class BazaRestControllerTest {
         truco = new Truco();
         truco.setId(1);
         truco.setBaza(baza);
-        truco.setIdCarta(1);
-        truco.setJugador(1);
+        truco.setCarta(carta);
+        truco.setJugador(jugador);
         truco.setMano(null);
         truco.setTurno(1);
         
@@ -212,22 +212,6 @@ public class BazaRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].id").value(truco.getId()));
-    }
-          
-    // Test para obtener cartas por jugador de una baza
-    @Test
-    void testFindCartasPorJugadorByBazaId() throws Exception {
-        Map<Integer, Integer> cartasPorJugador = new LinkedHashMap<>();
-        cartasPorJugador.put(1, 100); 
-        cartasPorJugador.put(2, 200); 
-
-        when(trucoService.getCartaByJugador(1)).thenReturn(cartasPorJugador);
-
-        mockMvc.perform(get("/api/v1/bazas/{id}/cartasJugadores", 1)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.1").value(100))
-                .andExpect(jsonPath("$.2").value(200));
     }
 
 

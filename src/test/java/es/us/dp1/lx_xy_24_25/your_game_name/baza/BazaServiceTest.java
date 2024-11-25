@@ -238,8 +238,7 @@ public class BazaServiceTest {
            assertEquals(ronda, nuevaBaza.getRonda());
    
            //Cuando esté hecho iniciarTrucos, descomentar y probar (antes de esta implementacion funciona todo :D)
-           // verify(trucoService, times(1)).crearTrucosBaza(nuevaBaza.getId());
-           verify(trucoService, times(1)).crearTrucosBazaConTurno(nuevaBaza);
+           verify(trucoService, times(1)).crearTrucosBaza(nuevaBaza.getId());
 
            verify(bazaRepository, times(1)).save(nuevaBaza);
        }

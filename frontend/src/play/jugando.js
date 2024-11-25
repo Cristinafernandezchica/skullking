@@ -10,12 +10,12 @@ const jwt = tokenService.getLocalAccessToken();
 const user = tokenService.getUser();
 
 export default function Jugando() {
-    const id = getIdFromUrl(2);
+    const idPartida = getIdFromUrl(2);
     const [message, setMessage] = useState(null);
     const [visible, setVisible] = useState(false);
     const [jugadores, setJugadores] = useFetchState(
       [],
-      `/api/v1/jugadores/${id}`,
+      `/api/v1/jugadores/${idPartida}`,
       jwt,
       setMessage,
       setVisible
@@ -87,7 +87,7 @@ export default function Jugando() {
 
     const fetchJugadores = async () => {
       try {
-          const response = await fetch(`/api/v1/jugadores/${id}`, {
+          const response = await fetch(`/api/v1/jugadores/${idPartida}`, {
               headers: {
                   "Authorization": `Bearer ${jwt}`,
                   'Content-Type': 'application/json'
@@ -240,7 +240,7 @@ export default function Jugando() {
     console.log("mano encontrada",mano);
     console.log("ronda encontrada",ronda);
     console.log(jugadores);
-    console.log(id);
+    console.log(idPartida);
 
 
     return (

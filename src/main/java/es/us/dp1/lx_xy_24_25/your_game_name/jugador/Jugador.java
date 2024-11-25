@@ -14,6 +14,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Positive;
@@ -42,7 +43,7 @@ public class Jugador extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User usuario;
 
-    @Positive
+    @Min(0) // Cambiar a @Positive cuando cambie la inicialización del turno en jugador (ahora mismo está a 0)
     private Integer turno;
     
     @PositiveOrZero

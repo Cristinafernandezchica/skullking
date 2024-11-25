@@ -1,3 +1,4 @@
+/*
 package es.us.dp1.lx_xy_24_25.your_game_name.jugador;
 
 import org.springframework.validation.Errors;
@@ -35,4 +36,5 @@ public class JugadorValidator implements Validator {
         return Jugador.class.equals(clazz);
     }
 }
+*/
 

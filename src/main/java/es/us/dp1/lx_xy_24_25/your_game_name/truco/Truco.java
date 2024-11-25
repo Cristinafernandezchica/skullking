@@ -47,6 +47,7 @@ public class Truco extends BaseEntity{
 
 
     // Carta sacada de la relación con la entidad Mano
+    // @Column(name = "id_carta")
     @ManyToOne(optional = true)
     @JoinColumn(name = "carta_id")
     private Carta carta;

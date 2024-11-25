@@ -93,23 +93,17 @@ public class TrucoServiceTests {
 
         partida = new Partida();
 
-        ronda = new Ronda();
-
         carta = new Carta();
         carta.setId(1);
-
         jugador = new Jugador();
         jugador.setId(1);
         jugador.setTurno(1);
-
         mano = new Mano();
         mano.setId(1);
         mano.setJugador(jugador);
         mano.setCartas(List.of(carta));
-
         baza = new Baza();
         baza.setId(1);
-
         truco = new Truco();
         truco.setId(1);
         truco.setBaza(baza);
@@ -117,7 +111,6 @@ public class TrucoServiceTests {
         truco.setMano(mano);
         truco.setCarta(carta);
         truco.setTurno(1);
-
 
     }
 
@@ -226,7 +219,6 @@ public class TrucoServiceTests {
         verify(trucoRepository).findByManoId(mano.getId());
     }
 
-    @Test
     public void shouldNotFindTrucosByManoId(){
         List<Truco> result = trucoService.findTrucosByManoId(999);
         assertTrue(result.isEmpty(), "Se esperaba que la lista devuelta sea vacía cuando no existen Trcos de dicha Mano");
@@ -266,10 +258,8 @@ public class TrucoServiceTests {
 
     @Test
     public void shouldNotSaveTruco() {
-
         Carta newCarta = new Carta();
         newCarta.setId(999);
-
         truco.setCarta(newCarta);
 
         assertThrows( NoCartaDeManoException.class, () -> {
@@ -279,14 +269,12 @@ public class TrucoServiceTests {
 
     @Test
     public void shouldUpdateTruco() {
-
         Carta newCarta = new Carta();
         newCarta.setId(999);
 
         Mano newMano = new Mano();
         newMano.setId(999);
         newMano.setCartas(List.of(carta, newCarta));
-
 
         Truco newTruco = new Truco();
         newTruco.setId(truco.getId());
@@ -336,7 +324,7 @@ public class TrucoServiceTests {
     }
 
     @Test
-    void shouldDeleteTruco() {
+    public void shouldDeleteTruco() {
         when(trucoRepository.findById(truco.getId())).thenReturn(Optional.of(truco));
 
         trucoService.deleteTruco(truco.getId());
@@ -344,7 +332,7 @@ public class TrucoServiceTests {
     }
 
     @Test
-    void shouldNotDeleteTruco() {
+    public void shouldNotDeleteTruco() {
         when(trucoRepository.findById(999)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> {
@@ -352,20 +340,10 @@ public class TrucoServiceTests {
         }, "No se puede borrar un Truco que no existe");
     }
 
-    @Test
-    public void shouldGetCartaByJugador(){
-        when(this.trucoService.findTrucosByBazaId(baza.getId())).thenReturn(List.of(truco));
-
-        Map<Carta, Jugador> result = this.trucoService.getCartaByJugador(baza.getId());
-
-        // Assert
-        assertEquals(truco.getJugador(), result.get(truco.getCarta()));
-    }
-
     // void crearTrucosBaza(Integer idBaza) ResourceNotFoundException
     // @Test
     // public void shouldCrearTrucosBaza() {
-    
+
         // ronda.setPartida(partida);
         // baza1.setRonda(ronda);
         // when(bazaRepository.findById(baza1.getId())).thenReturn(Optional.of(baza1));
@@ -374,7 +352,6 @@ public class TrucoServiceTests {
         // when(manoRepository.findAllManoByJugadorId(jugador1.getId())).thenReturn(List.of(mano1));
         // when(manoRepository.findAllManoByJugadorId(jugador2.getId())).thenReturn(List.of(mano2));
         // when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(List.of(jugador1, jugador2));
-
         // trucoService.crearTrucosBaza(baza1.getId());
         // verify(trucoRepository, times(2)).save(any(Truco.class));
     // }

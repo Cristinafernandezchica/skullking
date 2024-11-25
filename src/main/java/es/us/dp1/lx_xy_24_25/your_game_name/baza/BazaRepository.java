@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 public interface BazaRepository extends CrudRepository<Baza, Integer>{
 
@@ -17,4 +18,8 @@ public interface BazaRepository extends CrudRepository<Baza, Integer>{
     @Query("SELECT b FROM Baza b WHERE b.ronda.id = :rondaId AND b.numBaza = :numBaza")
     Optional<Baza> findByRondaIdAndNumBaza(Integer rondaId, Integer numBaza);
 
+
+    // Para calculo de turnos
+    @Query("SELECT b FROM Baza b WHERE b.ronda.id = :rondaId AND b.id < :bazaId ORDER BY b.id DESC")
+    Optional<Baza> findBazaAnterior(@Param("bazaId") Integer bazaId, @Param("rondaId") Integer rondaId);
 }

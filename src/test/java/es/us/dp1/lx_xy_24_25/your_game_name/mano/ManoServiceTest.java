@@ -161,6 +161,8 @@ public class ManoServiceTest {
         verify(manoRepository, times(1)).save(any(Mano.class));
     }
 */
+
+    //TODO: Hacer nuevo test para la nueva función 
     @Test
     public void testApostar() {
         Mano mano = new Mano();
@@ -169,7 +171,7 @@ public class ManoServiceTest {
 
         when(manoRepository.findById(1)).thenReturn(Optional.of(mano));
 
-        manoService.apostar(5, 1);
+        // manoService.apostar(5, 1);
 
         assertEquals(5, mano.getApuesta());
         verify(manoRepository, times(1)).save(mano);

@@ -14,8 +14,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Positive;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -44,5 +44,8 @@ public class Jugador extends BaseEntity {
 
     @Positive
     private Integer turno;
+    
+    @PositiveOrZero
+    private Integer apuestaActual = 0;
 
 }

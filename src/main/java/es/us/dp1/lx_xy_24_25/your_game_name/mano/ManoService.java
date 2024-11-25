@@ -15,6 +15,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.carta.CartaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.exceptions.ApuestaNoValidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import jakarta.validation.Valid;
@@ -57,9 +58,9 @@ private JugadorService js;
     
     //actualizar Mano
     @Transactional
-	public Mano updateMano(@Valid Mano Mano, Integer idToUpdate) {
+	public Mano updateMano(@Valid Mano mano, Integer idToUpdate) {
 		Mano toUpdate = findManoById(idToUpdate);
-		BeanUtils.copyProperties(Mano, toUpdate, "id");
+		BeanUtils.copyProperties(mano, toUpdate, "id");
 		manoRepository.save(toUpdate);
 		return toUpdate;
 	}
@@ -83,7 +84,7 @@ private JugadorService js;
             Mano mano = new Mano();
             List<Carta> cartasBaraja = listaCartas.subList(0,getNumCartasARepartir(ronda.getNumRonda(), jugadores.size()));
             mano.setJugador(jugador);
-            mano.setApuesta(null);  // Esto lo elige el usuario
+            mano.setApuesta(0);  // Esto lo elige el usuario, si no lo elige será 0
             mano.setResultado(null);    // El resultado se establecerá más tarde
             List<Carta> cartaMano= new ArrayList<Carta>();
             cartaMano.addAll(cartasBaraja);
@@ -107,15 +108,25 @@ private JugadorService js;
         return cartasARepartir;
     }
 
-    // Crear función apuesta, para poner las apuestas de cada uno de los jugadores
-    // Hay que ponerla en el controlador para que se pueda llamar desde frontend
-    // ya que las apuestas se pondrán en función de lo que elija el usuario
-    // Esta es provisional -->  NO ES CORRECTA
-    public void apostar(Integer apuesta, Integer manoId){
-        Mano mano = findManoById(manoId);
-        mano.setApuesta(apuesta);
+    // Para apostar
+    @Transactional
+    public void apuesta(Integer ap, Integer jugadorId){
+        Mano mano = findLastManoByJugadorId(jugadorId);
+        Jugador jugador = js.findById(jugadorId);
+        if (mano == null) {
+            throw new ResourceNotFoundException("Mano", "id", jugadorId);
+        }
+
+        if (ap > mano.getCartas().size()) {
+            throw new ApuestaNoValidaException("La apuesta no puede ser mayor a " + mano.getCartas().size());
+        }
+
+        mano.setApuesta(ap);
+        jugador.setApuestaActual(ap);
         manoRepository.save(mano);
+        js.updateJugador(jugador, jugadorId);
     }
+    
 
     public void calculoPuntaje(Integer numBazas, Integer rondaId){
          List<Mano> manos = manoRepository.findAllByRondaId(rondaId);

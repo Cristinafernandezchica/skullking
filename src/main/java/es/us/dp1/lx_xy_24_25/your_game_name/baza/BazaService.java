@@ -91,8 +91,9 @@ public class BazaService {
         baza.setGanador(null);
         baza.setTipoCarta(null);
         baza.setRonda(ronda);
-        trucoService.crearTrucosBaza(baza.getId());
-        return bazaRepository.save(baza);
+        Baza resBaza = bazaRepository.save(baza);
+        trucoService.crearTrucosBazaConTurno(baza.getId()); // cambiado para turnos
+        return resBaza;
     }
 
     // Next Baza

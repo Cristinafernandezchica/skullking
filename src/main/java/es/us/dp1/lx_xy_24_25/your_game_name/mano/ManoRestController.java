@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -76,18 +77,13 @@ public class ManoRestController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    // provisional para apostar, se necesita en controller para que la pueda llamar 
-    // el frontend ya que es algo que eligen los usuarios
-    // PROVISIONAL -->  NO ES CORRECTA
-    /*
-    @PostMapping("/apostar/{manoId}/{userId}")
+    // Para apostar
+    @PutMapping("/apuesta/{jugadorId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Mano> apostar(@PathVariable Integer manoId) {
-        Mano mano = manoService.findManoById(manoId);
-        RestPreconditions.checkNotNull(mano, "Mano", "ID", manoId);
-        return new ResponseEntity<>(manoService.apostar(mano.getId()), HttpStatus.OK);
+    public ResponseEntity<Void> apuesta(@RequestParam Integer apuesta, @PathVariable Integer jugadorId) {
+       manoService.apuesta(apuesta, jugadorId);
+       return new ResponseEntity<>(HttpStatus.OK);
     }
-    */
 
     // PETICIÓN PARA OBTENER LOS TRUCOS DE UNA MANO CONCRETA
     @GetMapping(value = "{manoId}/trucos")

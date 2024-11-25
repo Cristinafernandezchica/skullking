@@ -44,10 +44,12 @@ public class JugadorRestController {
     }
 
     // Para Validator
+    /*
     @InitBinder
     public void initJugadorBinder(WebDataBinder dataBinder){
         dataBinder.setValidator(new JugadorValidator(jugadorService));
     }
+    */
 
     //get jugador por id
     @GetMapping(value = "/{partidaId}" )
@@ -60,16 +62,29 @@ public class JugadorRestController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
     
-        //get jugador por usuarioId
-        @GetMapping(value = "/{usuarioId}/usuario" )
-        public ResponseEntity<Jugador> findJugadorByUsuarioId(@PathVariable("usuarioId") Integer usuarioId) {
-            Jugador res;
-            res = jugadorService.findJugadorByUsuarioId(usuarioId);
-            if(res == null){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(res, HttpStatus.OK);
+    //get jugador por usuarioId
+    @GetMapping(value = "/{usuarioId}/usuario" )
+    public ResponseEntity<Jugador> findJugadorByUsuarioId(@PathVariable("usuarioId") Integer usuarioId) {
+        Jugador res;
+        res = jugadorService.findJugadorByUsuarioId(usuarioId);
+        if(res == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    // get turno por jugadorId
+    /*
+    @GetMapping(value = "/{jugadorId}/turno")
+    public ResponseEntity<Integer> findTurnoByJugadorId(@PathVariable("jugadorId") Integer jugadorId) {
+        Integer res;
+        res = jugadorService.findTurnoByJugadorId(jugadorId);
+        if(res == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+    */
 
     //get todos los jugadores
     @GetMapping
@@ -88,15 +103,14 @@ public class JugadorRestController {
     }
 
     // crear un nuevo jugador
-    /* 
     @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Jugador> create(@RequestBody @Valid Jugador jugador) {
 		Jugador savedJugador = jugadorService.saveJugador(jugador);
 		return new ResponseEntity<>(savedJugador, HttpStatus.CREATED);
 	}
-    */
 
+    /*
     @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> create(@RequestBody @Valid Jugador jugador, BindingResult bindingResult){
@@ -110,6 +124,7 @@ public class JugadorRestController {
         return new ResponseEntity<>(savedJugador, HttpStatus.CREATED);
         
     }
+    */
 
     // borrar un jugador por id
     @DeleteMapping(value = "{id}")

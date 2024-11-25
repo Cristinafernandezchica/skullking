@@ -351,4 +351,8 @@ Una vez se compruebe que se ha acertado la apuesta, si el jugador ha ganado algu
 ### R40 - Puntos de bonificación: 3 cartas de personaje distintos  
 Una vez se compruebe que se ha acertado la apuesta, si el jugador ha ganado alguna baza que incluya los 3 tipos de personaje, se aplicará la regla de puntos de bonificación de Skull King capturado.
 
+### R41 - Nombre partida
+No pueden existir dos partidas en curso o en espera con el mismo nombre.
 
+### R42 - Tiempo de apuesta
+Tras el reparto de cartas se deberá apostar dentro del tiempo establecido (20 segundos), en otro caso, la apuesta se establecerá a 0.

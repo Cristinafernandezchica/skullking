@@ -42,7 +42,7 @@ public class Jugador extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User usuario;
 
-    @Min(0)
+    @Min(0) // Cambiar a @Positive cuando cambie la inicialización del turno en jugador (ahora mismo está a 0)
     private Integer turno;
     
     @PositiveOrZero

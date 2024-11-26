@@ -99,6 +99,7 @@ export default function PartidaListAdmin() {
                     throw new Error("Network response was not ok");
                 }
                 const data = await response.json();
+                data.sort((a, b) => new Date(b.inicio) - new Date(a.inicio)); // Ordenar por fecha de inicio del mas reciente al que menos
                 setPartidas(data);
 
                 data.forEach(async (partida) => {
@@ -139,10 +140,15 @@ export default function PartidaListAdmin() {
         numeroPaginas.push(i);
     }
 
+    function formatearFecha(fecha) {
+        const opciones = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+        return new Date(fecha).toLocaleDateString('es-ES', opciones).replace(',', ' -');
+    }
+
     let partidaList;
     if (filtered.length === 0 && (filter !== "" || search !== "")) partidaList =
         <tr>
-            <td>No hay consultas con esos filtros y parámetros de búsqueda.</td>
+            <td colSpan="5">No hay consultas con esos filtros y parámetros de búsqueda.</td>   
         </tr>
     else partidaList = partidasActuales.map((partida) => {
         const jugadoresList = jugadores[partida.id]?.map((jugador) => (
@@ -155,7 +161,7 @@ export default function PartidaListAdmin() {
                 <td>{partida.estado}</td>
                 <td>{jugadoresList}</td>
                 <td>{ownerName}</td>
-                <td>{partida.inicio}</td>
+                <td>{formatearFecha(partida.inicio)}</td>
             </tr>
         );
     });

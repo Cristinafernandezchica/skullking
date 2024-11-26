@@ -274,7 +274,7 @@ export default function Jugando() {
 
 
     return (
-      <div>
+      <div className = "tablero">
         <div className="lista-jugadores">
           {jugadores!==null  && jugadores.map((jugador) => (
             <div key={jugador.id} className="jugador-info" >

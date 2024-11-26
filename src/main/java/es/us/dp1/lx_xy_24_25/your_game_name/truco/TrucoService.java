@@ -101,12 +101,6 @@ public class TrucoService {
     @Transactional
 	public Truco updateTruco(Truco truco, int trucoId) throws DataAccessException {
 		Truco toUpdate = findTrucoById(trucoId);
-		
-        Boolean cartaEnMano = truco.getCarta() == null || 
-			truco.getMano().getCartas().stream().anyMatch(carta -> carta.equals(truco.getCarta()));
-		if (!cartaEnMano) {
-			throw new NoCartaDeManoException();
-		}
 
 		BeanUtils.copyProperties(truco, toUpdate, "id");
 		trucoRepository.save(toUpdate);

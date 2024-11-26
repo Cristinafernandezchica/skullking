@@ -18,8 +18,11 @@ public interface BazaRepository extends CrudRepository<Baza, Integer>{
     @Query("SELECT b FROM Baza b WHERE b.ronda.id = :rondaId AND b.numBaza = :numBaza")
     Optional<Baza> findByRondaIdAndNumBaza(Integer rondaId, Integer numBaza);
 
-
     // Para calculo de turnos
     @Query("SELECT b FROM Baza b WHERE b.ronda.id = :rondaId AND b.id < :bazaId ORDER BY b.id DESC")
     Optional<Baza> findBazaAnterior(@Param("bazaId") Integer bazaId, @Param("rondaId") Integer rondaId);
+
+    // Para el calculo de ptos de bonificación
+    @Query("SELECT b FROM Baza b WHERE b.ronda.id = :rondaId AND b.ganador = :jugadorId")
+    List<Baza> findByIdRondaAndIdJugador(@Param("rondaId") Integer rondaId, @Param("jugadorId") Integer jugadorId);
 }

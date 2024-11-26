@@ -113,7 +113,7 @@ public class BazaRestControllerTest {
         baza.setTipoCarta(TipoCarta.morada);
         baza.setNumBaza(3);
         baza.setGanador(jugador);
-        baza.setCartaGanadora(carta);
+        baza.setTrucoGanador(truco);
         baza.setRonda(ronda);
 
         mano =new Mano();
@@ -168,7 +168,7 @@ public class BazaRestControllerTest {
     @Test
     void testUpdateBaza() throws Exception {
         Baza updatedBaza = new Baza();
-        updatedBaza.setCartaGanadora(carta);
+        updatedBaza.setTrucoGanador(truco);
         updatedBaza.setGanador(jugador);
         updatedBaza.setNumBaza(5);
         updatedBaza.setRonda(ronda);

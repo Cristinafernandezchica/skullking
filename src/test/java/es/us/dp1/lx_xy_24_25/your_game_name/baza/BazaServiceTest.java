@@ -7,11 +7,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
@@ -20,6 +22,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 
 import java.time.LocalDateTime;
@@ -37,13 +40,13 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 public class BazaServiceTest {
 
-    @Mock
+    @MockBean
     private BazaRepository bazaRepository;
 
-    @Mock
+    @MockBean
     private RondaService rondaService;
 
-    @Mock
+    @MockBean
     private TrucoService trucoService;
 
     @InjectMocks
@@ -54,8 +57,11 @@ public class BazaServiceTest {
     private Jugador jugador;
     private Carta carta;
     private Carta cartaV;
+    private Truco truco;
+    private Truco trucoT;
     private Ronda ronda;
     private Partida partida;
+    private Mano mano;
 
     @BeforeEach
     void setUp() {
@@ -83,6 +89,30 @@ public class BazaServiceTest {
         cartaV.setNumero(1);
         cartaV.setTipoCarta(TipoCarta.verde);
 
+        truco = new Truco();
+        truco.setId(1);
+        truco.setBaza(baza);
+        truco.setCarta(carta);
+        truco.setJugador(jugador);
+        truco.setMano(mano);
+        truco.setTurno(1);
+
+        trucoT = new Truco();
+        trucoT.setId(2);
+        trucoT.setBaza(bazaV);
+        trucoT.setCarta(cartaV);
+        trucoT.setJugador(jugador);
+        trucoT.setMano(mano);
+        trucoT.setTurno(2);
+
+        mano =new Mano();
+        mano.setApuesta(1);
+        mano.setCartas(List.of(carta));
+        mano.setId(1);
+        mano.setJugador(jugador);
+        mano.setResultado(5);
+        mano.setRonda(ronda);
+
         ronda = new Ronda();
         ronda.setId(1);
         ronda.setBazaActual(3);
@@ -105,7 +135,7 @@ public class BazaServiceTest {
         baza.setTipoCarta(TipoCarta.morada);
         baza.setNumBaza(3);
         baza.setGanador(jugador);
-        baza.setCartaGanadora(carta);
+        baza.setTrucoGanador(truco);
         baza.setRonda(ronda);
 
         // Configuración de la entidad Baza
@@ -114,7 +144,7 @@ public class BazaServiceTest {
         bazaV.setTipoCarta(TipoCarta.verde);
         bazaV.setNumBaza(4);
         bazaV.setGanador(jugador);
-        bazaV.setCartaGanadora(carta);
+        bazaV.setTrucoGanador(trucoT);
         bazaV.setRonda(ronda);
     }
 
@@ -142,7 +172,7 @@ public class BazaServiceTest {
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(1, result.get(0).getCartaGanadora().getNumero());
+        assertEquals(1, result.get(0).getTrucoGanador().getCarta().getNumero());
         verify(bazaRepository, times(1)).findAll();
     }
 
@@ -233,12 +263,12 @@ public class BazaServiceTest {
    
            assertNotNull(nuevaBaza);
            assertEquals(1, nuevaBaza.getNumBaza());
-           assertNull(nuevaBaza.getCartaGanadora());
+           assertNull(nuevaBaza.getTrucoGanador());
            assertNull(nuevaBaza.getGanador());
            assertEquals(ronda, nuevaBaza.getRonda());
    
            //Cuando esté hecho iniciarTrucos, descomentar y probar (antes de esta implementacion funciona todo :D)
-           verify(trucoService, times(1)).crearTrucosBaza(nuevaBaza.getId());
+           verify(trucoService, times(1)).crearTrucosBazaConTurno(nuevaBaza.getId());
 
            verify(bazaRepository, times(1)).save(nuevaBaza);
        }
@@ -251,11 +281,11 @@ public class BazaServiceTest {
         when(bazaRepository.findById(1)).thenReturn(Optional.of(baza));
         when(bazaRepository.save(any(Baza.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Baza resultado = bazaService.nextBaza(1);
+        Baza resultado = rondaService.nextBaza(1);
 
         assertNotNull(resultado);
         assertEquals(2, resultado.getNumBaza());
-        assertNull(resultado.getCartaGanadora());
+        assertNull(resultado.getTrucoGanador());
         assertNull(resultado.getGanador());
 
         verify(bazaRepository, times(1)).save(baza);
@@ -269,7 +299,7 @@ public class BazaServiceTest {
         when(bazaRepository.findById(1)).thenReturn(Optional.of(baza));
         when(bazaRepository.save(any(Baza.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Baza resultado = bazaService.nextBaza(1);
+        Baza resultado = rondaService.nextBaza(1);
 
         assertNotNull(resultado);
         assertEquals(3, resultado.getNumBaza());
@@ -283,7 +313,7 @@ public class BazaServiceTest {
     void testNextBaza_BazaNoEncontrada() {
         when(bazaRepository.findById(99)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> bazaService.nextBaza(99));
+        assertThrows(ResourceNotFoundException.class, () -> rondaService.nextBaza(99));
     }
 
 }

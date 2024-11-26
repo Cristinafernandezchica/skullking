@@ -25,7 +25,8 @@ export default function Jugando() {
     const [ronda,setRonda] = useState(null);
     const [truco,setTruco] = useState(null);
     const [BazaActual, setBazaActual] = useState(null)
-    
+    // para las cartas del resto de jugadores
+    const [manosOtrosJugadores, setManosOtrosJugadores] = useState({});
     // Para lógica de apuesta
     const [apuestaModalOpen, setApuestaModalOpen] = useState(false);
     const toggleApuestaModal = () => setApuestaModalOpen(!apuestaModalOpen);
@@ -80,12 +81,40 @@ export default function Jugando() {
         }
       };
       */
-
+/*
       if(tu!==null){
         fetchMano(tu.id);
         // fetchTurnoActual(tu.id);
       }
     }, [tu]);
+*/
+
+    const fetchManosOtrosJugadores = async () => { 
+      try { 
+        const nuevasManos = {}; 
+        for (const jugador of jugadores) { 
+          if (jugador.id !== tu.id) { 
+            const response = await fetch(`/api/v1/manos/${jugador.id}`, { 
+              headers: { "Authorization": `Bearer ${jwt}`, 
+              'Content-Type': 'application/json' } }); 
+              if (!response.ok) { 
+                throw new Error("Network response was not ok"); 
+              } 
+              const data = await response.json(); 
+              nuevasManos[jugador.id] = data; 
+          } 
+        } 
+        setManosOtrosJugadores(nuevasManos); 
+        } catch (error) { 
+          console.error("Error fetching manos de otros jugadores:", error); 
+          setMessage(error.message); setVisible(true); 
+        } 
+      }; 
+        if (tu !== null) { 
+          fetchMano(tu.id); 
+          fetchManosOtrosJugadores(); 
+        } 
+      }, [jugadores, tu]);
 
 
     const fetchJugadores = async () => {
@@ -330,7 +359,7 @@ export default function Jugando() {
 
 
     return (
-      <div>
+      <div className = "tablero">
         <div className="lista-jugadores">
           {jugadores!==null  && jugadores.map((jugador) => (
             <div key={jugador.id} className="jugador-info" >
@@ -340,6 +369,23 @@ export default function Jugando() {
             </div>
           ))}
         </div>
+
+        <div className="cartas-otros-jugadores">
+          {Object.keys(manosOtrosJugadores).map(jugadorId => (
+            <div key={jugadorId} className="carta-otros-jugadores">
+              {manosOtrosJugadores[jugadorId].cartas.map((carta) => (
+                <img 
+                  key={carta.id}
+                  src={carta.imagenTrasera}
+                  alt={`Carta ${carta.tipoCarta}`}
+                  className="imagen-carta-otras"
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+
+
         <div className="cartas">
             {mano!==null && mano.cartas.map((carta) => (
               <div key={carta.id} className="carta">

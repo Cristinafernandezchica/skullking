@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Button, ButtonGroup, Table, Input, Container, Row, Col } from "reactstrap";
+import { Button, Table, Input, Container, Row, Col } from "reactstrap";
 import tokenService from "../../services/token.service";
 import "../../static/css/admin/adminPage.css";
-import deleteFromList from "../../util/deleteFromList";
 import getErrorModal from "../../util/getErrorModal";
 
 const jwt = tokenService.getLocalAccessToken();
@@ -12,12 +10,14 @@ export default function PartidaListAdmin() {
     const [message, setMessage] = useState(null);
     const [visible, setVisible] = useState(false);
     const [partidas, setPartidas] = useState([]);
-    const [jugadores, setJugadores] = useState({});   
-    const [filtered, setFiltered] = useState([]); 
+    const [jugadores, setJugadores] = useState({});
+    const [filtered, setFiltered] = useState([]);
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState("");
     const [alerts, setAlerts] = useState([]);
     const [owner, setOwner] = useState([]);
+    const [paginaActual, setPaginaActual] = useState(1);
+    const partidasPorPagina = 2;
 
     function handleSearch(event) {
         const value = event.target.value;
@@ -35,12 +35,14 @@ export default function PartidaListAdmin() {
         }
         setFiltered(filteredPartidas);
         setSearch(value);
+        setPaginaActual(1);
     }
 
     function handleClear() {
         setFiltered(partidas);
         setSearch("");
         setFilter("");
+        setPaginaActual(1);
     }
 
     function handleFilter(event) {
@@ -53,12 +55,13 @@ export default function PartidaListAdmin() {
                 filteredPartidas = partidas;
         } else {
             if (search !== "")
-                filteredPartidas = partidas.filter((i) => i.estado === value &&  i.nombre.toLowerCase().includes(search));
+                filteredPartidas = partidas.filter((i) => i.estado === value && i.nombre.toLowerCase().includes(search));
             else
                 filteredPartidas = partidas.filter((i) => i.estado === value);
         }
         setFiltered(filteredPartidas);
         setFilter(value);
+        setPaginaActual(1);
     }
 
     useEffect(() => {
@@ -91,9 +94,7 @@ export default function PartidaListAdmin() {
                 }
                 const data = await response.json();
                 setPartidas(data);
-                
-                // Fetch jugadores for each partida
-                // Fetch jugadores and owners for each partida
+
                 data.forEach(async (partida) => {
                     await fetchOwner(partida.ownerPartida);
 
@@ -117,19 +118,27 @@ export default function PartidaListAdmin() {
         fetchPartidas();
     }, []);
 
-    let partidasAux;
-        if (filtered.length > 0) partidasAux = filtered;
-        else partidasAux = partidas;
+    // Calcular el índice de la última partida de la página actual
+    const indiceUltimaPartida = paginaActual * partidasPorPagina;
+    // Calcular el índice de la primera partida de la página actual
+    const indicePrimeraPartida = indiceUltimaPartida - partidasPorPagina;
+    // Obtener las partidas de la página actual
+    const partidasActuales = (filtered.length > 0 ? filtered : partidas).slice(indicePrimeraPartida, indiceUltimaPartida);
+
+    const numeroPaginas = [];
+    for (let i = 1; i <= Math.ceil((filtered.length > 0 ? filtered.length : partidas.length) / partidasPorPagina); i++) {
+        numeroPaginas.push(i);
+    }
+
     let partidaList;
     if (filtered.length === 0 && (filter !== "" || search !== "")) partidaList =
         <tr>
             <td>No hay consultas con esos filtros y parámetros de búsqueda.</td>
         </tr>
-    else partidaList = partidasAux.map((partida) => {
+    else partidaList = partidasActuales.map((partida) => {
         const jugadoresList = jugadores[partida.id]?.map((jugador) => (
             <div key={jugador.id}>{jugador.usuario.username}</div>
         )) || <div>Cargando jugadores...</div>;
-//    if (filtered.length > 0) partidaList = filtered;
         const ownerName = owner[partida.ownerPartida]?.username || "Cargando owner...";
         return (
             <tr key={partida.id}>
@@ -137,6 +146,7 @@ export default function PartidaListAdmin() {
                 <td>{partida.estado}</td>
                 <td>{jugadoresList}</td>
                 <td>{ownerName}</td>
+                <td>{partida.inicio}</td>
             </tr>
         );
     });
@@ -144,42 +154,58 @@ export default function PartidaListAdmin() {
     const modal = getErrorModal(setVisible, visible, message);
 
     return (
-<div className="admin-page-container">
-<Container fluid style={{ marginTop: "15px" }}>
-    <h1 className="text-center">Partidas</h1>
-    {alerts.map((a) => a.alert)}
-    {modal}
-    <Row className="row-cols-auto g-3 align-items-center">
-        <Col>
-            <Button aria-label='jugando-filter' color="link" onClick={handleFilter} value="JUGANDO">Jugando</Button>
-            <Button aria-label='esperando-filter' color="link" onClick={handleFilter} value="ESPERANDO">Esperando</Button>
-            <Button aria-label='terminada-filter' color="link" onClick={handleFilter} value="TERMINADA">Terminada</Button>
-            <Button aria-label='all-filter' color="link" onClick={handleFilter} value="">Todas</Button>
-        </Col>
-        <Col className="search-bar">
-            <Input type="search" aria-label='search' placeholder="Buscar por nombre" value={search || ''}
-                onChange={handleSearch} />
-        </Col>
-        <Col className="clear-option">
-            <Button aria-label='clear-all' color="link" onClick={handleClear} >Borrar todo</Button>
-        </Col>
-    </Row>
-    <Table aria-label='partidas' className="mt-4">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Estado</th>
-                <th>Jugadores</th>
-                <th>Creador</th>
-            </tr>
-        </thead>
-        <tbody>{partidaList}</tbody>
-    </Table>
-</Container>
-</div>
+        <div className="admin-page-container">
+            <Container fluid style={{ marginTop: "15px" }}>
+                <h1 className="text-center">Partidas</h1>
+                {alerts.map((a) => a.alert)}
+                {modal}
+                <Row className="row-cols-auto g-3 align-items-center">
+                    <Col>
+                        <Button aria-label='jugando-filter' color="link" onClick={handleFilter} value="JUGANDO">Jugando</Button>
+                        <Button aria-label='esperando-filter' color="link" onClick={handleFilter} value="ESPERANDO">Esperando</Button>
+                        <Button aria-label='terminada-filter' color="link" onClick={handleFilter} value="TERMINADA">Terminada</Button>
+                        <Button aria-label='all-filter' color="link" onClick={handleFilter} value="">Todas</Button>
+                    </Col>
+                    <Col className="search-bar">
+                        <Input type="search" aria-label='search' placeholder="Buscar por nombre" value={search || ''}
+                            onChange={handleSearch} />
+                    </Col>
+                    <Col className="clear-option">
+                        <Button aria-label='clear-all' color="link" onClick={handleClear} >Borrar todo</Button>
+                    </Col>
+                </Row>
+                <Table aria-label='partidas' className="mt-4">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Estado</th>
+                            <th>Jugadores</th>
+                            <th>Creador</th>
+                            <th>Fecha de creación</th>
+                        </tr>
+                    </thead>
+                    <tbody>{partidaList}</tbody>
+                </Table>
+                <Row className="mt-3 justify-content-between">
+                <Col>
+                <div className="pagination"> 
+                    <Button onClick={() => setPaginaActual(paginaActual - 1)} disabled={paginaActual === 1}>Página anterior</Button> 
+                    <Col className="text-center">
+                        Página {paginaActual} de {numeroPaginas.length}
+                    </Col>
+                    <Button onClick={() => setPaginaActual(paginaActual + 1)} disabled={paginaActual === numeroPaginas.length}>Página siguiente</Button> 
+                </div>
+                </Col>
+                </Row>
+            </Container>
+        </div>
     );
 }
+
 /*
+
+
+
 import React, { useState, useEffect } from "react";
 import { Button, Table, Input, Container, Row, Col } from "reactstrap";
 import tokenService from "../../services/token.service";

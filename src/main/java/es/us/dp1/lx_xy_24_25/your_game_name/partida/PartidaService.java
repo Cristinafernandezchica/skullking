@@ -109,7 +109,6 @@ public class PartidaService {
         }
 
         partida.setEstado(PartidaEstado.JUGANDO);
-        partida.setInicio(LocalDateTime.now());
         update(partida, partidaId);
         rs.iniciarRonda(partida);
 

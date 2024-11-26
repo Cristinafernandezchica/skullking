@@ -28,7 +28,7 @@ public class Partida extends BaseEntity{
     private String nombre;
 
     @NotNull
-    private LocalDateTime inicio;
+    private LocalDateTime inicio = LocalDateTime.now();
 
     @Nullable
     private LocalDateTime fin;

@@ -68,11 +68,12 @@ public class BazaService {
     }
 
     @Transactional(readOnly = true)
-    public Baza findUltimaBazaByRondaId(Integer rondaId){
-               List<Baza> Bazas =bazaRepository.findBazasByRondaId(rondaId);
+    public Baza findBazaActualByRondaId(Integer rondaId){
+        List<Baza> Bazas =bazaRepository.findBazasByRondaId(rondaId);
+        Bazas= Bazas.stream().filter(x->x.getCartaGanadora()==null).toList();
        Baza BazasOrdenadas = Bazas.stream()
-                .sorted((j1, j2) -> j2.getId().compareTo(j1.getId())) // Orden descendente
-                .findFirst().orElse(null);
+                        .sorted((j1, j2) -> j1.getId().compareTo(j2.getId())) // Orden ascendente
+                        .findFirst().orElse(null);
                 return BazasOrdenadas;
     }
 

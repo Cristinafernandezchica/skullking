@@ -1,5 +1,8 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.baza;
 
+import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -9,9 +12,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
+import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import jakarta.validation.Valid;
 
@@ -23,7 +29,7 @@ public class BazaService {
     private TrucoService trucoService;
 
     @Autowired
-    public BazaService(BazaRepository bazaRepository, @Lazy RondaService rondaService, TrucoService trucoService) {
+    public BazaService(BazaRepository bazaRepository, @Lazy RondaService rondaService, @Lazy TrucoService trucoService) {
         this.bazaRepository = bazaRepository;
         this.rondaService = rondaService;
         this.trucoService = trucoService;
@@ -63,7 +69,6 @@ public class BazaService {
         return toUpdate;
     }
 
-
     @Transactional(readOnly = true)
     public Baza findUltimaBazaByRondaId(Integer rondaId){
                List<Baza> Bazas =bazaRepository.findBazasByRondaId(rondaId);
@@ -80,6 +85,12 @@ public class BazaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Baza", "numBaza", numBaza));
     }
 
+    // Se empleará para obtener aquellas bazas de una ronda que haya ganado un jugador
+    @Transactional(readOnly = true)
+    public List<Baza> findByIdRondaAndIdJugador(Integer rondaId, Integer jugadorId) {
+        return bazaRepository.findByIdRondaAndIdJugador(rondaId, jugadorId);
+    }
+
     // Si se usa este método se crea dependencia circular en Truco
     /*
     @Transactional(readOnly = true)
@@ -92,7 +103,7 @@ public class BazaService {
     @Transactional
     public Baza iniciarBazas (Ronda ronda) {
         Baza baza = new Baza();
-        baza.setCartaGanadora(null);
+        baza.setTrucoGanador(null);
         baza.setNumBaza(1);
         baza.setGanador(null);
         baza.setTipoCarta(null);
@@ -114,7 +125,7 @@ public class BazaService {
             rondaService.nextRonda(ronda.getId());
         } else{
             // Configurar para la siguiente baza
-            baza.setCartaGanadora(null);
+            baza.setTrucoGanador(null);
             baza.setGanador(null);
             baza.setNumBaza(nextBaza);
             baza.setTipoCarta(null);
@@ -127,5 +138,102 @@ public class BazaService {
         
         // Ademas hay q definir idCartaGanadora, llamando la funcion de truco que devuelve la list<trucos> y me quedo con la propiedad id carta    
 
+
+    @Transactional
+    public void calculoGanador(Integer idBaza){
+        Baza baza = findById(idBaza);
+        Truco trucoGanador = null;
+        List<Truco> trucosBaza = trucoService.findTrucosByBazaId(idBaza);
+        Integer personajes=0;
+        List<Truco> triunfos = new ArrayList<Truco>();
+        List<Truco> cartasPalo = new ArrayList<Truco>();
+        List<Truco> skullKing = new ArrayList<Truco>();
+        List<Truco> sirenas = new ArrayList<Truco>();
+        List<Truco> piratas = new ArrayList<Truco>();
+
+        for(Truco truco : trucosBaza){
+            Carta carta = truco.getCarta();
+            if(carta.esPersonaje()){
+                personajes++;
+                if(carta.getTipoCarta().equals(TipoCarta.skullking)) skullKing.add(truco);
+                if(carta.getTipoCarta().equals(TipoCarta.sirena)) sirenas.add(truco);
+                if(carta.getTipoCarta().equals(TipoCarta.skullking)) piratas.add(truco);
+            } 
+            if(carta.esTriunfo()) triunfos.add(truco);
+            if(baza.getTipoCarta().equals(carta.getTipoCarta())) cartasPalo.add(truco);
+        }
+
+        Truco primeraSirena = primeraSirena(sirenas);  
+        Truco primerPirata = primerPirata(piratas);
+        Truco triunfoMayorNum = triunfoMayorTruco(triunfos);
+        Truco cartaPaloMayorNum = cartaPaloMayorNum(cartasPalo);
+        Truco primerTruco = primerTruco(cartasPalo);
+
+        if(personajes != 0){
+            if(personajes >=1){
+                if(skullKing.size()!=0){
+                    if(sirenas.size()!=0){
+                        trucoGanador = primeraSirena;
+                    }else{
+                        trucoGanador = skullKing.get(0);
+                    }
+                }
+            } else if(sirenas.size()!=0){
+                if(piratas.size()!=0){
+                    trucoGanador = primerPirata;
+                }else{
+                    trucoGanador = primeraSirena;
+                }
+            } else{
+                trucoGanador = primerPirata;
+            }
+        } else{
+            if(triunfos.size()!=0){
+                if(triunfos.size() >= 1){
+                    trucoGanador = triunfoMayorNum;
+                }else{
+                    trucoGanador = triunfos.get(0);
+                }
+            }else{
+                if(cartasPalo.size()!=0){
+                    if(cartasPalo.size()>=1){
+                        trucoGanador = cartaPaloMayorNum;
+                    }else{
+                        trucoGanador = cartasPalo.get(0);
+                    }
+                } else{
+                    trucoGanador = primerTruco;
+                }
+            }
+        }
+        
+        baza.setTrucoGanador(trucoGanador);
+
+    }
+
+     public Truco primeraSirena(List<Truco> sirenas){
+        return sirenas.stream().collect(Collectors.minBy(
+            Comparator.comparingInt(t -> t.getTurno()))).get();
+     }
+
+     public Truco primerPirata(List<Truco> piratas){
+        return piratas.stream().collect(Collectors.minBy(
+            Comparator.comparingInt(t -> t.getTurno()))).get();
+     }
+
+     public Truco triunfoMayorTruco(List<Truco> triunfos){
+        return triunfos.stream().collect(Collectors.maxBy(
+            Comparator.comparingInt(t -> t.getCarta().getNumero()))).get();
+     }
+
+     public Truco cartaPaloMayorNum(List<Truco> cartasPalo){
+        return cartasPalo.stream().collect(Collectors.maxBy(
+            Comparator.comparingInt(t -> t.getCarta().getNumero()))).get();
+     }
+
+     public Truco primerTruco(List<Truco> cartasPalo){
+        return cartasPalo.stream().collect(Collectors.maxBy(
+            Comparator.comparingInt(t -> t.getCarta().getNumero()))).get();
+     }
 
 }

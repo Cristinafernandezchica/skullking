@@ -15,6 +15,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
@@ -24,6 +25,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -67,6 +69,9 @@ public class RondaServiceTest {
     private Ronda ronda;
     private Ronda rondaV;
     private Partida partida;
+    private Truco truco;
+    private Truco trucoT;
+    private Mano mano;
 
     @BeforeEach
     void setUp() {
@@ -119,13 +124,31 @@ public class RondaServiceTest {
         partida.setNombre("Partida Test");
         partida.setOwnerPartida(1);
 
+        truco = new Truco();
+        truco.setId(1);
+        truco.setBaza(baza);
+        truco.setCarta(carta);
+        truco.setJugador(jugador);
+        truco.setMano(mano);
+        truco.setMano(mano);
+        truco.setTurno(1);
+
+        trucoT = new Truco();
+        trucoT.setId(2);
+        trucoT.setBaza(bazaV);
+        trucoT.setCarta(cartaV);
+        trucoT.setJugador(jugador);
+        trucoT.setMano(mano);
+        trucoT.setMano(mano);
+        trucoT.setTurno(2);
+
         // Configuración de la entidad Baza
         baza = new Baza();
         baza.setId(1);
         baza.setTipoCarta(TipoCarta.morada);
         baza.setNumBaza(3);
         baza.setGanador(jugador);
-        baza.setCartaGanadora(carta);
+        baza.setTrucoGanador(truco);
         baza.setRonda(ronda);
 
         // Configuración de la entidad Baza
@@ -134,8 +157,16 @@ public class RondaServiceTest {
         bazaV.setTipoCarta(TipoCarta.verde);
         bazaV.setNumBaza(4);
         bazaV.setGanador(jugador);
-        bazaV.setCartaGanadora(carta);
+        bazaV.setTrucoGanador(truco);
         bazaV.setRonda(ronda);
+
+        mano =new Mano();
+        mano.setApuesta(1);
+        mano.setCartas(List.of(carta));
+        mano.setId(1);
+        mano.setJugador(jugador);
+        mano.setResultado(5);
+        mano.setRonda(ronda);
     }
 
     @Test
@@ -243,7 +274,7 @@ public class RondaServiceTest {
         // Verificar los cambios
         verify(rr, times(1)).findById(2);
         verify(rr, times(1)).save(any(Ronda.class));
-        verify(ms, times(1)).calculoPuntaje(ronda.getNumBazas(), 2);
+        verify(ms, times(1)).getPuntaje(ronda.getNumBazas(), 2);
 
         assertEquals(RondaEstado.FINALIZADA, ronda.getEstado());
     }

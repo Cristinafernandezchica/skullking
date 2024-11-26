@@ -3,13 +3,17 @@ package es.us.dp1.lx_xy_24_25.your_game_name.mano;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.CartaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
@@ -17,6 +21,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.exceptions.ApuestaNoValidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
+import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import jakarta.validation.Valid;
 
@@ -26,14 +31,20 @@ public class ManoService {
 private ManoRepository manoRepository;
 private CartaService cs;
 private JugadorService js;
+private BazaService bs;
+private TrucoService ts;
 
 
     @Autowired
-    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorService js) {
+    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorService js, 
+        @Lazy BazaService bs, @Lazy TrucoService ts) {
         this.manoRepository = manoRepository;
         this.cs = cs;
         this.js = js;
+        this.bs = bs;
+        this.ts = ts;
     }
+
 
     //save a Mano en la base de datos
     @Transactional
@@ -128,7 +139,8 @@ private JugadorService js;
     }
     
 
-    public void calculoPuntaje(Integer numBazas, Integer rondaId){
+    @Transactional
+    public void getPuntaje(Integer numBazas, Integer rondaId){
          List<Mano> manos = manoRepository.findAllByRondaId(rondaId);
          for(Mano m:manos){
             Integer puntaje = 0;
@@ -141,16 +153,52 @@ private JugadorService js;
                 }
             }else{
                 if(m.getApuesta().equals(m.getResultado())){
-                    puntaje += 20*m.getApuesta();
+                    // Los ptos de bonificacion solo se calcula si se acierta la apuesta
+                    Integer ptosBonificacion = getPtosBonificacion(rondaId, jugador.getId());
+                    puntaje += 20*m.getApuesta() + ptosBonificacion;
                 }else{
                     puntaje -= 10*Math.abs(m.getApuesta()-m.getResultado());
-                }
+                } 
             }
             jugador.setPuntos(jugador.getPuntos() + puntaje);
          }
     }
 
-    
+    // es mejor ponerlo en baza? y que calculoPuntaje lo llame?
+    @Transactional
+    public Integer getPtosBonificacion(Integer idRonda, Integer idJugador){
+        // se cogen las bazas de la ronda en la que el jugador haya ganado
+        List<Baza> bazasRondaJugador = bs.findByIdRondaAndIdJugador(idRonda,idJugador);
+        Integer ptosBonificacion = 0;
+        for(Baza baza: bazasRondaJugador){
+            List<Carta> cartasBaza = ts.findTrucosByBazaId(baza.getId())
+                .stream().map(t -> t.getCarta()).collect(Collectors.toList());
+            Carta cartaGanadora = baza.getTrucoGanador().getCarta();
+            for(Carta carta: cartasBaza){
+                calculoPtosBonificacion(cartaGanadora, carta);
+            }
+        }
+        return ptosBonificacion;
+    }
+
+    public Integer calculoPtosBonificacion(Carta cartaGanadora, Carta carta){
+        Integer ptosBonificacion = 0;
+        TipoCarta cartaTipo = carta.getTipoCarta();
+
+        if(carta.esCatorce()) ptosBonificacion += 10;
+        if(carta.esCatorce()&& carta.esTriunfo()) ptosBonificacion += 20;
+        if(cartaGanadora.getTipoCarta().equals(TipoCarta.pirata)) {
+            if(cartaTipo.equals(TipoCarta.sirena)) ptosBonificacion += 20;
+        }
+        if(cartaGanadora.getTipoCarta().equals(TipoCarta.sirena)) {
+            if(cartaTipo.equals(TipoCarta.skullking)) ptosBonificacion += 40;
+        }
+        if(cartaGanadora.getTipoCarta().equals(TipoCarta.skullking)) {
+            if(cartaTipo.equals(TipoCarta.pirata)) ptosBonificacion += 30;
+        }
+
+        return ptosBonificacion;
+    }
 
 
 }

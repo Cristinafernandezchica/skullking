@@ -106,7 +106,8 @@ public class RondaService {
         Ronda ronda = getRondaById(rondaId);
 
         ronda.setEstado(RondaEstado.FINALIZADA);
-        ms.calculoPuntaje(ronda.getNumBazas(), rondaId);
+        // bucle para cada baza -> bs.calculoGanador();
+        ms.getPuntaje(ronda.getNumBazas(), rondaId);
 
         rr.save(ronda);
     }

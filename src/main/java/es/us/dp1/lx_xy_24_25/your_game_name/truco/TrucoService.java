@@ -41,7 +41,7 @@ public class TrucoService {
 
 
     @Autowired
-	public TrucoService(TrucoRepository trucoRepository, BazaRepository bazaRepository, ManoService manoService, JugadorService jugadorService) { // , @Lazy BazaService bazaService ,ManoRepository manoRepository
+	public TrucoService(TrucoRepository trucoRepository, @Lazy BazaRepository bazaRepository, @Lazy ManoService manoService, JugadorService jugadorService) { // , @Lazy BazaService bazaService ,ManoRepository manoRepository
 		this.trucoRepository = trucoRepository;
         this.bazaRepository = bazaRepository;
         // this.manoRepository = manoRepository;

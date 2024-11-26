@@ -274,7 +274,7 @@ public class RondaServiceTest {
         // Verificar los cambios
         verify(rr, times(1)).findById(2);
         verify(rr, times(1)).save(any(Ronda.class));
-        verify(ms, times(1)).getPuntaje(ronda.getNumBazas(), 2);
+        verify(rs, times(1)).getPuntaje(ronda.getNumBazas(), 2);
 
         assertEquals(RondaEstado.FINALIZADA, ronda.getEstado());
     }

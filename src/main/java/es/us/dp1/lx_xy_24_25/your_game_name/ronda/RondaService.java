@@ -9,9 +9,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
@@ -85,20 +88,21 @@ public class RondaService {
         Integer nextRonda = ronda.getNumRonda() + 1;
         finalizarRonda(rondaId);
 
+        Ronda newRonda = new Ronda();
+
         // Comprobación si es la última ronda
         if(nextRonda > 10){
             ps.finalizarPartida(ronda.getPartida().getId());
         } else{
-            ronda.setNumRonda(nextRonda);
-            ronda.setBazaActual(1);
-            ronda.setEstado(RondaEstado.JUGANDO);
-            ms.iniciarManos(ronda.getPartida().getId(),ronda);
-            ronda.setNumBazas(ms.getNumCartasARepartir(ronda.getNumRonda(), 
-                    js.findJugadoresByPartidaId(ronda.getPartida().getId()).size()));
-            bs.iniciarBazas(ronda);
+            newRonda.setNumRonda(nextRonda);
+            newRonda.setBazaActual(1);
+            newRonda.setEstado(RondaEstado.JUGANDO);
+            ms.iniciarManos(ronda.getPartida().getId(),newRonda);
+            newRonda.setNumBazas(ms.getNumCartasARepartir(newRonda.getNumRonda(), 
+                    js.findJugadoresByPartidaId(newRonda.getPartida().getId()).size()));
+            bs.iniciarBazas(newRonda);
         }
-        
-        return rr.save(ronda);
+        return rr.save(newRonda);
     }
 
     @Transactional
@@ -107,7 +111,7 @@ public class RondaService {
 
         ronda.setEstado(RondaEstado.FINALIZADA);
         // bucle para cada baza -> bs.calculoGanador();
-        ms.getPuntaje(ronda.getNumBazas(), rondaId);
+        getPuntaje(ronda.getNumBazas(), rondaId);
 
         rr.save(ronda);
     }
@@ -119,6 +123,53 @@ public class RondaService {
                 .sorted((j1, j2) -> j2.getId().compareTo(j1.getId())) // Orden descendente
                 .findFirst().orElse(null);
         return rondasOrdenadas;
+    }
+
+    // Next Baza
+    @Transactional
+    public Baza nextBaza(Integer id) {
+        Baza baza = bs.findById(id);
+        Ronda ronda = baza.getRonda();
+        Integer nextBaza = baza.getNumBaza() + 1;
+
+        Baza newBaza = new Baza();
+
+        // Comprobación si es la última baza
+        if(nextBaza > ronda.getNumBazas()){
+            nextRonda(ronda.getId());
+        } else{
+            // Configurar para la siguiente baza
+            newBaza.setTrucoGanador(null);
+            newBaza.setGanador(null);
+            newBaza.setNumBaza(nextBaza);
+            newBaza.setTipoCarta(null);
+        }    
+        return bs.saveBaza(newBaza);
+    }
+
+    @Transactional
+    public void getPuntaje(Integer numBazas, Integer rondaId){
+         List<Mano> manos = ms.findAllByRondaId(rondaId);
+         for(Mano m:manos){
+            Integer puntaje = 0;
+            Jugador jugador = m.getJugador();
+            if(m.getApuesta()==0){
+                if(m.getApuesta().equals(m.getResultado())){
+                    puntaje += 10*numBazas;
+                }else{
+                    puntaje -= 10*numBazas;
+                }
+            }else{
+                if(m.getApuesta().equals(m.getResultado())){
+                    // Los ptos de bonificacion solo se calcula si se acierta la apuesta
+                    Integer ptosBonificacion = bs.getPtosBonificacion(rondaId, jugador.getId());
+                    puntaje += 20*m.getApuesta() + ptosBonificacion;
+                }else{
+                    puntaje -= 10*Math.abs(m.getApuesta()-m.getResultado());
+                } 
+            }
+            jugador.setPuntos(jugador.getPuntos() + puntaje);
+         }
     }
 
 }

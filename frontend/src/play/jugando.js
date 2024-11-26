@@ -91,7 +91,7 @@ export default function Jugando() {
       try { 
         const nuevasManos = {}; 
         for (const jugador of jugadores) { 
-          if (jugador.id !== user.id) { 
+          if (jugador.id !== tu.id) { 
             const response = await fetch(`/api/v1/manos/${jugador.id}`, { 
               headers: { "Authorization": `Bearer ${jwt}`, 
               'Content-Type': 'application/json' } }); 
@@ -287,7 +287,7 @@ export default function Jugando() {
 
         <div className="cartas-otros-jugadores">
           {Object.keys(manosOtrosJugadores).map(jugadorId => (
-            <div key={jugadorId} className="carta">
+            <div key={jugadorId} className="carta-otros-jugadores">
               {manosOtrosJugadores[jugadorId].cartas.map((carta) => (
                 <img 
                   key={carta.id}

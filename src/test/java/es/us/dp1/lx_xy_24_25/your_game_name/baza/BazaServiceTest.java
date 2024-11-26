@@ -281,7 +281,7 @@ public class BazaServiceTest {
         when(bazaRepository.findById(1)).thenReturn(Optional.of(baza));
         when(bazaRepository.save(any(Baza.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Baza resultado = bazaService.nextBaza(1);
+        Baza resultado = rondaService.nextBaza(1);
 
         assertNotNull(resultado);
         assertEquals(2, resultado.getNumBaza());
@@ -299,7 +299,7 @@ public class BazaServiceTest {
         when(bazaRepository.findById(1)).thenReturn(Optional.of(baza));
         when(bazaRepository.save(any(Baza.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Baza resultado = bazaService.nextBaza(1);
+        Baza resultado = rondaService.nextBaza(1);
 
         assertNotNull(resultado);
         assertEquals(3, resultado.getNumBaza());
@@ -313,7 +313,7 @@ public class BazaServiceTest {
     void testNextBaza_BazaNoEncontrada() {
         when(bazaRepository.findById(99)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> bazaService.nextBaza(99));
+        assertThrows(ResourceNotFoundException.class, () -> rondaService.nextBaza(99));
     }
 
 }

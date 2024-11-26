@@ -31,18 +31,13 @@ public class ManoService {
 private ManoRepository manoRepository;
 private CartaService cs;
 private JugadorService js;
-private BazaService bs;
-private TrucoService ts;
 
 
     @Autowired
-    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorService js, 
-        @Lazy BazaService bs, @Lazy TrucoService ts) {
+    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorService js) {
         this.manoRepository = manoRepository;
         this.cs = cs;
         this.js = js;
-        this.bs = bs;
-        this.ts = ts;
     }
 
 
@@ -65,6 +60,11 @@ private TrucoService ts;
     @Transactional
     public void deleteMano(Integer id) {
         manoRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Mano> findAllByRondaId(Integer rondaId){
+        return manoRepository.findAllByRondaId(rondaId);
     }
     
     //actualizar Mano
@@ -138,7 +138,7 @@ private TrucoService ts;
         js.updateJugador(jugador, jugadorId);
     }
     
-
+/* 
     @Transactional
     public void getPuntaje(Integer numBazas, Integer rondaId){
          List<Mano> manos = manoRepository.findAllByRondaId(rondaId);
@@ -154,7 +154,7 @@ private TrucoService ts;
             }else{
                 if(m.getApuesta().equals(m.getResultado())){
                     // Los ptos de bonificacion solo se calcula si se acierta la apuesta
-                    Integer ptosBonificacion = getPtosBonificacion(rondaId, jugador.getId());
+                    Integer ptosBonificacion = bs.getPtosBonificacion(rondaId, jugador.getId());
                     puntaje += 20*m.getApuesta() + ptosBonificacion;
                 }else{
                     puntaje -= 10*Math.abs(m.getApuesta()-m.getResultado());
@@ -163,8 +163,8 @@ private TrucoService ts;
             jugador.setPuntos(jugador.getPuntos() + puntaje);
          }
     }
-
-    // es mejor ponerlo en baza? y que calculoPuntaje lo llame?
+*/
+    /* 
     @Transactional
     public Integer getPtosBonificacion(Integer idRonda, Integer idJugador){
         // se cogen las bazas de la ronda en la que el jugador haya ganado
@@ -199,6 +199,6 @@ private TrucoService ts;
 
         return ptosBonificacion;
     }
-
+    */
 
 }

@@ -15,6 +15,7 @@
     position: fixed;
     top: 80px;
     left: 0px;
+    height: 89vh;
     width: 220px;
     padding: 15px;
     background-color: rgba(17, 62, 88, 0.804); /* Fondo gris claro */
@@ -23,12 +24,11 @@
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
     font-family: Arial, sans-serif;
     overflow-y: auto;
-    max-height: 90vh; /* Limita la altura si hay muchos jugadores */
   }
   
   /* Estilos para cada jugador dentro de la lista */
   .jugador-info {
-    margin-bottom: 100px;
+    margin-bottom: 20px;
     padding: 10px;
     background-color: #ffffff; /* Fondo blanco para cada jugador */
     border-radius: 5px;
@@ -59,6 +59,11 @@
   .carta {
     text-align: center;
   }
+
+  .carta-otros-jugadores {
+    text-align: center;
+    margin-left: 100px;
+  }
   
   .imagen-carta {
     width: 150px;
@@ -72,8 +77,8 @@
     height: auto;
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-left: -70px;
-    
+    margin-left: -100px;
+    margin-right: 20px;
   }
   .boton-agrandable {
     padding: 10px;

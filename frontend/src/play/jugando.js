@@ -35,28 +35,29 @@ export default function Jugando() {
     // manejo turno
     const [turnoActual, setTurnoActual] = useState(null);
 
-    useEffect(() => {
-      const fetchMano = async (jugadorId) => {
-          try {
-              const response = await fetch(`/api/v1/manos/${jugadorId}`, {
-                  headers: {
-                      "Authorization": `Bearer ${jwt}`,
-                      'Content-Type': 'application/json'
-                  }
-              });
-              if (!response.ok) {
-                  throw new Error("Network response was not ok");
+
+    const fetchMano = async (jugadorId) => {
+      try {
+          const response = await fetch(`/api/v1/manos/${jugadorId}`, {
+              headers: {
+                  "Authorization": `Bearer ${jwt}`,
+                  'Content-Type': 'application/json'
               }
-              const data = await response.json();
-              setMano(data);
-              
-              // Fetch jugadores for each partida
-          } catch (error) {
-              console.error("Error fetching partidas:", error);
-              setMessage(error.message);
-              setVisible(true);
+          });
+          if (!response.ok) {
+              throw new Error("Network response was not ok");
           }
-      };
+          const data = await response.json();
+          setMano(data);
+          
+          // Fetch jugadores for each partida
+      } catch (error) {
+          console.error("Error fetching partidas:", error);
+          setMessage(error.message);
+          setVisible(true);
+      }
+  };
+    useEffect(() => {
 
       /*
       const fetchTurnoActual = async (jugadorId) => {
@@ -293,13 +294,38 @@ export default function Jugando() {
       }
     };
 
+    const  quitarCarta = async (miMano) => {
+      try {
+        const response = await fetch(`/api/v1/manos/${miMano.id}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${jwt}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(miMano),
+        });
+
+        if (!response.ok) {
+          console.log("algo falla")
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        console.log("mano cambiada",data);
+        setMano(data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
     /*
-    console.log("mano encontrada",mano);
+
     console.log("ronda encontrada",ronda);
     console.log("Jugadores encontrado",jugadores);
     console.log("id de la partida",idPartida);
     console.log("Baza Actual",BazaActual);
         */
+    console.log("mano encontrada",mano);
     console.log("Truco",truco);
 
 
@@ -320,9 +346,12 @@ export default function Jugando() {
                 <button className='boton-agrandable'
                  disabled={visualizandoCartas}
                  onClick={() => {truco.carta=carta;
+                  mano.cartas= mano.cartas.filter((cartaAEliminar) =>carta.id !== cartaAEliminar.id)
                   setTruco(truco);
                   console.log("modificado",truco);
                   jugarTruco(truco);
+                  quitarCarta(mano);
+
                  } }
                  > 
                 <img 

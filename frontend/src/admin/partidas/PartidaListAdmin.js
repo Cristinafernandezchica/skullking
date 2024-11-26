@@ -17,7 +17,7 @@ export default function PartidaListAdmin() {
     const [alerts, setAlerts] = useState([]);
     const [owner, setOwner] = useState([]);
     const [paginaActual, setPaginaActual] = useState(1);
-    const partidasPorPagina = 2;
+    const [partidasPorPagina, setPartidasPorPagina] = useState(1);
 
     function handleSearch(event) {
         const value = event.target.value;
@@ -31,10 +31,16 @@ export default function PartidaListAdmin() {
             if (filter !== "")
                 filteredPartidas = partidas.filter((i) => i.estado === filter && i.nombre.includes(value));
             else
-                filteredPartidas = partidas.filter((i) => i.nombre.includes(value) );
+                filteredPartidas = partidas.filter((i) => i.nombre.includes(value));
         }
         setFiltered(filteredPartidas);
         setSearch(value);
+        setPaginaActual(1);
+    }
+
+    function handlePartidasPorPagina(event) {
+        const value = event.target.value;
+        setPartidasPorPagina(Number(value) || 1);
         setPaginaActual(1);
     }
 
@@ -170,6 +176,16 @@ export default function PartidaListAdmin() {
                         <Input type="search" aria-label='search' placeholder="Buscar por nombre" value={search || ''}
                             onChange={handleSearch} />
                     </Col>
+                    <Col className="partidas-per-page">
+                        <Input
+                            type="number"
+                            aria-label='partidas-por-pagina'
+                            placeholder="Partidas por página"
+                            value={partidasPorPagina}
+                            onChange={handlePartidasPorPagina}
+                            min="1"
+                        />
+                    </Col>
                     <Col className="clear-option">
                         <Button aria-label='clear-all' color="link" onClick={handleClear} >Borrar todo</Button>
                     </Col>
@@ -187,15 +203,22 @@ export default function PartidaListAdmin() {
                     <tbody>{partidaList}</tbody>
                 </Table>
                 <Row className="mt-3 justify-content-between">
-                <Col>
-                <div className="pagination"> 
-                    <Button onClick={() => setPaginaActual(paginaActual - 1)} disabled={paginaActual === 1}>Página anterior</Button> 
+                    <Col>
+                        <Button disabled={paginaActual === 1} onClick={() => setPaginaActual(paginaActual - 1)}>
+                            Página anterior
+                        </Button>
+                    </Col>
                     <Col className="text-center">
                         Página {paginaActual} de {numeroPaginas.length}
                     </Col>
-                    <Button onClick={() => setPaginaActual(paginaActual + 1)} disabled={paginaActual === numeroPaginas.length}>Página siguiente</Button> 
-                </div>
-                </Col>
+                    <Col className="text-end">
+                        <Button
+                            disabled={paginaActual >= numeroPaginas.length}
+                            onClick={() => setPaginaActual(paginaActual + 1)}
+                        >
+                            Página siguiente
+                        </Button>
+                    </Col>
                 </Row>
             </Container>
         </div>

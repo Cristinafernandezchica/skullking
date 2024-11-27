@@ -68,7 +68,7 @@ public class BazaService {
 
         return toUpdate;
     }
-
+//te encuentra la baza que tenga menor id y no haya finalizado (no tenga un truco ganador)
     @Transactional(readOnly = true)
     public Baza findBazaActualByRondaId(Integer rondaId){
         List<Baza> Bazas =bazaRepository.findBazasByRondaId(rondaId);

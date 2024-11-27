@@ -3,12 +3,12 @@ import './JugadorInfo.css';
 import tokenService from "../services/token.service";
 import useFetchState from '../util/useFetchState';
 import getIdFromUrl from '../util/getIdFromUrl';
-import RondaActual from '../services/RondaActual'; // Importa la clase
+import RondaActual from './rondaActual';
 import BazaActual from './bazaActual';
-import Mano from './Mano';
-import ApuestaModal from './ApuestaModal';
+import ApuestaModal from '../components/modals/ApostarModal';
 import JugadoresPartida from './jugadores';
 import Truco from './truco';
+import Mano from './mano';
 
 const jwt = tokenService.getLocalAccessToken();
 const user = tokenService.getUser();
@@ -34,6 +34,7 @@ export default function Jugando2() {
     setVisible
   );
   const [mano, setMano] = useState(null);
+  const [manosOtrosJugadores, setManosOtrosJugadores] = useState({});
   const [ronda, setRonda] = useState(null);
   const [truco, setTruco] = useState(null);
   const [bazaActual, setBazaActual] = useState(null);
@@ -101,22 +102,26 @@ const apostar = async (ap) => {
     }
 };
 
-  // Fetch de la mano del jugador actual
   useEffect(() => {
-    const fetchData = async () => {
-      if (tu !== null) {
+    const fetchDatosManos = async () => {
         try {
-          const fetchedMano = await Mano.fetchMano(tu.id, jwt);
-          setMano(fetchedMano);
+            if (tu !== null) {
+                // Obtiene la mano del usuario actual
+                const miMano = await Mano.fetchManoDeJugador(tu.id, jwt);
+                setMano(miMano); // Actualiza el estado con la mano del jugador actual
+
+                // Obtiene las manos de los otros jugadores
+                const manosDeOtros = await Mano.fetchManosDeOtrosJugadores(jugadores, tu.id, jwt);
+                setManosOtrosJugadores(manosDeOtros); // Actualiza el estado con las manos de los otros jugadores
+            }
         } catch (error) {
-          setMessage(error.message);
-          setVisible(true);
+            setMessage(error.message); // Muestra el mensaje de error en el UI
+            setVisible(true); // Controla la visibilidad del mensaje de error
         }
-      }
     };
 
-    fetchData();
-  }, [tu]);
+    fetchDatosManos(); // Llama a la función asíncrona
+}, [jugadores, tu]); // Se ejecuta cuando cambian los jugadores o el usuario actual (`tu`)
 
   // Fetch de la ronda actual
   useEffect(() => {
@@ -217,17 +222,32 @@ const jugarTruco = async (trucoAJugar) => {
   };
 
   return (
-    <div>
+    <div className = "tablero">
       <div className="lista-jugadores">
-        {jugadores !== null &&
-          jugadores.map((jugador) => (
-            <div key={jugador.id} className="jugador-info">
-              <h3>{jugador.usuario.username}</h3>
-              <p>Apuesta: {jugador.apuestaActual}</p>
-              <p>Puntos: {jugador.puntos}</p>
-            </div>
-          ))}
+        {jugadores!==null  && jugadores.map((jugador) => (
+          <div key={jugador.id} className="jugador-info" >
+            <h3>{jugador.usuario.username}</h3>
+            <p>Apuesta: {jugador.apuestaActual}</p>
+            <p>Puntos: {jugador.puntos}</p>
+          </div>
+        ))}
       </div>
+
+      <div className="cartas-otros-jugadores">
+        {Object.keys(manosOtrosJugadores).map(jugadorId => (
+          <div key={jugadorId} className="carta-otros-jugadores">
+            {manosOtrosJugadores[jugadorId].cartas.map((carta) => (
+              <img 
+                key={carta.id}
+                src={carta.imagenTrasera}
+                alt={`Carta ${carta.tipoCarta}`}
+                className="imagen-carta-otras"
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+
       <div className="cartas">
         {mano !== null &&
           mano.cartas.map((carta) => (
@@ -255,7 +275,6 @@ const jugarTruco = async (trucoAJugar) => {
           ))}
       </div>
 
-      {/* Modal de Apuestas */}
       <ApuestaModal
         isVisible={apuestaModalOpen}
         onCancel={() => setApuestaModalOpen(false)}

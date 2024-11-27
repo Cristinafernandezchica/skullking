@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
@@ -62,8 +63,9 @@ public class BazaService {
     @Transactional
     public Baza updateBaza(@Valid Baza baza, Integer idToUpdate) throws DataAccessException{
         Baza toUpdate = findById(idToUpdate);
-        BeanUtils.copyProperties(baza, toUpdate, "id");
-        bazaRepository.save(toUpdate);
+		BeanUtils.copyProperties(baza, toUpdate, "id");
+		bazaRepository.save(toUpdate);
+
         return toUpdate;
     }
 
@@ -105,7 +107,7 @@ public class BazaService {
         baza.setTrucoGanador(null);
         baza.setNumBaza(1);
         baza.setGanador(null);
-        baza.setTipoCarta(null);
+        baza.setTipoCarta(TipoCarta.sinDeterminar);
         baza.setRonda(ronda);
         Baza resBaza = bazaRepository.save(baza);
         //trucoService.crearTrucosBazaConTurno(baza.getId()); // cambiado para turnos

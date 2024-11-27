@@ -108,7 +108,7 @@ public class BazaService {
         baza.setTipoCarta(null);
         baza.setRonda(ronda);
         Baza resBaza = bazaRepository.save(baza);
-        trucoService.crearTrucosBazaConTurno(baza.getId()); // cambiado para turnos
+        //trucoService.crearTrucosBazaConTurno(baza.getId()); // cambiado para turnos
         return resBaza;
     }
 /* 

@@ -34,6 +34,12 @@ public class JugadorService {
         this.pr = pr;
     }
 
+        //obtener jugador por pk
+        @Transactional(readOnly = true)
+        public Jugador findById(Integer id) {
+            return jugadorRepository.findById(id).orElse(null);
+        }
+
     @Transactional
     public Jugador saveJugador(Jugador jugador) throws DataAccessException {
         Partida partida = jugador.getPartida();
@@ -95,11 +101,7 @@ public class JugadorService {
     public List<Jugador> findJugadoresByPartidaId(Integer partidaId) {
         return jugadorRepository.findJugadoresByPartidaId(partidaId);
     }
-    //obtener jugador por pk
-    @Transactional(readOnly = true)
-    public Jugador findById(Integer id) {
-        return jugadorRepository.findById(id).orElse(null);
-    }
+
 
     //borrar jugador por pk
     @Transactional

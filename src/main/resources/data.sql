@@ -27,7 +27,7 @@ INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (1,15,3,5,1);
 INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (2,15,3,5,1);
 INSERT INTO Jugador(id,puntos,partida_id,user_id,turno) VALUES (4,30,3,4,1);
 */
-
+INSERT INTO Partida(id, nombre, inicio, fin, estado, owner_partida) VALUES (2, 'Partida Ejemplo2', '2024-11-07 18:00:00', '2024-11-05 21:00:00', 'TERMINADA', 14);
 INSERT INTO Partida(id, nombre, inicio, fin, estado, owner_partida) VALUES (3, 'Partida Ejemplo', '2024-11-05 13:00:00', '2024-11-05 15:00:00', 'ESPERANDO', 6);
 INSERT INTO Partida(id, nombre, inicio, fin, estado, owner_partida) VALUES (4, 'Partida Random', '2024-11-07 12:00:00', '2024-11-05 14:00:00', 'TERMINADA', 5);
 
@@ -36,6 +36,7 @@ INSERT INTO Jugador(id,puntos,partida_id,user_id,turno,apuesta_actual) VALUES (3
 INSERT INTO Jugador(id,puntos,partida_id,user_id,turno,apuesta_actual) VALUES (1,15,3,5,2,0);
 INSERT INTO Jugador(id,puntos,partida_id,user_id,turno,apuesta_actual) VALUES (2,15,3,6,3,0);
 INSERT INTO Jugador(id,puntos,partida_id,user_id,turno,apuesta_actual) VALUES (4,30,4,7,4,0);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,turno,apuesta_actual) VALUES (5,10,2,14,1,0);
 
 
 -- moradas

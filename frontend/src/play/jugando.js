@@ -27,6 +27,7 @@ export default function Jugando() {
     const [BazaActual, setBazaActual] = useState(null)
     
     // Para lógica de apuesta
+    
     const [apuestaModalOpen, setApuestaModalOpen] = useState(false);
     const toggleApuestaModal = () => setApuestaModalOpen(!apuestaModalOpen);
     const [visualizandoCartas, setVisualizandoCartas] = useState(true)

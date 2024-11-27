@@ -311,29 +311,7 @@ export default function Jugando() {
       }
     };
 
-    const  quitarCarta = async (miMano) => {
-      try {
-        const response = await fetch(`/api/v1/manos/${miMano.id}`, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${jwt}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(miMano),
-        });
 
-        if (!response.ok) {
-          console.log("algo falla")
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        console.log("mano cambiada",data);
-        setMano(data);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
 
     /*
 

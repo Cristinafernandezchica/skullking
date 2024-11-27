@@ -98,6 +98,17 @@ public class TrucoService {
         return truco;
 	}
 
+	@Transactional
+	public Truco jugarTruco(Truco truco) throws DataAccessException {
+		Mano manoSinCartaJugada = truco.getMano();
+		List<Carta> nuevaListaCarta = truco.getMano().getCartas().stream().
+		filter(cartaJugada -> cartaJugada.getId()!=truco.getCarta().getId()).toList();
+		manoSinCartaJugada.setCartas(nuevaListaCarta);
+		manoService.saveMano(manoSinCartaJugada);
+		trucoRepository.save(truco);
+        return truco;
+	}
+
     @Transactional
 	public Truco updateTruco(Truco truco, int trucoId) throws DataAccessException {
 		Truco toUpdate = findTrucoById(trucoId);
@@ -115,20 +126,18 @@ public class TrucoService {
 	}
 
 	@Transactional
-	public void iniciarTruco(Baza Baza, Integer partidaId){
-		List<Jugador> jugadores =jugadorService.findJugadoresByPartidaId(partidaId);
-		Integer turno = 1;
-		for(Jugador jugador : jugadores){
+	public Truco iniciarTruco(Baza Baza, Integer jugadorId){
+		Jugador jugador =jugadorService.findById(jugadorId);
+
 			Truco trucoIniciado= new Truco();
 			trucoIniciado.setBaza(Baza);
 			Mano mano =manoService.findLastManoByJugadorId(jugador.getId());
 			trucoIniciado.setMano(mano);
 			trucoIniciado.setJugador(jugador);
-			trucoIniciado.setTurno(turno);
+			trucoIniciado.setTurno(jugador.getTurno());
 			trucoIniciado.setCarta(null);
 			trucoRepository.save(trucoIniciado);
-			turno += 1;
-		}
+			return trucoIniciado;
 	}
 	
 

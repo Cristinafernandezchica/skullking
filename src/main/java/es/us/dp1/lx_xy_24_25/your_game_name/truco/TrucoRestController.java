@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
 
 import org.springframework.beans.BeanUtils;
@@ -53,6 +54,23 @@ public class TrucoRestController {
 		// Integer jugadorId = truco.getMano().getJugador();
 		// newTruco.setIdJugador(jugadorId);
 		Truco savedTruco = this.trucoService.saveTruco(newTruco);
+
+		return new ResponseEntity<>(savedTruco, HttpStatus.CREATED);
+	}
+	@PostMapping("jugar")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<Truco> jugarTruco(@RequestBody @Valid Truco truco) throws URISyntaxException {
+		Truco newTruco = new Truco();
+		BeanUtils.copyProperties(truco, newTruco, "id");
+		Truco savedTruco = this.trucoService.jugarTruco(newTruco);
+
+		return new ResponseEntity<>(savedTruco, HttpStatus.CREATED);
+	}
+	@PostMapping(value= "{jugadorId}")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<Truco> createTruco(@PathVariable("jugadorId") int jugadorId,@RequestBody @Valid Baza baza) throws URISyntaxException {
+
+		Truco savedTruco = this.trucoService.iniciarTruco(baza, jugadorId);
 
 		return new ResponseEntity<>(savedTruco, HttpStatus.CREATED);
 	}

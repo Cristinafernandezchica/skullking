@@ -18,6 +18,7 @@ import Instructions from "./player/instrucciones";
 import PartidaListAdmin from "./admin/partidas/PartidaListAdmin";
 import Jugando from "./play/jugando";
 import Jugando2 from "./play/jugando2";
+import UserStatisticsDashboard from "./admin/users/UserDashboard";
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
@@ -52,7 +53,8 @@ function App() {
         <>
           <Route path="/users" exact={true} element={<PrivateRoute><UserListAdmin /></PrivateRoute>} />
           <Route path="/users/:username" exact={true} element={<PrivateRoute><UserEditAdmin /></PrivateRoute>} />
-          <Route path="/partidas" exact={true} element={<PrivateRoute><PartidaListAdmin /></PrivateRoute>} />          
+          <Route path="/partidas" exact={true} element={<PrivateRoute><PartidaListAdmin /></PrivateRoute>} />
+          <Route path="/users/statistics" exact={true} element={<PrivateRoute><UserStatisticsDashboard /></PrivateRoute>} />         
         </>)
     }
     if (role === "PLAYER") {

@@ -21,6 +21,8 @@ import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MinJugadoresPartidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MismoNombrePartidaNoTerminadaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
+import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
+import es.us.dp1.lx_xy_24_25.your_game_name.user.UserService;
 import jakarta.validation.Valid;
 
 @Service
@@ -29,6 +31,7 @@ public class PartidaService {
     PartidaRepository pr;
     RondaService rs;
     JugadorService js;
+    UserService us;
 
     @Autowired
     public PartidaService(PartidaRepository pr, RondaService rs, JugadorService js) {
@@ -121,9 +124,28 @@ public class PartidaService {
         if (partida == null) {
             throw new ResourceNotFoundException("Partida", "id", partidaId);
         }
-
         partida.setEstado(PartidaEstado.TERMINADA);
         partida.setFin(LocalDateTime.now());
+
+        Integer puntosGanador = null;
+        List<Jugador> jugadoresPartida = js.findJugadoresByPartidaId(partidaId);
+        for(Jugador jugador : jugadoresPartida){
+            User usuarioJugador = jugador.getUsuario();
+            usuarioJugador.setNumPuntosGanados(usuarioJugador.getNumPuntosGanados() + jugador.getPuntos());
+            usuarioJugador.setNumPartidasJugadas(usuarioJugador.getNumPartidasJugadas() + 1);
+            if(puntosGanador == null || jugador.getPuntos() > puntosGanador){
+                puntosGanador = jugador.getPuntos();
+            }
+        }
+
+        Integer puntosFinalGanador = puntosGanador;
+        List<User> ganadores = jugadoresPartida.stream().filter(j-> j.getPuntos().equals(puntosFinalGanador)).map(j-> j.getUsuario()).collect(Collectors.toList());
+        ganadores.forEach(u-> u.setNumPartidasGanadas(u.getNumPartidasGanadas()+1));
+
+        List<User> usuarios = jugadoresPartida.stream().map(j-> j.getUsuario()).collect(Collectors.toList());
+        for(User u : usuarios){
+            us.saveUser(u);
+        }
         update(partida, partidaId);
     }
 

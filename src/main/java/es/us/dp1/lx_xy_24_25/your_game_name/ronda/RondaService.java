@@ -30,7 +30,7 @@ public class RondaService {
     JugadorService js;
 
     @Autowired
-    public RondaService(RondaRepository rr, ManoService ms, @Lazy BazaService bs, JugadorService js){
+    public RondaService(RondaRepository rr, ManoService ms, BazaService bs, JugadorService js){
         this.rr = rr;
         this.ms = ms;
         this.bs = bs;

@@ -122,6 +122,8 @@ public class PartidaRestController {
         ps.iniciarPartida(id);
         return ResponseEntity.ok().build();
     }
+
+    
     
 
 }

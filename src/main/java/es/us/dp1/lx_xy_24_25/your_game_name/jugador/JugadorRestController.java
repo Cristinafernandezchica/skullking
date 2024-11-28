@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.AccessDeniedException;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.AuthoritiesService;
 import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -135,4 +136,10 @@ public class JugadorRestController {
 		return new ResponseEntity<>(new MessageResponse("Jugador deleted!"), HttpStatus.OK);
 	}
 
+    @GetMapping(value="/{usuarioId}/partida")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Partida> findPartidaByUsuarioId(@PathVariable("usuarioId") int usuarioId){
+        RestPreconditions.checkNotNull(jugadorService.findPartidaByUsuarioId(usuarioId), "Jugador", "usuarioId", usuarioId);
+        return new ResponseEntity<>(this.jugadorService.findPartidaByUsuarioId(usuarioId), HttpStatus.OK);
+    }
 }

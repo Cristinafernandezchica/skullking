@@ -246,7 +246,7 @@ export default function Jugando() {
     if (ronda !== null)  {
     fetchBazaActual();
   }
-  }, [ronda,truco]);
+  }, [ronda,ListaDeTrcuos]);
 
 
     /*
@@ -313,27 +313,24 @@ export default function Jugando() {
 
 
     const jugarTruco = async (cartaAJugar) => {
-      const trucoInicializado= {}
-      trucoInicializado.id= 100
-      trucoInicializado.baza = BazaActual
-      trucoInicializado.mano = mano
-      trucoInicializado.jugador = tu
-      trucoInicializado.carta = cartaAJugar
-      trucoInicializado.turno = ListaDeTrcuos.length +1
-      setTruco(trucoInicializado);
-      await iniciarTruco(trucoInicializado);
+      await iniciarTruco(tu.id,cartaAJugar);
       await fetchMano(tu.id);
     };
 
-    const iniciarTruco = async (truco) => {
+    const iniciarTruco = async (jugadorId,cartaAJugar) => {
+      const BazaCartaManoDTO= {}
+      BazaCartaManoDTO.baza = BazaActual
+      BazaCartaManoDTO.mano = mano
+      BazaCartaManoDTO.carta = cartaAJugar
+      BazaCartaManoDTO.turno = ListaDeTrcuos.length +1
       try {
-        const response = await fetch(`/api/v1/trucos/jugar`, {
+        const response = await fetch(`/api/v1/trucos/${jugadorId}/jugar`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${jwt}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(truco),
+          body: JSON.stringify(BazaCartaManoDTO),
         });
 
         if (!response.ok) {
@@ -380,8 +377,8 @@ export default function Jugando() {
         
         if(truco.carta.tipoCarta !== "banderaBlanca"){
         BazaActual.tipoCarta = truco.carta.tipoCarta;
-        console.log(BazaActual);
-      cambiarPaloBaza(BazaActual);}
+      cambiarPaloBaza(BazaActual);
+      console.log(BazaActual);}
     
   }
     }, [truco]);

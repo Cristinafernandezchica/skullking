@@ -19,6 +19,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.NoCartaDeManoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
+import es.us.dp1.lx_xy_24_25.your_game_name.bazaCartaManoDTO.BazaCartaManoDTO;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 
 import java.util.Comparator;
@@ -98,16 +99,7 @@ public class TrucoService {
         return truco;
 	}
 
-	@Transactional
-	public Truco jugarTruco(Truco truco) throws DataAccessException {
-		Mano manoSinCartaJugada = truco.getMano();
-		List<Carta> nuevaListaCarta = truco.getMano().getCartas().stream().
-		filter(cartaJugada -> cartaJugada.getId()!=truco.getCarta().getId()).toList();
-		manoSinCartaJugada.setCartas(nuevaListaCarta);
-		manoService.saveMano(manoSinCartaJugada);
-		trucoRepository.save(truco);
-        return truco;
-	}
+
 
     @Transactional
 	public Truco updateTruco(Truco truco, int trucoId) throws DataAccessException {
@@ -126,17 +118,23 @@ public class TrucoService {
 	}
 
 	@Transactional
-	public Truco iniciarTruco(Baza Baza, Integer jugadorId){
+	public Truco jugarTruco(BazaCartaManoDTO DTO, Integer jugadorId){
 		Jugador jugador =jugadorService.findById(jugadorId);
 
 			Truco trucoIniciado= new Truco();
-			trucoIniciado.setBaza(Baza);
-			Mano mano =manoService.findLastManoByJugadorId(jugador.getId());
-			trucoIniciado.setMano(mano);
+			trucoIniciado.setBaza(DTO.getBaza());
+			trucoIniciado.setMano(DTO.getMano());
 			trucoIniciado.setJugador(jugador);
-			trucoIniciado.setTurno(jugador.getTurno());
-			trucoIniciado.setCarta(null);
+			trucoIniciado.setTurno(DTO.getTurno());
+			trucoIniciado.setCarta(DTO.getCarta());
 			trucoRepository.save(trucoIniciado);
+
+			Mano manoSinCartaJugada = trucoIniciado.getMano();
+			List<Carta> nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
+			filter(cartaJugada -> cartaJugada.getId()!=trucoIniciado.getCarta().getId()).toList();
+			manoSinCartaJugada.setCartas(nuevaListaCarta);
+			manoService.saveMano(manoSinCartaJugada);
+
 			return trucoIniciado;
 	}
 	

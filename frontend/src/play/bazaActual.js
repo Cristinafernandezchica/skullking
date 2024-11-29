@@ -15,7 +15,7 @@ export default class BazaActual {
             const data = await response.json();
             return data; // Devuelve los datos de la baza actual
         } catch (error) {
-            console.error("Error fetching baza actual:", error);
+            console.error("Error encontrando baza actual:", error);
             throw error; // Propaga el error para manejarlo en el componente que lo utiliza
         }
     }

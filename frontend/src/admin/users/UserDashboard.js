@@ -36,7 +36,7 @@ export default function UserStatisticsDashboard() {
         }));
         setUsers(usersWithDefaults);
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error encontrando usuarios:", error);
         setMessage(error.message);
         setVisible(true);
       }
@@ -54,14 +54,14 @@ export default function UserStatisticsDashboard() {
   return (
     <div className="admin-page-container">
       <Container fluid style={{ marginTop: "15px" }}>
-        <h1 className="text-center">Estadísticas de Usuarios</h1>
+        <h1 className="text-center">Estadísticas de usuarios</h1>
         {alerts.map((a) => a.alert)}
         {modal}
         <Row className="mb-4">
           <Col>
             <Card>
               <CardBody>
-                <h5>Total de Partidas Jugadas</h5>
+                <h5>Total de partidas jugadas</h5>
                 <p className="stat-value">{totalPartidasJugadas}</p>
               </CardBody>
             </Card>
@@ -69,7 +69,7 @@ export default function UserStatisticsDashboard() {
           <Col>
             <Card>
               <CardBody>
-                <h5>Total de Partidas Ganadas</h5>
+                <h5>Total de partidas ganadas</h5>
                 <p className="stat-value">{totalPartidasGanadas}</p>
               </CardBody>
             </Card>
@@ -77,7 +77,7 @@ export default function UserStatisticsDashboard() {
           <Col>
             <Card>
               <CardBody>
-                <h5>Total de Puntos Ganados</h5>
+                <h5>Total de puntos ganados</h5>
                 <p className="stat-value">{totalPuntosGanados}</p>
               </CardBody>
             </Card>
@@ -86,7 +86,7 @@ export default function UserStatisticsDashboard() {
         <Table aria-label="users" className="mt-4">
           <thead>
             <tr>
-              <th>Nombre de Usuario</th>
+              <th>Nombre de usuario</th>
               <th>Partidas Jugadas</th>
               <th>Partidas Ganadas</th>
               <th>Puntos Ganados</th>

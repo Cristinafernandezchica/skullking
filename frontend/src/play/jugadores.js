@@ -15,7 +15,7 @@ export default class JugadoresPartida {
             const data = await response.json();
             return data; // Devuelve los datos de los jugadores
         } catch (error) {
-            console.error("Error fetching jugadores:", error);
+            console.error("Error encontrando jugadores:", error);
             throw error; // Propaga el error para manejo en el componente que la utiliza
         }
     }

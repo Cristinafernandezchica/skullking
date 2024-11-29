@@ -51,7 +51,7 @@ describe('SalaEspera', () => {
         render(<SalaEspera />);
         const alert = await waitFor(() => screen.findByRole('alert'));
         expect(alert).toBeInTheDocument();
-        expect(alert).toHaveTextContent('Error fetching jugadores');
+        expect(alert).toHaveTextContent('Error encontrando jugadores');
     });
 
 });

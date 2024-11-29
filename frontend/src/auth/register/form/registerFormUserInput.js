@@ -1,8 +1,8 @@
 import { formValidators } from "../../../validators/formValidators";
 
-export const registerFormClinicOwnerInputs = [
+export const registerFormUserInput = [
   {
-    tag: "Username",
+    tag: "Nombre de usuario",
     name: "username",
     type: "text",
     defaultValue: "",
@@ -10,7 +10,7 @@ export const registerFormClinicOwnerInputs = [
     validators: [formValidators.notEmptyValidator],
   },
   {
-    tag: "Password",
+    tag: "Contraseña",
     name: "password",
     type: "password",
     defaultValue: "",
@@ -18,7 +18,7 @@ export const registerFormClinicOwnerInputs = [
     validators: [formValidators.notEmptyValidator],
   },
   {
-    tag: "First Name",
+    tag: "Nombre",
     name: "firstName",
     type: "text",
     defaultValue: "",
@@ -26,7 +26,7 @@ export const registerFormClinicOwnerInputs = [
     validators: [formValidators.notEmptyValidator],
   },
   {
-    tag: "Last Name",
+    tag: "Apellido",
     name: "lastName",
     type: "text",
     defaultValue: "",

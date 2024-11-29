@@ -46,8 +46,8 @@ export default function SalaEspera() {
       const data = await response.json();
       setJugadores(data);
     } catch (error) {
-      console.error('Error fetching jugadores:', error);
-      setMessage('Error fetching jugadores');
+      console.error('Error encontrando jugadores:', error);
+      setMessage('Error encontrando jugadores');
       setVisible(true);
     }
   };
@@ -67,7 +67,7 @@ export default function SalaEspera() {
         navigate(`/tablero/${id}`);
       }
     } catch (error) {
-      console.error('Error fetching partida status:', error);
+      console.error('Error encontrando el estado de la partida:', error);
     }
   };
 
@@ -110,7 +110,7 @@ export default function SalaEspera() {
       if (!response.ok) {
         const errorData = await response.json();
         showError(errorData.message || errorData);
-        console.log("Fallo al iniciar partida")
+        console.log("Error al iniciar una partida")
         throw new Error('Network response was not ok');
       }
       //setPartida(response.json())
@@ -146,7 +146,7 @@ export default function SalaEspera() {
             <Table>
               <thead>
                 <tr>
-                  <th>Username</th>
+                  <th>Nombre de usuario</th>
                   <th>Turno</th>
                 </tr>
               </thead>

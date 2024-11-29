@@ -47,7 +47,7 @@ export default function useFetchState(initial, url, jwt, setMessage, setVisible,
                         }
                     }).catch((message) => {
                         console.log(message);
-                        setMessage('Failed to fetch data');
+                        setMessage('Fallos al buscar datos');
                         setVisible(true);
                     });
                 return () => {

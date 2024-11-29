@@ -13,6 +13,7 @@ const user = tokenService.getUser();
 
 export default function Jugando() {
     const idPartida = getIdFromUrl(2);
+    const [partida, setPartida] = useState(null);
     const [message, setMessage] = useState(null);
     const [visible, setVisible] = useState(false);
     const [jugadores, setJugadores] = useFetchState(
@@ -41,6 +42,37 @@ export default function Jugando() {
 
     // manejo turno
     const [turnoActual, setTurnoActual] = useState(null);
+
+    const fetchPartida = async (idPartida) => {
+      try {
+          const response = await fetch(`/api/v1/partidas/${idPartida}`, {
+              headers: {
+                  "Authorization": `Bearer ${jwt}`,
+                  'Content-Type': 'application/json'
+              }
+          });
+          if (!response.ok) {
+              throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          console.log("comprobar partida")
+          setPartida(data);
+          setTurnoActual(data.turnoActual)
+
+      } catch (error) {
+          console.error("Error fetching partida:", error);
+          setMessage(error.message);
+          setVisible(true);
+      }
+    }
+
+    useEffect(() => {
+      const intervalo = setInterval(() => {
+        fetchPartida(idPartida);
+      }, 5000); // Cada 5 segundos
+    
+      return () => clearInterval(intervalo);
+    }, [idPartida, tu]);
 
 
     const fetchMano = async (jugadorId) => {
@@ -428,7 +460,7 @@ export default function Jugando() {
             {mano!==null && mano.cartas.map((carta) => (
               <div key={carta.id} className="carta">
                 <button className='boton-agrandable'
-                 disabled={visualizandoCartas}
+                 disabled={visualizandoCartas || (partida.turnoActual !== tu.id)}
                  onClick={() => {
                   jugarTruco(carta);
                   //truco.carta=carta;

@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
@@ -27,11 +29,13 @@ public class BazaService {
     
     private BazaRepository bazaRepository;
     private TrucoService trucoService;
+    private PartidaService partidaService;
 
     @Autowired
-    public BazaService(BazaRepository bazaRepository,TrucoService trucoService) {
+    public BazaService(BazaRepository bazaRepository,TrucoService trucoService, PartidaService partidaService) {
         this.bazaRepository = bazaRepository;
         this.trucoService = trucoService;
+        this.partidaService = partidaService;
     }
 
     //Save las bazas en la base de datos
@@ -103,13 +107,18 @@ public class BazaService {
     // Iniciar una Baza
     @Transactional
     public Baza iniciarBazas (Ronda ronda) {
+         Partida partida = ronda.getPartida();
+        List<Integer> turnos  = trucoService.calcularTurnosNuevaBaza(partida.getId(), null);
         Baza baza = new Baza();
         baza.setTrucoGanador(null);
         baza.setNumBaza(1);
         baza.setGanador(null);
         baza.setTipoCarta(TipoCarta.sinDeterminar);
         baza.setRonda(ronda);
+        baza.setTurnos(turnos);
         Baza resBaza = bazaRepository.save(baza);
+        partida.setTurnoActual(trucoService.primerTurno(turnos));
+        partidaService.update(partida, partida.getId());
         //trucoService.crearTrucosBazaConTurno(baza.getId()); // cambiado para turnos
         return resBaza;
     }
@@ -146,12 +155,13 @@ public class BazaService {
                 .stream().map(t -> t.getCarta()).collect(Collectors.toList());
             Carta cartaGanadora = baza.getTrucoGanador().getCarta();
             for(Carta carta: cartasBaza){
-                calculoPtosBonificacion(cartaGanadora, carta);
+                ptosBonificacion += calculoPtosBonificacion(cartaGanadora, carta);  // carta.calculoPtosBonificacion(cartaGanadora, carta);
             }
         }
         return ptosBonificacion;
     }
 
+    // Mover a entidad Carta como método
     public Integer calculoPtosBonificacion(Carta cartaGanadora, Carta carta){
         Integer ptosBonificacion = 0;
         TipoCarta cartaTipo = carta.getTipoCarta();

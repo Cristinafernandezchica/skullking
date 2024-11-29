@@ -18,6 +18,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import jakarta.validation.Valid;
 
 @Service
@@ -28,13 +29,15 @@ public class RondaService {
     ManoService ms;
     BazaService bs;
     JugadorService js;
+    TrucoService ts;
 
     @Autowired
-    public RondaService(RondaRepository rr, ManoService ms, @Lazy BazaService bs, JugadorService js){
+    public RondaService(RondaRepository rr, ManoService ms, @Lazy BazaService bs, JugadorService js, TrucoService ts){
         this.rr = rr;
         this.ms = ms;
         this.bs = bs;
         this.js = js;
+        this.ts = ts;
     }
 
     @Transactional(readOnly=true)
@@ -104,6 +107,7 @@ public class RondaService {
         }
         return rr.save(newRonda);
     }
+    
 
     @Transactional
     public void finalizarRonda(Integer rondaId){
@@ -131,6 +135,7 @@ public class RondaService {
         Baza baza = bs.findById(id);
         Ronda ronda = baza.getRonda();
         Integer nextBaza = baza.getNumBaza() + 1;
+        Partida partida = ronda.getPartida();
 
         Baza newBaza = new Baza();
 
@@ -138,11 +143,16 @@ public class RondaService {
         if(nextBaza > ronda.getNumBazas()){
             nextRonda(ronda.getId());
         } else{
+            List<Integer> turnos = ts.calcularTurnosNuevaBaza(partida.getId(), baza);
+            // Configurar turno actual de la partida
+            partida.setTurnoActual(ts.primerTurno(turnos));
+            ps.update(partida, partida.getId());
             // Configurar para la siguiente baza
             newBaza.setTrucoGanador(null);
             newBaza.setGanador(null);
             newBaza.setNumBaza(nextBaza);
             newBaza.setTipoCarta(null);
+            newBaza.setTurnos(turnos);
         }    
         return bs.saveBaza(newBaza);
     }

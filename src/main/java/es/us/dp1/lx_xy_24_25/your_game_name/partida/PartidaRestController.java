@@ -48,15 +48,11 @@ public class PartidaRestController {
 
     PartidaService ps;
     JugadorService js;
-    private ManoService ms;
-    private BazaService bs;
-    // RondaService rs;
 
     @Autowired
     public PartidaRestController(PartidaService ps, JugadorService js) {
         this.ps = ps;
         this.js = js;
-        // this.rs = rs;
     }
 
     // @RequestParam es para filtrar por esos valores, por tanto no hacen falta los métodos PartidasByName y PartidasByEstado

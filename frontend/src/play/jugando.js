@@ -35,6 +35,7 @@ export default function Jugando() {
     // para las cartas del resto de jugadores
     const [manosOtrosJugadores, setManosOtrosJugadores] = useState({});
     // Para lógica de apuesta
+    
     const [apuestaModalOpen, setApuestaModalOpen] = useState(false);
     const toggleApuestaModal = () => setApuestaModalOpen(!apuestaModalOpen);
     const [visualizandoCartas, setVisualizandoCartas] = useState(true)

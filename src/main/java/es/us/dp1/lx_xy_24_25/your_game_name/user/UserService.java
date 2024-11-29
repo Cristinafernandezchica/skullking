@@ -15,8 +15,6 @@
  */
 package es.us.dp1.lx_xy_24_25.your_game_name.user;
 
-import java.util.Optional;
-
 import jakarta.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -26,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 
@@ -33,6 +32,8 @@ import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException
 public class UserService {
 
 	private UserRepository userRepository;	
+
+	private final ConcurrentHashMap<Integer, UserStats> userStatsMap = new ConcurrentHashMap<>();
 
 	@Autowired
 	public UserService(UserRepository userRepository) {
@@ -42,20 +43,37 @@ public class UserService {
 
 	@Transactional
 	public User saveUser(User user) throws DataAccessException {
+		UserStats stats = userStatsMap.computeIfAbsent(user.getId(), key -> new UserStats());
+        stats.setNumPartidasJugadas(user.getNumPartidasJugadas());
+        stats.setNumPartidasGanadas(user.getNumPartidasGanadas());
+        stats.setNumPuntosGanados(user.getNumPuntosGanados());
+
 		userRepository.save(user);
 		return user;
 	}
 
 	@Transactional(readOnly = true)
 	public User findUser(String username) {
-		return userRepository.findByUsername(username)
+		User user = userRepository.findByUsername(username)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+				
+		UserStats stats = userStatsMap.computeIfAbsent(user.getId(), key -> new UserStats());
+		user.setNumPartidasJugadas(stats.getNumPartidasJugadas());
+		user.setNumPartidasGanadas(stats.getNumPartidasGanadas());
+		user.setNumPuntosGanados(stats.getNumPuntosGanados());
+		return user;
 	}
 
 	@Transactional(readOnly = true)
 	public User findUser(Integer id) {
-		return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
-	}	
+		User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+
+        UserStats stats = userStatsMap.computeIfAbsent(user.getId(), key -> new UserStats());
+        user.setNumPartidasJugadas(stats.getNumPartidasJugadas());
+        user.setNumPartidasGanadas(stats.getNumPartidasGanadas());
+        user.setNumPuntosGanados(stats.getNumPuntosGanados());
+        return user;
+    }	
 
 	@Transactional(readOnly = true)
 	public User findCurrentUser() {
@@ -96,6 +114,36 @@ public class UserService {
 //		this.userRepository.deletePlayerRelation(id);
 		this.userRepository.delete(toDelete);
 	}
-	
 
+}
+
+class UserStats {
+    private Integer numPartidasJugadas = 0;
+    private Integer numPartidasGanadas = 0;
+    private Integer numPuntosGanados = 0;
+
+    // Getters and setters
+    public Integer getNumPartidasJugadas() {
+        return numPartidasJugadas;
+    }
+
+    public void setNumPartidasJugadas(Integer numPartidasJugadas) {
+        this.numPartidasJugadas = numPartidasJugadas;
+    }
+
+    public Integer getNumPartidasGanadas() {
+        return numPartidasGanadas;
+    }
+
+    public void setNumPartidasGanadas(Integer numPartidasGanadas) {
+        this.numPartidasGanadas = numPartidasGanadas;
+    }
+
+    public Integer getNumPuntosGanados() {
+        return numPuntosGanados;
+    }
+
+    public void setNumPuntosGanados(Integer numPuntosGanados) {
+        this.numPuntosGanados = numPuntosGanados;
+    }
 }

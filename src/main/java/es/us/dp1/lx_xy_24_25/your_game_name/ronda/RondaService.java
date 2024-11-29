@@ -18,7 +18,6 @@ import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
-import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import jakarta.validation.Valid;
 
 @Service
@@ -29,15 +28,13 @@ public class RondaService {
     ManoService ms;
     BazaService bs;
     JugadorService js;
-    TrucoService ts;
 
     @Autowired
-    public RondaService(RondaRepository rr, ManoService ms, @Lazy BazaService bs, JugadorService js, TrucoService ts){
+    public RondaService(RondaRepository rr, ManoService ms, @Lazy BazaService bs, JugadorService js){
         this.rr = rr;
         this.ms = ms;
         this.bs = bs;
         this.js = js;
-        this.ts = ts;
     }
 
     @Transactional(readOnly=true)
@@ -114,7 +111,7 @@ public class RondaService {
         Ronda ronda = getRondaById(rondaId);
 
         ronda.setEstado(RondaEstado.FINALIZADA);
-        // bucle para cada baza -> bs.calculoGanador();
+        // bucle para cada baza -> bs.calculoGanador(); -->  No va aquí, esto es para calcular el ganado r de la BAZA no de la ronda
         getPuntaje(ronda.getNumBazas(), rondaId);
 
         rr.save(ronda);
@@ -131,8 +128,8 @@ public class RondaService {
 
     // Next Baza
     @Transactional
-    public Baza nextBaza(Integer id) {
-        Baza baza = bs.findById(id);
+    public Baza nextBaza(Integer bazaId) {
+        Baza baza = bs.findById(bazaId);
         Ronda ronda = baza.getRonda();
         Integer nextBaza = baza.getNumBaza() + 1;
         Partida partida = ronda.getPartida();
@@ -143,9 +140,9 @@ public class RondaService {
         if(nextBaza > ronda.getNumBazas()){
             nextRonda(ronda.getId());
         } else{
-            List<Integer> turnos = ts.calcularTurnosNuevaBaza(partida.getId(), baza);
+            List<Integer> turnos = bs.calcularTurnosNuevaBaza(partida.getId(), baza);
             // Configurar turno actual de la partida
-            partida.setTurnoActual(ts.primerTurno(turnos));
+            partida.setTurnoActual(bs.primerTurno(turnos));
             ps.update(partida, partida.getId());
             // Configurar para la siguiente baza
             newBaza.setTrucoGanador(null);

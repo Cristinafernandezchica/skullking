@@ -163,7 +163,7 @@ public class TrucoServiceTests {
 	@Test
     public void shouldFindTrucosByBazaId() throws DataAccessException {
         // Arrange
-        when(trucoRepository.findByBazaId(baza.getId())).thenReturn(List.of(truco));
+        when(trucoRepository.findTrucosByBazaId(baza.getId())).thenReturn(List.of(truco));
 
         // Act
         List<Truco> result = trucoService.findTrucosByBazaId(baza.getId());
@@ -173,7 +173,7 @@ public class TrucoServiceTests {
         assertEquals(1, result.get(0).getId());
         assertEquals(baza, result.get(0).getBaza());
 
-        verify(trucoRepository).findByBazaId(baza.getId());
+        verify(trucoRepository).findTrucosByBazaId(baza.getId());
     }
 
     @Test

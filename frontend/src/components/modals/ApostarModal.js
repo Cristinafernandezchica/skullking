@@ -3,7 +3,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Input, FormGroup, L
 import { useNavigate } from 'react-router-dom';
 
 export default function ApuestaModal({ isVisible, onCancel, onConfirm }) {
-    const [apuesta, setApuesta] = useState('');
+    const [apuesta, setApuesta] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {

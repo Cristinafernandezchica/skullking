@@ -104,13 +104,14 @@ public class RondaService {
         }
         return rr.save(newRonda);
     }
+    
 
     @Transactional
     public void finalizarRonda(Integer rondaId){
         Ronda ronda = getRondaById(rondaId);
 
         ronda.setEstado(RondaEstado.FINALIZADA);
-        // bucle para cada baza -> bs.calculoGanador();
+        // bucle para cada baza -> bs.calculoGanador(); -->  No va aquí, esto es para calcular el ganado r de la BAZA no de la ronda
         getPuntaje(ronda.getNumBazas(), rondaId);
 
         rr.save(ronda);
@@ -127,10 +128,11 @@ public class RondaService {
 
     // Next Baza
     @Transactional
-    public Baza nextBaza(Integer id) {
-        Baza baza = bs.findById(id);
+    public Baza nextBaza(Integer bazaId) {
+        Baza baza = bs.findById(bazaId);
         Ronda ronda = baza.getRonda();
         Integer nextBaza = baza.getNumBaza() + 1;
+        Partida partida = ronda.getPartida();
 
         Baza newBaza = new Baza();
 
@@ -138,11 +140,16 @@ public class RondaService {
         if(nextBaza > ronda.getNumBazas()){
             nextRonda(ronda.getId());
         } else{
+            List<Integer> turnos = bs.calcularTurnosNuevaBaza(partida.getId(), baza);
+            // Configurar turno actual de la partida
+            partida.setTurnoActual(bs.primerTurno(turnos));
+            ps.update(partida, partida.getId());
             // Configurar para la siguiente baza
             newBaza.setTrucoGanador(null);
             newBaza.setGanador(null);
             newBaza.setNumBaza(nextBaza);
             newBaza.setTipoCarta(null);
+            newBaza.setTurnos(turnos);
         }    
         return bs.saveBaza(newBaza);
     }

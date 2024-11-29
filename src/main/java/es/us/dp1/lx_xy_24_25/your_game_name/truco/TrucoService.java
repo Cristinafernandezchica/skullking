@@ -15,6 +15,9 @@ import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
+import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.NoCartaDeManoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
@@ -39,16 +42,20 @@ public class TrucoService {
 	private JugadorService jugadorService;
 	private ManoService manoService;
 	// private BazaService bazaService;	// Para turnos
+	private PartidaService partidaService;
+	private RondaService rondaService;
 
 
     @Autowired
-	public TrucoService(TrucoRepository trucoRepository,  BazaRepository bazaRepository,  ManoService manoService, JugadorService jugadorService) { // , @Lazy BazaService bazaService ,ManoRepository manoRepository
+	public TrucoService(TrucoRepository trucoRepository,  BazaRepository bazaRepository,  ManoService manoService, JugadorService jugadorService, @Lazy PartidaService partidaService, RondaService rondaService) { // , @Lazy BazaService bazaService ,ManoRepository manoRepository
 		this.trucoRepository = trucoRepository;
         this.bazaRepository = bazaRepository;
         // this.manoRepository = manoRepository;
         this.jugadorService = jugadorService;
 		// this.bazaService = bazaService;
 		this.manoService = manoService;
+		this.partidaService = partidaService;
+		this.rondaService = rondaService;
 	}
 
     @Transactional(readOnly = true)
@@ -64,7 +71,7 @@ public class TrucoService {
     // Para BazaRestController
     @Transactional(readOnly = true)
 	public List<Truco> findTrucosByBazaId(int id) throws DataAccessException {
-		return trucoRepository.findByBazaId(id);
+		return trucoRepository.findTrucosByBazaId(id);
 	}
 
     // Para JugadorRestController
@@ -121,21 +128,40 @@ public class TrucoService {
 	public Truco jugarTruco(BazaCartaManoDTO DTO, Integer jugadorId){
 		Jugador jugador =jugadorService.findById(jugadorId);
 
-			Truco trucoIniciado= new Truco();
-			trucoIniciado.setBaza(DTO.getBaza());
-			trucoIniciado.setMano(DTO.getMano());
-			trucoIniciado.setJugador(jugador);
-			trucoIniciado.setTurno(DTO.getTurno());
-			trucoIniciado.setCarta(DTO.getCarta());
-			trucoRepository.save(trucoIniciado);
+		Truco trucoIniciado= new Truco();
+		trucoIniciado.setBaza(DTO.getBaza());
+		trucoIniciado.setMano(DTO.getMano());
+		trucoIniciado.setJugador(jugador);
+		trucoIniciado.setTurno(DTO.getTurno());
+		trucoIniciado.setCarta(DTO.getCarta());
+		trucoRepository.save(trucoIniciado);
 
-			Mano manoSinCartaJugada = trucoIniciado.getMano();
-			List<Carta> nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
-			filter(cartaJugada -> cartaJugada.getId()!=trucoIniciado.getCarta().getId()).toList();
-			manoSinCartaJugada.setCartas(nuevaListaCarta);
-			manoService.saveMano(manoSinCartaJugada);
+		Mano manoSinCartaJugada = trucoIniciado.getMano();
+		List<Carta> nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
+		filter(cartaJugada -> cartaJugada.getId()!=trucoIniciado.getCarta().getId()).toList();
+		manoSinCartaJugada.setCartas(nuevaListaCarta);
+		manoService.saveMano(manoSinCartaJugada);
 
-			return trucoIniciado;
+		Partida partida = trucoIniciado.getBaza().getRonda().getPartida();
+		Integer numJugadores = jugadorService.findJugadoresByPartidaId(partida.getId()).size();
+		Integer bazaId = trucoIniciado.getBaza().getId();
+		Integer numTrucosBaza = findTrucosByBazaId(bazaId).size();
+
+		// Si no es el último truco de la Baza, se actualiza el turno
+		if(numJugadores != numTrucosBaza){
+			List<Integer> turnos = trucoIniciado.getBaza().getTurnos();
+			Integer turnoAntesCambio = partida.getTurnoActual();
+			partida.setTurnoActual(siguienteTurno(turnos, turnoAntesCambio));
+			partidaService.update(partida, partida.getId());
+		}
+		// Si es el último truco de la Baza, se llama a nextBaza
+		/*
+		else if(numJugadores == numTrucosBaza){
+			rondaService.nextBaza(bazaId);
+		}
+		*/
+
+		return trucoIniciado;
 	}
 	
 
@@ -217,6 +243,7 @@ public class TrucoService {
     
 	// La he creado de nuevo por si no funciona tener la anterior
 	// Crear trucos con asociación de turnos correcta
+	/*
 	@Transactional
 	public void crearTrucosBazaConTurno(Integer idBaza) {
 		Optional<Baza> posibleBaza = bazaRepository.findById(idBaza);
@@ -239,19 +266,21 @@ public class TrucoService {
 				throw new ResourceNotFoundException("Mano", "jugadorId", jugadorId);
 			}
 			Mano mano = posibleMano.get();
-			*/
+			
 			Mano mano = manoService.findLastManoByJugadorId(jugador.getId());
 
 			Truco truco = new Truco(baza, mano, jugador, null, i + 1); // Turno = posición en la lista
 			trucoRepository.save(truco);
 		}
 	}
-
-	// Caluclar primer turno
+	*/
+	// Caluclar primer turno (Comprobar si se pueden meter directamente en la entidad Baza)
+	/*
 	@Transactional
 	public Integer primerTurno(List<Integer> turnos){
 		return turnos.get(0);
 	}
+	*/
 
 	@Transactional
 	public Integer siguienteTurno(List<Integer> turnos, Integer turnoActual){
@@ -261,6 +290,7 @@ public class TrucoService {
 	}
 
 	// Calcular turnos
+	/*
 	@Transactional
     public List<Integer> calcularTurnosNuevaBaza(int partidaId, Baza bazaAnterior) {
         List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partidaId);
@@ -289,6 +319,7 @@ public class TrucoService {
 
         return turnosNuevaBaza;
     }
+	
 
 	@Transactional
 	public void asignarTurnoAJugadores(List<Jugador> jugadores, List<Integer> turnos){
@@ -304,6 +335,7 @@ public class TrucoService {
 		}
 
 	}
+	*/
 
 
 }

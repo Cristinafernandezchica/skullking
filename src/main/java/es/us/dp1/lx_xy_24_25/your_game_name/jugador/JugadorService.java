@@ -8,6 +8,7 @@ import java.util.stream.StreamSupport;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,14 @@ import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
+import es.us.dp1.lx_xy_24_25.your_game_name.user.UserRepository;
 import jakarta.validation.Valid;
 
 @Service
 public class JugadorService {
     private JugadorRepository jugadorRepository;
     private PartidaRepository pr;
+    private UserRepository userRepository;
 
     @Autowired
     public JugadorService(JugadorRepository jugadorRepository, PartidaRepository pr) {

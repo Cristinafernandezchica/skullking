@@ -18,7 +18,7 @@ export default class Truco {
             const trucoMio = data.find((objeto) => objeto.jugador.usuario.id === userId);
             return trucoMio || null; // Devuelve el truco del usuario o null si no lo encuentra
         } catch (error) {
-            console.error("Error fetching truco:", error);
+            console.error("Error encontrando truco:", error);
             throw error; // Propaga el error para manejo en el componente que lo utiliza
         }
     }

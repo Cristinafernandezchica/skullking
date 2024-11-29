@@ -89,10 +89,10 @@ export default function Jugando() {
           }
           const data = await response.json();
           setMano(data);
-          console.log("nueva mano", mano)
+          console.log("Nueva mano", mano)
           // Fetch jugadores for each partida
       } catch (error) {
-          console.error("Error fetching partidas:", error);
+          console.error("Error encontrando partidas:", error);
           setMessage(error.message);
           setVisible(true);
       }
@@ -114,7 +114,7 @@ export default function Jugando() {
           const data = await response.json();
           setTurnoActual(data);
         } catch (error) {
-          console.error("Error fetching turno actual:", error);
+          console.error("Error encontrando turno actual:", error);
           setMessage(error.message);
           setVisible(true);
         }
@@ -145,7 +145,7 @@ export default function Jugando() {
         } 
         setManosOtrosJugadores(nuevasManos); 
         } catch (error) { 
-          console.error("Error fetching manos de otros jugadores:", error); 
+          console.error("Error encontrando manos de otros jugadores:", error); 
           setMessage(error.message); setVisible(true); 
         } 
       }; 
@@ -170,7 +170,7 @@ export default function Jugando() {
             console.log("Este es la lista de trucos",data)
             setListaDeTrcuos(data);
         } catch (error) {
-            console.error("Error fetching jugadores:", error);
+            console.error("Error encontrando jugadores:", error);
             setMessage(error.message);
             setVisible(true);
         }
@@ -191,7 +191,7 @@ export default function Jugando() {
           const data = await response.json();
           setJugadores(data);
       } catch (error) {
-          console.error("Error fetching jugadores:", error);
+          console.error("Error encontrando jugadores:", error);
           setMessage(error.message);
           setVisible(true);
       }
@@ -228,7 +228,7 @@ export default function Jugando() {
 
           if (!response.ok) {
               const errorData = await response.json();
-              throw new Error(`Error al hacer la apuesta: ${errorData.message || 'Error desconocido'}`);
+              throw new Error(errorData.message || 'Error desconocido');
           }
 
         //  console.log("Apuesta realizada con éxito");
@@ -257,7 +257,7 @@ export default function Jugando() {
           setBazaActual(data);
        //   console.log("baza??",data);
       } catch (error) {
-          console.error("Error fetching partidas:", error);
+          console.error("Error encontrando partidas:", error);
           setMessage(error.message);
           setVisible(true);
       }
@@ -306,7 +306,7 @@ export default function Jugando() {
         });
 
         if (!response.ok) {
-          console.log("algo falla")
+          console.log("Algo falla")
           throw new Error('Network response was not ok');
         }
 
@@ -336,7 +336,7 @@ export default function Jugando() {
               setRonda(data);
               
           } catch (error) {
-              console.error("Error fetching partidas:", error);
+              console.error("Error encontrando partidas:", error);
               setMessage(error.message);
               setVisible(true);
           }
@@ -367,13 +367,13 @@ export default function Jugando() {
         });
 
         if (!response.ok) {
-          console.log("algo falla")
+          console.log("Algo falla")
           throw new Error('Network response was not ok');
         }
 
         const data = await response.json();
         setTruco(data);
-        console.log("dime que se creo el truco",data);
+        console.log("Dime que se creo el truco",data);
       } catch (error) {
         console.error('Error:', error);
       }
@@ -391,13 +391,13 @@ export default function Jugando() {
         });
 
         if (!response.ok) {
-          console.log("algo falla")
+          console.log("Algo falla")
           throw new Error('Network response was not ok');
         }
 
         const data = await response.json();
         setBazaActual(data);
-        console.log("la baza con el palo dominante",data);
+        console.log("La baza con el palo dominante",data);
       } catch (error) {
         console.error('Error:', error);
       }
@@ -420,12 +420,12 @@ export default function Jugando() {
 
     /*
 
-    console.log("ronda encontrada",ronda);
-    console.log("Jugadores encontrado",jugadores);
-    console.log("id de la partida",idPartida);
+    console.log("Ronda encontrada",ronda);
+    console.log("Jugadores encontrados",jugadores);
+    console.log("Id de la partida",idPartida);
 
         */
-  //  console.log("mano encontrada",mano);
+  //  console.log("Mano encontrada",mano);
   //  console.log("Truco",truco);
   console.log("Baza Actual",BazaActual);
 
@@ -467,7 +467,7 @@ export default function Jugando() {
                   //truco.carta=carta;
                   //mano.cartas= mano.cartas.filter((cartaAEliminar) =>carta.id !== cartaAEliminar.id)
                   //setTruco(truco);
-                  //console.log("modificado",truco);
+                  //console.log("Modificado",truco);
                   //quitarCarta(mano);
                 } }
                 >

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
 import '../static/css/home/home.css';
-import logo from '../static/images/gamelogo.png'
 import tokenService from './../services/token.service';
 import jwt_decode from "jwt-decode";
 import { Button } from "reactstrap";

@@ -15,7 +15,7 @@ export default class Mano {
             const data = await response.json();
             return data; // Devuelve los datos de la mano del jugador
         } catch (error) {
-            console.error(`Error fetching mano de jugador ${jugadorId}:`, error);
+            console.error(`Error encontrando la mano del jugador ${jugadorId}:`, error);
             throw error; // Propaga el error
         }
     }
@@ -31,7 +31,7 @@ export default class Mano {
             }
             return manos; // Devuelve un objeto con las manos de otros jugadores
         } catch (error) {
-            console.error("Error fetching manos de otros jugadores:", error);
+            console.error("Error encontrando las manos de otros jugadores:", error);
             throw error; // Propaga el error
         }
     }

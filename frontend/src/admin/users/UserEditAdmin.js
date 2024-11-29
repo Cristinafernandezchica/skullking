@@ -71,13 +71,13 @@ export default function UserEditAdmin() {
 
   return (
     <div className="auth-page-container">
-      {<h2>{user.id ? "Edit User" : "Add User"}</h2>}
+      {<h2>{user.id ? "Editar usuario" : "Añadir usuario"}</h2>}
       {modal}
       <div className="auth-form-container">
         <Form onSubmit={handleSubmit}>
           <div className="custom-form-input">
             <Label for="username" className="custom-form-input-label">
-              Username
+              Nombre de usuario
             </Label>
             <Input
               type="text"
@@ -91,7 +91,7 @@ export default function UserEditAdmin() {
           </div>
           <div className="custom-form-input">
             <Label for="lastName" className="custom-form-input-label">
-              Password
+              Contraseña
             </Label>
             <Input
               type="password"
@@ -104,7 +104,7 @@ export default function UserEditAdmin() {
             />
           </div>
           <Label for="authority" className="custom-form-input-label">
-            Authority
+            Autoridad
           </Label>
           <div className="custom-form-input">
             {user.id ? (
@@ -136,13 +136,13 @@ export default function UserEditAdmin() {
             )}
           </div>
           <div className="custom-button-row">
-            <button className="auth-button">Save</button>
+            <button className="auth-button">Guardar</button>
             <Link
               to={`/users`}
               className="auth-button"
               style={{ textDecoration: "none" }}
             >
-              Cancel
+              Cancelar
             </Link>
           </div>
         </Form>

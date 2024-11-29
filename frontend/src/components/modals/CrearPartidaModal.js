@@ -20,7 +20,7 @@ export default function CrearPartidaModal({ isVisible, onCancel, onConfirm }) {
                     <Input
                         type="text"
                         id="nombrePartida"
-                        placeholder="Game Name"
+                        placeholder="Nombre partida"
                         value={nombrePartida}
                         onChange={(e) => setNombrePartida(e.target.value)}
                     />
@@ -28,10 +28,10 @@ export default function CrearPartidaModal({ isVisible, onCancel, onConfirm }) {
             </ModalBody>
             <ModalFooter>
                 <Button color="secondary" onClick={onCancel}>
-                    <i className="fa fa-times" aria-hidden="true"></i> Cancel
+                    <i className="fa fa-times" aria-hidden="true"></i> Cancelar
                 </Button>
                 <Button color="primary" onClick={handleConfirmClick}>
-                    <i className="fa fa-check" aria-hidden="true"></i> Confirm
+                    <i className="fa fa-check" aria-hidden="true"></i> Confirmar
                 </Button>
             </ModalFooter>
         </Modal>

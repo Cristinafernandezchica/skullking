@@ -21,9 +21,9 @@ import Jugando from "./play/jugando";
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
     <div role="alert">
-      <p>Something went wrong:</p>
+      <p>Algo fue mal:</p>
       <pre>{error.message}</pre>
-      <button onClick={resetErrorBoundary}>Try again</button>
+      <button onClick={resetErrorBoundary}>Prueba de nuevo</button>
     </div>
   )
 }

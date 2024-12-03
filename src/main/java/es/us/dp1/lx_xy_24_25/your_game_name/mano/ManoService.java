@@ -89,6 +89,8 @@ private JugadorService js;
     @Transactional
     public void iniciarManos(Integer partidaId, Ronda ronda){
         List<Carta> listaCartas =(List<Carta>) cs.findAll();
+        // para que no se cojan las cartas comodines
+        listaCartas.stream().filter(c -> !( c.getId().equals(72) || c.getId().equals(71))).collect(Collectors.toList());
         Collections.shuffle(listaCartas);   // Barajar cartas
         List<Jugador> jugadores = js.findJugadoresByPartidaId(partidaId);
         for(Jugador jugador: jugadores){

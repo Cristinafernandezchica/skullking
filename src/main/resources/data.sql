@@ -126,18 +126,21 @@ INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUE
 INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (62,  null, 'sirena', 'http://localhost:8080/resources/images/cartas/sirena_1.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
 INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (63,  null, 'sirena', 'http://localhost:8080/resources/images/cartas/sirena_2.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
 INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (64,  null, 'skullking', 'http://localhost:8080/resources/images/cartas/skull_king.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
-INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (65,  null, 'tigresa', 'http://localhost:8080/resources/images/cartas/sirena_2.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
+INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (65,  null, 'tigresa', 'http://localhost:8080/resources/images/cartas/tigresa.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
 INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (66, null, 'banderaBlanca', 'http://localhost:8080/resources/images/cartas/bandera_blanca.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
 INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (67, null, 'banderaBlanca', 'http://localhost:8080/resources/images/cartas/bandera_blanca.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
 INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (68, null, 'banderaBlanca', 'http://localhost:8080/resources/images/cartas/bandera_blanca.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
 INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (69, null, 'banderaBlanca', 'http://localhost:8080/resources/images/cartas/bandera_blanca.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
 INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (70, null, 'banderaBlanca', 'http://localhost:8080/resources/images/cartas/bandera_blanca.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
 
+-- Cartas comodín para tigresa
+INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (71, null, 'banderaBlanca', 'http://localhost:8080/resources/images/cartas/tigresa.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
+INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (72, null, 'pirata', 'http://localhost:8080/resources/images/cartas/tigresa.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
 
 -- testeo
 
 INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (1, 1, 1, 1);
-INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (2, 2, 1, 0);
+INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (500, 2, 1, 0);
 INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (3, 3, 0, 0);
 
 -- Asignar cartas a la mano 1
@@ -145,9 +148,9 @@ INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 1);  -- Mano 1 contiene Car
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 2);  -- Mano 1 contiene Carta 2
 
 -- Asignar cartas a la mano 2
-INSERT INTO carta_mano(mano_id, carta_id) VALUES (2, 2);  -- Mano 2 contiene Carta 2
-INSERT INTO carta_mano(mano_id, carta_id) VALUES (2, 3);  -- Mano 2 contiene Carta 3
-INSERT INTO carta_mano(mano_id, carta_id) VALUES (2, 4);  -- Mano 2 contiene Carta 4
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (500, 2);  -- Mano 2 contiene Carta 2
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (500, 3);  -- Mano 2 contiene Carta 3
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (500, 65);  -- Mano 2 contiene Carta 4
 
 -- Asignar cartas a la mano 3
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (3, 1);  -- Mano 3 contiene Carta 1

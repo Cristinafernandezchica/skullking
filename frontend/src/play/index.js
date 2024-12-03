@@ -221,7 +221,9 @@ useEffect(() => {
             </div>
             <div style={{ marginBottom: 20 }}>
               {partidaJugador && ( // Verifica que partidaJugador no sea null
-                <Button outline color="success" onClick={() => navigate(partidaJugador.estado === "ESPERANDO" ? `/salaEspera/${partidaJugador.id}` : `/tablero/${partidaJugador.id}`)}>
+                <Button outline color="success" onClick={() => 
+                  navigate(partidaJugador.estado === "ESPERANDO" ? 
+                    `/salaEspera/${partidaJugador.id}` : `/tablero/${partidaJugador.id}`)}>
                   Volver a partida
                 </Button>
               )}

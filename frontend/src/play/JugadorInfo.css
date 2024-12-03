@@ -72,6 +72,17 @@
     border-radius: 5px;
     margin-left: -70px; /* para que se solapen las cartas */
   }
+
+  .imagen-carta-tigresa {
+    width: 150px;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    justify-content: center;
+    text-align: center;
+
+  }
+
   .imagen-carta-otras {
     width: 100px;
     height: auto;

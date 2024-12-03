@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './JugadorInfo.css';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'; 
 import tokenService from "../services/token.service";
 import useFetchState from '../util/useFetchState';
 import getIdFromUrl from '../util/getIdFromUrl';
 import ApuestaModal from '../components/modals/ApostarModal';
+import ElegirTigresaModal from '../components/modals/ElegirTigresaModal';
 // import manito from  'frontend/src/static/images/cartas/morada_1.png'
 
 
@@ -41,6 +43,11 @@ export default function Jugando() {
 
     // manejo turno
     const [turnoActual, setTurnoActual] = useState(null);
+
+    // Jugar carta Tigresa
+    const [modalTigresaOpen, setModalTigresaOpen] = useState(false); 
+    const [eleccion, setEleccion] = useState('');
+    const [nuevaTigresa, setNuevaTigresa] = useState();
 
 
     const fetchMano = async (jugadorId) => {
@@ -311,9 +318,54 @@ export default function Jugando() {
       fetchRondaActual(idPartida);
     }, []);
 
+    const cambioTigresa2 = async (tipoCarta) => {
+      try{
+        const response = await fetch(`/api/v1/cartas/tigresa/${tipoCarta}`, {
+          headers: {
+            "Authorization": `Bearer ${jwt}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log("Se esta jugando tigresa",data);
+        setNuevaTigresa(data);
+      } catch (error) {
+        console.error("Error fetching cambioTigresa:", error);
+        setMessage(error.message);
+        setVisible(true);
+      }
+    }
 
-    const jugarTruco = async (cartaAJugar) => {
-      await iniciarTruco(tu.id,cartaAJugar);
+//
+    const jugarTruco = async (cartaAJugar, tipoCarta = eleccion) => {
+      let cartaFinal = cartaAJugar;
+      if(cartaAJugar.tipoCarta == "tigresa" && tipoCarta){
+        try{
+          const response = await fetch(`/api/v1/cartas/tigresa/${tipoCarta}`, {
+            headers: {
+              "Authorization": `Bearer ${jwt}`,
+              'Content-Type': 'application/json'
+            }
+          })
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          console.log("Se esta jugando tigresa",data);
+          setNuevaTigresa(data);
+          cartaFinal = data;
+        } catch (error) {
+          console.error("Error fetching cambioTigresa:", error);
+          setMessage(error.message);
+          setVisible(true);
+        }
+      }
+      console.log("Carta a jugar:", cartaFinal);
+      await iniciarTruco(tu.id,cartaFinal);
+      console.log("Truco a jugar:", cartaFinal);
       await fetchMano(tu.id);
     };
 
@@ -383,6 +435,15 @@ export default function Jugando() {
   }
     }, [truco]);
 
+    const handleEleccion = (eleccion) => {
+      setEleccion(eleccion);
+      setModalTigresaOpen(false);
+      console.log("hasta aqui llego");
+      jugarTruco({ tipoCarta: 'tigresa' }, eleccion); // Pasar la elección al jugarTruco
+      console.log("pase", nuevaTigresa);
+    };
+  
+
 
 
     /*
@@ -428,9 +489,11 @@ export default function Jugando() {
             {mano!==null && mano.cartas.map((carta) => (
               <div key={carta.id} className="carta">
                 <button className='boton-agrandable'
-                 disabled={visualizandoCartas}
                  onClick={() => {
-                  jugarTruco(carta);
+                  if(carta.tipoCarta === 'tigresa'){
+                    setModalTigresaOpen(true);
+                  }else{jugarTruco(carta);}
+
                   //truco.carta=carta;
                   //mano.cartas= mano.cartas.filter((cartaAEliminar) =>carta.id !== cartaAEliminar.id)
                   //setTruco(truco);
@@ -453,6 +516,13 @@ export default function Jugando() {
                 onCancel={toggleApuestaModal}
                 onConfirm={apostar}
                       />
+
+        <ElegirTigresaModal 
+                isVisible={modalTigresaOpen} 
+                onCancel={() => setModalTigresaOpen(false)} 
+                onConfirm={handleEleccion}
+          />
+
       </div>
     );
 }

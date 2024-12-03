@@ -50,4 +50,15 @@ public class CartaService {
 		return toUpdate;
 	}
 
+    @Transactional
+    public Carta cambioTigresa(String tipoCartaElegido){
+        Carta newCarta = new Carta();
+        if(tipoCartaElegido.toLowerCase().equals("pirata")){
+            newCarta = findById(72).get();
+        }else{
+            newCarta = findById(71).get();
+        }
+        return newCarta;
+    }
+
 }

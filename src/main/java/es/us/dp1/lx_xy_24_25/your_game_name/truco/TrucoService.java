@@ -39,6 +39,9 @@ public class TrucoService {
 	private JugadorService jugadorService;
 	private ManoService manoService;
 	// private BazaService bazaService;	// Para turnos
+	private final Integer idComodinPirata = 72;
+	private final Integer idComodinBanderaBlanca = 71;
+	private final Integer idTigresa = 65;
 
 
     @Autowired
@@ -132,7 +135,11 @@ public class TrucoService {
 			Mano manoSinCartaJugada = trucoIniciado.getMano();
 			List<Carta> nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
 			filter(cartaJugada -> cartaJugada.getId()!=trucoIniciado.getCarta().getId()).toList();
-			manoSinCartaJugada.setCartas(nuevaListaCarta);
+			if(trucoIniciado.getCarta().getId()==idComodinBanderaBlanca || trucoIniciado.getCarta().getId()==idComodinPirata){
+				nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
+					filter(cartaJugada -> cartaJugada.getId()!=idTigresa).toList();
+			}
+			manoSinCartaJugada.setCartas(nuevaListaCarta); 
 			manoService.saveMano(manoSinCartaJugada);
 
 			return trucoIniciado;

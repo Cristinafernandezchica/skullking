@@ -37,5 +37,7 @@ public class Partida extends BaseEntity{
     private PartidaEstado estado;
 
     @NotNull
-    private  Integer ownerPartida;
+    private Integer ownerPartida;
+
+    private Integer turnoActual;
 }

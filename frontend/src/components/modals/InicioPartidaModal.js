@@ -11,7 +11,7 @@ export default function InicioPartidaModal({ isVisible, onCancel, onConfirm }) {
 
     return (
         <Modal isOpen={isVisible} toggle={onCancel}>
-            <ModalHeader toggle={onCancel}>Confirmar Inicio de Partida</ModalHeader>
+            <ModalHeader toggle={onCancel}>Confirmar inicio de partida</ModalHeader>
             <ModalBody>
                 ¿Estás seguro de que deseas iniciar la partida?
             </ModalBody>

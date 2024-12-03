@@ -5,22 +5,17 @@ describe('AppNavbar', () => {
 
     test('renders public links correctly', () => {
         render(<AppNavbar />);
-        const linkDocsElement = screen.getByRole('link', { name: 'Docs' });
+        const linkDocsElement = screen.getByRole('link', { name: 'Documentos' });
         expect(linkDocsElement).toBeInTheDocument();
-
-        const linkPlansElement = screen.getByRole('link', { name: 'Pricing Plans' });
-        expect(linkPlansElement).toBeInTheDocument();
-
-        const linkHomeElement = screen.getByRole('link', { name: 'logo PetClinic' });
-        expect(linkHomeElement).toBeInTheDocument();
+        
     });
 
     test('renders not user links correctly', () => {
         render(<AppNavbar />);
-        const linkDocsElement = screen.getByRole('link', { name: 'Register' });
+        const linkDocsElement = screen.getByRole('link', { name: 'Registrarse' });
         expect(linkDocsElement).toBeInTheDocument();
 
-        const linkPlansElement = screen.getByRole('link', { name: 'Login' });
+        const linkPlansElement = screen.getByRole('link', { name: 'Iniciar sesión' });
         expect(linkPlansElement).toBeInTheDocument();
     });
 

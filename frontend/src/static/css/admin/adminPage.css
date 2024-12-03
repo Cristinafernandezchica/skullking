@@ -18,7 +18,7 @@
   transition: transform 0.5s, color 0.3s;
   transform: translateY(-15px) scale(0.7);
   transform-origin: top left;
-  color: #23c483;
+  color: #a7a03e;
   cursor: pointer;
 }
 

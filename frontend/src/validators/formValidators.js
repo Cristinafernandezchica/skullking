@@ -3,24 +3,12 @@ export const formValidators = {
         validate: (value) => {
             return value.trim().length > 0;
         },
-        message: "The field cannot be empty"
-    },
-    telephoneValidator: {
-        validate: (value) => {
-            return value.trim().length === 9 && /^\d+$/.test(value);
-        },
-        message: "The telephone number must be 9 digits long and contain only numbers"
+        message: "El campo no puede estar vacio"
     },
     notNoneTypeValidator: {
         validate: (value) => {
             return value !== "None";
         },
-        message: "Please, select a type"
-    },
-    validPhoneNumberValidator: {
-        validate: (value) => {
-            return value.trim().length === 9 && /^\d+$/.test(value);
-        },
-        message: "The phone number must be 9 digits long and contain only numbers"
+        message: "Por favor, selecciona un tipo"
     }
 }

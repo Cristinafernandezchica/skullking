@@ -21,7 +21,7 @@ export default function Login() {
     })
       .then(function (response) {
         if (response.status === 200) return response.json();
-        else return Promise.reject("Invalid login attempt");
+        else return Promise.reject("Intento inválido al iniciar sesión");
       })
       .then(function (data) {
         tokenService.setUser(data);
@@ -42,7 +42,7 @@ export default function Login() {
           <></>
         )}
 
-        <h1>Login</h1>
+        <h1>Iniciar sesión</h1>
 
         <div className="auth-form-container">
           <FormGenerator
@@ -51,7 +51,7 @@ export default function Login() {
             onSubmit={handleSubmit}
             numberOfColumns={1}
             listenEnterKey
-            buttonText="Login"
+            buttonText="Iniciar sesión"
             buttonClassName="auth-button"
           />
         </div>

@@ -22,7 +22,7 @@ export default function UnirPartidaModal({ isVisible, onCancel, onConfirm }) {
                     const data = await response.json();
                     setPartidas(data);
                 } catch (error) {
-                    console.error("Error fetching partidas:", error);
+                    console.error("Error encontrando partidas:", error);
                 }
             };
             fetchPartidas();
@@ -36,7 +36,7 @@ export default function UnirPartidaModal({ isVisible, onCancel, onConfirm }) {
 
     return (
         <Modal isOpen={isVisible} toggle={onCancel} >
-            <ModalHeader toggle={onCancel} style={{ backgroundColor: '#002147', color: '#ffffff' }}>Partidas Disponibles</ModalHeader>
+            <ModalHeader toggle={onCancel} style={{ backgroundColor: '#002147', color: '#ffffff' }}>Partidas disponibles</ModalHeader>
             <ModalBody style={{ backgroundColor: '#002147', color: '#ffffff'}}>
                 <Table>
                     <thead>

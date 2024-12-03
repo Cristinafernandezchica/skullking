@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface TrucoRepository extends CrudRepository<Truco, Integer> {
 
     @Query("SELECT t FROM Truco t WHERE (:bazaId IS NULL OR t.baza.id = :bazaId)")
-	public List<Truco> findByBazaId(Integer bazaId);
+	public List<Truco> findTrucosByBazaId(Integer bazaId);
 
     // Poner en TrucoService y luego en BazaRestController
     @Query("SELECT t.carta FROM Truco t WHERE t.baza.id = :bazaId ORDER BY t.turno ASC")

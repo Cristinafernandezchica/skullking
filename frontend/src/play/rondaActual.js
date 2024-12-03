@@ -15,7 +15,7 @@ export default class RondaActual {
             const data = await response.json();
             return data; // Devuelve los datos de la ronda
         } catch (error) {
-            console.error("Error fetching ronda actual:", error);
+            console.error("Error encontrando la ronda actual:", error);
             throw error; // Propaga el error para manejo en el componente que la utiliza
         }
     }

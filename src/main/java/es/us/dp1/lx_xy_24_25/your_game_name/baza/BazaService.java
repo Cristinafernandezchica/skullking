@@ -15,23 +15,30 @@ import org.springframework.transaction.annotation.Transactional;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
-import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoRepository;
 import jakarta.validation.Valid;
 
 @Service
 public class BazaService {
     
     private BazaRepository bazaRepository;
-    private TrucoService trucoService;
+    private TrucoRepository trucoRepository;
+    private PartidaService partidaService;
+    private JugadorService jugadorService;
 
     @Autowired
-    public BazaService(BazaRepository bazaRepository,TrucoService trucoService) {
+    public BazaService(BazaRepository bazaRepository,TrucoRepository trucoRepository, PartidaService partidaService, JugadorService jugadorService) {
         this.bazaRepository = bazaRepository;
-        this.trucoService = trucoService;
+        this.trucoRepository = trucoRepository;
+        this.partidaService = partidaService;
+        this.jugadorService = jugadorService;
     }
 
     //Save las bazas en la base de datos
@@ -103,16 +110,69 @@ public class BazaService {
     // Iniciar una Baza
     @Transactional
     public Baza iniciarBazas (Ronda ronda) {
+         Partida partida = ronda.getPartida();
+        List<Integer> turnos  = calcularTurnosNuevaBaza(partida.getId(), null);
         Baza baza = new Baza();
         baza.setTrucoGanador(null);
         baza.setNumBaza(1);
         baza.setGanador(null);
         baza.setTipoCarta(TipoCarta.sinDeterminar);
         baza.setRonda(ronda);
+        baza.setTurnos(turnos);
         Baza resBaza = bazaRepository.save(baza);
+        partida.setTurnoActual(primerTurno(turnos));
+        partidaService.update(partida, partida.getId());
         //trucoService.crearTrucosBazaConTurno(baza.getId()); // cambiado para turnos
         return resBaza;
     }
+
+    @Transactional
+    public List<Integer> calcularTurnosNuevaBaza(int partidaId, Baza bazaAnterior) {
+        List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partidaId);
+
+        // Si es la primera baza, el orden es el orden de unión de los jugadores
+        if (bazaAnterior == null) {
+			List<Integer> turnosJugadores = jugadores.stream().map(Jugador::getId).collect(Collectors.toList());
+			asignarTurnoAJugadores(jugadores, turnosJugadores);
+            return turnosJugadores;
+        }
+
+        // Identificar al ganador de la baza anterior
+        Integer ganadorId = bazaAnterior.getGanador().getId();
+
+        // Reorganizar turnos: ganador primero, seguido por el resto
+        List<Integer> ordenAnterior = jugadores.stream().map(Jugador::getId).collect(Collectors.toList());
+        List<Integer> turnosNuevaBaza = ordenAnterior.stream()
+            .dropWhile(id -> !id.equals(ganadorId))  // Los jugadores a partir del ganador
+            .collect(Collectors.toList());
+
+        // Añadir los jugadores que estaban antes del ganador al final de la lista
+        turnosNuevaBaza.addAll(
+            ordenAnterior.stream().takeWhile(id -> !id.equals(ganadorId)).collect(Collectors.toList())
+        );
+		asignarTurnoAJugadores(jugadores, turnosNuevaBaza);
+
+        return turnosNuevaBaza;
+    }
+
+    @Transactional
+	public void asignarTurnoAJugadores(List<Jugador> jugadores, List<Integer> turnos){
+		Integer turno = 1;
+		for (Integer turnoJugadorId: turnos){
+			for(Jugador jugador: jugadores){
+				if(turnoJugadorId == jugador.getId()){
+					jugador.setTurno(turno);
+                    jugadorService.updateJugador(jugador, jugador.getId());
+				}
+			}
+			turno++;
+		}
+	}
+
+    @Transactional
+	public Integer primerTurno(List<Integer> turnos){
+		return turnos.get(0);
+	}
 /* 
     // Next Baza
     @Transactional
@@ -142,16 +202,17 @@ public class BazaService {
         List<Baza> bazasRondaJugador = findByIdRondaAndIdJugador(idRonda,idJugador);
         Integer ptosBonificacion = 0;
         for(Baza baza: bazasRondaJugador){
-            List<Carta> cartasBaza = trucoService.findTrucosByBazaId(baza.getId())
+            List<Carta> cartasBaza = trucoRepository.findTrucosByBazaId(baza.getId())
                 .stream().map(t -> t.getCarta()).collect(Collectors.toList());
             Carta cartaGanadora = baza.getTrucoGanador().getCarta();
             for(Carta carta: cartasBaza){
-                calculoPtosBonificacion(cartaGanadora, carta);
+                ptosBonificacion += calculoPtosBonificacion(cartaGanadora, carta);  // carta.calculoPtosBonificacion(cartaGanadora, carta);
             }
         }
         return ptosBonificacion;
     }
 
+    // Mover a entidad Carta como método
     public Integer calculoPtosBonificacion(Carta cartaGanadora, Carta carta){
         Integer ptosBonificacion = 0;
         TipoCarta cartaTipo = carta.getTipoCarta();
@@ -181,7 +242,7 @@ public class BazaService {
     public void calculoGanador(Integer idBaza){
         Baza baza = findById(idBaza);
         Truco trucoGanador = null;
-        List<Truco> trucosBaza = trucoService.findTrucosByBazaId(idBaza);
+        List<Truco> trucosBaza = trucoRepository.findTrucosByBazaId(idBaza);
         Integer personajes=0;
         List<Truco> triunfos = new ArrayList<Truco>();
         List<Truco> cartasPalo = new ArrayList<Truco>();

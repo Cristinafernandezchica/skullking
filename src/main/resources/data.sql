@@ -134,8 +134,8 @@ INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUE
 INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (70, null, 'banderaBlanca', 'http://localhost:8080/resources/images/cartas/bandera_blanca.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
 
 -- Cartas comodín para tigresa
-INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (71, null, 'banderaBlanca', 'http://localhost:8080/resources/images/cartas/tigresa.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
-INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (72, null, 'pirata', 'http://localhost:8080/resources/images/cartas/tigresa.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
+INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (71, null, 'banderaBlanca', 'http://localhost:8080/resources/images/cartas/tigresa_banderaBlanca.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
+INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUES (72, null, 'pirata', 'http://localhost:8080/resources/images/cartas/tigresa_pirata.png', 'http://localhost:8080/resources/images/cartas/parte_trasera.png');
 
 -- testeo
 

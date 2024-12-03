@@ -56,6 +56,7 @@ export default function ElegirTigresaModal({ isVisible, onCancel, onConfirm }) {
                 >
                     <img 
                         src={'http://localhost:8080/resources/images/cartas/tigresa_banderaBlanca.png'} 
+                        // frontend\src\static\images\cartas\tigresa_banderaBlanca.png
                         alt="Carta Bandera Blanca" 
                         className="imagen-carta-tigresa" 
                     />

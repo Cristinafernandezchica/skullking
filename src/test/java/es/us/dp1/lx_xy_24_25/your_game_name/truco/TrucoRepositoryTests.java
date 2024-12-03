@@ -16,12 +16,12 @@ public class TrucoRepositoryTests {
     // public Optional<Truco> findTrucoByBazaIdCartaId(Integer bazaId, Integer cartaId);
     @Test
     public void findBazaByNullId(){
-        List<Truco> trucos = trucoRepository.findByBazaId(null);
+        List<Truco> trucos = trucoRepository.findTrucosByBazaId(null);
         assertTrue(trucos.isEmpty());
     }
     @Test
     public void findBazaByNonExistentId(){
-        List<Truco> trucos = trucoRepository.findByBazaId(1);
+        List<Truco> trucos = trucoRepository.findTrucosByBazaId(1);
         assertTrue(!trucos.isEmpty());
     }
 }

@@ -78,6 +78,7 @@ public class ManoRestController {
     }
 
     // Para apostar
+    //@PostMapping("/apuesta/{jugadorId}")
     @PutMapping("/apuesta/{jugadorId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> apuesta(@RequestParam Integer apuesta, @PathVariable Integer jugadorId) {

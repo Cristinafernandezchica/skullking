@@ -19,6 +19,10 @@ export default function ApuestaModal({ isVisible, onCancel, onConfirm }) {
     }, [isVisible]);
 
     const handleConfirmClick = async () => {
+        if (apuesta === '') {
+            setErrorMessage('El campo no puede estar vacío.');
+            return;
+        }
         try {
             await onConfirm(apuesta);
             setApuesta('');
@@ -46,9 +50,6 @@ export default function ApuestaModal({ isVisible, onCancel, onConfirm }) {
                 </FormGroup>
             </ModalBody>
             <ModalFooter>
-                <Button color="secondary" onClick={onCancel}>
-                    <i className="fa fa-times" aria-hidden="true"></i> Cancelar
-                </Button>
                 <Button color="primary" onClick={handleConfirmClick}>
                     <i className="fa fa-check" aria-hidden="true"></i> Confirmar
                 </Button>

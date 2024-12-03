@@ -35,7 +35,7 @@ export default function UserListAdmin() {
               tag={Link}
               to={"/users/" + user.id}
             >
-              Edit
+              Editar
             </Button>
             <Button
               size="sm"
@@ -52,7 +52,7 @@ export default function UserListAdmin() {
                 )
               }
             >
-              Delete
+              Eliminar
             </Button>
           </ButtonGroup>
         </td>
@@ -63,19 +63,19 @@ export default function UserListAdmin() {
 
   return (
     <div className="admin-page-container">
-      <h1 className="text-center">Users</h1>
+      <h1 className="text-center">Usuarios</h1>
       {alerts.map((a) => a.alert)}
       {modal}
       <Button color="success" tag={Link} to="/users/new">
-        Add User
+        Añadir usuario
       </Button>
       <div>
         <Table aria-label="users" className="mt-4">
           <thead>
             <tr>
-              <th>Username</th>
-              <th>Authority</th>
-              <th>Actions</th>
+              <th>Nombre de usuario</th>
+              <th>Autoridad</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>{userList}</tbody>

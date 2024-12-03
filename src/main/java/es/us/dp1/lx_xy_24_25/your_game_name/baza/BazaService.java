@@ -34,7 +34,7 @@ public class BazaService {
     private JugadorService jugadorService;
 
     @Autowired
-    public BazaService(BazaRepository bazaRepository,TrucoRepository trucoRepository, PartidaService partidaService, JugadorService jugadorService) {
+    public BazaService(BazaRepository bazaRepository,TrucoRepository trucoRepository, @Lazy PartidaService partidaService, JugadorService jugadorService) {
         this.bazaRepository = bazaRepository;
         this.trucoRepository = trucoRepository;
         this.partidaService = partidaService;

@@ -351,26 +351,6 @@ export default function Jugando() {
       fetchRondaActual(idPartida);
     }, []);
 
-    const cambioTigresa2 = async (tipoCarta) => {
-      try{
-        const response = await fetch(`/api/v1/cartas/tigresa/${tipoCarta}`, {
-          headers: {
-            "Authorization": `Bearer ${jwt}`,
-            'Content-Type': 'application/json'
-          }
-        })
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        console.log("Se esta jugando tigresa",data);
-        setNuevaTigresa(data);
-      } catch (error) {
-        console.error("Error fetching cambioTigresa:", error);
-        setMessage(error.message);
-        setVisible(true);
-      }
-    }
 
 //
     const jugarTruco = async (cartaAJugar, tipoCarta = eleccion) => {

@@ -9,6 +9,7 @@ import java.util.stream.StreamSupport;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +35,7 @@ public class PartidaService {
     UserService us;
 
     @Autowired
-    public PartidaService(PartidaRepository pr, RondaService rs, JugadorService js) {
+    public PartidaService(PartidaRepository pr, @Lazy RondaService rs, JugadorService js) {
         this.pr = pr;
         this.rs = rs;
         this.js = js;

@@ -140,17 +140,18 @@ public class TrucoService {
 		trucoIniciado.setCarta(DTO.getCarta());
 		trucoRepository.save(trucoIniciado);
 
-			Mano manoSinCartaJugada = trucoIniciado.getMano();
-			List<Carta> nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
+		Mano manoSinCartaJugada = trucoIniciado.getMano();
+		List<Carta> nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
 			filter(cartaJugada -> cartaJugada.getId()!=trucoIniciado.getCarta().getId()).toList();
-			manoSinCartaJugada.setCartas(nuevaListaCarta);
-			manoService.saveMano(manoSinCartaJugada);
-			if(trucoIniciado.getCarta().getId()==idComodinBanderaBlanca || trucoIniciado.getCarta().getId()==idComodinPirata){
-				nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
-					filter(cartaJugada -> cartaJugada.getId()!=idTigresa).toList();
-			}
+			
+		if(trucoIniciado.getCarta().getId()==idComodinBanderaBlanca || trucoIniciado.getCarta().getId()==idComodinPirata){
+			nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
+				filter(cartaJugada -> cartaJugada.getId()!=idTigresa).toList();
+		}
+		manoSinCartaJugada.setCartas(nuevaListaCarta);
+		manoService.saveMano(manoSinCartaJugada);
 
-			Partida partida = trucoIniciado.getBaza().getRonda().getPartida();
+		Partida partida = trucoIniciado.getBaza().getRonda().getPartida();
 		Integer numJugadores = jugadorService.findJugadoresByPartidaId(partida.getId()).size();
 		Integer bazaId = trucoIniciado.getBaza().getId();
 		Integer numTrucosBaza = findTrucosByBazaId(bazaId).size();

@@ -256,7 +256,7 @@ public class BazaService {
                 personajes++;
                 if(carta.getTipoCarta().equals(TipoCarta.skullking)) skullKing.add(truco);
                 if(carta.getTipoCarta().equals(TipoCarta.sirena)) sirenas.add(truco);
-                if(carta.getTipoCarta().equals(TipoCarta.skullking)) piratas.add(truco);
+                if(carta.getTipoCarta().equals(TipoCarta.pirata)) piratas.add(truco);
             } 
             if(carta.esTriunfo()) triunfos.add(truco);
             if(baza.getTipoCarta().equals(carta.getTipoCarta())) cartasPalo.add(truco);

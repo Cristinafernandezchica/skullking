@@ -132,6 +132,19 @@ public class JugadorService {
                 return jugadoresOrdenados;
     }
 
+    @Transactional(readOnly = true)
+    public Partida findPartidaByUsuarioId(Integer usuarioId){
+        List<Jugador> jugadores =jugadorRepository.findJugadoresByUsuarioId(usuarioId);
+        Partida partida = new Partida();
+        for(Jugador j:jugadores){
+            if(!(j.getPartida().getEstado().equals(PartidaEstado.TERMINADA))){
+                partida = j.getPartida();
+            }
+        }
+        return partida;
+    }
+
+
     /*
     // Para ver el turno del jugador
     @Transactional(readOnly = true)

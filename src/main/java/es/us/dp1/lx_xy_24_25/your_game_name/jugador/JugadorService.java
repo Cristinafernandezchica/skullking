@@ -132,6 +132,28 @@ public class JugadorService {
                 return jugadoresOrdenados;
     }
 
+    @Transactional(readOnly = true)
+    public Partida findPartidaByUsuarioId(Integer usuarioId){
+        List<Jugador> jugadores =jugadorRepository.findJugadoresByUsuarioId(usuarioId);
+        Partida partida = new Partida();
+        for(Jugador j:jugadores){
+            if(!(j.getPartida().getEstado().equals(PartidaEstado.TERMINADA))){
+                partida = j.getPartida();
+            }
+        }
+        return partida;
+    }
+
+
+    /*
+    // Para ver el turno del jugador
+    @Transactional(readOnly = true)
+    public Integer findTurnoByJugadorId(Integer jugadorId) {
+        Optional<Jugador> jugador = jugadorRepository.findById(jugadorId);
+        return jugador.isPresent()? jugador.get().getTurno() : null;
+    }
+    */
+
     // Método para verificar si un usuario tiene múltiples jugadores en la misma partida
     /*
     public boolean usuarioMultiplesJugadoresEnPartida(User usuario, Partida partida) {

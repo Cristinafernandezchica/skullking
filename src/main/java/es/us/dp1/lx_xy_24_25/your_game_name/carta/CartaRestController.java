@@ -84,4 +84,10 @@ public class CartaRestController {
 
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/tigresa/{tipoCarta}")
+    public ResponseEntity<Carta> cambioTigresa(@PathVariable String tipoCarta){
+        RestPreconditions.checkNotNull(cartaService.cambioTigresa(tipoCarta), "Carta", "tipoCarta", tipoCarta);
+        return new ResponseEntity<>(this.cartaService.cambioTigresa(tipoCarta), HttpStatus.OK);
+    }
+    
 }

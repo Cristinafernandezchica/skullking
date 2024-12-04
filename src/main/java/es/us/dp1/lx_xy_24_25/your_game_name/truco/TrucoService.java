@@ -36,6 +36,11 @@ import java.util.stream.Collectors;
 @Service
 public class TrucoService {
     
+	private final Integer idTigresa=65;
+	private final Integer idComodinBanderaBlanca=71;
+	private final Integer idComodinPirata=72;
+	
+	
     private TrucoRepository trucoRepository;
 	private BazaRepository bazaRepository;
 	// private ManoRepository manoRepository;
@@ -138,7 +143,12 @@ public class TrucoService {
 
 		Mano manoSinCartaJugada = trucoIniciado.getMano();
 		List<Carta> nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
-		filter(cartaJugada -> cartaJugada.getId()!=trucoIniciado.getCarta().getId()).toList();
+			filter(cartaJugada -> cartaJugada.getId()!=trucoIniciado.getCarta().getId()).toList();
+			
+		if(trucoIniciado.getCarta().getId()==idComodinBanderaBlanca || trucoIniciado.getCarta().getId()==idComodinPirata){
+			nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
+				filter(cartaJugada -> cartaJugada.getId()!=idTigresa).toList();
+		}
 		manoSinCartaJugada.setCartas(nuevaListaCarta);
 		manoService.saveMano(manoSinCartaJugada);
 
@@ -163,7 +173,6 @@ public class TrucoService {
 
 		return trucoIniciado;
 	}
-	
 
 
     // Para BazaRestController

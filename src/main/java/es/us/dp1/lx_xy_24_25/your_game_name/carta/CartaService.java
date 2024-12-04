@@ -13,7 +13,9 @@ import jakarta.validation.Valid;
 @Service
 public class CartaService {
      private CartaRepository cartaRepository;
-
+    private final Integer ID_TIGRESA_BANDERA_BLANCA = 71;
+    private final Integer ID_TIGRESA_PIRATA = 72;
+    
     @Autowired
     public CartaService(CartaRepository cartaRepository) {
         this.cartaRepository = cartaRepository;
@@ -50,4 +52,14 @@ public class CartaService {
 		return toUpdate;
 	}
 
+    @Transactional
+    public Carta cambioTigresa(String tipoCartaElegido){
+        Carta newCarta = new Carta();
+        if(tipoCartaElegido.toLowerCase().equals("pirata")){
+            newCarta = findById(ID_TIGRESA_BANDERA_BLANCA).get();
+        }else{
+            newCarta = findById(ID_TIGRESA_PIRATA).get();
+        }
+        return newCarta;
+    }
 }

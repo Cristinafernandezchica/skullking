@@ -53,5 +53,6 @@ public class Carta extends BaseEntity {
     public Boolean esCatorce(){
         return numero == 14;
     }
+    
 
 }

@@ -55,13 +55,11 @@ public class ManoServiceTest {
         jugador = new Jugador();
         jugador.setId(1);
         jugador.setPuntos(12);
-        jugador.setTurno(1);
         jugador.setUsuario(null);
         jugador.setPartida(partida);
 
         ronda = new Ronda();
         ronda.setId(1);
-        ronda.setBazaActual(3);
         ronda.setEstado(RondaEstado.JUGANDO);
         ronda.setNumBazas(4);
         ronda.setNumRonda(4);
@@ -78,7 +76,6 @@ public class ManoServiceTest {
         carta = new Carta();
         carta.setId(1);
         carta.setImagenFrontal("./images/cartas/morada_1.png");
-        carta.setImagenTrasera("./images/cartas/parte_trasera.png");
         carta.setNumero(1);
         carta.setTipoCarta(TipoCarta.morada);
         cartas = List.of(carta);
@@ -187,7 +184,6 @@ public class ManoServiceTest {
         Mano mano2 = new Mano();
         Jugador jugador2 = new Jugador();
         jugador2.setId(2);
-        jugador2.setTurno(1);
         mano2.setJugador(jugador2);
         mano2.setApuesta(1);
         mano2.setResultado(0);

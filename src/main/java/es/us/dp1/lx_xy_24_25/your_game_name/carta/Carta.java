@@ -20,9 +20,9 @@ public class Carta extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TipoCarta tipoCarta;
 
-    private String imagenFrontal;   // Imagen parte delantera
+    private String imagenFrontal;
 
-    private String imagenTrasera;   // Imagen parte trasera
+    private String imagenTrasera="./images/cartas/parte_trasera.png";
 
 
     public Boolean esPersonaje(){

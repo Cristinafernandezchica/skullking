@@ -73,19 +73,6 @@ public class JugadorRestController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    // get turno por jugadorId
-    /*
-    @GetMapping(value = "/{jugadorId}/turno")
-    public ResponseEntity<Integer> findTurnoByJugadorId(@PathVariable("jugadorId") Integer jugadorId) {
-        Integer res;
-        res = jugadorService.findTurnoByJugadorId(jugadorId);
-        if(res == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(res, HttpStatus.OK);
-    }
-    */
-
     //get todos los jugadores
     @GetMapping
     public ResponseEntity<List<Jugador>> findAll() {

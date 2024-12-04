@@ -8,14 +8,9 @@ import org.springframework.http.ResponseEntity;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
-import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
-import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
-import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
-import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

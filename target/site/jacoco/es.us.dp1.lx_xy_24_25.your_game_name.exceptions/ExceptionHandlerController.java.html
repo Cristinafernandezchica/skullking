@@ -57,13 +57,13 @@ import org.springframework.web.context.request.WebRequest;
 	@ExceptionHandler(value = MethodArgumentNotValidException.class)
 	public final ResponseEntity&lt;ErrorMessage&gt; handleMethodArgumentException(MethodArgumentNotValidException ex,
 			WebRequest request) {
-<span class="nc" id="L60">		Map&lt;String, Object&gt; fieldError = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L61">		List&lt;FieldError&gt; fieldErrors = ex.getBindingResult().getFieldErrors();</span>
-<span class="nc" id="L62">		fieldErrors.stream().forEach(error -&gt; fieldError.put(error.getField(), error.getDefaultMessage()));</span>
-<span class="nc" id="L63">		ErrorMessage message = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), new Date(), fieldError.toString(),</span>
-<span class="nc" id="L64">				request.getDescription(false));</span>
+<span class="fc" id="L60">		Map&lt;String, Object&gt; fieldError = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L61">		List&lt;FieldError&gt; fieldErrors = ex.getBindingResult().getFieldErrors();</span>
+<span class="fc" id="L62">		fieldErrors.stream().forEach(error -&gt; fieldError.put(error.getField(), error.getDefaultMessage()));</span>
+<span class="fc" id="L63">		ErrorMessage message = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), new Date(), fieldError.toString(),</span>
+<span class="fc" id="L64">				request.getDescription(false));</span>
 
-<span class="nc" id="L66">		return new ResponseEntity&lt;&gt;(message, HttpStatus.BAD_REQUEST);</span>
+<span class="fc" id="L66">		return new ResponseEntity&lt;&gt;(message, HttpStatus.BAD_REQUEST);</span>
 	}
 
 	@ExceptionHandler(value = AccessDeniedException.class)

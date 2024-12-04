@@ -132,15 +132,6 @@ public class JugadorService {
                 return jugadoresOrdenados;
     }
 
-    /*
-    // Para ver el turno del jugador
-    @Transactional(readOnly = true)
-    public Integer findTurnoByJugadorId(Integer jugadorId) {
-        Optional<Jugador> jugador = jugadorRepository.findById(jugadorId);
-        return jugador.isPresent()? jugador.get().getTurno() : null;
-    }
-    */
-
     // Método para verificar si un usuario tiene múltiples jugadores en la misma partida
     /*
     public boolean usuarioMultiplesJugadoresEnPartida(User usuario, Partida partida) {

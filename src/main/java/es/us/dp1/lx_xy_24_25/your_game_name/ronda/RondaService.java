@@ -72,7 +72,6 @@ public class RondaService {
         Ronda ronda = new Ronda();
         ronda.setNumBazas(1);
         ronda.setNumRonda(1);
-        ronda.setBazaActual(1);
         ronda.setPartida(partida);
         ronda.setEstado(RondaEstado.JUGANDO);
         Ronda res= rr.save(ronda);
@@ -96,7 +95,6 @@ public class RondaService {
             ps.finalizarPartida(ronda.getPartida().getId());
         } else{
             newRonda.setNumRonda(nextRonda);
-            newRonda.setBazaActual(1);
             newRonda.setEstado(RondaEstado.JUGANDO);
             ms.iniciarManos(ronda.getPartida().getId(),newRonda);
             newRonda.setNumBazas(ms.getNumCartasARepartir(newRonda.getNumRonda(), 

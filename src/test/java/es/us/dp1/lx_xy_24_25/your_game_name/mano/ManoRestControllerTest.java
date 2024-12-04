@@ -56,14 +56,12 @@ public class ManoRestControllerTest {
         jugador = new Jugador();
         jugador.setId(1);
         jugador.setPuntos(12);
-        jugador.setTurno(1);
         jugador.setUsuario(null);
         jugador.setPartida(partida);
 
         carta = new Carta();
         carta.setId(1);
         carta.setImagenFrontal("./images/cartas/morada_1.png");
-        carta.setImagenTrasera("./images/cartas/parte_trasera.png");
         carta.setNumero(1);
         carta.setTipoCarta(TipoCarta.morada);
 
@@ -77,7 +75,6 @@ public class ManoRestControllerTest {
 
         ronda = new Ronda();
         ronda.setId(1);
-        ronda.setBazaActual(3);
         ronda.setEstado(RondaEstado.JUGANDO);
         ronda.setNumBazas(4);
         ronda.setNumRonda(4);
@@ -147,10 +144,10 @@ public class ManoRestControllerTest {
 
     // Test para obtener una mano por jugador
     @Test
-    void testFindManoByJugadorId() {
+    void testFindLastManoByJugadorId() {
         given(manoService.findLastManoByJugadorId(1)).willReturn(mano);
 
-        ResponseEntity<Mano> response = new ManoRestController(manoService, trucoService).findManoByJugadorId(1);
+        ResponseEntity<Mano> response = new ManoRestController(manoService, trucoService).findLastManoByJugadorId(1);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());

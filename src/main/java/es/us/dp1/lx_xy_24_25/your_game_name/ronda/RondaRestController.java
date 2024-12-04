@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
 
@@ -85,4 +86,11 @@ public class RondaRestController {
     public Ronda getRondaByPartidaId(@PathVariable("partidaId") Integer partidaId) {
         return rs.findRondaActualByPartidaId(partidaId);
     }
+
+    @PostMapping("/{bazaId}/next-baza") 
+    public ResponseEntity<Baza> nextBaza(@PathVariable Integer bazaId) { 
+    Baza newBaza = rs.nextBaza(bazaId); 
+    return ResponseEntity.ok(newBaza);
+    }
+
 }

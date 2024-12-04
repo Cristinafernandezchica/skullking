@@ -181,6 +181,10 @@ public class BazaService {
         Ronda ronda = baza.getRonda();
         Integer nextBaza = baza.getNumBaza() + 1;
 
+        // Actualiza la propiedad ganador de la instancia de la Baza anterior
+        // El valor de esta propiedad se usa en el cálculo del puntaje
+        calculoGanador(baza.getId());
+        // Posible nueva baza de la misma ronda
         Baza newBaza = new Baza();
 
         // Comprobación si es la última baza
@@ -238,6 +242,7 @@ public class BazaService {
         // Ademas hay q definir idCartaGanadora, llamando la funcion de truco que devuelve la list<trucos> y me quedo con la propiedad id carta    
 
 
+    /*
     @Transactional
     public void calculoGanador(Integer idBaza){
         Baza baza = findById(idBaza);
@@ -308,6 +313,36 @@ public class BazaService {
         
         baza.setTrucoGanador(trucoGanador);
 
+    }
+    */
+
+    // Método calculoGanador usando Patrón State
+    @Transactional
+    public void calculoGanador(Integer idBaza) {
+        Baza baza = findById(idBaza);
+        List<Truco> trucosBaza = trucoRepository.findTrucosByBazaId(idBaza);
+        CalculoGanadorContext context = new CalculoGanadorContext();
+
+        // Determinar el estado basado en las condiciones
+        if (trucosBaza.stream().anyMatch(truco -> truco.getCarta().esPersonaje())) {
+            context.setState(new PersonajesState());
+        } else if (trucosBaza.stream().anyMatch(truco -> truco.getCarta().esTriunfo())) {
+            context.setState(new TriunfosState());
+        } else {
+            context.setState(new CartasPaloState());
+        }
+
+        // Calcular el ganador utilizando el estado
+        Truco trucoGanador = context.calcularGanador(baza, trucosBaza);
+
+        // Fallback si no se encuentra un ganador válido
+        if (trucoGanador == null && !trucosBaza.isEmpty()) {
+            trucoGanador = trucosBaza.get(0);
+        }
+
+        baza.setTrucoGanador(trucoGanador);
+        baza.setGanador(trucoGanador.getJugador());
+        bazaRepository.save(baza);
     }
 
      public Truco getPrimeraSirena(List<Truco> sirenas){

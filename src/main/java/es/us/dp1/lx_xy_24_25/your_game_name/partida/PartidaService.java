@@ -34,10 +34,11 @@ public class PartidaService {
     UserService us;
 
     @Autowired
-    public PartidaService(PartidaRepository pr, RondaService rs, JugadorService js) {
+    public PartidaService(PartidaRepository pr, RondaService rs, JugadorService js, UserService us) {
         this.pr = pr;
         this.rs = rs;
         this.js = js;
+        this.us = us;
     }
 
     // Con este método se puede filtrar por nombre y estado

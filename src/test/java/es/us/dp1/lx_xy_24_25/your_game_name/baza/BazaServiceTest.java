@@ -74,7 +74,6 @@ public class BazaServiceTest {
         jugador = new Jugador();
         jugador.setId(1);
         jugador.setPuntos(12);
-        jugador.setTurno(1);
         jugador.setUsuario(null);
         jugador.setPartida(partida);
 
@@ -82,14 +81,12 @@ public class BazaServiceTest {
         carta = new Carta();
         carta.setId(1);
         carta.setImagenFrontal("./images/cartas/morada_1.png");
-        carta.setImagenTrasera("./images/cartas/parte_trasera.png");
         carta.setNumero(1);
         carta.setTipoCarta(TipoCarta.morada);
 
         cartaV = new Carta();
         cartaV.setId(29);
         cartaV.setImagenFrontal("./images/cartas/verde_1.png");
-        cartaV.setImagenTrasera("./images/cartas/parte_trasera.png");
         cartaV.setNumero(1);
         cartaV.setTipoCarta(TipoCarta.verde);
 
@@ -119,7 +116,6 @@ public class BazaServiceTest {
 
         ronda = new Ronda();
         ronda.setId(1);
-        ronda.setBazaActual(3);
         ronda.setEstado(RondaEstado.JUGANDO);
         ronda.setNumBazas(3);
         ronda.setNumRonda(4);

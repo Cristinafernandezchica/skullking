@@ -71,9 +71,8 @@ public class ManoRestController {
 	}
 
     @GetMapping("/{jugadorId}")
-    public ResponseEntity<Mano> findManoByJugadorId(@PathVariable("jugadorId") Integer jugadorId) {
-        Mano res;
-        res = manoService.findLastManoByJugadorId(jugadorId);
+    public ResponseEntity<Mano> findLastManoByJugadorId(@PathVariable("jugadorId") Integer jugadorId) {
+        Mano res = manoService.findLastManoByJugadorId(jugadorId);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 

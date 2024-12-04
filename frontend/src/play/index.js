@@ -23,6 +23,7 @@ export default function Play(){
   const handleCloseUnionModal = () => setUnionModalOpen(false);
   // Para manejo de errores (unirse a partida)
   const [errors, setErrors] = useState([]);
+  const [partidaJugador,setPartidaJugador] = useState(false);
 
 
   const showError = (error) => { 
@@ -99,7 +100,6 @@ const createJugador = async (partida) => {
               puntos: 0,
               partida: { id: partida.id },
               usuario: { id: user.id },
-              turno: 0
           }),
       });
 
@@ -151,8 +151,7 @@ const unirseAPartida = async (partidaId) => {
       body: JSON.stringify({
         puntos: 0,
         partida: { id: partidaId },
-        usuario: user,
-        turno: 0
+        usuario: user
       }),
     });
 
@@ -178,6 +177,25 @@ const unirseAPartida = async (partidaId) => {
     console.error('Error creando jugador:', error);
   }
 };
+const fetchPartidaJugador = async () => {
+  try {
+      const response = await fetch(`/api/v1/jugadores/${user.id}/partida`, {
+          headers: {
+              "Authorization": `Bearer ${jwt}`
+          }
+      });
+      if (!response.ok) {
+          throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setPartidaJugador(data);
+  } catch (error) {
+      console.error("Error fetching partidas Jugando:", error);
+  }
+};
+useEffect(() => {
+  fetchPartidaJugador();
+}, []);
 
     
     return (
@@ -198,6 +216,14 @@ const unirseAPartida = async (partidaId) => {
             </div>
             <div style = {{marginBottom: 20}}>
               <Button outline color="success" onClick={handleOpenUnionModal}>Unirse a una partida</Button>
+            </div>
+
+            <div style={{ marginBottom: 20 }}>
+              {partidaJugador && ( // Verifica que partidaJugador no sea null
+                <Button outline color="success" onClick={() => navigate(partidaJugador.estado === "ESPERANDO" ? `/salaEspera/${partidaJugador.id}` : `/tablero/${partidaJugador.id}`)}>
+                  Volver a partida
+                </Button>
+              )}
             </div>
 
             <CrearPartidaModal

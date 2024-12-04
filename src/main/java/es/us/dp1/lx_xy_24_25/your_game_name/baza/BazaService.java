@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +18,6 @@ import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
-import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.state.CalculoGanadorContext;
 import es.us.dp1.lx_xy_24_25.your_game_name.state.CartasPaloState;
 import es.us.dp1.lx_xy_24_25.your_game_name.state.PersonajesState;
@@ -79,12 +77,12 @@ public class BazaService {
 
         return toUpdate;
     }
-//te encuentra la baza que tenga menor id y no haya finalizado (no tenga un truco ganador)
+    // Buscar la baza que tenga menor id y no haya finalizado (no tenga un truco ganador)
     @Transactional(readOnly = true)
     public Baza findBazaActualByRondaId(Integer rondaId){
         List<Baza> Bazas =bazaRepository.findBazasByRondaId(rondaId);
         Bazas= Bazas.stream().filter(x->x.getTrucoGanador()==null).toList();
-       Baza BazasOrdenadas = Bazas.stream()
+        Baza BazasOrdenadas = Bazas.stream()
                         .sorted((j1, j2) -> j1.getId().compareTo(j2.getId())) // Orden ascendente
                         .findFirst().orElse(null);
                 return BazasOrdenadas;
@@ -137,7 +135,6 @@ public class BazaService {
         // Si es la primera baza, el orden es el orden de unión de los jugadores
         if (bazaAnterior == null) {
 			List<Integer> turnosJugadores = jugadores.stream().map(Jugador::getId).collect(Collectors.toList());
-			asignarTurnoAJugadores(jugadores, turnosJugadores);
             return turnosJugadores;
         }
 
@@ -154,24 +151,10 @@ public class BazaService {
         turnosNuevaBaza.addAll(
             ordenAnterior.stream().takeWhile(id -> !id.equals(ganadorId)).collect(Collectors.toList())
         );
-		asignarTurnoAJugadores(jugadores, turnosNuevaBaza);
 
         return turnosNuevaBaza;
     }
 
-    @Transactional
-	public void asignarTurnoAJugadores(List<Jugador> jugadores, List<Integer> turnos){
-		Integer turno = 1;
-		for (Integer turnoJugadorId: turnos){
-			for(Jugador jugador: jugadores){
-				if(turnoJugadorId == jugador.getId()){
-					jugador.setTurno(turno);
-                    jugadorService.updateJugador(jugador, jugador.getId());
-				}
-			}
-			turno++;
-		}
-	}
 
     @Transactional
 	public Integer primerTurno(List<Integer> turnos){
@@ -265,7 +248,7 @@ public class BazaService {
                 personajes++;
                 if(carta.getTipoCarta().equals(TipoCarta.skullking)) skullKing.add(truco);
                 if(carta.getTipoCarta().equals(TipoCarta.sirena)) sirenas.add(truco);
-                if(carta.getTipoCarta().equals(TipoCarta.skullking)) piratas.add(truco);
+                if(carta.getTipoCarta().equals(TipoCarta.pirata)) piratas.add(truco);
             } 
             if(carta.esTriunfo()) triunfos.add(truco);
             if(baza.getTipoCarta().equals(carta.getTipoCarta())) cartasPalo.add(truco);

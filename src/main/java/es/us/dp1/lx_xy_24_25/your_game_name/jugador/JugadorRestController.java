@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.AccessDeniedException;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.AuthoritiesService;
 import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -73,19 +74,6 @@ public class JugadorRestController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    // get turno por jugadorId
-    /*
-    @GetMapping(value = "/{jugadorId}/turno")
-    public ResponseEntity<Integer> findTurnoByJugadorId(@PathVariable("jugadorId") Integer jugadorId) {
-        Integer res;
-        res = jugadorService.findTurnoByJugadorId(jugadorId);
-        if(res == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(res, HttpStatus.OK);
-    }
-    */
-
     //get todos los jugadores
     @GetMapping
     public ResponseEntity<List<Jugador>> findAll() {
@@ -102,7 +90,7 @@ public class JugadorRestController {
 		return new ResponseEntity<>(this.jugadorService.updateJugador(jugador, id), HttpStatus.OK);
     }
 
-    // crear un nuevo jugador
+    // crear un nuevo jugador.
     @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Jugador> create(@RequestBody @Valid Jugador jugador) {
@@ -134,5 +122,12 @@ public class JugadorRestController {
 		jugadorService.deleteJugador(id);
 		return new ResponseEntity<>(new MessageResponse("Jugador deleted!"), HttpStatus.OK);
 	}
+    
+    @GetMapping(value="/{usuarioId}/partida")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Partida> findPartidaByUsuarioId(@PathVariable("usuarioId") int usuarioId){
+        RestPreconditions.checkNotNull(jugadorService.findPartidaByUsuarioId(usuarioId), "Jugador", "usuarioId", usuarioId);
+        return new ResponseEntity<>(this.jugadorService.findPartidaByUsuarioId(usuarioId), HttpStatus.OK);
+    }
 
 }

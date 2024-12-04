@@ -1,18 +1,10 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.baza;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
-import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 @Component
 public class BazaValidator implements Validator{

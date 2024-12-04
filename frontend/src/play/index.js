@@ -23,7 +23,8 @@ export default function Play(){
   const handleCloseUnionModal = () => setUnionModalOpen(false);
   // Para manejo de errores (unirse a partida)
   const [errors, setErrors] = useState([]);
-  const [partidaJugador, setPartidaJugador] = useState();
+  const [partidaJugador,setPartidaJugador] = useState(false);
+
 
   const showError = (error) => { 
     setErrors([error]); 
@@ -178,7 +179,6 @@ const unirseAPartida = async (partidaId) => {
     console.error('Error creando jugador:', error);
   }
 };
-
 const fetchPartidaJugador = async () => {
   try {
       const response = await fetch(`/api/v1/jugadores/${user.id}/partida`, {
@@ -195,7 +195,6 @@ const fetchPartidaJugador = async () => {
       console.error("Error fetching partidas Jugando:", error);
   }
 };
-
 useEffect(() => {
   fetchPartidaJugador();
 }, []);
@@ -219,16 +218,14 @@ useEffect(() => {
             <div style = {{marginBottom: 20}}>
               <Button outline color="success" onClick={handleOpenUnionModal}>Unirse a una partida</Button>
             </div>
+
             <div style={{ marginBottom: 20 }}>
               {partidaJugador && ( // Verifica que partidaJugador no sea null
-                <Button outline color="success" onClick={() => 
-                  navigate(partidaJugador.estado === "ESPERANDO" ? 
-                    `/salaEspera/${partidaJugador.id}` : `/tablero/${partidaJugador.id}`)}>
+                <Button outline color="success" onClick={() => navigate(partidaJugador.estado === "ESPERANDO" ? `/salaEspera/${partidaJugador.id}` : `/tablero/${partidaJugador.id}`)}>
                   Volver a partida
                 </Button>
               )}
             </div>
-
 
             <CrearPartidaModal
               isVisible={isModalOpen}

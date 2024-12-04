@@ -27,7 +27,9 @@ import jakarta.validation.Valid;
 
 @Service
 public class ManoService {
-    
+private final Integer ID_TIGRESA_BANDERA_BLANCA = 71;
+private final Integer ID_TIGRESA_PIRATA = 72;
+
 private ManoRepository manoRepository;
 private CartaService cs;
 private JugadorService js;
@@ -90,7 +92,7 @@ private JugadorService js;
     public void iniciarManos(Integer partidaId, Ronda ronda){
         List<Carta> listaCartas =(List<Carta>) cs.findAll();
         // para que no se cojan las cartas comodines
-        listaCartas.stream().filter(c -> !( c.getId().equals(72) || c.getId().equals(71))).collect(Collectors.toList());
+        listaCartas.stream().filter(c -> !( c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA))).collect(Collectors.toList());
         Collections.shuffle(listaCartas);   // Barajar cartas
         List<Jugador> jugadores = js.findJugadoresByPartidaId(partidaId);
         for(Jugador jugador: jugadores){

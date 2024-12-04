@@ -6,6 +6,7 @@ import useFetchState from '../util/useFetchState';
 import getIdFromUrl from '../util/getIdFromUrl';
 import ApuestaModal from '../components/modals/ApostarModal';
 import ElegirTigresaModal from '../components/modals/ElegirTigresaModal';
+import ElegirTigresaModal from '../components/modals/ElegirTigresaModal';
 // import manito from  'frontend/src/static/images/cartas/morada_1.png'
 
 
@@ -25,6 +26,9 @@ export default function Jugando() {
       setMessage,
       setVisible
     );
+    const [modalTigresaOpen, setModalTigresaOpen] = useState(false); 
+    const [eleccion, setEleccion] = useState('');
+    const [nuevaTigresa, setNuevaTigresa] = useState();
     const [tu,setTu] = useFetchState(null,`/api/v1/jugadores/${user.id}/usuario`,jwt,setMessage,setVisible); 
     const [mano, setMano] = useState(null);
     const [ronda,setRonda] = useState(null);
@@ -45,12 +49,6 @@ export default function Jugando() {
 
     // manejo turno
     const [turnoActual, setTurnoActual] = useState(null);
-
-     // Jugar carta Tigresa
-     const [modalTigresaOpen, setModalTigresaOpen] = useState(false); 
-     const [eleccion, setEleccion] = useState('');
-     const [nuevaTigresa, setNuevaTigresa] = useState();
-
 
      const fetchPartida = async (idPartida) => {
       try {
@@ -289,42 +287,6 @@ export default function Jugando() {
   }, [ronda,ListaDeTrcuos]);
 
 
-    /*
-    const jugarTruco = async (carta) => {
-      if (visualizandoCartas){
-        console.log("Aún no puedes jugar una carta, espera a que terminen las apuestas y sea tu turno")
-      }
-      if (tu.id !== turnoActual) {
-        console.log("No es tu turno");
-        return;
-      }
-
-      try {
-        const response = await fetch(`/api/v1/trucos/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${jwt}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            jugadorId: tu.id,
-            cartaId: carta.id
-          })
-        });
-
-        if (!response.ok) {
-          console.log("Algo falla")
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        setTurnoActual(data.turnoActual);
-
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-    */
 
 
     useEffect(() => {
@@ -352,7 +314,6 @@ export default function Jugando() {
     }, []);
 
 
-//
     const jugarTruco = async (cartaAJugar, tipoCarta = eleccion) => {
       let cartaFinal = cartaAJugar;
       if(cartaAJugar.tipoCarta == "tigresa" && tipoCarta){
@@ -411,6 +372,8 @@ export default function Jugando() {
       }
     };
 
+    
+
     const cambiarPaloBaza = async (baza) => {
       try {
         const response = await fetch(`/api/v1/bazas/${baza.id}`, {
@@ -455,7 +418,6 @@ export default function Jugando() {
       jugarTruco({ tipoCarta: 'tigresa' }, eleccion); // Pasar la elección al jugarTruco
       console.log("pase", nuevaTigresa);
     };
-  
 
 
 
@@ -470,73 +432,73 @@ export default function Jugando() {
   //  console.log("Truco",truco);
   console.log("Baza Actual",BazaActual);
 
-    return (
-      <div className = "tablero">
-        <div className="lista-jugadores">
-          {jugadores!==null  && jugadores.map((jugador) => (
-            <div key={jugador.id} className="jugador-info" >
-              <h3>{jugador.usuario.username}</h3>
-              <p>Apuesta: {jugador.apuestaActual}</p>
-              <p>Puntos: {jugador.puntos}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="cartas-otros-jugadores">
-          {Object.keys(manosOtrosJugadores).map(jugadorId => (
-            <div key={jugadorId} className="carta-otros-jugadores">
-              {manosOtrosJugadores[jugadorId].cartas.map((carta) => (
-                <img 
-                  key={carta.id}
-                  src={carta.imagenTrasera}
-                  alt={`Carta ${carta.tipoCarta}`}
-                  className="imagen-carta-otras"
-                />
-              ))}
-            </div>
-          ))}
-        </div>
-
-
-        <div className="cartas">
-            {mano!==null && mano.cartas.map((carta) => (
-              <div key={carta.id} className="carta">
-                <button className='boton-agrandable'
-                 disabled={visualizandoCartas || (partida.turnoActual !== tu.id)}
-                 onClick={() => {
-                  if(carta.tipoCarta === 'tigresa'){
-                    setModalTigresaOpen(true);
-                  }else{jugarTruco(carta);}
-
-                  //truco.carta=carta;
-                  //mano.cartas= mano.cartas.filter((cartaAEliminar) =>carta.id !== cartaAEliminar.id)
-                  //setTruco(truco);
-                  //console.log("Modificado",truco);
-                  //quitarCarta(mano);
-                } }
-                >
-                <img 
-                  src={carta.imagenFrontal} 
-                  alt={`Carta ${carta.tipoCarta}`} 
-                  className="imagen-carta" 
-                />
-                </button>
-              </div>
-            ))}
-        </div>
-
-        <ApuestaModal
-                isVisible={apuestaModalOpen}
-                onCancel={toggleApuestaModal}
-                onConfirm={apostar}
-                      />
-
-        <ElegirTigresaModal 
-                isVisible={modalTigresaOpen} 
-                onCancel={() => setModalTigresaOpen(false)} 
-                onConfirm={handleEleccion}
-          />
-
+  return (
+    <div className = "tablero">
+      <div className="lista-jugadores">
+        {jugadores!==null  && jugadores.map((jugador) => (
+          <div key={jugador.id} className="jugador-info" >
+            <h3>{jugador.usuario.username}</h3>
+            <p>Apuesta: {jugador.apuestaActual}</p>
+            <p>Puntos: {jugador.puntos}</p>
+          </div>
+        ))}
       </div>
-    );
+
+      <div className="cartas-otros-jugadores">
+        {Object.keys(manosOtrosJugadores).map(jugadorId => (
+          <div key={jugadorId} className="carta-otros-jugadores">
+            {manosOtrosJugadores[jugadorId].cartas.map((carta) => (
+              <img 
+                key={carta.id}
+                src={carta.imagenTrasera}
+                alt={`Carta ${carta.tipoCarta}`}
+                className="imagen-carta-otras"
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+
+
+      <div className="cartas">
+          {mano!==null && mano.cartas.map((carta) => (
+            <div key={carta.id} className="carta">
+              <button className='boton-agrandable'
+               disabled={visualizandoCartas || (partida.turnoActual !== tu.id)}
+               onClick={() => {
+                if(carta.tipoCarta === 'tigresa'){
+                  setModalTigresaOpen(true);
+                }else{jugarTruco(carta);}
+
+                //truco.carta=carta;
+                //mano.cartas= mano.cartas.filter((cartaAEliminar) =>carta.id !== cartaAEliminar.id)
+                //setTruco(truco);
+                //console.log("Modificado",truco);
+                //quitarCarta(mano);
+              } }
+              >
+              <img 
+                src={carta.imagenFrontal} 
+                alt={`Carta ${carta.tipoCarta}`} 
+                className="imagen-carta" 
+              />
+              </button>
+            </div>
+          ))}
+      </div>
+
+      <ApuestaModal
+              isVisible={apuestaModalOpen}
+              onCancel={toggleApuestaModal}
+              onConfirm={apostar}
+                    />
+
+      <ElegirTigresaModal 
+              isVisible={modalTigresaOpen} 
+              onCancel={() => setModalTigresaOpen(false)} 
+              onConfirm={handleEleccion}
+        />
+
+    </div>
+  );
 }

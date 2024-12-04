@@ -144,6 +144,7 @@ public class JugadorService {
         return partida;
     }
 
+
     /*
     // Para ver el turno del jugador
     @Transactional(readOnly = true)

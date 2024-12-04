@@ -36,6 +36,11 @@ import java.util.stream.Collectors;
 @Service
 public class TrucoService {
     
+	private final Integer idTigresa=65;
+	private final Integer idComodinBanderaBlanca=71;
+	private final Integer idComodinPirata=72;
+	
+	
     private TrucoRepository trucoRepository;
 	private BazaRepository bazaRepository;
 	// private ManoRepository manoRepository;
@@ -172,7 +177,6 @@ public class TrucoService {
 
 		return trucoIniciado;
 	}
-	
 
 
     // Para BazaRestController

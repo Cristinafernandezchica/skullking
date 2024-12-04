@@ -74,6 +74,7 @@ public class JugadorRestController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    
     // get turno por jugadorId
     /*
     @GetMapping(value = "/{jugadorId}/turno")
@@ -103,7 +104,7 @@ public class JugadorRestController {
 		return new ResponseEntity<>(this.jugadorService.updateJugador(jugador, id), HttpStatus.OK);
     }
 
-    // crear un nuevo jugador
+    // crear un nuevo jugador.
     @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Jugador> create(@RequestBody @Valid Jugador jugador) {
@@ -135,6 +136,13 @@ public class JugadorRestController {
 		jugadorService.deleteJugador(id);
 		return new ResponseEntity<>(new MessageResponse("Jugador deleted!"), HttpStatus.OK);
 	}
+    
+    @GetMapping(value="/{usuarioId}/partida")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Partida> findPartidaByUsuarioId(@PathVariable("usuarioId") int usuarioId){
+        RestPreconditions.checkNotNull(jugadorService.findPartidaByUsuarioId(usuarioId), "Jugador", "usuarioId", usuarioId);
+        return new ResponseEntity<>(this.jugadorService.findPartidaByUsuarioId(usuarioId), HttpStatus.OK);
+    }
 
     @GetMapping(value="/{usuarioId}/partida")
     @ResponseStatus(HttpStatus.OK)

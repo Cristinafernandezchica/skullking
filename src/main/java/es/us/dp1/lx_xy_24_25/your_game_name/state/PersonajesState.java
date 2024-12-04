@@ -1,5 +1,6 @@
-package es.us.dp1.lx_xy_24_25.your_game_name.baza;
+package es.us.dp1.lx_xy_24_25.your_game_name.state;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
 import java.util.List;

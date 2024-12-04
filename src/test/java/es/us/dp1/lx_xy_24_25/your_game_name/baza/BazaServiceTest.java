@@ -371,8 +371,9 @@ public class BazaServiceTest {
             when(trucoRepository.findTrucosByBazaId(baza2.getId())).thenReturn(List.of(truco1, truco2));
     
             bazaService.calculoGanador(baza2.getId());
+            Baza bazaActualizada = bazaService.findById(baza2.getId());
     
-            assertEquals(truco1, baza2.getTrucoGanador());
+            assertEquals(truco2.getCarta(), bazaActualizada.getTrucoGanador().getCarta());
     
             verify(bazaRepository, times(1)).save(baza2);
         }

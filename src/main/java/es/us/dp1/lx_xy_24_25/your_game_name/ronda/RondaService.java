@@ -64,6 +64,7 @@ public class RondaService {
         BeanUtils.copyProperties(ronda, toUpdate, "id");
         rr.save(toUpdate);
         return toUpdate;
+        
     }
 
     @Transactional

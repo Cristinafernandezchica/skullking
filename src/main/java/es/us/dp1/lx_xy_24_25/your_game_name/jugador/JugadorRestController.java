@@ -104,7 +104,7 @@ public class JugadorRestController {
 		return new ResponseEntity<>(this.jugadorService.updateJugador(jugador, id), HttpStatus.OK);
     }
 
-    // crear un nuevo jugador
+    // crear un nuevo jugador.
     @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Jugador> create(@RequestBody @Valid Jugador jugador) {

@@ -2,6 +2,7 @@ package es.us.dp1.lx_xy_24_25.your_game_name.baza;
 
 import java.util.List;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.model.BaseEntity;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
@@ -41,8 +42,8 @@ public class Baza extends BaseEntity{
 	private Jugador ganador;
 
     @ManyToOne(optional = true)
-	@JoinColumn(name = "truco_id")
-    private Truco trucoGanador;
+	@JoinColumn(name = "carta_id")
+    private Carta cartaGanadora;
 
     @ManyToOne(optional = true)
 	@JoinColumn(name = "ronda_id")

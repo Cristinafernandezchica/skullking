@@ -77,7 +77,7 @@ public class BazaService {
     @Transactional(readOnly = true)
     public Baza findBazaActualByRondaId(Integer rondaId){
         List<Baza> Bazas =bazaRepository.findBazasByRondaId(rondaId);
-        Bazas= Bazas.stream().filter(x->x.getTrucoGanador()==null).toList();
+        Bazas= Bazas.stream().filter(x->x.getGanador()==null).toList();
         Baza BazasOrdenadas = Bazas.stream()
                         .sorted((j1, j2) -> j1.getId().compareTo(j2.getId())) // Orden ascendente
                         .findFirst().orElse(null);
@@ -108,10 +108,14 @@ public class BazaService {
     // Iniciar una Baza
     @Transactional
     public Baza iniciarBazas (Ronda ronda) {
-         Partida partida = ronda.getPartida();
-        List<Integer> turnos  = calcularTurnosNuevaBaza(partida.getId(), null);
+        Partida partida = ronda.getPartida();
+        // Probando cosas ya que al crear la primera baza de la segunda ronda no funcionan los turnos
+        List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partida.getId());
+        // calcularTurnosNuevaBaza(partida.getId(), null);
+        // List<Integer> turnos  = calcularTurnosNuevaBaza(partida.getId(), null);
+        List<Integer> turnos = jugadores.stream().map(Jugador::getId).collect(Collectors.toList());
         Baza baza = new Baza();
-        baza.setTrucoGanador(null);
+        baza.setCartaGanadora(null);
         baza.setNumBaza(1);
         baza.setGanador(null);
         baza.setTipoCarta(TipoCarta.sinDeterminar);
@@ -187,7 +191,7 @@ public class BazaService {
         for(Baza baza: bazasRondaJugador){
             List<Carta> cartasBaza = trucoRepository.findTrucosByBazaId(baza.getId())
                 .stream().map(t -> t.getCarta()).collect(Collectors.toList());
-            Carta cartaGanadora = baza.getTrucoGanador().getCarta();
+            Carta cartaGanadora = baza.getCartaGanadora();
             for(Carta carta: cartasBaza){
                 ptosBonificacion += calculoPtosBonificacion(cartaGanadora, carta);  // carta.calculoPtosBonificacion(cartaGanadora, carta);
             }
@@ -220,7 +224,7 @@ public class BazaService {
         
         // Ademas hay q definir idCartaGanadora, llamando la funcion de truco que devuelve la list<trucos> y me quedo con la propiedad id carta    
 
-
+    /*
     @Transactional
     public void calculoGanador(Integer idBaza){
         Baza baza = findById(idBaza);
@@ -292,6 +296,7 @@ public class BazaService {
         baza.setTrucoGanador(trucoGanador);
 
     }
+    */
 
      public Truco getPrimeraSirena(List<Truco> sirenas){
         return sirenas.stream().collect(Collectors.minBy(

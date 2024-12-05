@@ -70,7 +70,6 @@ public class BazaServiceTest {
         jugador = new Jugador();
         jugador.setId(1);
         jugador.setPuntos(12);
-        jugador.setTurno(1);
         jugador.setUsuario(null);
         jugador.setPartida(partida);
 
@@ -78,14 +77,12 @@ public class BazaServiceTest {
         carta = new Carta();
         carta.setId(1);
         carta.setImagenFrontal("./images/cartas/morada_1.png");
-        carta.setImagenTrasera("./images/cartas/parte_trasera.png");
         carta.setNumero(1);
         carta.setTipoCarta(TipoCarta.morada);
 
         cartaV = new Carta();
         cartaV.setId(29);
         cartaV.setImagenFrontal("./images/cartas/verde_1.png");
-        cartaV.setImagenTrasera("./images/cartas/parte_trasera.png");
         cartaV.setNumero(1);
         cartaV.setTipoCarta(TipoCarta.verde);
 
@@ -115,7 +112,6 @@ public class BazaServiceTest {
 
         ronda = new Ronda();
         ronda.setId(1);
-        ronda.setBazaActual(3);
         ronda.setEstado(RondaEstado.JUGANDO);
         ronda.setNumBazas(3);
         ronda.setNumRonda(4);
@@ -135,7 +131,7 @@ public class BazaServiceTest {
         baza.setTipoCarta(TipoCarta.morada);
         baza.setNumBaza(3);
         baza.setGanador(jugador);
-        baza.setTrucoGanador(truco);
+        //baza.setTrucoGanador(truco);
         baza.setRonda(ronda);
 
         // Configuración de la entidad Baza
@@ -144,7 +140,7 @@ public class BazaServiceTest {
         bazaV.setTipoCarta(TipoCarta.verde);
         bazaV.setNumBaza(4);
         bazaV.setGanador(jugador);
-        bazaV.setTrucoGanador(trucoT);
+        //bazaV.setTrucoGanador(trucoT);
         bazaV.setRonda(ronda);
     }
 
@@ -172,7 +168,7 @@ public class BazaServiceTest {
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(1, result.get(0).getTrucoGanador().getCarta().getNumero());
+        assertEquals(1, result.get(0).getCartaGanadora().getNumero());
         verify(bazaRepository, times(1)).findAll();
     }
 
@@ -263,7 +259,7 @@ public class BazaServiceTest {
    
            assertNotNull(nuevaBaza);
            assertEquals(1, nuevaBaza.getNumBaza());
-           assertNull(nuevaBaza.getTrucoGanador());
+           assertNull(nuevaBaza.getCartaGanadora());
            assertNull(nuevaBaza.getGanador());
            assertEquals(ronda, nuevaBaza.getRonda());
    
@@ -285,7 +281,7 @@ public class BazaServiceTest {
 
         assertNotNull(resultado);
         assertEquals(2, resultado.getNumBaza());
-        assertNull(resultado.getTrucoGanador());
+        assertNull(resultado.getCartaGanadora());
         assertNull(resultado.getGanador());
 
         verify(bazaRepository, times(1)).save(baza);

@@ -88,7 +88,6 @@ export default function SalaEspera() {
   const jugadoresList = jugadores.map((jugador) => (
     <tr key={jugador.id}>
       <td>{jugador.usuario.username}</td>
-      <td>{jugador.turno}</td>
     </tr>
   ));
 
@@ -147,7 +146,6 @@ export default function SalaEspera() {
               <thead>
                 <tr>
                   <th>Nombre de usuario</th>
-                  <th>Turno</th>
                 </tr>
               </thead>
               <tbody>

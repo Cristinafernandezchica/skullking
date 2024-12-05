@@ -54,15 +54,4 @@ public class Truco extends BaseEntity{
     // Turno correspondiente a la posición del id_jugador en la lista listaJugadores del id_partida
     // @Column(name = "turno")
     private Integer turno;
-
-    public Truco() {}
-
-    public Truco(Baza baza, Mano mano, Jugador jugador, Carta carta, Integer turno) {
-        this.baza = baza;
-        this.mano = mano;
-        this.jugador = jugador;
-        this.carta = carta;
-        this.turno = turno;
-    }
-    
 }

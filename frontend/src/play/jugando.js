@@ -104,35 +104,6 @@ export default function Jugando() {
   };
     useEffect(() => {
 
-      /*
-      const fetchTurnoActual = async (jugadorId) => {
-        try {
-          const response = await fetch(`/api/v1/jugadores/${jugadorId}/turno`, {
-            headers: {
-              "Authorization": `Bearer ${jwt}`,
-              'Content-Type': 'application/json'
-            }
-          });
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          setTurnoActual(data);
-        } catch (error) {
-          console.error("Error encontrando turno actual:", error);
-          setMessage(error.message);
-          setVisible(true);
-        }
-      };
-      */
-/*
-      if(tu!==null){
-        fetchMano(tu.id);
-        // fetchTurnoActual(tu.id);
-      }
-    }, [tu]);
-*/
-
     const fetchManosOtrosJugadores = async () => { 
       try { 
         const nuevasManos = {}; 

@@ -81,20 +81,17 @@ public class BazaRestControllerTest {
         jugador = new Jugador();
         jugador.setId(1);
         jugador.setPuntos(12);
-        jugador.setTurno(1);
         jugador.setUsuario(null);
         jugador.setPartida(partida);
     
         carta = new Carta();
         carta.setId(1);
         carta.setImagenFrontal("./images/cartas/morada_1.png");
-        carta.setImagenTrasera("./images/cartas/parte_trasera.png");
         carta.setNumero(1);
         carta.setTipoCarta(TipoCarta.morada);
     
         ronda = new Ronda();
         ronda.setId(1);
-        ronda.setBazaActual(3);
         ronda.setEstado(RondaEstado.JUGANDO);
         ronda.setNumBazas(4);
         ronda.setNumRonda(4);
@@ -113,7 +110,7 @@ public class BazaRestControllerTest {
         baza.setTipoCarta(TipoCarta.morada);
         baza.setNumBaza(3);
         baza.setGanador(jugador);
-        baza.setTrucoGanador(truco);
+        //baza.setTrucoGanador(truco);
         baza.setRonda(ronda);
 
         mano =new Mano();
@@ -168,7 +165,7 @@ public class BazaRestControllerTest {
     @Test
     void testUpdateBaza() throws Exception {
         Baza updatedBaza = new Baza();
-        updatedBaza.setTrucoGanador(truco);
+        //updatedBaza.setTrucoGanador(truco);
         updatedBaza.setGanador(jugador);
         updatedBaza.setNumBaza(5);
         updatedBaza.setRonda(ronda);

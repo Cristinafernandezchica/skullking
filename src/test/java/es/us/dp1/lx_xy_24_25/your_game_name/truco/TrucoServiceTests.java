@@ -98,7 +98,6 @@ public class TrucoServiceTests {
         carta.setId(1);
         jugador = new Jugador();
         jugador.setId(1);
-        jugador.setTurno(1);
         mano = new Mano();
         mano.setId(1);
         mano.setJugador(jugador);

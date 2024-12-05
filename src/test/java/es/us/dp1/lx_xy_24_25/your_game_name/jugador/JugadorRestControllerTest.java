@@ -10,26 +10,14 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
-
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaRepository;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaRestController;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 
 @WebMvcTest(controllers = JugadorRestController.class)
@@ -79,13 +67,11 @@ public class JugadorRestControllerTest {
         jugador = new Jugador();
         jugador.setId(TEST_Jugador_id);
         jugador.setPuntos(100);
-        jugador.setTurno(1);
         jugador.setUsuario(user);
         
         jugador2 = new Jugador();
         jugador2.setId(2);
         jugador2.setPuntos(120);
-        jugador2.setTurno(1);
         jugador2.setUsuario(user2);
     }
 
@@ -152,7 +138,6 @@ public class JugadorRestControllerTest {
         Jugador updatedJugador = new Jugador();
         updatedJugador.setId(1);
         updatedJugador.setPuntos(120);
-        updatedJugador.setTurno(2);
     
 
         when(jugadorService.findById(any(Integer.class))).thenReturn(updatedJugador);
@@ -178,7 +163,6 @@ public class JugadorRestControllerTest {
         Jugador jugador3 = new Jugador();
         jugador3.setId(3);
         jugador3.setPuntos(120);
-        jugador3.setTurno(1);
         jugador3.setUsuario(user3);
     
         when(jugadorService.saveJugador(any(Jugador.class))).thenReturn(jugador3);

@@ -100,7 +100,6 @@ const createJugador = async (partida) => {
               puntos: 0,
               partida: { id: partida.id },
               usuario: { id: user.id },
-              turno: 0
           }),
       });
 
@@ -152,8 +151,7 @@ const unirseAPartida = async (partidaId) => {
       body: JSON.stringify({
         puntos: 0,
         partida: { id: partidaId },
-        usuario: user,
-        turno: 0
+        usuario: user
       }),
     });
 

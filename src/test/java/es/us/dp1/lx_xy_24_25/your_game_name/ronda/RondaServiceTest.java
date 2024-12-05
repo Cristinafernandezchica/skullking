@@ -144,7 +144,7 @@ public class RondaServiceTest {
         baza.setTipoCarta(TipoCarta.morada);
         baza.setNumBaza(3);
         baza.setGanador(jugador);
-        baza.setTrucoGanador(truco);
+        //baza.setTrucoGanador(truco);
         baza.setRonda(ronda);
 
         // Configuración de la entidad Baza
@@ -153,7 +153,7 @@ public class RondaServiceTest {
         bazaV.setTipoCarta(TipoCarta.verde);
         bazaV.setNumBaza(4);
         bazaV.setGanador(jugador);
-        bazaV.setTrucoGanador(truco);
+        //bazaV.setTrucoGanador(truco);
         bazaV.setRonda(ronda);
 
         mano =new Mano();
@@ -379,7 +379,7 @@ public class RondaServiceTest {
         Baza result = rs.nextBaza(bazaId);
 
         // Assert
-        assertNull(result.getTrucoGanador()); // Verificar que no se configura una nueva baza
+        assertNull(result.getCartaGanadora()); // Verificar que no se configura una nueva baza
         verify(rs).nextRonda(ronda.getId());
         verify(bs, never()).calcularTurnosNuevaBaza(anyInt(), any(Baza.class)); // No se calculan turnos
     }

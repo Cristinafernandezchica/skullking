@@ -2,6 +2,7 @@ package es.us.dp1.lx_xy_24_25.your_game_name.partida;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -179,6 +180,12 @@ public class PartidaService {
             lanzarExcepcion = true;
         }
         return lanzarExcepcion;
+    }
+
+    public Jugador getJugadorGanador(Integer partidaId){
+        List<Jugador> jugadores = js.findJugadoresByPartidaId(partidaId);
+        Jugador ganador = jugadores.stream().max(Comparator.comparing(j -> j.getPuntos())).get();
+        return ganador;
     }
 
 }

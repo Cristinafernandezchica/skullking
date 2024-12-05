@@ -6,7 +6,6 @@ import useFetchState from '../util/useFetchState';
 import getIdFromUrl from '../util/getIdFromUrl';
 import ApuestaModal from '../components/modals/ApostarModal';
 import ElegirTigresaModal from '../components/modals/ElegirTigresaModal';
-import ElegirTigresaModal from '../components/modals/ElegirTigresaModal';
 // import manito from  'frontend/src/static/images/cartas/morada_1.png'
 
 
@@ -46,6 +45,7 @@ export default function Jugando() {
     const toggleApuestaModal = () => setApuestaModalOpen(!apuestaModalOpen);
     const [visualizandoCartas, setVisualizandoCartas] = useState(true)
 
+    // 
 
     // manejo turno
     const [turnoActual, setTurnoActual] = useState(null);
@@ -464,7 +464,7 @@ export default function Jugando() {
           {mano!==null && mano.cartas.map((carta) => (
             <div key={carta.id} className="carta">
               <button className='boton-agrandable'
-               disabled={visualizandoCartas || (partida.turnoActual !== tu.id)}
+               disabled={visualizandoCartas || (partida.turnoActual !== tu.id) }
                onClick={() => {
                 if(carta.tipoCarta === 'tigresa'){
                   setModalTigresaOpen(true);

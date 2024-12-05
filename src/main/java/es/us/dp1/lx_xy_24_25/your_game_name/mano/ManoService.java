@@ -141,6 +141,20 @@ private JugadorService js;
         manoRepository.save(mano);
         js.updateJugador(jugador, jugadorId);
     }
+
+    public List<Carta> cartasDisabled(Integer idMano, TipoCarta tipoCarta){
+        Mano manoActual = manoRepository.findById(idMano).get();
+        List<Carta> cartas = manoActual.getCartas();
+        List<Carta> result = new ArrayList<Carta>();
+        for(Carta c : cartas){
+            if(!(c.getTipoCarta().equals(tipoCarta) || c.esCartaEspecial())){
+                result.add(c);
+            }else{
+                result = null;
+            }
+        }
+        return result;
+    }
     
 /* 
     @Transactional

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
+import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
+import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.AuthoritiesService;
@@ -90,6 +92,11 @@ public class ManoRestController {
     @GetMapping(value = "{manoId}/trucos")
 	public ResponseEntity<List<Truco>> findTrucosByManoId(@PathVariable("manoId") int id) {
 		return new ResponseEntity<>(trucoService.findTrucosByManoId(id), HttpStatus.OK);
+	}
+
+    @GetMapping(value = "{manoId}/manoDisabled")
+	public ResponseEntity<List<Carta>> cartasDisabled(@PathVariable("manoId") int id, TipoCarta tipoCarta) {
+		return new ResponseEntity<>(manoService.cartasDisabled(id, tipoCarta), HttpStatus.OK);
 	}
 
 }

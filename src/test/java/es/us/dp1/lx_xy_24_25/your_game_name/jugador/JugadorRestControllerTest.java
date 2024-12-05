@@ -135,21 +135,16 @@ public class JugadorRestControllerTest {
     @WithMockUser("player")
     void shouldUpdateAJugador() throws Exception {
 
-        Jugador updatedJugador = new Jugador();
-        updatedJugador.setId(1);
-        updatedJugador.setPuntos(120);
-    
-
-        when(jugadorService.findById(any(Integer.class))).thenReturn(updatedJugador);
-        when(jugadorService.updateJugador(any(Jugador.class), any(Integer.class))).thenReturn(updatedJugador);
+        when(jugadorService.findById(any(Integer.class))).thenReturn(jugador);
+        when(jugadorService.updateJugador(any(Jugador.class), any(Integer.class))).thenReturn(jugador);
 
 
         mockMvc.perform(put(BASE_URL + "/{id}",1)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updatedJugador)))
+                .content(objectMapper.writeValueAsString(jugador)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.puntos").value(120));
+                .andExpect(jsonPath("$.puntos").value(100));
     }
 
     @Test

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +33,7 @@ public class BazaService {
     private JugadorService jugadorService;
 
     @Autowired
-    public BazaService(BazaRepository bazaRepository,TrucoRepository trucoRepository, PartidaService partidaService, JugadorService jugadorService) {
+    public BazaService(BazaRepository bazaRepository,TrucoRepository trucoRepository, @Lazy PartidaService partidaService, JugadorService jugadorService) {
         this.bazaRepository = bazaRepository;
         this.trucoRepository = trucoRepository;
         this.partidaService = partidaService;

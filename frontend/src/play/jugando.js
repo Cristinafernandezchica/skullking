@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './JugadorInfo.css';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'; 
 import tokenService from "../services/token.service";
 import useFetchState from '../util/useFetchState';
 import getIdFromUrl from '../util/getIdFromUrl';
@@ -44,11 +45,13 @@ export default function Jugando() {
     const toggleApuestaModal = () => setApuestaModalOpen(!apuestaModalOpen);
     const [visualizandoCartas, setVisualizandoCartas] = useState(true)
 
+    // Mano disabled
+    const [cartasDisabled, setCartasDisabled] = useState([]);
 
     // manejo turno
     const [turnoActual, setTurnoActual] = useState(null);
 
-    const fetchPartida = async (idPartida) => {
+     const fetchPartida = async (idPartida) => {
       try {
           const response = await fetch(`/api/v1/partidas/${idPartida}`, {
               headers: {
@@ -79,7 +82,6 @@ export default function Jugando() {
       return () => clearInterval(intervalo);
     }, [idPartida, tu]);
 
-
     const fetchMano = async (jugadorId) => {
       try {
           const response = await fetch(`/api/v1/manos/${jugadorId}`, {
@@ -94,13 +96,41 @@ export default function Jugando() {
           const data = await response.json();
           setMano(data);
           console.log("Nueva mano", mano)
-          // Fetch jugadores for each partida
+          // Fetch jugadores for each partida    
+          await fetchCartasDisabled(data.id, BazaActual.tipoCarta)                                                          
       } catch (error) {
           console.error("Error encontrando partidas:", error);
           setMessage(error.message);
           setVisible(true);
       }
   };
+ 
+  const fetchCartasDisabled = async (idMano, paloActual) => {
+    try {
+        const response = await fetch(`/api/v1/manos/${idMano}/manoDisabled?tipoCarta=${paloActual}`, {
+            headers: {
+                "Authorization": `Bearer ${jwt}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        
+        const responseData = await response.text();
+        console.log("Response text:", responseData);
+        
+        const data = JSON.parse(responseData);
+        setCartasDisabled(data);
+        console.log("Cartas disabled:", data);
+    } catch (error) {
+        console.error("Error encontrando partidas:", error);
+        setMessage(error.message);
+        setVisible(true);
+    }
+};
+
+
     useEffect(() => {
 
     const fetchManosOtrosJugadores = async () => { 
@@ -434,7 +464,7 @@ export default function Jugando() {
           {mano!==null && mano.cartas.map((carta) => (
             <div key={carta.id} className="carta">
               <button className='boton-agrandable'
-               disabled={visualizandoCartas || (partida.turnoActual !== tu.id)}
+               disabled={visualizandoCartas || (partida.turnoActual !== tu.id) || cartasDisabled.some(disabledCarta => disabledCarta.id === carta.id) }
                onClick={() => {
                 if(carta.tipoCarta === 'tigresa'){
                   setModalTigresaOpen(true);

@@ -105,6 +105,12 @@ public class PartidaRestController {
         ps.iniciarPartida(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{id}/jugadorGanador")
+    public ResponseEntity<Jugador> ganadorPartida (@PathVariable("id") Integer id){
+        ps.getJugadorGanador(id);
+        return new ResponseEntity<>(ps.getJugadorGanador(id), HttpStatus.OK);
+    }
     
 
 }

@@ -18,6 +18,10 @@ import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.CalculoGanadorContext;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.CartasPaloState;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.PersonajesState;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.TriunfosState;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.NoCartaDeManoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
@@ -35,12 +39,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class TrucoService {
-    
-	private final Integer idTigresa=65;
-	private final Integer idComodinBanderaBlanca=71;
-	private final Integer idComodinPirata=72;
-	
-	
+		
     private TrucoRepository trucoRepository;
 	private BazaRepository bazaRepository;
 	// private ManoRepository manoRepository;
@@ -49,6 +48,10 @@ public class TrucoService {
 	// private BazaService bazaService;	// Para turnos
 	private PartidaService partidaService;
 	private RondaService rondaService;
+
+	private final Integer idComodinPirata = 72;
+	private final Integer idComodinBanderaBlanca = 71;
+	private final Integer idTigresa = 65;
 
 
     @Autowired
@@ -158,21 +161,53 @@ public class TrucoService {
 		Integer numTrucosBaza = findTrucosByBazaId(bazaId).size();
 
 		// Si no es el último truco de la Baza, se actualiza el turno
-		if(numJugadores != numTrucosBaza){
+		if(numJugadores > numTrucosBaza){
 			List<Integer> turnos = trucoIniciado.getBaza().getTurnos();
 			Integer turnoAntesCambio = partida.getTurnoActual();
 			partida.setTurnoActual(siguienteTurno(turnos, turnoAntesCambio));
 			partidaService.update(partida, partida.getId());
 		}
 		// Si es el último truco de la Baza, se llama a nextBaza
-		/*
+		
 		else if(numJugadores == numTrucosBaza){
-			rondaService.nextBaza(bazaId);
+			calculoGanador(bazaId);
+			// rondaService.nextBaza(bazaId);
 		}
-		*/
+		
 
 		return trucoIniciado;
 	}
+
+	// Método calculoGanador usando Patrón State
+    @Transactional
+    public void calculoGanador(Integer idBaza) {
+        Baza baza = bazaRepository.findById(idBaza).get();
+        List<Truco> trucosBaza = trucoRepository.findTrucosByBazaId(idBaza);
+        CalculoGanadorContext context = new CalculoGanadorContext();
+        // Determinar el estado basado en las condiciones
+        if (trucosBaza.stream().anyMatch(truco -> truco.getCarta().esPersonaje())) {
+            context.setState(new PersonajesState());
+        } else if (trucosBaza.stream().anyMatch(truco -> truco.getCarta().esTriunfo())) {
+            context.setState(new TriunfosState());
+        } else {
+            context.setState(new CartasPaloState());
+        }
+        // Calcular el ganador utilizando el estado
+        Truco trucoGanador = context.calcularGanador(baza, trucosBaza);
+        // Fallback si no se encuentra un ganador válido
+        if (trucoGanador == null && !trucosBaza.isEmpty()) {
+            trucoGanador = trucosBaza.get(0);
+        }
+		/*
+		TrucoGanadorDTO trucoGanadorDTO = new TrucoGanadorDTO();
+		trucoGanadorDTO.setJugador(trucoGanador.getJugador());
+		trucoGanadorDTO.setCarta(trucoGanador.getCarta());
+		*/
+
+        baza.setCartaGanadora(trucoGanador.getCarta());
+        baza.setGanador(trucoGanador.getJugador());
+        bazaRepository.save(baza);
+    }
 
 
     // Para BazaRestController

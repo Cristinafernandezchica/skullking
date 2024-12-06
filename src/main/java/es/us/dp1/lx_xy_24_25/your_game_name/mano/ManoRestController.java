@@ -1,5 +1,6 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.mano;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,8 +95,9 @@ public class ManoRestController {
 	}
 
     @GetMapping(value = "{manoId}/manoDisabled")
-	public ResponseEntity<List<Carta>> cartasDisabled(@PathVariable("manoId") int id, TipoCarta tipoCarta) {
-		return new ResponseEntity<>(manoService.cartasDisabled(id, tipoCarta), HttpStatus.OK);
+	public ResponseEntity<List<Carta>> cartasDisabled(@PathVariable("manoId") int id, @RequestParam TipoCarta tipoCarta) {
+        List<Carta> res = manoService.cartasDisabled(id, tipoCarta);
+		return new ResponseEntity<>(res!=null? res: new ArrayList<>(), HttpStatus.OK);
 	}
 
 }

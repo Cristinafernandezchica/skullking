@@ -33,9 +33,9 @@ export default function Jugando() {
     const [ronda,setRonda] = useState(null);
     const [truco,setTruco] = useState(null);
     const [BazaActual, setBazaActual] = useState(null)
-    const [ListaDeTrcuos, setListaDeTrcuos] = useState([])
+    const [ListaDeTrucos, setListaDeTrucos] = useState([])
     const [seCambiaPalo, setSeCambiaPalo] = useState(true)
-    const [buscarUnaVezListaDeTrcuos, setBuscarUnaVezListaDeTrucos] =useState(true)
+    const [buscarUnaVezListaDeTrucos, setBuscarUnaVezListaDeTrucos] =useState(true)
 
     // para las cartas del resto de jugadores
     const [manosOtrosJugadores, setManosOtrosJugadores] = useState({});
@@ -173,7 +173,7 @@ export default function Jugando() {
             }
             const data = await response.json();
             console.log("Este es la lista de trucos",data)
-            setListaDeTrcuos(data);
+            setListaDeTrucos(data);
         } catch (error) {
             console.error("Error encontrando jugadores:", error);
             setMessage(error.message);
@@ -272,7 +272,7 @@ export default function Jugando() {
   useEffect(() => {
     if (BazaActual !== null)  {
     
-    if(buscarUnaVezListaDeTrcuos){
+    if(buscarUnaVezListaDeTrucos){
     fetchListaDeTrucos(BazaActual.id);
     setInterval(() => {fetchListaDeTrucos(BazaActual.id)}, 3000);
     setBuscarUnaVezListaDeTrucos(false)
@@ -284,7 +284,7 @@ export default function Jugando() {
     if (ronda !== null)  {
     fetchBazaActual();
   }
-  }, [ronda,ListaDeTrcuos]);
+  }, [ronda,ListaDeTrucos]);
 
 
 
@@ -348,7 +348,7 @@ export default function Jugando() {
       BazaCartaManoDTO.baza = BazaActual
       BazaCartaManoDTO.mano = mano
       BazaCartaManoDTO.carta = cartaAJugar
-      BazaCartaManoDTO.turno = ListaDeTrcuos.length +1
+      BazaCartaManoDTO.turno = ListaDeTrucos.length +1
       try {
         const response = await fetch(`/api/v1/trucos/${jugadorId}/jugar`, {
           method: 'POST',
@@ -459,6 +459,9 @@ export default function Jugando() {
         ))}
       </div>
 
+      <div className="cartas">
+        {}
+      </div>
 
       <div className="cartas">
           {mano!==null && mano.cartas.map((carta) => (

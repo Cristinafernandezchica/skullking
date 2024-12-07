@@ -56,9 +56,9 @@ public class CartaService {
     public Carta cambioTigresa(String tipoCartaElegido){
         Carta newCarta = new Carta();
         if(tipoCartaElegido.toLowerCase().equals("pirata")){
-            newCarta = findById(ID_TIGRESA_BANDERA_BLANCA).get();
-        }else{
             newCarta = findById(ID_TIGRESA_PIRATA).get();
+        }else{
+            newCarta = findById(ID_TIGRESA_BANDERA_BLANCA).get();
         }
         return newCarta;
     }

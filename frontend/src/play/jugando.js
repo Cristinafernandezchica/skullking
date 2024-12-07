@@ -459,8 +459,17 @@ export default function Jugando() {
         ))}
       </div>
 
-      <div className="cartas">
-        {}
+      <div className="cartas-trucos">
+        {ListaDeTrucos!==null && ListaDeTrucos.map((truco) => (
+          <div key={truco.id} className="carta truco">
+            <img 
+              src={truco.carta.imagenFrontal} 
+              alt={`Carta ${truco.carta.tipoCarta}`} 
+              className="imagen-carta-trucos"
+            />
+            <div className="nombre-jugador"><p>{truco.jugador.usuario.username}</p></div>
+          </div>
+        ))}
       </div>
 
       <div className="cartas">

@@ -23,41 +23,41 @@ Siguiendo la jerarquía, hallamos el palo de triunfos con cartas numeradas del 1
 ### CARTAS:
 
 #### Bandera Blanca
-![Bandera Blanca](/src/main/resources/images/cartas/bandera_blanca.png)
+![Bandera Blanca](/src/main/resources/static/resources/images/cartas/bandera_blanca.png)
 
  Las 5 cartas de bandera blanca pueden ser jugadas para ‘no ganar’ al considerarse de valor 0. Pierden con el resto de cartas. Son muy útiles para aseguraros no ganar más bazas de las que se han pujado.
 
 #### Pirata
-![Pirata](/src/main/resources/images/cartas/pirata_1.png)
+![Pirata](/src/main/resources/static/resources/images/cartas/pirata_1.png)
 
 Las cartas de Pirata superan a todas las cartas numeradas. Todas son de igual valor, por lo que si se juegan más de una en la misma baza, quien haya jugado el primer pirata ganará la baza.
 
 #### Tigresa
-![Tigresa](/src/main/resources/images/cartas/trigresa.png)
+![Tigresa](/src/main/resources/static/resources/images/cartas/tigresa.png)
 
 Al jugar la Tigresa, debéis declarar si contará como Pirata o como Huida. Asume todas la características de un pirata o de una huida.
 
 #### Skull King
-![Skull King](/src/main/resources/images/cartas/skull_king.png)
+![Skull King](/src/main/resources/static/resources/images/cartas/skull_king.png)
 
 El Skull King vence a todas las cartas numeradas y todos los Piratas (incluida la Tigresa al ser jugada como Pirata). Las únicas que puede derrotarle son las Sirenas.
 
 #### Sirena
-![Sirena](/src/main/resources/images/cartas/sirena_1.png)
+![Sirena](/src/main/resources/static/resources/images/cartas/sirena_1.png)
 
 Las Sirenas vencen a todos los palos numerados pero pierden con todos los Piratas,con la excepción del Skull King. Si se juegan ambas Sirenas en la misma baza, la primera que fue jugada ganará la baza.
 
 #### Palos normales (amarillo, verde y morado)
-![Palo amarillo](/src/main/resources/images/cartas/amarilla_14.png)
+![Palo amarillo](/src/main/resources/static/resources/images/cartas/amarilla_14.png)
 
-![Palo verde](/src/main/resources/images/cartas/morada_9.png)
+![Palo verde](/src/main/resources/static/resources/images/cartas/morada_9.png)
 
-![Palo morado](/src/main/resources/images/cartas/verde_2.png)
+![Palo morado](/src/main/resources/static/resources/images/cartas/verde_2.png)
 
 Hay tres palos normales: amarillo (Cofre del Tesoro), verde (Loro) y morado (Mapa del Tesoro).
 
 #### Palo Triunfo
-![Palo Triunfo](/src/main/resources/images/cartas/triunfo_4.png)
+![Palo Triunfo](/src/main/resources/static/resources/images/cartas/triunfo_4.png)
 
 Las cartas triunfo son superiores a la de las otras tres palos.
 
@@ -112,7 +112,7 @@ Si lo desea puede aplicar la aproximación descrita en https://vmaks.github.io/2
 ## Patrones de diseño y arquitectónicos aplicados
 En esta sección de especificar el conjunto de patrones de diseño y arquitectónicos aplicados durante el proyecto.
 
-### Patrón: < Modelo Vista Controlador (MVC) >
+### Patrón: Modelo Vista Controlador (MVC)
 *Tipo*: Arquitectónico
 
 *Contexto de Aplicación*
@@ -135,7 +135,7 @@ Respecto a las vistas, por el momento, se han creado los paquetes play, salaEspe
 
 Ofrece soporte para múltiples vistas, favorece la alta cohesión, el bajo acoplamiento y la separación de responsabilidades. Facilita el desarrollo y las pruebas de cada tipo de componente.
 
-### Patrón: < Arquitectura centrada en datos >
+### Patrón: Arquitectura centrada en datos
 *Tipo*: Diseño
 
 *Contexto de Aplicación*
@@ -150,7 +150,7 @@ En el repositorio del proyecto inicialmente venía incluida una clase data.sql.
 
 La principal ventaja es la posibilidad de o¡introducir todas las cartas directamente en base de datos, evitando así tener que crearlas una a una cada vez que se inicia una partida.
 
-### Patrón: < Dependency Injection >
+### Patrón: Dependency Injection
 *Tipo*: Diseño
 
 *Contexto de Aplicación*
@@ -165,7 +165,7 @@ Las clases mencionadas en el patrón MVC. Normalmente los servicios son las clas
 
 Nos aseguramos de que se cree solo una instancia de estas clases y que todas las clases que la necesiten puedan acceder a ella. Hacer esto sin un contenedor de inversión de control (Spring en este caso) resulta complicado. Permitimos que el framework realice operaciones complejas facilitando y ayudando mucho al programador en numerosas clases.
 
-### Patrón: < Layer Super Type >
+### Patrón: Layer Super Type
 *Tipo*: Arquitectónico | de Diseño
 
 *Contexto de Aplicación*

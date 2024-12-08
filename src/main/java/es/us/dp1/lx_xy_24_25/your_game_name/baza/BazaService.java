@@ -128,7 +128,7 @@ public class BazaService {
         baza.setCartaGanadora(null);
         baza.setNumBaza(1);
         baza.setGanador(null);
-        baza.setTipoCarta(TipoCarta.sinDeterminar);
+        baza.setPaloBaza(PaloBaza.sinDeterminar);
         baza.setRonda(ronda);
         baza.setTurnos(turnos);
         Baza resBaza = bazaRepository.save(baza);
@@ -188,7 +188,7 @@ public class BazaService {
             newBaza.setTrucoGanador(null);
             newBaza.setGanador(null);
             newBaza.setNumBaza(nextBaza);
-            newBaza.setTipoCarta(null);
+            newBaza.setPaloBaza(null);
         }    
         return bazaRepository.save(newBaza);
     }

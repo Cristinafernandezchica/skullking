@@ -77,7 +77,7 @@ public class PartidaService {
         } if (partidaEsperandoJugando) {
             throw new UsuarioPartidaEnJuegoEsperandoException("No puede crear otra partida, ya tiene una en espera o en juego.");
         } else if(usuarioJugadorEnPartida(p)){
-            throw new UsuarioPartidaEnJuegoEsperandoException("No puede crear una partia, ya tiene una en espera o en juego.");
+            throw new UsuarioPartidaEnJuegoEsperandoException("No puede crear una partida, ya tiene una en espera o en juego.");
         }
         return pr.save(p);
     }

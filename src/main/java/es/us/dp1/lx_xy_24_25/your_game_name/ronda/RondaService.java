@@ -155,7 +155,7 @@ public class RondaService {
             newBaza.setCartaGanadora(null);
             newBaza.setGanador(null);
             newBaza.setNumBaza(nextBaza);
-            newBaza.setTipoCarta(null);
+            newBaza.setPaloBaza(null);
             newBaza.setTurnos(turnos);
         }    
         return bs.saveBaza(newBaza);

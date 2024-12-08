@@ -99,7 +99,7 @@ export default function Jugando() {
           setMano(data);
           console.log("Nueva mano", mano)
           // Fetch jugadores for each partida    
-          await fetchCartasDisabled(data.id, BazaActual.tipoCarta)                                                          
+          await fetchCartasDisabled(data.id, BazaActual.paloBaza)                                                          
       } catch (error) {
           console.error("Error encontrando mano:", error);
           setMessage(error.message);
@@ -416,10 +416,10 @@ export default function Jugando() {
 
 
     useEffect(() => {
-      if (BazaActual !== null && BazaActual.tipoCarta === "sinDeterminar" && truco !== null && truco.carta !== null)  {
+      if (BazaActual !== null && BazaActual.paloBaza === "sinDeterminar" && truco !== null && truco.carta !== null)  {
         
         if(truco.carta.tipoCarta !== "banderaBlanca"){
-        BazaActual.tipoCarta = truco.carta.tipoCarta;
+        BazaActual.paloBaza = truco.carta.tipoCarta;
       cambiarPaloBaza(BazaActual);
       console.log(BazaActual);}
     

@@ -12,6 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.PaloBaza;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
@@ -141,7 +142,7 @@ public class RondaServiceTest {
         // Configuración de la entidad Baza
         baza = new Baza();
         baza.setId(1);
-        baza.setTipoCarta(TipoCarta.morada);
+        baza.setPaloBaza(PaloBaza.morada);
         baza.setNumBaza(3);
         baza.setGanador(jugador);
         //baza.setTrucoGanador(truco);
@@ -150,7 +151,7 @@ public class RondaServiceTest {
         // Configuración de la entidad Baza
         bazaV = new Baza();
         bazaV.setId(2);
-        bazaV.setTipoCarta(TipoCarta.verde);
+        bazaV.setPaloBaza(PaloBaza.verde);
         bazaV.setNumBaza(4);
         bazaV.setGanador(jugador);
         //bazaV.setTrucoGanador(truco);

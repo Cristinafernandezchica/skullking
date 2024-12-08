@@ -13,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
@@ -52,6 +53,9 @@ public class BazaServiceTest {
 
     @MockBean
     private TrucoService trucoService;
+
+    @MockBean
+    private JugadorService jugadorService;
 
     @InjectMocks
     private BazaService bazaService;
@@ -386,6 +390,7 @@ public class BazaServiceTest {
            assertNotNull(resultado);
            assertEquals(1, resultado.getId());
        }
+
    }
 
 
@@ -485,6 +490,3 @@ public class BazaServiceTest {
             verify(bazaRepository, times(1)).save(baza2);
         }
     */
-
-*/
-}

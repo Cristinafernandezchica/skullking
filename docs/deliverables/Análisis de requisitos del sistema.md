@@ -177,6 +177,12 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Listado de partidas en curso](../mockups/listado_partidas.png)|
 |El administrador, en la parte superior de la pantalla, tendrá un botón 'Partidas'. Dentro de esta pantalla encontrará una barra de búsqueda para filtrar las partidas por nombre. Además, encontrará diversos botones para filtrar en función del estado de las partidas.|
 
+### HJA2-(ISSUE#177): Ver estadísticas usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/177]())
+| "Como administrador quiero poder ver las estadísticas de los usuarios para saber cuáles son los datos de partidas de los usuarios."| 
+|-----|
+|![Ver estadísiticas usuarios](../mockups/ver_estadisticas_usuarios.png)|
+|El administrador podrá ver las estadísitcas en la pestaña con este mismo nombre.|
+
 ### HJJ5-(ISSUE#40): Ver apuestas de la ronda ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/40]())
 | "Como jugador quiero poder ver todas las apuestas realizadas en la ronda actual para poder perjudicar las apuestas de otros jugadores."| 
 |-----|
@@ -210,8 +216,14 @@ A continuación se definen todas las historias de usuario a implementar:
 ### HJJ2-(ISSUE#37): Ver puntuación actualizada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/37]())
 | "Como jugador quiero poder ver mi puntuación actualizada tras cada ronda para saber si voy ganando o no."| 
 |-----|
-|![Ver puntuación actualizado](../mockups/Ver_puntuacion.png)|
+|![Ver puntuación actualizada](../mockups/Ver_puntuacion.png)|
 |El jugador podrá observar su puntuación y la de sus compañeros actualizada tras cada ronda en el margen izquierdo de la pantalla. Esta se mantendrá visible durante toda la ronda siguiente hasta que se actualice al final de la ronda.|
+
+### HJJ14-(ISSUE#175): Ver ganador baza ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/175]())
+| "Como jugador quiero poder ver el ganador de la baza tras su finalización para saber si quién ha sido el ganador."| 
+|-----|
+|![Ver ganador baza](../mockups/ver_ganador_baza.png)|
+|El jugador podrá observar el ganador de cada baza tras su finalización (una vez todos los jugadores hayan jugador su correspondiente carta) a trvés de un modal que aparecerá automaticamente en pantalla. Se cerrará al pasar a la siguiente baza o ronda.|
 
  ### HJJ7-(ISSUE#42): Salir de la partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/42]())
 | "Como jugador quiero poder rendirme y salir en mitad de la partida para evitar seguir jugando en caso de que me surja un imprevisto."| 

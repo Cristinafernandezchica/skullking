@@ -75,6 +75,7 @@ public class BazaService {
         return toUpdate;
     }
     // Buscar la baza que tenga menor id y no haya finalizado (no tenga un truco ganador)
+    /*
     @Transactional(readOnly = true)
     public Baza findBazaActualByRondaId(Integer rondaId){
         List<Baza> Bazas =bazaRepository.findBazasByRondaId(rondaId);
@@ -83,6 +84,14 @@ public class BazaService {
                         .sorted((j1, j2) -> j1.getId().compareTo(j2.getId())) // Orden ascendente
                         .findFirst().orElse(null);
                 return BazasOrdenadas;
+    }
+    */
+
+    @Transactional(readOnly = true)
+    public Baza findBazaActualByRondaId(Integer rondaId){
+        List<Baza> bazas =bazaRepository.findBazasByRondaId(rondaId);
+        Integer posUltimaBaza = bazas.size() - 1;
+        return bazas.get(posUltimaBaza);
     }
 
     // Buscar una Baza por Ronda ID y número de Baza
@@ -119,7 +128,7 @@ public class BazaService {
         baza.setCartaGanadora(null);
         baza.setNumBaza(1);
         baza.setGanador(null);
-        baza.setTipoCarta(TipoCarta.sinDeterminar);
+        baza.setPaloBaza(PaloBaza.sinDeterminar);
         baza.setRonda(ronda);
         baza.setTurnos(turnos);
         Baza resBaza = bazaRepository.save(baza);
@@ -183,7 +192,7 @@ public class BazaService {
             newBaza.setTrucoGanador(null);
             newBaza.setGanador(null);
             newBaza.setNumBaza(nextBaza);
-            newBaza.setTipoCarta(null);
+            newBaza.setPaloBaza(null);
         }    
         return bazaRepository.save(newBaza);
     }

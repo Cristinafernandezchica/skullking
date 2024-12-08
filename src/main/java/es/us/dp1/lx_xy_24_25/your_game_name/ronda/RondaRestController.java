@@ -87,7 +87,7 @@ public class RondaRestController {
         return rs.findRondaActualByPartidaId(partidaId);
     }
 
-    @PostMapping("/{bazaId}/next-baza") 
+    @PostMapping("/bazaActual/{bazaId}/next-baza") 
     public ResponseEntity<Baza> nextBaza(@PathVariable Integer bazaId) { 
     Baza newBaza = rs.nextBaza(bazaId); 
     return ResponseEntity.ok(newBaza);

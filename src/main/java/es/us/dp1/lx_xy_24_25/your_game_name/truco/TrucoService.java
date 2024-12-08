@@ -198,12 +198,7 @@ public class TrucoService {
         if (trucoGanador == null && !trucosBaza.isEmpty()) {
             trucoGanador = trucosBaza.get(0);
         }
-		/*
-		TrucoGanadorDTO trucoGanadorDTO = new TrucoGanadorDTO();
-		trucoGanadorDTO.setJugador(trucoGanador.getJugador());
-		trucoGanadorDTO.setCarta(trucoGanador.getCarta());
-		*/
-
+		
         baza.setCartaGanadora(trucoGanador.getCarta());
         baza.setGanador(trucoGanador.getJugador());
         bazaRepository.save(baza);

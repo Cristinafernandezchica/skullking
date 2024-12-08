@@ -3,7 +3,6 @@ package es.us.dp1.lx_xy_24_25.your_game_name.partida;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -15,17 +14,20 @@ import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.UsuarioPartidaEnJuegoEspe
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MinJugadoresPartidaException;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MismoNombrePartidaNoTerminadaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
+import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
+import es.us.dp1.lx_xy_24_25.your_game_name.user.UserService;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -41,19 +43,32 @@ public class PartidaServiceTest {
     @Mock
     private JugadorService jugadorService;
 
+    @Mock
+    private UserService userService;
+
     @InjectMocks
     private PartidaService partidaService;
 
     private Partida partida;
-    private Partida partidaEsperando;
-    private Partida partidaJugando;
-    private Partida partida1;
-    private Partida partida2;
-    private Partida updatedPartida;
+    private Jugador jugador;
+    private User user;
+    private Partida partidaCrear;
+    private User owner;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+
+        user = new User();
+        user.setId(1);
+        user.setNumPartidasGanadas(0);
+        user.setNumPartidasJugadas(0);
+        user.setNumPuntosGanados(0);
+
+        jugador = new Jugador();
+        jugador.setId(1);
+        jugador.setUsuario(user);
+        jugador.setPuntos(100);
 
         partida = new Partida();
         partida.setId(1);
@@ -62,44 +77,17 @@ public class PartidaServiceTest {
         partida.setInicio(LocalDateTime.now());
         partida.setOwnerPartida(1);
 
-        partidaEsperando = new Partida();
-        partidaEsperando.setId(2);
-        partidaEsperando.setNombre("Partida Esperando");
-        partidaEsperando.setEstado(PartidaEstado.ESPERANDO);
-        partidaEsperando.setInicio(LocalDateTime.now());
-        partidaEsperando.setOwnerPartida(1);
+        owner = new User();
+        owner.setId(1);
 
-        partidaJugando = new Partida();
-        partidaJugando.setId(3);
-        partidaJugando.setNombre("Partida Jugando");
-        partidaJugando.setEstado(PartidaEstado.JUGANDO);
-        partidaJugando.setInicio(LocalDateTime.now());
-        partidaJugando.setOwnerPartida(1);
-
-        partida1 = new Partida();
-        partida1.setId(1);
-        partida1.setNombre("Partida 1");
-        partida1.setEstado(PartidaEstado.ESPERANDO);
-        partida1.setInicio(LocalDateTime.now());
-        partida1.setOwnerPartida(1);
-
-        partida2 = new Partida();
-        partida2.setId(2);
-        partida2.setNombre("Juego 2");
-        partida2.setEstado(PartidaEstado.ESPERANDO);
-        partida2.setInicio(LocalDateTime.now());
-        partida2.setOwnerPartida(1);
-
-        updatedPartida = partida;
-        updatedPartida.setNombre("Partida Actualizada");
-        updatedPartida.setEstado(PartidaEstado.JUGANDO);
+        partidaCrear = new Partida();
+        partidaCrear.setOwnerPartida(1);
     }
 
-    // Test para obtener todas las partidas
+    // Test para obtener todas las partidas (sin filtros)
     @Test
     void testGetAllPartidas() {
-        List<Partida> partidaList = Arrays.asList(partida);
-        when(partidaRepository.findAll()).thenReturn(partidaList);
+        when(partidaRepository.findAll()).thenReturn(Arrays.asList(partida));
 
         List<Partida> result = partidaService.getAllPartidas(null, null);
 
@@ -108,178 +96,377 @@ public class PartidaServiceTest {
         verify(partidaRepository, times(1)).findAll();
     }
 
-    // Test para filtrar partidas por estado y nombre
+    // Test para obtener todas las partidas (con filtros)
     @Test
-    void testGetAllPartidasFiltrado() {
-        // Configurar el comportamiento del mock del repositorio
-        when(partidaRepository.findByNombreAndEstado("Juego 2", PartidaEstado.ESPERANDO)).thenReturn(Arrays.asList(partida2, partida1));
-    
-        // Llamada al servicio con el filtro de estado y nombre
-        List<Partida> result = partidaService.getAllPartidas("Juego 2", PartidaEstado.ESPERANDO);
-    
-        // Verificación de resultados
+    void testGetAllPartidasFiltradasPorNombreYEstado() {
+        when(partidaRepository.findByNombreAndEstado("Partida Test", PartidaEstado.ESPERANDO))
+                .thenReturn(Arrays.asList(partida));
+
+        List<Partida> result = partidaService.getAllPartidas("Partida Test", PartidaEstado.ESPERANDO);
+
         assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals("Juego 2", result.get(0).getNombre());
-        assertEquals(PartidaEstado.ESPERANDO, result.get(0).getEstado());
-        verify(partidaRepository, times(1)).findByNombreAndEstado("Juego 2", PartidaEstado.ESPERANDO);
+        assertEquals(1, result.size());
+        assertEquals("Partida Test", result.get(0).getNombre());
+        verify(partidaRepository, times(1)).findByNombreAndEstado("Partida Test", PartidaEstado.ESPERANDO);
     }
 
+    @Test
+    void testGetAllPartidasConNombre() {
+        // Arrange
+        when(partidaRepository.findByNombre("Partida Test")).thenReturn(Arrays.asList(partida));
+
+        // Act
+        List<Partida> result = partidaService.getAllPartidas("Partida Test", null);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("Partida Test", result.get(0).getNombre());
+        verify(partidaRepository, times(1)).findByNombre("Partida Test");
+    }
+
+    @Test
+    void testGetAllPartidasConEstado() {
+        // Arrange
+        when(partidaRepository.findByEstado(PartidaEstado.ESPERANDO)).thenReturn(Arrays.asList(partida));
+
+        // Act
+        List<Partida> result = partidaService.getAllPartidas(null, PartidaEstado.ESPERANDO);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(PartidaEstado.ESPERANDO, result.get(0).getEstado());
+        verify(partidaRepository, times(1)).findByEstado(PartidaEstado.ESPERANDO);
+    }
+
+    @Test
+    void testGetAllPartidasSinResultados() {
+        // Arrange
+        when(partidaRepository.findAll()).thenReturn(Collections.emptyList());
+
+        // Act
+        List<Partida> result = partidaService.getAllPartidas(null, null);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(partidaRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testGetAllPartidasConNombreYEstadoSinResultados() {
+        // Arrange
+        when(partidaRepository.findByNombreAndEstado("No Existe", PartidaEstado.TERMINADA))
+                .thenReturn(Collections.emptyList());
+
+        // Act
+        List<Partida> result = partidaService.getAllPartidas("No Existe", PartidaEstado.TERMINADA);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(partidaRepository, times(1)).findByNombreAndEstado("No Existe", PartidaEstado.TERMINADA);
+    }
 
     // Test para obtener una partida por ID (caso positivo)
     @Test
     void testGetPartidaById() {
         when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
 
-        Partida foundPartida = partidaService.getPartidaById(1);
+        Partida result = partidaService.getPartidaById(1);
 
-        assertNotNull(foundPartida);
-        assertEquals(1, foundPartida.getId());
+        assertNotNull(result);
+        assertEquals(1, result.getId());
         verify(partidaRepository, times(1)).findById(1);
     }
 
     // Test para obtener una partida por ID (excepción)
     @Test
-    void testGetPartidaByIdNotFound() {
+    void testGetPartidaByIdNoExiste() {
         when(partidaRepository.findById(99)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> partidaService.getPartidaById(99));
     }
 
-    // Test para guardar una partida (caso positivo)
+    // Test para guardar una partida (caso exitoso)
     @Test
-    public void testSavePartida() {
-        Partida partida = new Partida();
-        partida.setOwnerPartida(1);
-
-        // Simula que el usuario no tiene partidas en juego o esperando
-        when(partidaRepository.findByOwnerPartidaAndEstado(1, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO)))
-                .thenReturn(List.of());
-
+    void testSavePartida() {
+        when(partidaRepository.findByOwnerPartidaAndEstado(eq(1), anyList())).thenReturn(List.of());
         when(partidaRepository.save(partida)).thenReturn(partida);
 
-        Partida savedPartida = partidaService.save(partida);
-        assertNotNull(savedPartida);
-        assertEquals(partida, savedPartida);
+        Partida result = partidaService.save(partida);
+
+        assertNotNull(result);
+        verify(partidaRepository, times(1)).save(partida);
     }
 
-    // Test para guardar una partida (excepción)
     @Test
-    public void testSavePartidaConUsuarioEnPartidaEnJuegoEsperando() {
+    void testSavePartidaMismoNombrePartidaNoTerminadaException() {
         Partida partida = new Partida();
-        partida.setOwnerPartida(1); // ID del usuario
-    
-        // Simula que el usuario ya tiene una partida en juego o esperando
-        when(partidaRepository.findByOwnerPartidaAndEstado(1, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO)))
-                .thenReturn(List.of(new Partida()));
-    
+        partida.setNombre("Partida Test");
+        partida.setOwnerPartida(1);
+        
+        // Simula que ya existe una partida no terminada con el mismo nombre
+        when(partidaRepository.findByNombreAndEstado("Partida Test", PartidaEstado.ESPERANDO))
+            .thenReturn(List.of(new Partida()));
+
+        // Verifica que se lanza la excepción esperada
+        assertThrows(MismoNombrePartidaNoTerminadaException.class, () -> partidaService.save(partida));
+
+        // Verifica que no se guarda la partida
+        verify(partidaRepository, times(0)).save(any(Partida.class));
+    }
+
+
+    // Test para guardar una partida (excepción por estado)
+    @Test
+    void testSavePartidaExcepcionEstado() {
+        when(partidaRepository.findByOwnerPartidaAndEstado(eq(1), anyList()))
+                .thenReturn(List.of(partida));
+
         assertThrows(UsuarioPartidaEnJuegoEsperandoException.class, () -> partidaService.save(partida));
     }
 
-    // Test para eliminar una partida
-    @Test
-    void testDeletePartida() {
-        partidaService.delete(1);
-        verify(partidaRepository, times(1)).deleteById(1);
-    }
-
-    // Test para actualizar una partida (caso positivo)
-    @Test
-    void testUpdatePartida() {
-        when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
-        when(partidaRepository.save(any(Partida.class))).thenReturn(partida);
-
-        partida.setNombre("Partida Actualizada");
-        partida.setEstado(PartidaEstado.JUGANDO);
-
-        Partida result = partidaService.update(updatedPartida, 1);
-
-        assertNotNull(result);
-        assertEquals("Partida Actualizada", result.getNombre());
-        assertEquals(PartidaEstado.JUGANDO, result.getEstado());
-        assertEquals(1, result.getId()); // La ID original debe mantenerse
-        assertEquals(1, result.getOwnerPartida()); // La id del owner debe mantenerse
-        verify(partidaRepository, times(1)).findById(1);
-        verify(partidaRepository, times(1)).save(any(Partida.class));
-    }
-
-    // Test para actualizar una partida (excepción)
-    @Test
-    void testUpdatePartidaNotFound() {
-        when(partidaRepository.findById(99)).thenReturn(Optional.empty());
-
-        assertThrows(ResourceNotFoundException.class, () -> partidaService.update(updatedPartida, 99));
-        verify(partidaRepository, times(1)).findById(99);
-        verify(partidaRepository, times(0)).save(any(Partida.class)); // No se debe llamar al save si no se encuentra la partida
-    }
-
-
     // Test para iniciar una partida (caso positivo)
     @Test
-    public void testIniciarPartidaConTresOMasJugadores() {
-        Partida partida = new Partida();
-        partida.setId(1);
-
-        // Simular los comportamientos esperados
+    void testIniciarPartida() {
         when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
-        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(List.of(new Jugador(), new Jugador(), new Jugador())); // 3 jugadores
-        when(partidaRepository.save(any(Partida.class))).thenReturn(partida);
+        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(Arrays.asList(new Jugador(), new Jugador(), new Jugador()));
 
-        // Llamar al método bajo prueba
         partidaService.iniciarPartida(1);
 
-        // Verificaciones
         assertEquals(PartidaEstado.JUGANDO, partida.getEstado());
-        assertNotNull(partida.getInicio()); // Verificar que se haya establecido la hora de inicio
-        verify(partidaRepository, times(2)).findById(1); // La llamada a findById sucede dos veces
-        verify(jugadorService).findJugadoresByPartidaId(1);
-        verify(partidaRepository, times(1)).save(any(Partida.class));
-        verify(rondaService).iniciarRonda(partida); // Verificar que se inicie la ronda
+        verify(rondaService, times(1)).iniciarRonda(partida);
+        verify(partidaRepository, times(1)).save(partida);
     }
 
-
-
-
-    // Test para iniciar una partida (exception)
     @Test
-    public void testIniciarPartidaConMenosDeTresJugadores() {
-        Partida partida = new Partida();
-        partida.setId(1);
-
+    void testIniciarPartidaMenosDeTresJugadores() {
         when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
-        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(List.of(new Jugador(), new Jugador())); // Solo 2 jugadores
+        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(Arrays.asList(new Jugador(), new Jugador()));
 
         assertThrows(MinJugadoresPartidaException.class, () -> partidaService.iniciarPartida(1));
-
-        verify(partidaRepository, times(1)).findById(1);
-        verify(partidaRepository, times(0)).save(any(Partida.class)); // No se debe guardar la partida
-        verify(rondaService, times(0)).iniciarRonda(any(Partida.class)); // No se debe iniciar la ronda
+        verify(rondaService, times(0)).iniciarRonda(partida);
+        verify(partidaRepository, times(0)).save(partida);
     }
 
 
-    // Test para finalizar una partida
+    // Test para finalizar una partida (caso positivo)
     @Test
     void testFinalizarPartida() {
         when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
+        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(Arrays.asList(jugador));
 
         partidaService.finalizarPartida(1);
 
         assertEquals(PartidaEstado.TERMINADA, partida.getEstado());
-        assertNotNull(partida.getFin()); // Verificar que se haya establecido la hora de fin
-        verify(partidaRepository, times(2)).findById(1); // La llamada a findById sucede dos veces
-        verify(partidaRepository, times(1)).save(partida);
+        assertNotNull(partida.getFin());
+        assertEquals(1, user.getNumPartidasJugadas());
+        assertEquals(100, user.getNumPuntosGanados());
+        verify(userService, times(1)).saveUser(user);
+    }
+
+    @Test
+    public void testFinalizarPartidaNoExiste() {
+        // Simular que la partida no existe
+        when(partidaRepository.findById(99)).thenReturn(Optional.empty());
+
+        // Verificar que se lanza la excepción ResourceNotFoundException
+        assertThrows(ResourceNotFoundException.class, () -> partidaService.finalizarPartida(99));
+
+        // Verificar que no se realizaron otras acciones
+        verify(partidaRepository, times(1)).findById(99);
+        verify(partidaRepository, times(0)).save(any(Partida.class));
+        verify(jugadorService, times(0)).findJugadoresByPartidaId(anyInt());
+    }
+
+    // Test para eliminar una partida
+    @Test
+    void testEliminarPartida() {
+        doNothing().when(partidaRepository).deleteById(1);
+
+        partidaService.delete(1);
+
+        verify(partidaRepository, times(1)).deleteById(1);
     }
 
 
-    // Test para validar si el usuario tiene partidas en espera o en juego
     @Test
-    void testUsuarioPartidaEnJuegoEsperando() {
-        when(partidaRepository.findByOwnerPartidaAndEstado(1, Arrays.asList(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO)))
-            .thenReturn(Arrays.asList(partidaEsperando, partidaJugando));
+    void testUsuarioNoEsJugadorEnNingunaPartida() {
+        Partida partidaCrear = new Partida();
+        partidaCrear.setOwnerPartida(1);
 
-        Boolean result = partidaService.usuarioPartidaEnJuegoEsperando(1);
+        // Simula que no hay jugadores que coincidan con las condiciones
+        when(jugadorService.findAll()).thenReturn(List.of());
+
+        Boolean resultado = partidaService.usuarioJugadorEnPartida(partidaCrear);
+
+        assertFalse(resultado);
+        verify(jugadorService, times(1)).findAll();
+    }
+
+    @Test
+    void testMismoNombrePartidaNoTerminada() {
+        Partida partida = new Partida();
+        partida.setNombre("Partida Test");
+
+        when(partidaRepository.findByNombreAndEstado("Partida Test", PartidaEstado.ESPERANDO)).thenReturn(List.of(partida));
+        when(partidaRepository.findByNombreAndEstado("Partida Test", PartidaEstado.JUGANDO)).thenReturn(List.of());
+
+        Boolean result = partidaService.mismoNombrePartidaNoTerminada(partida);
 
         assertTrue(result);
-        verify(partidaRepository, times(1)).findByOwnerPartidaAndEstado(1, Arrays.asList(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO));
+        verify(partidaRepository, times(1)).findByNombreAndEstado("Partida Test", PartidaEstado.ESPERANDO);
+        verify(partidaRepository, times(1)).findByNombreAndEstado("Partida Test", PartidaEstado.JUGANDO);
     }
+
+    @Test
+    void testMismoNombrePartidaTerminada() {
+        Partida partida = new Partida();
+        partida.setNombre("Partida Test");
+
+        when(partidaRepository.findByNombreAndEstado("Partida Test", PartidaEstado.ESPERANDO)).thenReturn(List.of());
+        when(partidaRepository.findByNombreAndEstado("Partida Test", PartidaEstado.JUGANDO)).thenReturn(List.of());
+
+        Boolean result = partidaService.mismoNombrePartidaNoTerminada(partida);
+
+        assertFalse(result);
+        verify(partidaRepository, times(1)).findByNombreAndEstado("Partida Test", PartidaEstado.ESPERANDO);
+        verify(partidaRepository, times(1)).findByNombreAndEstado("Partida Test", PartidaEstado.JUGANDO);
+    }
+
+    @Test
+    void testGetJugadorGanador() {
+        // Arrange
+        Jugador jugador1 = new Jugador();
+        jugador1.setPuntos(100);
+        Jugador jugador2 = new Jugador();
+        jugador2.setPuntos(150);
+        Jugador jugador3 = new Jugador();
+        jugador3.setPuntos(120);
+
+        List<Jugador> jugadores = Arrays.asList(jugador1, jugador2, jugador3);
+        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(jugadores);
+
+        // Act
+        Jugador ganador = partidaService.getJugadorGanador(1);
+
+        // Assert
+        assertNotNull(ganador);
+        assertEquals(jugador2, ganador);
+        verify(jugadorService, times(1)).findJugadoresByPartidaId(1);
+    }
+
+    @Test
+    void testGetJugadorGanadorConPuntajesIguales() {
+        // Arrange
+        Jugador jugador1 = new Jugador();
+        jugador1.setPuntos(150);
+        Jugador jugador2 = new Jugador();
+        jugador2.setPuntos(150);
+
+        List<Jugador> jugadores = Arrays.asList(jugador1, jugador2);
+        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(jugadores);
+
+        // Act
+        Jugador ganador = partidaService.getJugadorGanador(1);
+
+        // Assert
+        assertNotNull(ganador);
+        assertTrue(jugador1.equals(ganador) || jugador2.equals(ganador));
+        verify(jugadorService, times(1)).findJugadoresByPartidaId(1);
+    }
+
+    @Test
+    void testGetJugadorGanadorListaVacia() {
+        // Arrange
+        List<Jugador> jugadores = Arrays.asList();
+        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(jugadores);
+
+        // Act & Assert
+        assertThrows(NoSuchElementException.class, () -> partidaService.getJugadorGanador(1));
+        verify(jugadorService, times(1)).findJugadoresByPartidaId(1);
+    }
+
+    @Test
+    void testUsuarioJugadorEnPartidaEnEspera() {
+        // Arrange
+        Jugador jugador = new Jugador();
+        jugador.setUsuario(owner);
+        Partida partida = new Partida();
+        partida.setEstado(PartidaEstado.ESPERANDO);
+        jugador.setPartida(partida);
+
+        when(jugadorService.findAll()).thenReturn(List.of(jugador));
+
+        // Act
+        Boolean result = partidaService.usuarioJugadorEnPartida(partidaCrear);
+
+        // Assert
+        assertTrue(result);
+        verify(jugadorService, times(1)).findAll();
+    }
+
+    @Test
+    void testUsuarioJugadorEnPartidaJugando() {
+        // Arrange
+        Jugador jugador = new Jugador();
+        jugador.setUsuario(owner);
+        Partida partida = new Partida();
+        partida.setEstado(PartidaEstado.JUGANDO);
+        jugador.setPartida(partida);
+
+        when(jugadorService.findAll()).thenReturn(List.of(jugador));
+
+        // Act
+        Boolean result = partidaService.usuarioJugadorEnPartida(partidaCrear);
+
+        // Assert
+        assertTrue(result);
+        verify(jugadorService, times(1)).findAll();
+    }
+
+
+    @Test
+    void testUsuarioJugadorEnPartidaTerminada() {
+        // Arrange
+        Jugador jugador = new Jugador();
+        jugador.setUsuario(owner);
+        Partida partida = new Partida();
+        partida.setEstado(PartidaEstado.TERMINADA);
+        jugador.setPartida(partida);
+
+        when(jugadorService.findAll()).thenReturn(List.of(jugador));
+
+        // Act
+        Boolean result = partidaService.usuarioJugadorEnPartida(partidaCrear);
+
+        // Assert
+        assertFalse(result);
+        verify(jugadorService, times(1)).findAll();
+    }
+
+    @Test
+    void testUsuarioEnOtraPartida() {
+        // Arrange
+        User otroUsuario = new User();
+        otroUsuario.setId(2);
+        Jugador otroJugador = new Jugador();
+        otroJugador.setUsuario(otroUsuario);
+        Partida partidaEnEspera = new Partida();
+        partidaEnEspera.setEstado(PartidaEstado.ESPERANDO);
+        otroJugador.setPartida(partidaEnEspera);
+
+        when(jugadorService.findAll()).thenReturn(List.of(otroJugador));
+
+        // Act
+        Boolean result = partidaService.usuarioJugadorEnPartida(partidaCrear);
+
+        // Assert
+        assertFalse(result);
+        verify(jugadorService, times(1)).findAll();
+    }
+    
+
 }

@@ -49,7 +49,7 @@ export default function Jugando() {
     // Mostrar ganador baza
     const [ganadorBazaModal, setGanadorBazaModal] = useState(false);
     const [ganadorBaza, setGanadorBaza] = useState('');
-    const [ejecutadoGanadorBaza, setEjecutadoGanadorBaza] = useState(false);
+    const [ejecutadoGanadorBaza, setEjecutadoGanadorBaza] = useState(0);
 
 
      const fetchPartida = async (idPartida) => {
@@ -287,11 +287,11 @@ export default function Jugando() {
       console.log("bazaActual por listaTrucos");
       fetchBazaActual();
       // Para modal del ganador de la Baza
-      if(jugadores.length === ListaDeTrucos.length && ListaDeTrucos.length > 0 && !ejecutadoGanadorBaza) {
+      if(jugadores.length === ListaDeTrucos.length && ListaDeTrucos.length > 0 && !(ejecutadoGanadorBaza === 2)) {
         setGanadorBaza(BazaActual.ganador);
         console.log("ganador Baza 1er fetchBaza: ", BazaActual.ganador);
         setGanadorBazaModal(true);
-        setEjecutadoGanadorBaza(true);
+        setEjecutadoGanadorBaza(ejecutadoGanadorBaza + 1);
       }
     }
   }, [ronda,ListaDeTrucos]);

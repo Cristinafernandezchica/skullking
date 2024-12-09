@@ -34,15 +34,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
-import es.us.dp1.lx_xy_24_25.your_game_name.configuration.SecurityConfiguration;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.PaloBaza;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
-import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
-import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaRestController;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
-import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 
 @WebMvcTest(controllers = RondaRestController.class)
 public class RondaControllerTest {
@@ -92,13 +87,13 @@ public class RondaControllerTest {
         // Configuración de la entidad Baza
         baza = new Baza();
         baza.setId(1);
-        baza.setTipoCarta(TipoCarta.morada);
+        baza.setPaloBaza(PaloBaza.morada);
         baza.setNumBaza(3);
 
         // Configuración de la entidad Baza
         bazaV = new Baza();
         bazaV.setId(2);
-        bazaV.setTipoCarta(TipoCarta.verde);
+        bazaV.setPaloBaza(PaloBaza.verde);
         bazaV.setNumBaza(4);
 
     }

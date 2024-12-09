@@ -10,7 +10,7 @@ public class CartasPaloState implements CalculoGanadorState{
     @Override
     public Truco calcularGanador(Baza baza, List<Truco> trucosBaza) {
         return trucosBaza.stream()
-            .filter(truco -> truco.getCarta().getTipoCarta().equals(baza.getTipoCarta()))
+            .filter(truco -> truco.getCarta().getTipoCarta().toString().equals(baza.getPaloBaza().toString()))
             .max(Comparator.comparing(t -> t.getCarta().getNumero()))
             .orElse(null);
     }

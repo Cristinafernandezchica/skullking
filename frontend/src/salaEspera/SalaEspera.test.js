@@ -20,6 +20,8 @@ describe('SalaEspera', () => {
             });
     });
 
+    // TO DO: Da fallitos
+
     test('renders correctly', async () => {
         render(<SalaEspera />);
 

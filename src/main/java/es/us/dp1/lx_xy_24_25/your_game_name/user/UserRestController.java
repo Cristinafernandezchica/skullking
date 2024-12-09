@@ -99,4 +99,20 @@ class UserRestController {
 			throw new AccessDeniedException("You can't delete yourself!");
 	}
 
+	//AÑADIDOS PARA LAS ESTADÍSTICAS
+
+	// Método para obtener usuarios ordenados por puntos totales
+	@GetMapping("/sorted-by-points")
+	public ResponseEntity<List<UserStats>> getUsersSortedByPoints() {
+		List<UserStats> usersByPoints = userService.getUsersSortedByPoints();
+		return new ResponseEntity<>(usersByPoints, HttpStatus.OK);
+	}
+
+	// Método para obtener usuarios ordenados por porcentaje de victorias
+	@GetMapping("/sorted-by-win-percentage")
+	public ResponseEntity<List<UserStats>> getUsersSortedByWinPercentage() {
+		List<UserStats> usersByWinPercentage = userService.getUsersSortedByWinPercentage();
+		return new ResponseEntity<>(usersByWinPercentage, HttpStatus.OK);
+	}
+
 }

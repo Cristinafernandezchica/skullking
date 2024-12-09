@@ -437,7 +437,6 @@ public class BazaServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> rondaService.nextBaza(99));
     }
 
-    //CAMBIAR
     /*
         @Test
         void testCalculoGanador() {

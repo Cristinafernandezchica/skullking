@@ -116,3 +116,84 @@ En cuanto a la medición del tiempo trabajado, hemos solucionado el problema del
 
 ![Sprint2 Emmanuel](/docs/deliverables/reportesClockify/Sprint2/Sprint2_EMMANUEL.jpg)
  
+
+
+## Sprint 3
+### ¿Qué ha funcionado bien?
+
+
+En este sprint se han alcanzado todos los objetivos propuestos. Para lograrlo, hemos decidido centrar nuestros esfuerzos en dividir el trabajo en dos grandes bloques: la refactorización e implementación de decisiones de diseño y el desarrollo de la parte funcional de la aplicación.
+
+Gracias a esta estrategia, hemos podido desarrollar el ranking de puntuaciones, dividiendo toda la tabla mediante la paginación. Además, se mejoró el lobby de partida, se logró un gran avance en el desarrollo de la partida en sí y, finalmente, alcanzamos nuestro último gran hito: la mejora en la legibilidad del código. Esto se consiguió gracias al uso de patrones de diseño como *State*, la eliminación de funciones que ya no eran utilizadas y la implementación de DTOs.
+
+Cabe recalcar que, de forma paralela, se implementaron aún más tests para verificar el correcto funcionamiento del código.
+
+### Asignación de tareas
+
+#### Diagrama de capas
+
+Gutiérrez González, Candela Jazmín
+
+#### Diagrama de dominio
+Amo Sánchez, Ángel
+
+#### Patrones de diseño y arquitectónicos aplicados
+Aguilar Morcillo, Marta
+
+#### Decisiones de diseño
+Aguilar Morcillo, Marta
+
+#### Plan de pruebas y matriz de trazabilidad
+
+Fernández Chica, Cristina
+
+#### Tests
+Amo Sánchez, Ángel ; Gutiérrez González, Candela Jazmín
+
+#### Frontend
+
+Fernández Chica, Cristina; Chávez Malavé, Luis Emmanuel; Gutiérrez González; Candela;  Amo Sánchez, Ángel
+
+#### Las asignaciones son orientativas,  ya que han habido aportaciones de distintas personas en cada apartado por la complejidad del proyecto.
+
+
+ ### ¿Problemas que hayamos tenido para poder progresar correctamente en el último Sprint?
+
+
+La alta complejidad del código. Puesto que cada pareja era responsable de desarrollar un componente de la aplicación, al momento de fusionarlos para hacer funcionar la aplicación, nos vimos con el problema de que no se terminaban de acoplar correctamente, generando fallos. De igual manera, como se ha ido añadiendo constantemente funcionalidad a nuestra pestaña de juego, terminó siendo un bloque de código muy grande.
+
+ ### ¿Qué cosas hay que mejorar para el siguiente sprint?
+
+Estandarizar nuestro código. Aunque hayamos hecho un gran avance en este sprint, todavía tenemos que continuar con el trabajo de refactorización del código e intentar unificar todas las llamadas a funciones de nuestra pantalla principal para mejorar la legibilidad del código.
+
+### Medición del tiempo trabajado
+
+En cuanto a la medición del tiempo trabajado, hemos vuelto a usar la herramienta Clockify:
+
+#### Sprint Rueda (todos)
+
+![Sprint3 Rueda](/docs/deliverables/reportesClockify/Sprint3/todos_rueda_sprint3.png)
+
+#### Sprint Gráfica (todos)
+
+![Sprint3 Gráfica](/docs/deliverables/reportesClockify/Sprint3/todos_sprint3.png)
+
+#### Sprint Gráfica Aguilar Morcillo, Marta
+
+![Sprint3 Marta](/docs/deliverables/reportesClockify/Sprint3/Marta_sprint3.png)
+
+#### Sprint Gráfica  Amo Sánchez, Ángel
+
+![Sprint3 Angel](/docs/deliverables/reportesClockify/Sprint3/Angel_sprint3.png)
+
+#### Sprint Gráfica Fernández Chica, Cristina
+
+![Sprint3 Cristina](/docs/deliverables/reportesClockify/Sprint3/Cristina_sprint3.png)
+
+#### Sprint Gráfica Gutiérrez González, Candela Jazmín
+
+![Sprint3 Candela](/docs/deliverables/reportesClockify/Sprint3/Candela_sprint3.png)
+
+#### Sprint Gráfica Chávez Malavé, Luis Emmanuel
+
+![Sprint3 Emmanuel](/docs/deliverables/reportesClockify/Sprint3/Emmanuel_sprint3.png)

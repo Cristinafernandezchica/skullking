@@ -1,0 +1,83 @@
+.ganador-modal {
+    max-width: 500px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #001f3f, #0a2e51); /* Tonos azul marino */
+    color: #f5d76e; /* Dorado */
+    font-family: 'Pirata One', serif; /* Fuente temática (puedes usar Google Fonts) */
+    border: 2px solid #f5d76e;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+}
+
+.ganador-modal-header {
+    background: #112b44; /* Azul profundo */
+    color: #f5d76e;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    padding: 1rem;
+    border-bottom: 2px solid #f5d76e;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.ganador-modal-body {
+    text-align: center;
+    padding: 2rem;
+}
+
+.ganador-name {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #ffd700; /* Dorado brillante */
+    text-shadow: 0 2px 6px rgba(255, 215, 0, 0.6);
+}
+
+.ganador-message {
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+    color: #f5d76e; /* Dorado suave */
+}
+
+.loading-message {
+    font-size: 1.2rem;
+    color: #f5d76e;
+    animation: blink 1.5s linear infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.ganador-modal-footer {
+    display: flex;
+    justify-content: center;
+    background: #0a2e51; /* Azul oscuro */
+    padding: 1rem;
+    border-top: 2px solid #f5d76e;
+}
+
+.close-button {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #112b44; /* Texto azul oscuro */
+    background: #f5d76e; /* Fondo dorado */
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    cursor: default;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease;
+}
+
+.close-button:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+.close-button:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+}

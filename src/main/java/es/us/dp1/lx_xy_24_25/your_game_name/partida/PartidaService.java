@@ -35,10 +35,11 @@ public class PartidaService {
     UserService us;
 
     @Autowired
-    public PartidaService(PartidaRepository pr, @Lazy RondaService rs, JugadorService js) {
+    public PartidaService(PartidaRepository pr, @Lazy RondaService rs, JugadorService js, UserService us) {
         this.pr = pr;
         this.rs = rs;
         this.js = js;
+        this.us = us;
     }
 
     // Con este método se puede filtrar por nombre y estado
@@ -77,7 +78,7 @@ public class PartidaService {
         } if (partidaEsperandoJugando) {
             throw new UsuarioPartidaEnJuegoEsperandoException("No puede crear otra partida, ya tiene una en espera o en juego.");
         } else if(usuarioJugadorEnPartida(p)){
-            throw new UsuarioPartidaEnJuegoEsperandoException("No puede crear una partia, ya tiene una en espera o en juego.");
+            throw new UsuarioPartidaEnJuegoEsperandoException("No puede crear una partida, ya tiene una en espera o en juego.");
         }
         return pr.save(p);
     }

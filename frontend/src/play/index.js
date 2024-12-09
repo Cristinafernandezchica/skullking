@@ -197,7 +197,14 @@ useEffect(() => {
   fetchPartidaJugador();
 }, []);
 
-    
+const handleVolverPartida = () => {
+  if (partidaJugador && partidaJugador.estado === "JUGANDO") {
+    navigate(partidaJugador.estado === "ESPERANDO" ? `/salaEspera/${partidaJugador.id}` : `/tablero/${partidaJugador.id}`)
+  } else {
+    showError("No estás jugando ninguna partida.");
+  }
+};
+
     return (
       <>
         <div className="validation-errors"> 
@@ -219,9 +226,7 @@ useEffect(() => {
 
             <div style={{ marginBottom: 20 }}>
               {partidaJugador && ( // Verifica que partidaJugador no sea null
-                <Button outline color="success" onClick={() => navigate(partidaJugador.estado === "ESPERANDO" ? `/salaEspera/${partidaJugador.id}` : `/tablero/${partidaJugador.id}`)}>
-                  Volver a partida
-                </Button>
+                <Button outline color="success" onClick={handleVolverPartida}>Volver a partida</Button>
               )}
             </div>
 

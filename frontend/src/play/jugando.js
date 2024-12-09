@@ -6,10 +6,8 @@ import useFetchState from '../util/useFetchState';
 import getIdFromUrl from '../util/getIdFromUrl';
 import ApuestaModal from '../components/modals/ApostarModal';
 import ElegirTigresaModal from '../components/modals/ElegirTigresaModal';
-// import manito from  'frontend/src/static/images/cartas/morada_1.png'
+import GanadorBazaModal from '../components/modals/GanadorBazaModal';
 
-
-//hola 
 const jwt = tokenService.getLocalAccessToken();
 const user = tokenService.getUser();
 
@@ -48,8 +46,11 @@ export default function Jugando() {
     // Mano disabled
     const [cartasDisabled, setCartasDisabled] = useState([]);
 
-    // manejo turno
-    const [turnoActual, setTurnoActual] = useState(null);
+    // Mostrar ganador baza
+    const [ganadorBazaModal, setGanadorBazaModal] = useState(false);
+    const [ganadorBaza, setGanadorBaza] = useState('');
+    const [ejecutadoGanadorBaza, setEjecutadoGanadorBaza] = useState(0);
+
 
      const fetchPartida = async (idPartida) => {
       try {
@@ -65,7 +66,6 @@ export default function Jugando() {
           const data = await response.json();
           console.log("comprobar partida")
           setPartida(data);
-          setTurnoActual(data.turnoActual)
 
       } catch (error) {
           console.error("Error fetching partida:", error);
@@ -77,10 +77,12 @@ export default function Jugando() {
     useEffect(() => {
       const intervalo = setInterval(() => {
         fetchPartida(idPartida);
+        // fetchBazaActual();
       }, 5000); // Cada 5 segundos
     
       return () => clearInterval(intervalo);
     }, [idPartida, tu]);
+
 
     const fetchMano = async (jugadorId) => {
       try {
@@ -97,9 +99,9 @@ export default function Jugando() {
           setMano(data);
           console.log("Nueva mano", mano)
           // Fetch jugadores for each partida    
-          await fetchCartasDisabled(data.id, BazaActual.tipoCarta)                                                          
+          await fetchCartasDisabled(data.id, BazaActual.paloBaza)                                                          
       } catch (error) {
-          console.error("Error encontrando partidas:", error);
+          console.error("Error encontrando mano:", error);
           setMessage(error.message);
           setVisible(true);
       }
@@ -260,9 +262,9 @@ export default function Jugando() {
           }
           const data = await response.json();
           setBazaActual(data);
-       //   console.log("baza??",data);
+          console.log("bazaActual fetchBazaActual: ",data);
       } catch (error) {
-          console.error("Error encontrando partidas:", error);
+          console.error("Error encontrando baza:", error);
           setMessage(error.message);
           setVisible(true);
       }
@@ -282,8 +284,16 @@ export default function Jugando() {
 
   useEffect(() => {
     if (ronda !== null)  {
-    fetchBazaActual();
-  }
+      console.log("bazaActual por listaTrucos");
+      fetchBazaActual();
+      // Para modal del ganador de la Baza
+      if(jugadores.length === ListaDeTrucos.length && ListaDeTrucos.length > 0 && !(ejecutadoGanadorBaza === 2)) {
+        setGanadorBaza(BazaActual.ganador);
+        console.log("ganador Baza 1er fetchBaza: ", BazaActual.ganador);
+        setGanadorBazaModal(true);
+        setEjecutadoGanadorBaza(ejecutadoGanadorBaza + 1);
+      }
+    }
   }, [ronda,ListaDeTrucos]);
 
 
@@ -312,6 +322,7 @@ export default function Jugando() {
       };
       fetchRondaActual(idPartida);
     }, []);
+    
 
 
     const jugarTruco = async (cartaAJugar, tipoCarta = eleccion) => {
@@ -367,6 +378,10 @@ export default function Jugando() {
         const data = await response.json();
         setTruco(data);
         console.log("Dime que se creo el truco",data);
+        // Para mostrar el ganador de la baza, SIN ESTO NO FUNCIONA NO QUITAR
+        await fetchBazaActual();
+
+        return data;
       } catch (error) {
         console.error('Error:', error);
       }
@@ -401,10 +416,10 @@ export default function Jugando() {
 
 
     useEffect(() => {
-      if (BazaActual !== null && BazaActual.tipoCarta === "sinDeterminar" && truco !== null && truco.carta !== null)  {
+      if (BazaActual !== null && BazaActual.paloBaza === "sinDeterminar" && truco !== null && truco.carta !== null)  {
         
         if(truco.carta.tipoCarta !== "banderaBlanca"){
-        BazaActual.tipoCarta = truco.carta.tipoCarta;
+        BazaActual.paloBaza = truco.carta.tipoCarta;
       cambiarPaloBaza(BazaActual);
       console.log(BazaActual);}
     
@@ -430,8 +445,7 @@ export default function Jugando() {
         */
   //  console.log("Mano encontrada",mano);
   //  console.log("Truco",truco);
-  console.log("Baza Actual",BazaActual);
-
+  // console.log("Baza Actual",BazaActual);
   return (
     <div className = "tablero">
       <div className="lista-jugadores">
@@ -510,6 +524,12 @@ export default function Jugando() {
               onCancel={() => setModalTigresaOpen(false)} 
               onConfirm={handleEleccion}
         />
+      
+      <GanadorBazaModal
+        isVisible={ganadorBazaModal}
+        ganador={ganadorBaza}
+        onClose={() => setGanadorBazaModal(false)}
+      />
 
     </div>
   );

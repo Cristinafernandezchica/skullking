@@ -6,8 +6,6 @@ import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.model.BaseEntity;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
-import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
-import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -27,10 +25,8 @@ import lombok.Setter;
 
 public class Baza extends BaseEntity{
 
-    // TipoCarta debería ser paloBaza y solo puede ser palo, ninguna carta especial
-    // además, si la primera carta es una bandera blanca, la segunda carta
     @Enumerated(EnumType.STRING)
-    private TipoCarta tipoCarta;
+    private PaloBaza paloBaza;
 
     @NotNull
     @Min(0)

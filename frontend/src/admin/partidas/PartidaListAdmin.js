@@ -84,7 +84,7 @@ export default function PartidaListAdmin() {
                 const ownerData = await response.json();
                 setOwner(prev => ({ ...prev, [id]: ownerData }));
             } catch (error) {
-                console.error("Error fetching owner data:", error);
+                console.error("Error buscando datos del creador:", error);
             }
         };
 
@@ -116,7 +116,7 @@ export default function PartidaListAdmin() {
                     }
                 });
             } catch (error) {
-                console.error("Error fetching partidas:", error);
+                console.error("Error buscando partidas:", error);
                 setMessage(error.message);
                 setVisible(true);
             }
@@ -154,7 +154,7 @@ export default function PartidaListAdmin() {
         const jugadoresList = jugadores[partida.id]?.map((jugador) => (
             <div key={jugador.id}>{jugador.usuario.username}</div>
         )) || <div>Cargando jugadores...</div>;
-        const ownerName = owner[partida.ownerPartida]?.username || "Cargando owner...";
+        const ownerName = owner[partida.ownerPartida]?.username || "Cargando creador...";
         return (
             <tr key={partida.id}>
                 <td>{partida.nombre}</td>

@@ -23,41 +23,41 @@ Siguiendo la jerarquía, hallamos el palo de triunfos con cartas numeradas del 1
 ### CARTAS:
 
 #### Bandera Blanca
-![Bandera Blanca](/src/main/resources/images/cartas/bandera_blanca.png)
+![Bandera Blanca](/src/main/resources/static/resources/images/cartas/bandera_blanca.png)
 
  Las 5 cartas de bandera blanca pueden ser jugadas para ‘no ganar’ al considerarse de valor 0. Pierden con el resto de cartas. Son muy útiles para aseguraros no ganar más bazas de las que se han pujado.
 
 #### Pirata
-![Pirata](/src/main/resources/images/cartas/pirata_1.png)
+![Pirata](/src/main/resources/static/resources/images/cartas/pirata_1.png)
 
 Las cartas de Pirata superan a todas las cartas numeradas. Todas son de igual valor, por lo que si se juegan más de una en la misma baza, quien haya jugado el primer pirata ganará la baza.
 
 #### Tigresa
-![Tigresa](/src/main/resources/images/cartas/trigresa.png)
+![Tigresa](/src/main/resources/static/resources/images/cartas/tigresa.png)
 
 Al jugar la Tigresa, debéis declarar si contará como Pirata o como Huida. Asume todas la características de un pirata o de una huida.
 
 #### Skull King
-![Skull King](/src/main/resources/images/cartas/skull_king.png)
+![Skull King](/src/main/resources/static/resources/images/cartas/skull_king.png)
 
 El Skull King vence a todas las cartas numeradas y todos los Piratas (incluida la Tigresa al ser jugada como Pirata). Las únicas que puede derrotarle son las Sirenas.
 
 #### Sirena
-![Sirena](/src/main/resources/images/cartas/sirena_1.png)
+![Sirena](/src/main/resources/static/resources/images/cartas/sirena_1.png)
 
 Las Sirenas vencen a todos los palos numerados pero pierden con todos los Piratas,con la excepción del Skull King. Si se juegan ambas Sirenas en la misma baza, la primera que fue jugada ganará la baza.
 
 #### Palos normales (amarillo, verde y morado)
-![Palo amarillo](/src/main/resources/images/cartas/amarilla_14.png)
+![Palo amarillo](/src/main/resources/static/resources/images/cartas/amarilla_14.png)
 
-![Palo verde](/src/main/resources/images/cartas/morada_9.png)
+![Palo verde](/src/main/resources/static/resources/images/cartas/morada_9.png)
 
-![Palo morado](/src/main/resources/images/cartas/verde_2.png)
+![Palo morado](/src/main/resources/static/resources/images/cartas/verde_2.png)
 
 Hay tres palos normales: amarillo (Cofre del Tesoro), verde (Loro) y morado (Mapa del Tesoro).
 
 #### Palo Triunfo
-![Palo Triunfo](/src/main/resources/images/cartas/triunfo_4.png)
+![Palo Triunfo](/src/main/resources/static/resources/images/cartas/triunfo_4.png)
 
 Las cartas triunfo son superiores a la de las otras tres palos.
 
@@ -183,6 +183,12 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Listado de partidas en curso](../mockups/listado_partidas.png)|
 |El administrador, en la parte superior de la pantalla, tendrá un botón 'Partidas'. Dentro de esta pantalla encontrará una barra de búsqueda para filtrar las partidas por nombre. Además, encontrará diversos botones para filtrar en función del estado de las partidas.|
 
+### HJA2-(ISSUE#177): Ver estadísticas usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/177]())
+| "Como administrador quiero poder ver las estadísticas de los usuarios para saber cuáles son los datos de partidas de los usuarios."| 
+|-----|
+|![Ver estadísiticas usuarios](../mockups/ver_estadisticas_usuarios.png)|
+|El administrador podrá ver las estadísitcas en la pestaña con este mismo nombre.|
+
 ### HJJ5-(ISSUE#40): Ver apuestas de la ronda ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/40]())
 | "Como jugador quiero poder ver todas las apuestas realizadas en la ronda actual para poder perjudicar las apuestas de otros jugadores."| 
 |-----|
@@ -216,8 +222,14 @@ A continuación se definen todas las historias de usuario a implementar:
 ### HJJ2-(ISSUE#37): Ver puntuación actualizada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/37]())
 | "Como jugador quiero poder ver mi puntuación actualizada tras cada ronda para saber si voy ganando o no."| 
 |-----|
-|![Ver puntuación actualizado](../mockups/Ver_puntuacion.png)|
+|![Ver puntuación actualizada](../mockups/Ver_puntuacion.png)|
 |El jugador podrá observar su puntuación y la de sus compañeros actualizada tras cada ronda en el margen izquierdo de la pantalla. Esta se mantendrá visible durante toda la ronda siguiente hasta que se actualice al final de la ronda.|
+
+### HJJ14-(ISSUE#175): Ver ganador baza ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/175]())
+| "Como jugador quiero poder ver el ganador de la baza tras su finalización para saber si quién ha sido el ganador."| 
+|-----|
+|![Ver ganador baza](../mockups/ver_ganador_baza.png)|
+|El jugador podrá observar el ganador de cada baza tras su finalización (una vez todos los jugadores hayan jugador su correspondiente carta) a trvés de un modal que aparecerá automaticamente en pantalla. Se cerrará al pasar a la siguiente baza o ronda.|
 
  ### HJJ7-(ISSUE#42): Salir de la partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/42]())
 | "Como jugador quiero poder rendirme y salir en mitad de la partida para evitar seguir jugando en caso de que me surja un imprevisto."| 

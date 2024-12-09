@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Alert } from 'reactstrap';
 
 export default function ElegirTigresaModal({ isVisible, onCancel, onConfirm }) {
-    const [carta, setCarta] = useState("banderaBlanca");
+    const [carta, setCarta] = useState(''); // Inicializar como string vacío
     const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
@@ -10,7 +10,7 @@ export default function ElegirTigresaModal({ isVisible, onCancel, onConfirm }) {
         if (isVisible) {
             autoCambioTigresaTimer = setTimeout(() => {
                 setCarta("banderaBlanca");
-                handleConfirmClick();
+                handleConfirmClick("banderaBlanca");
             }, 20000); 
         }
 
@@ -35,9 +35,7 @@ export default function ElegirTigresaModal({ isVisible, onCancel, onConfirm }) {
                 <button
                     className='boton-agrandable'
                     onClick={() => {
-                        setCarta('pirata');
-                        console.log("Jugado:", carta)
-                        handleConfirmClick(carta);
+                        handleConfirmClick('pirata');
                     }}
                 >
                     <img 
@@ -49,14 +47,11 @@ export default function ElegirTigresaModal({ isVisible, onCancel, onConfirm }) {
                 <button
                     className='boton-agrandable'
                     onClick={() => {
-                        setCarta('banderaBlanca');
-                        console.log("Jugado:", carta)
-                        handleConfirmClick(carta);
+                        handleConfirmClick('banderaBlanca');
                     }}
                 >
                     <img 
                         src={'http://localhost:8080/resources/images/cartas/tigresa_banderaBlanca.png'} 
-                        // frontend\src\static\images\cartas\tigresa_banderaBlanca.png
                         alt="Carta Bandera Blanca" 
                         className="imagen-carta-tigresa" 
                     />

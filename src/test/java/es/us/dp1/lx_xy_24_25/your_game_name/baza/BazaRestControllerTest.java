@@ -107,10 +107,10 @@ public class BazaRestControllerTest {
     
         baza = new Baza();
         baza.setId(1);
-        baza.setTipoCarta(TipoCarta.morada);
+        baza.setPaloBaza(PaloBaza.morada);
         baza.setNumBaza(3);
         baza.setGanador(jugador);
-        baza.setTrucoGanador(truco);
+        //baza.setTrucoGanador(truco);
         baza.setRonda(ronda);
 
         mano =new Mano();
@@ -165,11 +165,11 @@ public class BazaRestControllerTest {
     @Test
     void testUpdateBaza() throws Exception {
         Baza updatedBaza = new Baza();
-        updatedBaza.setTrucoGanador(truco);
+        //updatedBaza.setTrucoGanador(truco);
         updatedBaza.setGanador(jugador);
         updatedBaza.setNumBaza(5);
         updatedBaza.setRonda(ronda);
-        updatedBaza.setTipoCarta(TipoCarta.pirata);
+        updatedBaza.setPaloBaza(PaloBaza.amarillo);
 
         when(bazaService.findById(1)).thenReturn(baza);
         when(bazaService.saveBaza(any(Baza.class))).thenReturn(updatedBaza);

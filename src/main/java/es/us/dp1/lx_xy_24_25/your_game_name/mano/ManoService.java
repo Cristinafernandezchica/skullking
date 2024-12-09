@@ -92,7 +92,7 @@ private JugadorService js;
     public void iniciarManos(Integer partidaId, Ronda ronda){
         List<Carta> listaCartas =(List<Carta>) cs.findAll();
         // para que no se cojan las cartas comodines
-        listaCartas.stream().filter(c -> !( c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA))).collect(Collectors.toList());
+        listaCartas = listaCartas.stream().filter(c -> !( c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA))).collect(Collectors.toList());
         Collections.shuffle(listaCartas);   // Barajar cartas
         List<Jugador> jugadores = js.findJugadoresByPartidaId(partidaId);
         for(Jugador jugador: jugadores){
@@ -100,7 +100,7 @@ private JugadorService js;
             List<Carta> cartasBaraja = listaCartas.subList(0,getNumCartasARepartir(ronda.getNumRonda(), jugadores.size()));
             mano.setJugador(jugador);
             mano.setApuesta(0);  // Esto lo elige el usuario, si no lo elige será 0
-            mano.setResultado(null);    // El resultado se establecerá más tarde
+            mano.setResultado(0);    // El resultado se establecerá más tarde
             List<Carta> cartaMano= new ArrayList<Carta>();
             cartaMano.addAll(cartasBaraja);
             mano.setCartas(cartaMano);
@@ -141,6 +141,42 @@ private JugadorService js;
         manoRepository.save(mano);
         js.updateJugador(jugador, jugadorId);
     }
+
+    public List<Carta> cartasDisabled(Integer idMano, TipoCarta tipoCarta) {
+        Mano manoActual = manoRepository.findById(idMano).orElse(null);
+        if (manoActual == null) {
+            return new ArrayList<>(); // o lanza una excepción si prefieres
+        }
+        
+        List<Carta> cartas = manoActual.getCartas();
+        Boolean hasPaloBaza = cartas.stream().anyMatch(c -> c.getTipoCarta().equals(tipoCarta));
+        Boolean hasEspecial = cartas.stream().anyMatch(Carta::esCartaEspecial);
+        List<Carta> result = new ArrayList<>();
+        
+        for (Carta c : cartas) {
+            if(!(tipoCarta.equals(TipoCarta.sinDeterminar))){
+                if (hasEspecial && hasPaloBaza) {
+                    // Caso 3: Mano con alguna especial y alguna del palobaza
+                    if (!c.getTipoCarta().equals(tipoCarta) || !c.esCartaEspecial()) {
+                        result.add(c);
+                    }
+                } else if (hasEspecial && !hasPaloBaza) {
+                    // Caso 2: Mano con alguna especial sin palobaza
+                    if (!c.esCartaEspecial()) {
+                        result.add(c);
+                    }
+                } else if (hasPaloBaza && !hasEspecial) {
+                    // Caso 4: Mano con alguna del palobaza y ninguna especial
+                    if (!c.getTipoCarta().equals(tipoCarta)) {
+                        result.add(c);
+                    }
+                }
+            }
+            // Caso 1: Mano sin especiales ni palobaza - `result` permanece vacío (todas las cartas habilitadas).
+        }
+        
+        return result;
+    }    
     
 /* 
     @Transactional
@@ -204,5 +240,5 @@ private JugadorService js;
         return ptosBonificacion;
     }
     */
-
+    
 }

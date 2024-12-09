@@ -2,6 +2,7 @@ package es.us.dp1.lx_xy_24_25.your_game_name.partida;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,6 +10,7 @@ import java.util.stream.StreamSupport;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,10 +35,11 @@ public class PartidaService {
     UserService us;
 
     @Autowired
-    public PartidaService(PartidaRepository pr, RondaService rs, JugadorService js) {
+    public PartidaService(PartidaRepository pr, @Lazy RondaService rs, JugadorService js, UserService us) {
         this.pr = pr;
         this.rs = rs;
         this.js = js;
+        this.us = us;
     }
 
     // Con este método se puede filtrar por nombre y estado
@@ -75,7 +78,7 @@ public class PartidaService {
         } if (partidaEsperandoJugando) {
             throw new UsuarioPartidaEnJuegoEsperandoException("No puede crear otra partida, ya tiene una en espera o en juego.");
         } else if(usuarioJugadorEnPartida(p)){
-            throw new UsuarioPartidaEnJuegoEsperandoException("No puede crear una partia, ya tiene una en espera o en juego.");
+            throw new UsuarioPartidaEnJuegoEsperandoException("No puede crear una partida, ya tiene una en espera o en juego.");
         }
         return pr.save(p);
     }
@@ -178,6 +181,12 @@ public class PartidaService {
             lanzarExcepcion = true;
         }
         return lanzarExcepcion;
+    }
+
+    public Jugador getJugadorGanador(Integer partidaId){
+        List<Jugador> jugadores = js.findJugadoresByPartidaId(partidaId);
+        Jugador ganador = jugadores.stream().max(Comparator.comparing(j -> j.getPuntos())).get();
+        return ganador;
     }
 
 }

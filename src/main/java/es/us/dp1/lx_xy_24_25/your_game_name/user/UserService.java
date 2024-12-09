@@ -18,6 +18,7 @@ package es.us.dp1.lx_xy_24_25.your_game_name.user;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 
@@ -115,35 +117,77 @@ public class UserService {
 		this.userRepository.delete(toDelete);
 	}
 
+	// Método para obtener usuarios ordenados por puntos totales
+	@Transactional(readOnly = true)
+	public List<UserStats> getUsersSortedByPoints() {
+		List<User> users = (List<User>) findAll();
+		return users.stream()
+				.map(user -> {
+					UserStats stats = userStatsMap.getOrDefault(user.getId(), new UserStats());
+					stats.setNumPuntosGanados(user.getNumPuntosGanados());
+					return stats;
+				})
+				.sorted((u1, u2) -> u2.getNumPuntosGanados() - u1.getNumPuntosGanados())
+				.collect(Collectors.toList());
+	}
+
+	// Nuevo método: Obtener usuarios ordenados por porcentaje de victorias
+	@Transactional(readOnly = true)
+	public List<UserStats> getUsersSortedByWinPercentage() {
+		List<User> users = (List<User>) findAll();
+		return users.stream()
+				.map(user -> {
+					UserStats stats = userStatsMap.getOrDefault(user.getId(), new UserStats());
+					int partidasJugadas = stats.getNumPartidasJugadas() != null ? stats.getNumPartidasJugadas() : 0;
+					int partidasGanadas = stats.getNumPartidasGanadas() != null ? stats.getNumPartidasGanadas() : 0;
+					double porcentajeVictorias = (partidasJugadas > 0)
+							? (double) partidasGanadas / partidasJugadas * 100
+							: 0.0;
+					stats.setWinPercentage(porcentajeVictorias);
+					return stats;
+				})
+				.sorted((u1, u2) -> Double.compare(u2.getWinPercentage(), u1.getWinPercentage()))
+				.collect(Collectors.toList());
+	}
+
 }
 
 class UserStats {
-    private Integer numPartidasJugadas = 0;
-    private Integer numPartidasGanadas = 0;
-    private Integer numPuntosGanados = 0;
+	private Integer numPartidasJugadas = 0;
+	private Integer numPartidasGanadas = 0;
+	private Integer numPuntosGanados = 0;
+	private Double winPercentage = 0.0;
 
-    // Getters and setters
-    public Integer getNumPartidasJugadas() {
-        return numPartidasJugadas;
-    }
+	// Getters y setters
+	public Integer getNumPartidasJugadas() {
+		return numPartidasJugadas;
+	}
 
-    public void setNumPartidasJugadas(Integer numPartidasJugadas) {
-        this.numPartidasJugadas = numPartidasJugadas;
-    }
+	public void setNumPartidasJugadas(Integer numPartidasJugadas) {
+		this.numPartidasJugadas = numPartidasJugadas;
+	}
 
-    public Integer getNumPartidasGanadas() {
-        return numPartidasGanadas;
-    }
+	public Integer getNumPartidasGanadas() {
+		return numPartidasGanadas;
+	}
 
-    public void setNumPartidasGanadas(Integer numPartidasGanadas) {
-        this.numPartidasGanadas = numPartidasGanadas;
-    }
+	public void setNumPartidasGanadas(Integer numPartidasGanadas) {
+		this.numPartidasGanadas = numPartidasGanadas;
+	}
 
-    public Integer getNumPuntosGanados() {
-        return numPuntosGanados;
-    }
+	public Integer getNumPuntosGanados() {
+		return numPuntosGanados;
+	}
 
-    public void setNumPuntosGanados(Integer numPuntosGanados) {
-        this.numPuntosGanados = numPuntosGanados;
-    }
+	public void setNumPuntosGanados(Integer numPuntosGanados) {
+		this.numPuntosGanados = numPuntosGanados;
+	}
+
+	public Double getWinPercentage() {
+		return winPercentage;
+	}
+
+	public void setWinPercentage(Double winPercentage) {
+		this.winPercentage = winPercentage;
+	}
 }

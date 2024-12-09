@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './JugadorInfo.css';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'; 
 import tokenService from "../services/token.service";
 import useFetchState from '../util/useFetchState';
 import getIdFromUrl from '../util/getIdFromUrl';
 import ApuestaModal from '../components/modals/ApostarModal';
 import ElegirTigresaModal from '../components/modals/ElegirTigresaModal';
-// import manito from  'frontend/src/static/images/cartas/morada_1.png'
+import GanadorBazaModal from '../components/modals/GanadorBazaModal';
 
-
-//hola 
 const jwt = tokenService.getLocalAccessToken();
 const user = tokenService.getUser();
 
@@ -32,9 +31,9 @@ export default function Jugando() {
     const [ronda,setRonda] = useState(null);
     const [truco,setTruco] = useState(null);
     const [BazaActual, setBazaActual] = useState(null)
-    const [ListaDeTrcuos, setListaDeTrcuos] = useState([])
+    const [ListaDeTrucos, setListaDeTrucos] = useState([])
     const [seCambiaPalo, setSeCambiaPalo] = useState(true)
-    const [buscarUnaVezListaDeTrcuos, setBuscarUnaVezListaDeTrucos] =useState(true)
+    const [buscarUnaVezListaDeTrucos, setBuscarUnaVezListaDeTrucos] =useState(true)
 
     // para las cartas del resto de jugadores
     const [manosOtrosJugadores, setManosOtrosJugadores] = useState({});
@@ -44,11 +43,16 @@ export default function Jugando() {
     const toggleApuestaModal = () => setApuestaModalOpen(!apuestaModalOpen);
     const [visualizandoCartas, setVisualizandoCartas] = useState(true)
 
+    // Mano disabled
+    const [cartasDisabled, setCartasDisabled] = useState([]);
 
-    // manejo turno
-    const [turnoActual, setTurnoActual] = useState(null);
+    // Mostrar ganador baza
+    const [ganadorBazaModal, setGanadorBazaModal] = useState(false);
+    const [ganadorBaza, setGanadorBaza] = useState('');
+    const [ejecutadoGanadorBaza, setEjecutadoGanadorBaza] = useState(0);
 
-    const fetchPartida = async (idPartida) => {
+
+     const fetchPartida = async (idPartida) => {
       try {
           const response = await fetch(`/api/v1/partidas/${idPartida}`, {
               headers: {
@@ -62,7 +66,6 @@ export default function Jugando() {
           const data = await response.json();
           console.log("comprobar partida")
           setPartida(data);
-          setTurnoActual(data.turnoActual)
 
       } catch (error) {
           console.error("Error fetching partida:", error);
@@ -74,6 +77,7 @@ export default function Jugando() {
     useEffect(() => {
       const intervalo = setInterval(() => {
         fetchPartida(idPartida);
+        // fetchBazaActual();
       }, 5000); // Cada 5 segundos
     
       return () => clearInterval(intervalo);
@@ -94,13 +98,41 @@ export default function Jugando() {
           const data = await response.json();
           setMano(data);
           console.log("Nueva mano", mano)
-          // Fetch jugadores for each partida
+          // Fetch jugadores for each partida    
+          await fetchCartasDisabled(data.id, BazaActual.paloBaza)                                                          
       } catch (error) {
-          console.error("Error encontrando partidas:", error);
+          console.error("Error encontrando mano:", error);
           setMessage(error.message);
           setVisible(true);
       }
   };
+ 
+  const fetchCartasDisabled = async (idMano, paloActual) => {
+    try {
+        const response = await fetch(`/api/v1/manos/${idMano}/manoDisabled?tipoCarta=${paloActual}`, {
+            headers: {
+                "Authorization": `Bearer ${jwt}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        
+        const responseData = await response.text();
+        console.log("Response text:", responseData);
+        
+        const data = JSON.parse(responseData);
+        setCartasDisabled(data);
+        console.log("Cartas disabled:", data);
+    } catch (error) {
+        console.error("Error encontrando partidas:", error);
+        setMessage(error.message);
+        setVisible(true);
+    }
+};
+
+
     useEffect(() => {
 
     const fetchManosOtrosJugadores = async () => { 
@@ -143,7 +175,7 @@ export default function Jugando() {
             }
             const data = await response.json();
             console.log("Este es la lista de trucos",data)
-            setListaDeTrcuos(data);
+            setListaDeTrucos(data);
         } catch (error) {
             console.error("Error encontrando jugadores:", error);
             setMessage(error.message);
@@ -230,9 +262,9 @@ export default function Jugando() {
           }
           const data = await response.json();
           setBazaActual(data);
-       //   console.log("baza??",data);
+          console.log("bazaActual fetchBazaActual: ",data);
       } catch (error) {
-          console.error("Error encontrando partidas:", error);
+          console.error("Error encontrando baza:", error);
           setMessage(error.message);
           setVisible(true);
       }
@@ -242,7 +274,7 @@ export default function Jugando() {
   useEffect(() => {
     if (BazaActual !== null)  {
     
-    if(buscarUnaVezListaDeTrcuos){
+    if(buscarUnaVezListaDeTrucos){
     fetchListaDeTrucos(BazaActual.id);
     setInterval(() => {fetchListaDeTrucos(BazaActual.id)}, 3000);
     setBuscarUnaVezListaDeTrucos(false)
@@ -252,9 +284,17 @@ export default function Jugando() {
 
   useEffect(() => {
     if (ronda !== null)  {
-    fetchBazaActual();
-  }
-  }, [ronda,ListaDeTrcuos]);
+      console.log("bazaActual por listaTrucos");
+      fetchBazaActual();
+      // Para modal del ganador de la Baza
+      if(jugadores.length === ListaDeTrucos.length && ListaDeTrucos.length > 0 && !(ejecutadoGanadorBaza === 2)) {
+        setGanadorBaza(BazaActual.ganador);
+        console.log("ganador Baza 1er fetchBaza: ", BazaActual.ganador);
+        setGanadorBazaModal(true);
+        setEjecutadoGanadorBaza(ejecutadoGanadorBaza + 1);
+      }
+    }
+  }, [ronda,ListaDeTrucos]);
 
 
 
@@ -282,6 +322,7 @@ export default function Jugando() {
       };
       fetchRondaActual(idPartida);
     }, []);
+    
 
 
     const jugarTruco = async (cartaAJugar, tipoCarta = eleccion) => {
@@ -318,7 +359,7 @@ export default function Jugando() {
       BazaCartaManoDTO.baza = BazaActual
       BazaCartaManoDTO.mano = mano
       BazaCartaManoDTO.carta = cartaAJugar
-      BazaCartaManoDTO.turno = ListaDeTrcuos.length +1
+      BazaCartaManoDTO.turno = ListaDeTrucos.length +1
       try {
         const response = await fetch(`/api/v1/trucos/${jugadorId}/jugar`, {
           method: 'POST',
@@ -337,6 +378,10 @@ export default function Jugando() {
         const data = await response.json();
         setTruco(data);
         console.log("Dime que se creo el truco",data);
+        // Para mostrar el ganador de la baza, SIN ESTO NO FUNCIONA NO QUITAR
+        await fetchBazaActual();
+
+        return data;
       } catch (error) {
         console.error('Error:', error);
       }
@@ -371,10 +416,10 @@ export default function Jugando() {
 
 
     useEffect(() => {
-      if (BazaActual !== null && BazaActual.tipoCarta === "sinDeterminar" && truco !== null && truco.carta !== null)  {
+      if (BazaActual !== null && BazaActual.paloBaza === "sinDeterminar" && truco !== null && truco.carta !== null)  {
         
         if(truco.carta.tipoCarta !== "banderaBlanca"){
-        BazaActual.tipoCarta = truco.carta.tipoCarta;
+        BazaActual.paloBaza = truco.carta.tipoCarta;
       cambiarPaloBaza(BazaActual);
       console.log(BazaActual);}
     
@@ -400,8 +445,7 @@ export default function Jugando() {
         */
   //  console.log("Mano encontrada",mano);
   //  console.log("Truco",truco);
-  console.log("Baza Actual",BazaActual);
-
+  // console.log("Baza Actual",BazaActual);
   return (
     <div className = "tablero">
       <div className="lista-jugadores">
@@ -429,12 +473,24 @@ export default function Jugando() {
         ))}
       </div>
 
+      <div className="cartas-trucos">
+        {ListaDeTrucos!==null && ListaDeTrucos.map((truco) => (
+          <div key={truco.id} className="carta truco">
+            <img 
+              src={truco.carta.imagenFrontal} 
+              alt={`Carta ${truco.carta.tipoCarta}`} 
+              className="imagen-carta-trucos"
+            />
+            <div className="nombre-jugador"><p>{truco.jugador.usuario.username}</p></div>
+          </div>
+        ))}
+      </div>
 
       <div className="cartas">
           {mano!==null && mano.cartas.map((carta) => (
             <div key={carta.id} className="carta">
               <button className='boton-agrandable'
-               disabled={visualizandoCartas || (partida.turnoActual !== tu.id)}
+               disabled={visualizandoCartas || (partida.turnoActual !== tu.id) || cartasDisabled.some(disabledCarta => disabledCarta.id === carta.id) }
                onClick={() => {
                 if(carta.tipoCarta === 'tigresa'){
                   setModalTigresaOpen(true);
@@ -468,6 +524,12 @@ export default function Jugando() {
               onCancel={() => setModalTigresaOpen(false)} 
               onConfirm={handleEleccion}
         />
+      
+      <GanadorBazaModal
+        isVisible={ganadorBazaModal}
+        ganador={ganadorBaza}
+        onClose={() => setGanadorBazaModal(false)}
+      />
 
     </div>
   );

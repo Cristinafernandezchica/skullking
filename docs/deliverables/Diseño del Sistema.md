@@ -23,41 +23,41 @@ Siguiendo la jerarquía, hallamos el palo de triunfos con cartas numeradas del 1
 ### CARTAS:
 
 #### Bandera Blanca
-![Bandera Blanca](/src/main/resources/images/cartas/bandera_blanca.png)
+![Bandera Blanca](/src/main/resources/static/resources/images/cartas/bandera_blanca.png)
 
  Las 5 cartas de bandera blanca pueden ser jugadas para ‘no ganar’ al considerarse de valor 0. Pierden con el resto de cartas. Son muy útiles para aseguraros no ganar más bazas de las que se han pujado.
 
 #### Pirata
-![Pirata](/src/main/resources/images/cartas/pirata_1.png)
+![Pirata](/src/main/resources/static/resources/images/cartas/pirata_1.png)
 
 Las cartas de Pirata superan a todas las cartas numeradas. Todas son de igual valor, por lo que si se juegan más de una en la misma baza, quien haya jugado el primer pirata ganará la baza.
 
 #### Tigresa
-![Tigresa](/src/main/resources/images/cartas/trigresa.png)
+![Tigresa](/src/main/resources/static/resources/images/cartas/tigresa.png)
 
 Al jugar la Tigresa, debéis declarar si contará como Pirata o como Huida. Asume todas la características de un pirata o de una huida.
 
 #### Skull King
-![Skull King](/src/main/resources/images/cartas/skull_king.png)
+![Skull King](/src/main/resources/static/resources/images/cartas/skull_king.png)
 
 El Skull King vence a todas las cartas numeradas y todos los Piratas (incluida la Tigresa al ser jugada como Pirata). Las únicas que puede derrotarle son las Sirenas.
 
 #### Sirena
-![Sirena](/src/main/resources/images/cartas/sirena_1.png)
+![Sirena](/src/main/resources/static/resources/images/cartas/sirena_1.png)
 
 Las Sirenas vencen a todos los palos numerados pero pierden con todos los Piratas,con la excepción del Skull King. Si se juegan ambas Sirenas en la misma baza, la primera que fue jugada ganará la baza.
 
 #### Palos normales (amarillo, verde y morado)
-![Palo amarillo](/src/main/resources/images/cartas/amarilla_14.png)
+![Palo amarillo](/src/main/resources/static/resources/images/cartas/amarilla_14.png)
 
-![Palo verde](/src/main/resources/images/cartas/morada_9.png)
+![Palo verde](/src/main/resources/static/resources/images/cartas/morada_9.png)
 
-![Palo morado](/src/main/resources/images/cartas/verde_2.png)
+![Palo morado](/src/main/resources/static/resources/images/cartas/verde_2.png)
 
 Hay tres palos normales: amarillo (Cofre del Tesoro), verde (Loro) y morado (Mapa del Tesoro).
 
 #### Palo Triunfo
-![Palo Triunfo](/src/main/resources/images/cartas/triunfo_4.png)
+![Palo Triunfo](/src/main/resources/static/resources/images/cartas/triunfo_4.png)
 
 Las cartas triunfo son superiores a la de las otras tres palos.
 
@@ -112,7 +112,7 @@ Si lo desea puede aplicar la aproximación descrita en https://vmaks.github.io/2
 ## Patrones de diseño y arquitectónicos aplicados
 En esta sección de especificar el conjunto de patrones de diseño y arquitectónicos aplicados durante el proyecto.
 
-### Patrón: < Modelo Vista Controlador (MVC) >
+### Patrón: Modelo Vista Controlador (MVC)
 *Tipo*: Arquitectónico
 
 *Contexto de Aplicación*
@@ -135,7 +135,7 @@ Respecto a las vistas, por el momento, se han creado los paquetes play, salaEspe
 
 Ofrece soporte para múltiples vistas, favorece la alta cohesión, el bajo acoplamiento y la separación de responsabilidades. Facilita el desarrollo y las pruebas de cada tipo de componente.
 
-### Patrón: < Arquitectura centrada en datos >
+### Patrón: Arquitectura centrada en datos
 *Tipo*: Diseño
 
 *Contexto de Aplicación*
@@ -150,7 +150,7 @@ En el repositorio del proyecto inicialmente venía incluida una clase data.sql.
 
 La principal ventaja es la posibilidad de o¡introducir todas las cartas directamente en base de datos, evitando así tener que crearlas una a una cada vez que se inicia una partida.
 
-### Patrón: < Dependency Injection >
+### Patrón: Dependency Injection
 *Tipo*: Diseño
 
 *Contexto de Aplicación*
@@ -165,7 +165,7 @@ Las clases mencionadas en el patrón MVC. Normalmente los servicios son las clas
 
 Nos aseguramos de que se cree solo una instancia de estas clases y que todas las clases que la necesiten puedan acceder a ella. Hacer esto sin un contenedor de inversión de control (Spring en este caso) resulta complicado. Permitimos que el framework realice operaciones complejas facilitando y ayudando mucho al programador en numerosas clases.
 
-### Patrón: < Layer Super Type >
+### Patrón: Layer Super Type
 *Tipo*: Arquitectónico | de Diseño
 
 *Contexto de Aplicación*
@@ -179,6 +179,21 @@ Se ha usado la clase BaseEntity.java.
 *Ventajas alcanzadas al aplicar el patrón*
 
 El patrón Layer Super type ofrece beneficios en el diseño de software al facilitar la reutilización de código, promover la consistencia, mejorar la mantenibilidad y proporcionar claridad en la jerarquía de clases. Además, se evita la duplicación de código y se simplifica el mantenimiento al tener un único punto de modificación para elementos compartidos.
+
+### Patrón: State
+*Tipo*: Diseño
+
+*Contexto de Aplicación*
+
+Se utiliza el patrón de comportamiento State para que dependiendo del estado del conjunto de cartas jugadas en una Baza, la carta ganadora de la Baza se calcule de una manera concreta. Un conjunto de cartas puede contener personajes, de los cuales alguno de ellos será el ganador de la Baza; puede incluir cartas de triunfo, siendo la ganadora aquella carta de triunfo con mayor número; o puede haber cartas de palo, en cuyo caso la carta ganadora sería la carta del mismo TipoPalo que la Baza y con mayor valor.
+
+*Clases o paquetes creados*
+
+Para implementar este patrón se ha creado el paquete trucoState, dentro del cual hemos incluido la clase CalculoGanadorContext, la cual actúa de contexto que es el que almacena una referencia a uno de los objetos de estado concretos y le delega todo el trabajo específico del estado. Además también hemos añadido las clases con los estados concretos, los cuales proporcionan sus propias implementaciones para los métodos específicos del estado. Los estados concretos que puede tener el método calculoGanador son: CartasPaloState, PersonajesState y TriunfosState.
+
+*Ventajas alcanzadas al aplicar el patrón*
+
+Conseguimos reducir el número de condiciones a comprobar en el método calculoGanador de la clase TrucoService, puesto que algunas de estas condiciones solo se realizan si el conjunto de cartas se encuentra en un estado concreto.
 
 
 
@@ -319,11 +334,59 @@ Necesitamos garantizar el cumplimiento de las reglas de negocio y requisitos del
 #### Justificación de la solución adoptada
 Se optó por implementarlo mediante validaciones y excepciones controladas para asegurar que los datos cumplan con las reglas de negocio, priorizando las validaciones en anotaciones y delegando a Validators lo que no pueda expresarse directamente en ellas como pueden ser reglas de negocio en las que unas propiedades dependan o limiten a otras de clases distintas.
 
+### Decisión 9: Uso de DTO y serializadores
+
+#### Descripción del problema
+Al jugar una carta específica durante el turno de un jugador, es necesario crear un objeto Truco que registre la carta jugada, el jugador correspondiente y la mano asociada. Esto permite mantener un historial completo de todas las cartas jugadas en una baza.
+
+#### Justificación de la solución adoptada
+Se decidió implementar una clase BazaCartaManoDTO, diseñada para recoger desde el frontend los valores de los estados bazaActual, cartaJugada, manoActual y turno, y enviarlos en un JSON que combina propiedades de varios objetos.
+En el backend, el método jugarTruco del servicio TrucoService recibe como parámetro un objeto BazaCartaManoDTO y lo utiliza para crear un nuevo Truco. Esta solución ofrece varias ventajas:
+   - Eficiencia: Simplifica la transferencia de datos al consolidar múltiples propiedades en una sola estructura.
+   - Seguridad: Encapsula la lógica de serialización, reduciendo la exposición innecesaria de datos sensibles.
+   - Bajo acoplamiento: Facilita la separación entre frontend y backend, mejorando la mantenibilidad del código.
 
 
 ## Refactorizaciones aplicadas
 
-Si ha hecho refactorizaciones en su código, puede documentarlas usando el siguiente formato:
+Refactorizaciones aplicadas en el código:
+
+### Refactorización 1:
+En esta refactorización llevamos a cabo la eliminación de números mágicos. En CartaService y ManoService se han definido las constantes ID_TIGRESA_BANDERA_BLANCA e ID_TIGRESA_PIRATA para identificar las dos posibles cartas en las que puede transformarse la carta tigresa. En JugadorService se ha creado la constante MAX_JUGADORES, que define el número máximo de jugadores permitidos en una partida. En RondaService, se añadió la constante ULTIMA_RONDA, que representa el número correspondiente a la última ronda del juego.
+
+#### Problema que nos hizo realizar la refactorización
+Había números cuyo significado no estaba claro, lo que dificultaba la legibilidad del código, ya que no se sabía qué representaban esos valores.
+
+#### Ventajas que presenta la nueva versión del código respecto de la versión original
+Ahora, esos valores sin contexto se han convertido en constantes, cuyo nombre indica lo que representan. Además, nos permite utilizar el mismo número en diferentes partes de una misma clase, puesto que ahora solo es necesario hacer referencia a la constante correspondiente.
+
+### Refactorización 2:
+En esta refactorización se ha realizado la traducción de todo el contenido visualizado en pantalla del inglés al español.
+
+#### Problema que nos hizo realizar la refactorización
+Parte del texto estaba en español y otra en inglés, lo que generaba confusión en la información presentada.
+
+#### Ventajas que presenta la nueva versión del código respecto de la versión original
+Se presenta un texto más coherente y cohesionado, y se establece como norma que todo el texto mostrado en pantalla esté en español.
+
+### Refactorización 3:
+En esta refactorización se ha realizado la eliminación de código innecesario. Se ha subsanado el antipatrón Boat Anchor. Se eliminó la propiedad turno de la clase Jugador, la propiedad bazaActual de la entidad Ronda, un constructor de la entidad Truco que estaba en desuso y código del proyecto base que se nos proporcionó del React-PetClinic.
+
+#### Problema que nos hizo realizar la refactorización
+Había código que no solo los desarrolladores no sabían para qué servía, sino que ni siquiera se utilizaba, lo que generaba dudas e incertidumbre entre los programadores, quienes no se decantaban por eliminarlo. Además 
+
+#### Ventajas que presenta la nueva versión del código respecto de la versión original
+Estos cambios optimizan el código al eliminar elementos redundantes o sin utilidad, mejorando su claridad y mantenibilidad.
+
+### Refactorización 4:
+En esta refactorización se ha llevado a cabo la operación de refactorización de Inline Function, en la cual se han homogeneizado las funciones findManoByJugador y findLastManoByJugador.
+
+#### Problema que nos hizo realizar la refactorización
+Se duplicaba el código en dos funciones distintas, aunque ambas realizaban la misma operación. Esto provocó que cada uno de los métodos se llamara en varias partes del proyecto, obteniendo el mismo resultado a pesar de que, supuestamente, se usaban servicios diferentes.
+
+#### Ventajas que presenta la nueva versión del código respecto de la versión original
+Evade la confusión por cuando usar cada uno de los dos métodos, ya que ambos realizan los mismo. Al eliminar código duplicado, evitamos redundancias.
+
 
 ### Refactorización X: 
 En esta refactorización añadimos un mapa de parámtros a la partida para ayudar a personalizar la información precalculada de la que partimos en cada fase del juego.

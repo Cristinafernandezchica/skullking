@@ -197,7 +197,14 @@ useEffect(() => {
   fetchPartidaJugador();
 }, []);
 
-    
+const handleVolverPartida = () => {
+  if (partidaJugador && partidaJugador.estado === "JUGANDO") {
+    navigate(partidaJugador.estado === "ESPERANDO" ? `/salaEspera/${partidaJugador.id}` : `/tablero/${partidaJugador.id}`)
+  } else {
+    showError("No estás jugando ninguna partida.");
+  }
+};
+
     return (
       <>
         <div className="validation-errors"> 
@@ -210,7 +217,6 @@ useEffect(() => {
         <div className="home-page-container">
           <div className="hero-div">
             <h1>Lobby</h1>
-            <h3>---</h3>
             <div style = {{marginBottom: 20}}>
               <Button outline color="success" onClick={handleOpenModal}>Crear partida</Button>
             </div>
@@ -220,9 +226,7 @@ useEffect(() => {
 
             <div style={{ marginBottom: 20 }}>
               {partidaJugador && ( // Verifica que partidaJugador no sea null
-                <Button outline color="success" onClick={() => navigate(partidaJugador.estado === "ESPERANDO" ? `/salaEspera/${partidaJugador.id}` : `/tablero/${partidaJugador.id}`)}>
-                  Volver a partida
-                </Button>
+                <Button outline color="success" onClick={handleVolverPartida}>Volver a partida</Button>
               )}
             </div>
 

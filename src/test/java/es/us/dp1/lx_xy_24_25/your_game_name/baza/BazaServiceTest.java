@@ -13,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
@@ -23,6 +24,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 
 import java.time.LocalDateTime;
@@ -44,10 +46,16 @@ public class BazaServiceTest {
     private BazaRepository bazaRepository;
 
     @MockBean
+    private TrucoRepository trucoRepository;
+
+    @MockBean
     private RondaService rondaService;
 
     @MockBean
     private TrucoService trucoService;
+
+    @MockBean
+    private JugadorService jugadorService;
 
     @InjectMocks
     private BazaService bazaService;
@@ -128,19 +136,21 @@ public class BazaServiceTest {
         // Configuración de la entidad Baza
         baza = new Baza();
         baza.setId(1);
-        baza.setTipoCarta(TipoCarta.morada);
+        baza.setPaloBaza(PaloBaza.morada);
         baza.setNumBaza(3);
         baza.setGanador(jugador);
-        baza.setTrucoGanador(truco);
+        baza.setTurnos(List.of());
+        baza.setCartaGanadora(carta);
         baza.setRonda(ronda);
 
         // Configuración de la entidad Baza
         bazaV = new Baza();
         bazaV.setId(2);
-        bazaV.setTipoCarta(TipoCarta.verde);
+        bazaV.setPaloBaza(PaloBaza.verde);
         bazaV.setNumBaza(4);
         bazaV.setGanador(jugador);
-        bazaV.setTrucoGanador(trucoT);
+        bazaV.setTurnos(List.of());
+        bazaV.setCartaGanadora(cartaV);
         bazaV.setRonda(ronda);
     }
 
@@ -152,7 +162,7 @@ public class BazaServiceTest {
         Baza savedBaza = bazaService.saveBaza(baza);
 
         assertNotNull(savedBaza);
-        assertEquals(TipoCarta.morada, savedBaza.getTipoCarta());
+        assertEquals(PaloBaza.morada, savedBaza.getPaloBaza());
         assertEquals(3, savedBaza.getNumBaza());
         assertEquals(1, savedBaza.getGanador().getId());
         verify(bazaRepository, times(1)).save(baza);
@@ -168,7 +178,7 @@ public class BazaServiceTest {
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(1, result.get(0).getTrucoGanador().getCarta().getNumero());
+        assertEquals(1, result.get(0).getCartaGanadora().getNumero());
         verify(bazaRepository, times(1)).findAll();
     }
 
@@ -181,7 +191,7 @@ public class BazaServiceTest {
 
         assertNotNull(foundBaza);
         assertEquals(1, foundBaza.getId());
-        assertEquals(TipoCarta.morada, foundBaza.getTipoCarta());
+        assertEquals(PaloBaza.morada, foundBaza.getPaloBaza());
         verify(bazaRepository, times(1)).findById(1);
     }
 
@@ -204,7 +214,7 @@ public class BazaServiceTest {
     @Test
     void testUpdateBaza() {
         Baza newBaza = new Baza();
-        newBaza.setTipoCarta(TipoCarta.amarillo);
+        newBaza.setPaloBaza(PaloBaza.amarillo);
         newBaza.setNumBaza(5);
         newBaza.setGanador(jugador);
 
@@ -214,30 +224,22 @@ public class BazaServiceTest {
         Baza updatedBaza = bazaService.updateBaza(newBaza, 1);
 
         assertNotNull(updatedBaza);
-        assertEquals(TipoCarta.amarillo, updatedBaza.getTipoCarta());
+        assertEquals(PaloBaza.amarillo, updatedBaza.getPaloBaza());
         assertEquals(5, updatedBaza.getNumBaza());
         verify(bazaRepository, times(1)).save(baza);
     }
 
-    // Test para obtener la última Baza por Ronda ID
- //   @Test
-//    void testFindUltimaBazaByRondaId() {
-      //  Baza baza1 = new Baza();
-    //    baza1.setId(1);
-      //  Baza baza2 = new Baza();
-       // baza2.setId(2);
+    @Test
+    void testFindBazaActualByRondaId() {
+        List<Baza> bazas = Arrays.asList(baza);
+        when(bazaRepository.findBazasByRondaId(1)).thenReturn(bazas);
 
-       // List<Baza> bazaList = Arrays.asList(baza1, baza2);
+        Baza bazaActual = bazaService.findBazaActualByRondaId(1);
 
-      //  when(bazaRepository.findBazasByRondaId(1)).thenReturn(bazaList);
-
-       // Baza ultimaBaza = bazaService.findUltimaBazaByRondaId(1);
-
-       // assertNotNull(ultimaBaza);
-      //  assertEquals(2, ultimaBaza.getId()); // Debería devolver la última baza por ID (orden descendente)
-      //  verify(bazaRepository, times(1)).findBazasByRondaId(1);
-   // }
-    
+        assertNotNull(bazaActual);
+        assertEquals(1, bazaActual.getId());
+        verify(bazaRepository, times(1)).findBazasByRondaId(1);
+    }    
     
     @Test
     void testFindByRondaIdAndNumBaza() {
@@ -250,6 +252,32 @@ public class BazaServiceTest {
         assertEquals(3, foundBaza.getNumBaza());
     }
 
+    @Test
+    void testFindByIdRondaAndIdJugador() {
+        List<Baza> bazas = Arrays.asList(baza);
+        when(bazaRepository.findByIdRondaAndIdJugador(1, 1)).thenReturn(bazas);
+
+        List<Baza> resultado = bazaService.findByIdRondaAndIdJugador(1, 1);
+
+        assertNotNull(resultado);
+        assertEquals(1, resultado.size());
+        verify(bazaRepository, times(1)).findByIdRondaAndIdJugador(1, 1);
+    }
+
+    //TODO: findBazaAnterior() cuando no cree dependencia circular
+    /*
+    @Test
+    void testFindBazaAnterior() {
+        when(bazaRepository.findBazaAnterior(1, 1)).thenReturn(Optional.of(baza));
+
+        Baza bazaAnterior = bazaService.findBazaAnterior(1, 1);
+
+        assertNotNull(bazaAnterior);
+        assertEquals(1, bazaAnterior.getId());
+        verify(bazaRepository, times(1)).findBazaAnterior(1, 1);
+    }
+     */
+
        // Test para iniciar una nueva Baza
        @Test
        void testIniciarBazas() {
@@ -259,7 +287,7 @@ public class BazaServiceTest {
    
            assertNotNull(nuevaBaza);
            assertEquals(1, nuevaBaza.getNumBaza());
-           assertNull(nuevaBaza.getTrucoGanador());
+           assertNull(nuevaBaza.getCartaGanadora());
            assertNull(nuevaBaza.getGanador());
            assertEquals(ronda, nuevaBaza.getRonda());
    
@@ -269,7 +297,104 @@ public class BazaServiceTest {
            verify(bazaRepository, times(1)).save(nuevaBaza);
        }
 
+       //calcularTurnosNuevaBaza()
+       //primerTurno()
+       //getPtosBonificacion
+       //Todos los get de Truco
 
+       @Test
+       void testCalcularTurnosNuevaBaza_PrimeraBaza() {
+           List<Jugador> jugadores = Arrays.asList(jugador);
+           when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(jugadores);
+   
+           List<Integer> turnos = bazaService.calcularTurnosNuevaBaza(1, null);
+   
+           assertNotNull(turnos);
+           assertEquals(1, turnos.size());
+           assertEquals(1, turnos.get(0));
+           verify(jugadorService, times(1)).findJugadoresByPartidaId(1);
+       }
+   
+       @Test
+       void testCalcularTurnosNuevaBaza_ConGanador() {
+           List<Jugador> jugadores = Arrays.asList(jugador);
+           when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(jugadores);
+   
+           baza.setGanador(jugador);
+           List<Integer> turnos = bazaService.calcularTurnosNuevaBaza(1, baza);
+   
+           assertNotNull(turnos);
+           assertEquals(1, turnos.size());
+           assertEquals(1, turnos.get(0));
+           verify(jugadorService, times(1)).findJugadoresByPartidaId(1);
+       }
+   
+       @Test
+       void testPrimerTurno() {
+           List<Integer> turnos = Arrays.asList(1, 2, 3);
+           Integer primerTurno = bazaService.primerTurno(turnos);
+   
+           assertNotNull(primerTurno);
+           assertEquals(1, primerTurno);
+       }
+   
+       @Test
+       void testGetPtosBonificacion() {
+           List<Baza> bazas = Arrays.asList(baza);
+           List<Truco> trucos = Arrays.asList(truco);
+   
+           when(bazaRepository.findByIdRondaAndIdJugador(1, 1)).thenReturn(bazas);
+           when(trucoRepository.findTrucosByBazaId(1)).thenReturn(trucos);
+   
+           Integer puntos = bazaService.getPtosBonificacion(1, 1);
+   
+           assertNotNull(puntos);
+           verify(bazaRepository, times(1)).findByIdRondaAndIdJugador(1, 1);
+           verify(trucoRepository, times(1)).findTrucosByBazaId(1);
+       }
+   
+       @Test
+       void testGetPrimeraSirena() {
+           List<Truco> sirenas = Arrays.asList(truco);
+           Truco resultado = bazaService.getPrimeraSirena(sirenas);
+   
+           assertNotNull(resultado);
+           assertEquals(1, resultado.getId());
+       }
+   
+       @Test
+       void testGetPrimerPirata() {
+           List<Truco> piratas = Arrays.asList(truco);
+           Truco resultado = bazaService.getPrimerPirata(piratas);
+   
+           assertNotNull(resultado);
+           assertEquals(1, resultado.getId());
+       }
+   
+       @Test
+       void testGetTriunfoMayorTruco() {
+           truco.getCarta().setNumero(10);
+           List<Truco> triunfos = Arrays.asList(truco);
+           Truco resultado = bazaService.getTriunfoMayorTruco(triunfos);
+   
+           assertNotNull(resultado);
+           assertEquals(1, resultado.getId());
+       }
+   
+       @Test
+       void testGetCartaPaloMayorNum() {
+           truco.getCarta().setNumero(10);
+           List<Truco> cartasPalo = Arrays.asList(truco);
+           Truco resultado = bazaService.getCartaPaloMayorNum(cartasPalo);
+   
+           assertNotNull(resultado);
+           assertEquals(1, resultado.getId());
+       }
+
+   }
+
+
+/*
     // Test para nextBaza: Incrementar numBaza dentro de la misma ronda
     @Test
     void testNextBaza_IncrementarNumBaza() {
@@ -281,7 +406,7 @@ public class BazaServiceTest {
 
         assertNotNull(resultado);
         assertEquals(2, resultado.getNumBaza());
-        assertNull(resultado.getTrucoGanador());
+        assertNull(resultado.getCartaGanadora());
         assertNull(resultado.getGanador());
 
         verify(bazaRepository, times(1)).save(baza);
@@ -312,4 +437,56 @@ public class BazaServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> rondaService.nextBaza(99));
     }
 
-}
+    //CAMBIAR
+    /*
+        @Test
+        void testCalculoGanador() {
+            Baza baza2 = new Baza();
+            baza2.setId(1);
+            baza2.setTipoCarta(TipoCarta.morada);
+            baza2.setNumBaza(1);
+            baza2.setGanador(null);
+            baza2.setTrucoGanador(null);
+            baza2.setRonda(ronda);
+
+            Carta carta2 = new Carta();
+            carta2.setId(30);
+            carta2.setImagenFrontal("./images/cartas/verde_1.png");
+            carta2.setImagenTrasera("./images/cartas/parte_trasera.png");
+            carta2.setNumero(10);
+            carta2.setTipoCarta(TipoCarta.morada);
+
+            Carta carta1 = new Carta();
+            carta1.setId(15);
+            carta1.setImagenFrontal("./images/cartas/verde_1.png");
+            carta1.setImagenTrasera("./images/cartas/parte_trasera.png");
+            carta1.setNumero(3);
+            carta1.setTipoCarta(TipoCarta.morada);
+
+            Truco truco2 = new Truco();
+            truco2.setId(10);
+            truco2.setBaza(baza2);
+            truco2.setCarta(carta2);
+            truco2.setJugador(jugador);
+            truco2.setMano(mano);
+            truco2.setTurno(2);
+
+            Truco truco1 = new Truco();
+            truco1.setId(15);
+            truco1.setBaza(baza2);
+            truco1.setCarta(carta1);
+            truco1.setJugador(jugador);
+            truco1.setMano(mano);
+            truco1.setTurno(3);
+
+            when(bazaRepository.findById(baza2.getId())).thenReturn(Optional.of(baza2));
+            when(trucoRepository.findTrucosByBazaId(baza2.getId())).thenReturn(List.of(truco1, truco2));
+    
+            bazaService.calculoGanador(baza2.getId());
+            Baza bazaActualizada = bazaService.findById(baza2.getId());
+    
+            assertEquals(truco2.getCarta(), bazaActualizada.getTrucoGanador().getCarta());
+    
+            verify(bazaRepository, times(1)).save(baza2);
+        }
+    */

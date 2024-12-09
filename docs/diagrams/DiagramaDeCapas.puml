@@ -40,8 +40,6 @@ package "Resources Layer" as Resources {
 
 PartidaRestController ..> PartidaService
 PartidaRestController ..> JugadorService
-PartidaRestController ..> ManoService
-PartidaRestController ..> BazaService
 
 RondaRestController ..> RondaService
 
@@ -63,6 +61,7 @@ UserRestController ..> AuthoritiesService
 PartidaService ..> PartidaRepository
 PartidaService ..> RondaService
 PartidaService ..> JugadorService
+PartidaService ..> UserService
 
 RondaService ..> RondaRepository
 RondaService ..> PartidaService
@@ -75,18 +74,23 @@ ManoService ..> CartaService
 ManoService ..> JugadorService
 
 BazaService ..> BazaRepository
-BazaService ..> RondaService
-BazaService ..> TrucoService
+BazaService ..> TrucoRepository
+BazaService ..> PartidaService
+BazaService ..> JugadorService
 
 TrucoService ..> TrucoRepository
 TrucoService ..> BazaRepository
 TrucoService ..> ManoRepository
 TrucoService ..> JugadorService
+TrucoService ..> ManoService
+TrucoService ..> PartidaService
+TrucoService ..> RondaService
 
 CartaService ..> CartaRepository
 
 JugadorService ..> JugadorRepository
 JugadorService ..> PartidaRepository
+JugadorService ..> UserRepository
 
 UserService ..> UserRepository
 

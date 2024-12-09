@@ -83,7 +83,7 @@ Las entidades implicadas son: Partida, Ronda, Baza, Mano, Truco, Carta, Jugador 
 
 ### Diagrama de Capas (incluyendo Controladores, Servicios y Repositorios)
 
-![Diagrama de Capas](/docs/diagrams/DiagramaDeCapas.png.png)
+![Diagrama de Capas](/docs/diagrams/DiagramaDeCapas_v2.png)
 
 En este diagrama de capas podemos ver las relaciones entre los controladores de cada entidad y los distintos servicios, además de las conexiones con los repositorios.
 

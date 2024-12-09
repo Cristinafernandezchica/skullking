@@ -157,7 +157,7 @@ private JugadorService js;
             if(!(tipoCarta.equals(TipoCarta.sinDeterminar))){
                 if (hasEspecial && hasPaloBaza) {
                     // Caso 3: Mano con alguna especial y alguna del palobaza
-                    if (!c.getTipoCarta().equals(tipoCarta) || !c.esCartaEspecial()) {
+                    if (!(c.getTipoCarta().equals(tipoCarta) || c.esCartaEspecial())) {
                         result.add(c);
                     }
                 } else if (hasEspecial && !hasPaloBaza) {
@@ -177,68 +177,5 @@ private JugadorService js;
         
         return result;
     }    
-    
-/* 
-    @Transactional
-    public void getPuntaje(Integer numBazas, Integer rondaId){
-         List<Mano> manos = manoRepository.findAllByRondaId(rondaId);
-         for(Mano m:manos){
-            Integer puntaje = 0;
-            Jugador jugador = m.getJugador();
-            if(m.getApuesta()==0){
-                if(m.getApuesta().equals(m.getResultado())){
-                    puntaje += 10*numBazas;
-                }else{
-                    puntaje -= 10*numBazas;
-                }
-            }else{
-                if(m.getApuesta().equals(m.getResultado())){
-                    // Los ptos de bonificacion solo se calcula si se acierta la apuesta
-                    Integer ptosBonificacion = bs.getPtosBonificacion(rondaId, jugador.getId());
-                    puntaje += 20*m.getApuesta() + ptosBonificacion;
-                }else{
-                    puntaje -= 10*Math.abs(m.getApuesta()-m.getResultado());
-                } 
-            }
-            jugador.setPuntos(jugador.getPuntos() + puntaje);
-         }
-    }
-*/
-    /* 
-    @Transactional
-    public Integer getPtosBonificacion(Integer idRonda, Integer idJugador){
-        // se cogen las bazas de la ronda en la que el jugador haya ganado
-        List<Baza> bazasRondaJugador = bs.findByIdRondaAndIdJugador(idRonda,idJugador);
-        Integer ptosBonificacion = 0;
-        for(Baza baza: bazasRondaJugador){
-            List<Carta> cartasBaza = ts.findTrucosByBazaId(baza.getId())
-                .stream().map(t -> t.getCarta()).collect(Collectors.toList());
-            Carta cartaGanadora = baza.getTrucoGanador().getCarta();
-            for(Carta carta: cartasBaza){
-                calculoPtosBonificacion(cartaGanadora, carta);
-            }
-        }
-        return ptosBonificacion;
-    }
-
-    public Integer calculoPtosBonificacion(Carta cartaGanadora, Carta carta){
-        Integer ptosBonificacion = 0;
-        TipoCarta cartaTipo = carta.getTipoCarta();
-
-        if(carta.esCatorce()) ptosBonificacion += 10;
-        if(carta.esCatorce()&& carta.esTriunfo()) ptosBonificacion += 20;
-        if(cartaGanadora.getTipoCarta().equals(TipoCarta.pirata)) {
-            if(cartaTipo.equals(TipoCarta.sirena)) ptosBonificacion += 20;
-        }
-        if(cartaGanadora.getTipoCarta().equals(TipoCarta.sirena)) {
-            if(cartaTipo.equals(TipoCarta.skullking)) ptosBonificacion += 40;
-        }
-        if(cartaGanadora.getTipoCarta().equals(TipoCarta.skullking)) {
-            if(cartaTipo.equals(TipoCarta.pirata)) ptosBonificacion += 30;
-        }
-
-        return ptosBonificacion;
-    }
-    */
     
 }

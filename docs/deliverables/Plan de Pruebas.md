@@ -58,19 +58,22 @@ https://html-preview.github.io/?url=https://raw.githubusercontent.com/gii-is-DP1
 | HGA4: Crear un usuario | [UTB-2:UserControllerTests](../../src/test/java/es/us/dp1/lx_xy_24_25/your_game_name/user/UserServiceTests.java#L118shouldInsertUser) | Verifica que el administrador pueda crear un usuario. | Implementada | Unitaria en backend |
 | HJJ13: Ver jugadores en la sala | [UTB-3:JugadorServiceTest](../../src/test/java/es/us/dp1/lx_xy_24_25/your_game_name/user/JugadorServiceTest.java#LshouldFindAllJugadoresByPartidaId) | Verifica que se obtengan los jugadores de una partida. | Implementada | Unitaria en backend |
 | HJJ9: Crear partida | [UTB-4:PartidaServiceTest](../../src/test/java/es/us/dp1/lx_xy_24_25/your_game_name/user/PartidaServiceTest.java#L151testSavePartida) | Verifica que se cree una partida correctamente. | Implementada | Unitaria en backend |
-| HJJ12: Iniciar partida creada | [UTB-4:PartidaServiceTest](../../src/test/java/es/us/dp1/lx_xy_24_25/your_game_name/user/PartidaServiceTest.java#L219testIniciarPartidaConTresOMasJugadores) | Verifica que el usuario creador pueda iniciar la partida. | Implementada | Unitaria en backend |
-| HJA1: Ver listado partidas filtradas | [UTB-4:PartidaServiceTest](../../src/test/java/es/us/dp1/lx_xy_24_25/your_game_name/user/PartidaServiceTest.java#L113testGetAllPartidasFiltrado) | Verifica que se pueden obtener las partidas pudiendo filtrar por estado y/o nombre. | Implementada | Unitaria en backend |
+| HJJ12: Iniciar partida creada | [UTB-4:PartidaServiceTest](../../src/test/java/es/us/dp1/lx_xy_24_25/your_game_name/user/PartidaServiceTest.java#L233testIniciarPartida) | Verifica que el usuario creador pueda iniciar la partida. | Implementada | Unitaria en backend |
+| HJA1: Ver listado partidas filtradas | [UTB-4:PartidaServiceTest](../../src/test/java/es/us/dp1/lx_xy_24_25/your_game_name/user/PartidaServiceTest.java#L101testGetAllPartidasFiltradasPorNombreYEstado) | Verifica que se pueden obtener las partidas pudiendo filtrar por estado y/o nombre. | Implementada | Unitaria en backend |
 | HJJ8: Conocer reglas del juego | [UTB-5:FrontendTest](Por implementar) | Verifica que se cree una partida correctamente. | Por implementar | En frontend |
+| HJJ11: Unirse a partida | [UTB-3:JugadorServiceTest](../../src/test/java/es/us/dp1/lx_xy_24_25/your_game_name/user/JugadorServiceTest.java#L131shouldSaveJugadorSuccessfully) | Verifica que se cree un jugador al unirse a una partida. | Implementada | Unitaria en backend |
+| HJJ10: Hacer apuestas | [UTB-6:ManoServiceTest](../../src/test/java/es/us/dp1/lx_xy_24_25/your_game_name/user/ManoServiceTest.java#L460testApuestaExito) | Verifica que haga una apuesta. | Implementada | Unitaria en backend |
 
 ### 5.3 Matriz de Trazabilidad entre Pruebas e Historias de Usuario
 
-| Prueba                    |  HGJ2  |  HGJ1  |  HGA1  |  HGA2  |  HGA3  |  HGA4  |  HJJ13 |  HJJ9  |  HJJ12 |  HJA1  |  HJJ8  |
-|---------------------------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
-| UTB-1:UserServiceTests    |   X    |    X   |    X   |    X   |        |   X    |        |        |        |        |        |
-| UTB-2:UserControllerTests |        |        |        |        |    X   |        |        |        |        |        |        |
-| UTB-3:JugadorServiceTest  |        |        |        |        |        |        |    X   |        |        |        |        |
-| UTB-4:PartidaServiceTest  |        |        |        |        |        |        |        |    X   |    X   |    X   |        |
-| UTB-5:FrontendTest        |        |        |        |        |        |        |        |        |        |        |    X   |
+| Prueba                    |  HGJ2  |  HGJ1  |  HGA1  |  HGA2  |  HGA3  |  HGA4  |  HJJ13 |  HJJ9  |  HJJ12 |  HJA1  |  HJJ8  |  HJJ11 |  HJJ10 |
+|---------------------------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+| UTB-1:UserServiceTests    |   X    |    X   |    X   |    X   |        |   X    |        |        |        |        |        |        |        |
+| UTB-2:UserControllerTests |        |        |        |        |    X   |        |        |        |        |        |        |        |        |
+| UTB-3:JugadorServiceTest  |        |        |        |        |        |        |    X   |        |        |        |        |    X   |        |
+| UTB-4:PartidaServiceTest  |        |        |        |        |        |        |        |    X   |    X   |    X   |        |        |        |
+| UTB-5:FrontendTest        |        |        |        |        |        |        |        |        |        |        |    X   |        |        |
+| UTB-6:ManoServiceTest     |        |        |        |        |        |        |        |        |        |        |        |        |    X   |
 
 ## 6. Criterios de Aceptación
 

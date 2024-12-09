@@ -46,6 +46,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 public class PartidaControllerTest {
 
     private static final int TEST_PARTIDA_ID = 1;
+    private static final int TEST_JUGADOR_ID = 1;
     private static final String BASE_URL = "/api/v1/partidas";
 
     @SuppressWarnings("unused")
@@ -66,6 +67,8 @@ public class PartidaControllerTest {
 
     private Partida partida;
 
+    private Jugador jugadorGanador;
+
     @BeforeEach
     void setup() {
         partida = new Partida();
@@ -73,6 +76,10 @@ public class PartidaControllerTest {
         partida.setNombre("Partida Test");
         partida.setEstado(PartidaEstado.ESPERANDO);
         partida.setOwnerPartida(1);
+
+        jugadorGanador = new Jugador();
+        jugadorGanador.setId(TEST_JUGADOR_ID);
+        jugadorGanador.setPuntos(150);
         
     }
 
@@ -196,6 +203,17 @@ public class PartidaControllerTest {
 
         mockMvc.perform(put(BASE_URL + "/{id}/iniciar-partida", TEST_PARTIDA_ID).with(csrf()))
             .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser("admin")
+    void shouldGetJugadorGanador() throws Exception {
+        when(partidaService.getJugadorGanador(TEST_PARTIDA_ID)).thenReturn(jugadorGanador);
+
+        mockMvc.perform(get(BASE_URL + "/{id}/jugadorGanador", TEST_PARTIDA_ID))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(TEST_JUGADOR_ID))
+            .andExpect(jsonPath("$.puntos").value(150));
     }
 
 

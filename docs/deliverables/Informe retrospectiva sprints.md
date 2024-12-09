@@ -148,11 +148,15 @@ Aguilar Morcillo, Marta
 Fernández Chica, Cristina
 
 #### Tests
-Amo Sánchez, Ángel ; Gutiérrez González, Candela Jazmín
+Amo Sánchez, Ángel ; Gutiérrez González, Candela Jazmín; Fernández Chica, Cristina
+
+#### Backend
+
+Fernández Chica, Cristina; Gutiérrez González, Candela; Aguilar Morcillo, Marta; Chávez Malavé, Luis Emmanuel; Amo Sánchez, Ángel
 
 #### Frontend
 
-Fernández Chica, Cristina; Chávez Malavé, Luis Emmanuel; Gutiérrez González; Candela;  Amo Sánchez, Ángel
+Fernández Chica, Cristina; Chávez Malavé, Luis Emmanuel; Gutiérrez González, Candela;  Amo Sánchez, Ángel
 
 #### Las asignaciones son orientativas,  ya que han habido aportaciones de distintas personas en cada apartado por la complejidad del proyecto.
 
@@ -172,11 +176,11 @@ En cuanto a la medición del tiempo trabajado, hemos vuelto a usar la herramient
 
 #### Sprint Rueda (todos)
 
-![Sprint3 Rueda](/docs/deliverables/reportesClockify/Sprint3/todos_rueda_sprint3.png)
+![Sprint3 Rueda](/docs/deliverables/reportesClockify/Sprint3/rueda_todos_sprint3.png)
 
 #### Sprint Gráfica (todos)
 
-![Sprint3 Gráfica](/docs/deliverables/reportesClockify/Sprint3/todos_sprint3.png)
+![Sprint3 Gráfica](/docs/deliverables/reportesClockify/Sprint3/barras_todos_sprint3.png)
 
 #### Sprint Gráfica Aguilar Morcillo, Marta
 
@@ -188,7 +192,7 @@ En cuanto a la medición del tiempo trabajado, hemos vuelto a usar la herramient
 
 #### Sprint Gráfica Fernández Chica, Cristina
 
-![Sprint3 Cristina](/docs/deliverables/reportesClockify/Sprint3/Cristina_sprint3.png)
+![Sprint3 Cristina](/docs/deliverables/reportesClockify/Sprint3/Cristina_rueda_sprint3.png)
 
 #### Sprint Gráfica Gutiérrez González, Candela Jazmín
 

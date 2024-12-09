@@ -158,12 +158,18 @@ A continuación se definen todas las historias de usuario a implementar:
 |Puedes presionar en el botón "Unirse a partida" para unirte a una partida que esté en estado "ESPERANDO".|
 |Caso negativo: Si ya estás en una partida en estado "JUGANDO" o "ESPERANDO", se lanzará una excepción y no podrás unirte a otra partida.|
 
- ### HJJ12-(ISSUE#108): Iniciar partida creada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/108]())
+ ### HJJ12-(ISSUE#108): Iniciar a partida creada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/108]())
 | "Como jugador quiero poder iniciar una partida que he creado para poder jugar."| 
 |-----|
 |![Lobby](../mockups/iniciar_partida.png)|
 |Una vez el jugador se encuentre en la sala de espera de la partida, si ha creado la partida, puede presionar el botón "Iniciar Prtida".|
 |Caso negativo: Si en la partida hay menos de 3 jugadores, no se podrá iniciar, aparecerá una excepción que lo indique.|
+
+### HJJ12-(ISSUE#108): Volver a partida empezada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/108]())
+| "Como jugador quiero poder volver a la partida empezada anteriormente."| 
+|-----|
+|![Lobby](../mockups/volverAPartida.png)|
+|Una vez el jugador se encuentre en una partida en espera o empezada, puede presionar el botón "Volver a Partida".|
 
  ### HJJ10-(ISSUE#43): Hacer apuestas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/43]())
 | "Como jugador quiero poder hacer apuestas sobre cuántas bazas ganaré para poder planificar mi estrategia."| 

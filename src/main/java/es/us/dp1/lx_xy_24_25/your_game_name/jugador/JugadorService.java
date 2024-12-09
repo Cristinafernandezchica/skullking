@@ -30,6 +30,7 @@ public class JugadorService {
     private JugadorRepository jugadorRepository;
     private PartidaRepository pr;
     private UserRepository userRepository;
+    private static final Integer MAX_JUGADORES = 8;
 
     @Autowired
     public JugadorService(JugadorRepository jugadorRepository, PartidaRepository pr) {
@@ -48,7 +49,7 @@ public class JugadorService {
         Partida partida = jugador.getPartida();
         List<Jugador> jugadoresPartida = findJugadoresByPartidaId(partida.getId());
 
-        if(jugadoresPartida.size() == 8){
+        if(jugadoresPartida.size() == MAX_JUGADORES){
             throw new MaximoJugadoresPartidaException("La partida está completa.");
         } else if(jugador.getUsuario().getId() == partida.getOwnerPartida() || jugadorEnPartida(jugadoresPartida, jugador)){
             throw new UsuarioMultiplesJugadoresEnPartidaException("El usuario ya tiene un jugador en la partida.");

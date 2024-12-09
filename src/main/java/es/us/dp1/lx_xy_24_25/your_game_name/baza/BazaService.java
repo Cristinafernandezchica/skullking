@@ -178,6 +178,10 @@ public class BazaService {
         Ronda ronda = baza.getRonda();
         Integer nextBaza = baza.getNumBaza() + 1;
 
+        // Actualiza la propiedad ganador de la instancia de la Baza anterior
+        // El valor de esta propiedad se usa en el cálculo del puntaje
+        calculoGanador(baza.getId());
+        // Posible nueva baza de la misma ronda
         Baza newBaza = new Baza();
 
         // Comprobación si es la última baza

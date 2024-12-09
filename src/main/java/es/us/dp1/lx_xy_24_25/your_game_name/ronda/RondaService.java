@@ -28,6 +28,7 @@ public class RondaService {
     ManoService ms;
     BazaService bs;
     JugadorService js;
+    private static final int ULTIMA_RONDA = 10;
 
     @Autowired
     public RondaService(RondaRepository rr, ManoService ms, @Lazy BazaService bs, JugadorService js){
@@ -92,7 +93,7 @@ public class RondaService {
         Ronda newRonda = new Ronda();
 
         // Comprobación si es la última ronda
-        if(nextRonda > 10){
+        if(nextRonda > ULTIMA_RONDA){
             ps.finalizarPartida(ronda.getPartida().getId());
         } else{
             newRonda.setNumRonda(nextRonda);
@@ -169,9 +170,9 @@ public class RondaService {
             Jugador jugador = m.getJugador();
             if(m.getApuesta()==0){
                 if(m.getApuesta().equals(m.getResultado())){
-                    puntaje += 10*numBazas;
+                    puntaje += ULTIMA_RONDA*numBazas;
                 }else{
-                    puntaje -= 10*numBazas;
+                    puntaje -= ULTIMA_RONDA*numBazas;
                 }
             }else{
                 if(m.getApuesta().equals(m.getResultado())){
@@ -179,7 +180,7 @@ public class RondaService {
                     Integer ptosBonificacion = bs.getPtosBonificacion(rondaId, jugador.getId());
                     puntaje += 20*m.getApuesta() + ptosBonificacion;
                 }else{
-                    puntaje -= 10*Math.abs(m.getApuesta()-m.getResultado());
+                    puntaje -= ULTIMA_RONDA*Math.abs(m.getApuesta()-m.getResultado());
                 } 
             }
             jugador.setPuntos(jugador.getPuntos() + puntaje);

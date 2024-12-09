@@ -13,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
@@ -23,6 +24,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 
 import java.time.LocalDateTime;
@@ -44,10 +46,16 @@ public class BazaServiceTest {
     private BazaRepository bazaRepository;
 
     @MockBean
+    private TrucoRepository trucoRepository;
+
+    @MockBean
     private RondaService rondaService;
 
     @MockBean
     private TrucoService trucoService;
+
+    @MockBean
+    private JugadorService jugadorService;
 
     @InjectMocks
     private BazaService bazaService;
@@ -382,6 +390,7 @@ public class BazaServiceTest {
            assertNotNull(resultado);
            assertEquals(1, resultado.getId());
        }
+
    }
 
 
@@ -427,5 +436,57 @@ public class BazaServiceTest {
 
         assertThrows(ResourceNotFoundException.class, () -> rondaService.nextBaza(99));
     }
-*/
-}
+
+    //CAMBIAR
+    /*
+        @Test
+        void testCalculoGanador() {
+            Baza baza2 = new Baza();
+            baza2.setId(1);
+            baza2.setTipoCarta(TipoCarta.morada);
+            baza2.setNumBaza(1);
+            baza2.setGanador(null);
+            baza2.setTrucoGanador(null);
+            baza2.setRonda(ronda);
+
+            Carta carta2 = new Carta();
+            carta2.setId(30);
+            carta2.setImagenFrontal("./images/cartas/verde_1.png");
+            carta2.setImagenTrasera("./images/cartas/parte_trasera.png");
+            carta2.setNumero(10);
+            carta2.setTipoCarta(TipoCarta.morada);
+
+            Carta carta1 = new Carta();
+            carta1.setId(15);
+            carta1.setImagenFrontal("./images/cartas/verde_1.png");
+            carta1.setImagenTrasera("./images/cartas/parte_trasera.png");
+            carta1.setNumero(3);
+            carta1.setTipoCarta(TipoCarta.morada);
+
+            Truco truco2 = new Truco();
+            truco2.setId(10);
+            truco2.setBaza(baza2);
+            truco2.setCarta(carta2);
+            truco2.setJugador(jugador);
+            truco2.setMano(mano);
+            truco2.setTurno(2);
+
+            Truco truco1 = new Truco();
+            truco1.setId(15);
+            truco1.setBaza(baza2);
+            truco1.setCarta(carta1);
+            truco1.setJugador(jugador);
+            truco1.setMano(mano);
+            truco1.setTurno(3);
+
+            when(bazaRepository.findById(baza2.getId())).thenReturn(Optional.of(baza2));
+            when(trucoRepository.findTrucosByBazaId(baza2.getId())).thenReturn(List.of(truco1, truco2));
+    
+            bazaService.calculoGanador(baza2.getId());
+            Baza bazaActualizada = bazaService.findById(baza2.getId());
+    
+            assertEquals(truco2.getCarta(), bazaActualizada.getTrucoGanador().getCarta());
+    
+            verify(bazaRepository, times(1)).save(baza2);
+        }
+    */

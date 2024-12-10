@@ -180,7 +180,7 @@ En cuanto a la medición del tiempo trabajado, hemos vuelto a usar la herramient
 
 #### Sprint Gráfica (todos)
 
-![Sprint3 Gráfica](/docs/deliverables/reportesClockify/Sprint3/barras_todos_sprint3.png)
+![Sprint3 Gráfica](/docs/deliverables/reportesClockify/Sprint3/todos_sprint3.png)
 
 #### Sprint Gráfica Aguilar Morcillo, Marta
 
@@ -192,7 +192,7 @@ En cuanto a la medición del tiempo trabajado, hemos vuelto a usar la herramient
 
 #### Sprint Gráfica Fernández Chica, Cristina
 
-![Sprint3 Cristina](/docs/deliverables/reportesClockify/Sprint3/Cristina_rueda_sprint3.png)
+![Sprint3 Cristina](/docs/deliverables/reportesClockify/Sprint3/Cristina_sprint3.png)
 
 #### Sprint Gráfica Gutiérrez González, Candela Jazmín
 

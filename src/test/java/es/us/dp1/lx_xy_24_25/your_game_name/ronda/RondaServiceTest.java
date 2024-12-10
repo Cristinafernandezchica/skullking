@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
@@ -22,10 +21,6 @@ import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
-import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
-import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaEstado;
-import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaRepository;
-import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
 
@@ -45,22 +40,22 @@ import static org.mockito.Mockito.*;
 public class RondaServiceTest {
 
     @InjectMocks
-    private RondaService rs;
+    private RondaService rondaService;
 
     @Mock
-    private RondaRepository rr;
+    private RondaRepository rondaRepository;
 
     @Mock
-    private PartidaService ps;
+    private PartidaService partidaService;
 
     @Mock
-    private ManoService ms;
+    private ManoService manoService;
 
     @Mock
-    private BazaService bs;
+    private BazaService bazaService;
 
     @Mock
-    private JugadorService js;
+    private JugadorService jugadorService;
 
 
     private Baza baza;
@@ -79,7 +74,6 @@ public class RondaServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        // Configuración de entidades relacionadas
         jugador = new Jugador();
         jugador.setId(1);
         jugador.setPuntos(12);
@@ -139,22 +133,20 @@ public class RondaServiceTest {
         trucoT.setMano(mano);
         trucoT.setTurno(2);
 
-        // Configuración de la entidad Baza
         baza = new Baza();
         baza.setId(1);
         baza.setPaloBaza(PaloBaza.morada);
         baza.setNumBaza(3);
         baza.setGanador(jugador);
-        //baza.setTrucoGanador(truco);
+        baza.setCartaGanadora(carta);
         baza.setRonda(ronda);
 
-        // Configuración de la entidad Baza
         bazaV = new Baza();
         bazaV.setId(2);
         bazaV.setPaloBaza(PaloBaza.verde);
         bazaV.setNumBaza(4);
         bazaV.setGanador(jugador);
-        //bazaV.setTrucoGanador(truco);
+        bazaV.setCartaGanadora(cartaV);
         bazaV.setRonda(ronda);
 
         mano =new Mano();
@@ -167,11 +159,11 @@ public class RondaServiceTest {
     }
 
     @Test
-    void testGetAllRondas(){
+    void shouldGetAllRondas(){
         List<Ronda> rondaList = Arrays.asList(ronda, ronda, ronda);
-        when(rr.findAll()).thenReturn(rondaList);
+        when(rondaRepository.findAll()).thenReturn(rondaList);
 
-        List<Ronda> result = rs.getAllRondas();
+        List<Ronda> result = rondaService.getAllRondas();
 
         assertNotNull(result);
         assertEquals(3,result.size());
@@ -179,46 +171,46 @@ public class RondaServiceTest {
     }
 
     @Test
-    void testSaveRonda() {
-        when(rr.save(any(Ronda.class))).thenReturn(ronda);
+    void shouldSaveRonda() {
+        when(rondaRepository.save(any(Ronda.class))).thenReturn(ronda);
 
-        Ronda savedRonda = rs.save(ronda);
+        Ronda savedRonda = rondaService.save(ronda);
 
         assertNotNull(savedRonda);
         assertEquals(RondaEstado.JUGANDO, savedRonda.getEstado());
         assertEquals(4, savedRonda.getNumBazas());
         assertEquals(4, savedRonda.getNumRonda());
-        verify(rr, times(1)).save(ronda);
+        verify(rondaRepository, times(1)).save(ronda);
     }
 
     @Test
-    void testFindById(){
-        when(rr.findById(2)).thenReturn(Optional.of(ronda));
+    void shouldFindById(){
+        when(rondaRepository.findById(2)).thenReturn(Optional.of(ronda));
 
-        Ronda foundRonda = rs.getRondaById(2);
+        Ronda foundRonda = rondaService.getRondaById(2);
        
         assertNotNull(foundRonda);
         assertEquals(RondaEstado.JUGANDO, foundRonda.getEstado());
         assertEquals(4, foundRonda.getNumBazas());
         assertEquals(4, foundRonda.getNumRonda());
-        verify(rr, times(1)).findById(2);
+        verify(rondaRepository, times(1)).findById(2);
     }
 
     @Test
-    void testFindByIdNotFound() {
-        when(rr.findById(1)).thenReturn(Optional.empty());
+    void shouldFindByIdNotFound() {
+        when(rondaRepository.findById(1)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> rs.getRondaById(1));
+        assertThrows(ResourceNotFoundException.class, () -> rondaService.getRondaById(1));
     }
 
     @Test
-    void testDeleteRonda() {
-        rs.delete(1);
-        verify(rr, times(1)).deleteById(1);
+    void shouldDeleteRonda() {
+        rondaService.delete(1);
+        verify(rondaRepository, times(1)).deleteById(1);
     }
 
     @Test
-    void testUpdateRonda() {
+    void shouldUpdateRonda() {
         Ronda newRonda = new Ronda();
         newRonda.setId(2);
         newRonda.setEstado(RondaEstado.FINALIZADA); 
@@ -226,22 +218,22 @@ public class RondaServiceTest {
         newRonda.setNumRonda(4);
         newRonda.setPartida(partida);
 
-        when(rr.findById(1)).thenReturn(Optional.of(ronda));
-        when(rr.save(any(Ronda.class))).thenReturn(newRonda);
+        when(rondaRepository.findById(1)).thenReturn(Optional.of(ronda));
+        when(rondaRepository.save(any(Ronda.class))).thenReturn(newRonda);
 
-        Ronda updatedRonda = rs.updateRonda(newRonda, 1);
+        Ronda updatedRonda = rondaService.updateRonda(newRonda, 1);
 
         assertNotNull(updatedRonda);
         assertEquals(RondaEstado.FINALIZADA, updatedRonda.getEstado());
-        verify(rr, times(1)).save(ronda);
+        verify(rondaRepository, times(1)).save(ronda);
     }
 
     
     @Test
-    void testIniciarRonda() {
-        when(rr.save(any(Ronda.class))).thenAnswer(invocation -> invocation.getArgument(0));
+    void shouldIniciarRonda() {
+        when(rondaRepository.save(any(Ronda.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Ronda result = rs.iniciarRonda(partida);
+        Ronda result = rondaService.iniciarRonda(partida);
 
         assertNotNull(result); 
         assertEquals(Integer.valueOf(1), result.getNumRonda()); 
@@ -249,32 +241,32 @@ public class RondaServiceTest {
         assertEquals(partida, result.getPartida()); 
         assertEquals(RondaEstado.JUGANDO, result.getEstado()); 
 
-        verify(ms, times(1)).iniciarManos(partida.getId(), ronda);
-        verify(bs, times(1)).iniciarBazas(ronda);
-        verify(rr, times(1)).save(any(Ronda.class)); 
+        verify(manoService, times(1)).iniciarManos(partida.getId(), ronda);
+        verify(bazaService, times(1)).iniciarBazas(ronda);
+        verify(rondaRepository, times(1)).save(any(Ronda.class)); 
     }
     
     @Test
-    void testFinalizarRonda() {
+    void shouldFinalizarRonda() {
    
-        when(rr.findById(2)).thenReturn(Optional.of(ronda));
-        // doNothing().when(rs).getPuntaje(anyInt(),anyInt());
-        when(rr.save(any(Ronda.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(rondaRepository.findById(2)).thenReturn(Optional.of(ronda));
+        //doNothing().when(rondaService).getPuntaje(anyInt(),anyInt());
+        when(rondaRepository.save(any(Ronda.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Ejecutar el método
-        rs.finalizarRonda(2); 
+        rondaService.finalizarRonda(2); 
 
         // Verificar los cambios
-        verify(rr, times(1)).findById(2);
-        verify(rr, times(1)).save(any(Ronda.class));
-        // verify(rs, times(1)).getPuntaje(ronda.getNumBazas(), 2);
+        verify(rondaRepository, times(1)).findById(2);
+        verify(rondaRepository, times(1)).save(any(Ronda.class));
+        //verify(rondaService, times(1)).getPuntaje(ronda.getNumBazas(), 2);
 
         assertEquals(RondaEstado.FINALIZADA, ronda.getEstado());
     }
 
 
     @Test
-    void testNextRonda_OtraRonda() {
+    void shouldNextRonda_OtraRonda() {
         ronda = new Ronda();
         ronda.setId(2);
         ronda.setEstado(RondaEstado.FINALIZADA);
@@ -282,29 +274,29 @@ public class RondaServiceTest {
         ronda.setNumRonda(4);
         ronda.setPartida(partida);
 
-        when(rr.findById(2)).thenReturn(Optional.of(ronda));
-        when(rr.save(any(Ronda.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        when(js.findJugadoresByPartidaId(ronda.getPartida().getId())).thenReturn(List.of(new Jugador(), new Jugador(), new Jugador()));
-        when(ms.getNumCartasARepartir(anyInt(), anyInt())).thenReturn(5);
+        when(rondaRepository.findById(2)).thenReturn(Optional.of(ronda));
+        when(rondaRepository.save(any(Ronda.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(jugadorService.findJugadoresByPartidaId(ronda.getPartida().getId())).thenReturn(List.of(new Jugador(), new Jugador(), new Jugador()));
+        when(manoService.getNumCartasARepartir(anyInt(), anyInt())).thenReturn(5);
     
-        Ronda result = rs.nextRonda(2);
+        Ronda result = rondaService.nextRonda(2);
     
         assertNotNull(result);
         assertEquals(Integer.valueOf(5), result.getNumRonda());
         assertEquals(Integer.valueOf(5), result.getNumBazas());
         assertEquals(RondaEstado.JUGANDO, result.getEstado());
     
-        verify(rr, times(2)).findById(2);
-        verify(rr, times(2)).save(any(Ronda.class));
-        verify(ms, times(1)).iniciarManos(partida.getId(), result);
-        verify(bs, times(1)).iniciarBazas(result);
-        verify(ms, times(1)).getNumCartasARepartir(eq(5), eq(3));
-        verify(ps, never()).finalizarPartida(anyInt());
+        verify(rondaRepository, times(2)).findById(2);
+        verify(rondaRepository, times(2)).save(any(Ronda.class));
+        verify(manoService, times(1)).iniciarManos(partida.getId(), result);
+        verify(bazaService, times(1)).iniciarBazas(result);
+        verify(manoService, times(1)).getNumCartasARepartir(eq(5), eq(3));
+        verify(partidaService, never()).finalizarPartida(anyInt());
     }
     
-    /* 
+    
     @Test
-    void testNextRonda_UltimaRonda() {
+    void shouldNextRonda_UltimaRonda() {
         ronda = new Ronda();
         ronda.setId(10);
         ronda.setEstado(RondaEstado.FINALIZADA);
@@ -312,75 +304,78 @@ public class RondaServiceTest {
         ronda.setNumRonda(10);
         ronda.setPartida(partida);
 
-        when(rr.findById(10)).thenReturn(Optional.of(ronda));
-        when(rr.save(any(Ronda.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        when(js.findJugadoresByPartidaId(ronda.getPartida().getId())).thenReturn(List.of(new Jugador(), new Jugador(), new Jugador()));
-        when(ms.getNumCartasARepartir(anyInt(), anyInt())).thenReturn(5);
+        when(rondaRepository.findById(10)).thenReturn(Optional.of(ronda));
+        when(rondaRepository.save(any(Ronda.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(jugadorService.findJugadoresByPartidaId(ronda.getPartida().getId())).thenReturn(List.of(new Jugador(), new Jugador(), new Jugador()));
+        when(manoService.getNumCartasARepartir(anyInt(), anyInt())).thenReturn(5);
     
-        Ronda result = rs.nextRonda(10);
+        Ronda result = rondaService.nextRonda(10);
     
         assertNotNull(result);
-        assertEquals(Integer.valueOf(null), result.getNumRonda());
-        assertEquals(Integer.valueOf(null), result.getNumBazas());
+        assertEquals((null), result.getNumRonda());
+        assertEquals((null), result.getNumBazas());
         assertEquals(null, result.getEstado());
     
-        verify(rr, times(1)).findById(10);
-        verify(rr, times(2)).save(any(Ronda.class));
-        verify(ms, times(1)).iniciarManos(partida.getId(), result);
-        verify(bs, times(1)).iniciarBazas(result);
-        verify(ms, times(1)).getNumCartasARepartir(eq(5), eq(3));
-        verify(ps, never()).finalizarPartida(anyInt());
+        verify(rondaRepository, times(2)).findById(10);
+        verify(rondaRepository, times(2)).save(any(Ronda.class));
+        verify(manoService, times(1)).iniciarManos(partida.getId(), result);
+        verify(bazaService, times(1)).iniciarBazas(result);
     }
-    */
+    
+    @Test
+    void shouldFindRondaActualByPartidaId() {
+        List<Ronda> listaRondas = List.of(ronda, rondaV);
+        when(rondaRepository.findByPartidaId(5)).thenReturn(listaRondas);
+    
+        Ronda result = rondaService.findRondaActualByPartidaId(5);
+        assertNotNull(result);
+        assertEquals(2, result.getId());
+        assertEquals(RondaEstado.JUGANDO, result.getEstado());
+    
+        verify(rondaRepository, times(1)).findByPartidaId(5);
+    }
+    
+
 
     @Test
-    void testNextBaza_CuandoNoUltimaBaza() {
-        // Arrange
+    void shouldNextBaza_CuandoNoUltimaBaza() {
         Integer bazaId = 1;
         Integer nextBazaNum = 2;
 
-        // Simula una partida
         Partida partida = new Partida();
         partida.setId(1);
         partida.setTurnoActual(1);
 
-        // Simula una ronda con 3 bazas totales
         Ronda ronda = new Ronda();
         ronda.setId(1);
         ronda.setPartida(partida);
         ronda.setNumBazas(3);
 
-        // Simula la baza actual
         Baza currentBaza = new Baza();
         currentBaza.setId(bazaId);
         currentBaza.setNumBaza(1);
         currentBaza.setRonda(ronda);
 
-        // Simula una nueva baza
         Baza newBaza = new Baza();
         newBaza.setNumBaza(nextBazaNum);
+        newBaza.setTurnos(Arrays.asList(1, 2, 3));
 
-        // Lista de turnos para la nueva baza
-        List<Integer> turnos = Arrays.asList(1, 2, 3);
+        when(bazaService.findById(bazaId)).thenReturn(currentBaza);
+        when(bazaService.calcularTurnosNuevaBaza(partida.getId(), currentBaza)).thenReturn(newBaza.getTurnos());
+        when(bazaService.primerTurno(newBaza.getTurnos())).thenReturn(1);
+        when(bazaService.saveBaza(any(Baza.class))).thenReturn(newBaza);
 
-        when(bs.findById(bazaId)).thenReturn(currentBaza);
-        when(bs.calcularTurnosNuevaBaza(partida.getId(), currentBaza)).thenReturn(turnos);
-        when(bs.primerTurno(turnos)).thenReturn(1);
-        when(bs.saveBaza(any(Baza.class))).thenReturn(newBaza);
+        Baza result = rondaService.nextBaza(bazaId);
 
-        // Act
-        Baza result = rs.nextBaza(bazaId);
-
-        // Assert
         assertNotNull(result);
         assertEquals(nextBazaNum, result.getNumBaza());
-        verify(bs).calcularTurnosNuevaBaza(partida.getId(), currentBaza);
-        verify(ps).update(partida, partida.getId());
-        verify(bs).saveBaza(any(Baza.class));
+        verify(bazaService).calcularTurnosNuevaBaza(partida.getId(), currentBaza);
+        verify(partidaService).update(partida, partida.getId());
+        verify(bazaService).saveBaza(any(Baza.class));
     }
 /* 
     @Test
-    void testNextBaza_WhenLastBaza() {
+    void shouldNextBaza_WhenLastBaza() {
         // Arrange
         Integer bazaId = 1;
 
@@ -401,20 +396,20 @@ public class RondaServiceTest {
         currentBaza.setRonda(ronda);
 
         // Configuración de mocks
-        when(bs.findById(bazaId)).thenReturn(currentBaza);
-        doNothing().when(rs).nextRonda(ronda.getId());
+        when(bazaService.findById(bazaId)).thenReturn(currentBaza);
+        doNothing().when(rondaService).nextRonda(ronda.getId());
 
         // Act
-        Baza result = rs.nextBaza(bazaId);
+        Baza result = rondaService.nextBaza(bazaId);
 
         // Assert
         assertNull(result.getCartaGanadora()); // Verificar que no se configura una nueva baza
-        verify(rs).nextRonda(ronda.getId());
-        verify(bs, never()).calcularTurnosNuevaBaza(anyInt(), any(Baza.class)); // No se calculan turnos
+        verify(rondaService).nextRonda(ronda.getId());
+        verify(bazaService, never()).calcularTurnosNuevaBaza(anyInt(), any(Baza.class)); // No se calculan turnos
     }
 */
     @Test
-    void testGetPuntaje() {
+    void shouldGetPuntaje() {
         // Inicialización de datos
         Jugador jugador = new Jugador();
         jugador.setId(1);
@@ -431,14 +426,14 @@ public class RondaServiceTest {
         ronda.setNumBazas(3);
 
         // Configuración de mocks
-        when(ms.findAllByRondaId(2)).thenReturn(List.of(mano));
-        when(bs.getPtosBonificacion(2, 1)).thenReturn(10);
+        when(manoService.findAllByRondaId(2)).thenReturn(List.of(mano));
+        when(bazaService.getPtosBonificacion(2, 1)).thenReturn(10);
 
         // Act
-        rs.getPuntaje(3, 2);
+        rondaService.getPuntaje(3, 2);
 
         // Assert
-        verify(js, times(1)).updateJugador(any(Jugador.class), eq(1));
+        verify(jugadorService, times(1)).updateJugador(any(Jugador.class), eq(1));
         assertEquals(50, jugador.getPuntos()); // 20*2 + 10 = 50
     }
 

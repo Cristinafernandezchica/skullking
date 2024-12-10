@@ -35,33 +35,33 @@ import jakarta.validation.Valid;
 
 public class BazaRestController {
     
-    private final BazaService bs;
+    private final BazaService bazaService;
     private TrucoService trucoService;
 
     @Autowired
-    public BazaRestController(BazaService bs, TrucoService trucoService){
-        this.bs=bs;
+    public BazaRestController(BazaService bazaService, TrucoService trucoService){
+        this.bazaService=bazaService;
         this.trucoService=trucoService;
     }
 
     // Get todas las bazas
     @GetMapping
     public ResponseEntity<List<Baza>> getAllBazas(){
-        List<Baza> listaAux= bs.getAllBazas();
+        List<Baza> listaAux= bazaService.getAllBazas();
         return new ResponseEntity<>(listaAux, HttpStatus.OK);
     }
 
     // Get de una baza en función de su id
     @GetMapping("/{id}")
     public ResponseEntity<Baza> getBazaById(@PathVariable("id")Integer id){
-        Baza bazaById = bs.findById(id);
+        Baza bazaById = bazaService.findById(id);
         return new ResponseEntity<>(bazaById, HttpStatus.OK);
     }
 
     // Create una nueva baza
     @PostMapping()
     public ResponseEntity<Baza> createBaza(@Valid @RequestBody Baza b){
-        Baza bAux =bs.saveBaza(b);
+        Baza bAux =bazaService.saveBaza(b);
         return new ResponseEntity<>(bAux, HttpStatus.CREATED);
     }
 
@@ -69,8 +69,8 @@ public class BazaRestController {
     @PutMapping(value="/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Baza> updateBaza(@Valid @RequestBody Baza b,@PathVariable("id")Integer id){
-        RestPreconditions.checkNotNull(bs.findById(id), "Baza", "id", id);
-		return new ResponseEntity<>(this.bs.updateBaza(b,id), HttpStatus.NO_CONTENT);
+        RestPreconditions.checkNotNull(bazaService.findById(id), "Baza", "id", id);
+		return new ResponseEntity<>(this.bazaService.updateBaza(b,id), HttpStatus.NO_CONTENT);
 
     }
 
@@ -78,15 +78,15 @@ public class BazaRestController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<MessageResponse> deleteBaza(@PathVariable("id") int id) {
-		RestPreconditions.checkNotNull(bs.findById(id), "Baza", "ID", id);
-		bs.deleteBaza(id);
+		RestPreconditions.checkNotNull(bazaService.findById(id), "Baza", "ID", id);
+		bazaService.deleteBaza(id);
 		return new ResponseEntity<>(new MessageResponse("Baza eliminada"), HttpStatus.NO_CONTENT);
 	}
 
     //Get ganador de una baza concreta
     @GetMapping("/{id}/ganador")
     public Jugador findBazaByIdGanador(@PathVariable(value = "id") int id) {
-        Baza bazaById = bs.findById(id);
+        Baza bazaById = bazaService.findById(id);
         return bazaById.getGanador();
     }
 
@@ -101,7 +101,7 @@ public class BazaRestController {
     // PETICION PARA OBTENER LA ULTIMA BAZA DE UNA RONDA EN CONCRETA
     @GetMapping(value = "{rondaId}/bazaActual")
     public ResponseEntity<Baza> findBazaActualByRondaId(@PathVariable("rondaId") Integer rondaId) {
-        return new ResponseEntity<>(bs.findBazaActualByRondaId(rondaId), HttpStatus.OK);
+        return new ResponseEntity<>(bazaService.findBazaActualByRondaId(rondaId), HttpStatus.OK);
     }
     
     

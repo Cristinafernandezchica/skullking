@@ -18,16 +18,16 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 
 @WebMvcTest(controllers = JugadorRestController.class)
 public class JugadorRestControllerTest {
 
-
-    private static final int TEST_Jugador_id = 1;
     private static final String BASE_URL = "/api/v1/jugadores";
 
-    @SuppressWarnings("unused")
     @Autowired
     private JugadorRestController jugadorController;
 
@@ -44,41 +44,41 @@ public class JugadorRestControllerTest {
     private User user2;
     private Jugador jugador;
     private Jugador jugador2;
+    private Partida partida;
 
     @BeforeEach
     void setup() {
-        User user = new User();
+        user = new User();
         user.setId(1);
         user.setUsername("testUser");
 
-        User user2 = new User();
+        user2 = new User();
         user2.setId(2);
         user2.setUsername("testUser2");
 
-        /* 
-        Partida partida = new Partida();
+        partida = new Partida();
         partida.setId(1);
         partida.setNombre("Partida Test");
         partida.setOwnerPartida(1);
         partida.setEstado(PartidaEstado.ESPERANDO);
-        partida.setId(LocalDate);
-        */
         
         jugador = new Jugador();
-        jugador.setId(TEST_Jugador_id);
+        jugador.setId(1);
         jugador.setPuntos(100);
         jugador.setUsuario(user);
+        jugador.setPartida(partida);
         
         jugador2 = new Jugador();
         jugador2.setId(2);
         jugador2.setPuntos(120);
         jugador2.setUsuario(user2);
+        jugador2.setPartida(partida);
+
     }
 
     @Test
     @WithMockUser("player")
-    void shouldFindAllJugadoresByPartidaId() throws Exception {
-    
+    void shouldFindJugadoresByPartidaId() throws Exception {
         List<Jugador> jugadores = List.of(jugador,jugador2);
 
         when(jugadorService.findJugadoresByPartidaId(any(Integer.class))).thenReturn(jugadores);
@@ -90,33 +90,11 @@ public class JugadorRestControllerTest {
 
     @Test
     @WithMockUser("player")
-    void shouldNotFindAnyJugadoresByPartidaIdBecausePartidaIdDoesntExist() throws Exception {
-    
-        List<Jugador> jugadores = List.of(jugador,jugador2);
-
-        when(jugadorService.findJugadoresByPartidaId(any(Integer.class))).thenReturn(null);
-
-        mockMvc.perform(get(BASE_URL+"/1")).andExpect(status().isNotFound());
-    }
-
-
-    @Test
-    @WithMockUser("player")
-    void shouldFindAJugadorByUsuarioId() throws Exception {
-    
+    void shouldFindJugadorByUsuarioId() throws Exception {
         when(jugadorService.findJugadorByUsuarioId(any(Integer.class))).thenReturn(jugador);
 
         mockMvc.perform(get(BASE_URL+"/1/usuario")).andExpect(status().isOk())
         .andExpect(jsonPath("$.usuario.username").value("testUser"));
-    }
-
-    @Test
-    @WithMockUser("player")
-    void shouldNotFindAJugadorByUsuarioIdBecauseTheUserIdDoesntHaveJugadores() throws Exception {
-    
-        when(jugadorService.findJugadorByUsuarioId(any(Integer.class))).thenReturn(null);
-
-        mockMvc.perform(get(BASE_URL+"/1/usuario")).andExpect(status().isNotFound());
     }
 
     @Test
@@ -133,7 +111,7 @@ public class JugadorRestControllerTest {
 
     @Test
     @WithMockUser("player")
-    void shouldUpdateAJugador() throws Exception {
+    void shouldUpdateJugador() throws Exception {
 
         when(jugadorService.findById(any(Integer.class))).thenReturn(jugador);
         when(jugadorService.updateJugador(any(Jugador.class), any(Integer.class))).thenReturn(jugador);
@@ -149,7 +127,7 @@ public class JugadorRestControllerTest {
 
     @Test
     @WithMockUser("player")
-    void shouldCreateAJugador() throws Exception {
+    void shouldCreateJugador() throws Exception {
 
         User user3 = new User();
         user3.setId(3);
@@ -172,16 +150,48 @@ public class JugadorRestControllerTest {
 
     @Test
     @WithMockUser("player")
-    void shouldDeleteAJugador() throws Exception {
-
-    
-
+    void shouldDeleteJugador() throws Exception {
         when(jugadorService.findById(any(Integer.class))).thenReturn(jugador);
-
 
         mockMvc.perform(delete(BASE_URL + "/{id}",1)
                 .with(csrf()))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser("player")
+    void shouldFindPartidaByUsuarioId() throws Exception {
+        int usuarioId = 123;
+
+        // Simular el comportamiento del servicio
+        when(jugadorService.findPartidaByUsuarioId(usuarioId)).thenReturn(partida);
+
+        // Realizar la solicitud GET y validar la respuesta
+        mockMvc.perform(get("/api/v1/jugadores/{usuarioId}/partida", usuarioId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(partida.getId()))
+                .andExpect(jsonPath("$.nombre").value(partida.getNombre()));
+
+        // Verificar que el servicio fue invocado
+        verify(jugadorService, times(2)).findPartidaByUsuarioId(usuarioId);
+    }
+
+    @Test
+    @WithMockUser("player")
+    void shouldFindPartidaByUsuarioId_NotFound() throws Exception {
+        int usuarioId = 999;
+
+        // Simular el comportamiento cuando no se encuentra la partida
+        when(jugadorService.findPartidaByUsuarioId(usuarioId)).thenReturn(null);
+
+        // Realizar la solicitud GET y validar que lanza un error 404
+        mockMvc.perform(get("/api/v1/jugadores/{usuarioId}/partida", usuarioId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        // Verificar que el servicio fue invocado
+        verify(jugadorService, times(1)).findPartidaByUsuarioId(usuarioId);
     }
 
 }

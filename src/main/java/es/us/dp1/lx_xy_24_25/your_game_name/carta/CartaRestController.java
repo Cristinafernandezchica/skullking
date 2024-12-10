@@ -48,7 +48,7 @@ public class CartaRestController {
     //update Carta
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Carta> putMethodName(@PathVariable Integer id, @RequestBody @Valid Carta carta) {
+    public ResponseEntity<Carta> update(@PathVariable Integer id, @RequestBody @Valid Carta carta) {
         RestPreconditions.checkNotNull(cartaService.findById(id), "Carta", "ID", id);
 		return new ResponseEntity<>(this.cartaService.updateCarta(carta, id), HttpStatus.OK);
     }

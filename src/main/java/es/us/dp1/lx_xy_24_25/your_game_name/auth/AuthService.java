@@ -25,13 +25,10 @@ public class AuthService {
 	
 
 	@Autowired
-	public AuthService(PasswordEncoder encoder, AuthoritiesService authoritiesService, UserService userService
-			// PlayerService playerService
-			) {
+	public AuthService(PasswordEncoder encoder, AuthoritiesService authoritiesService, UserService userService) {
 		this.encoder = encoder;
 		this.authoritiesService = authoritiesService;
 		this.userService = userService;
-		//this.playerService = ownerService;		
 	}
 
 	@Transactional
@@ -52,15 +49,6 @@ public class AuthService {
 			role = authoritiesService.findByAuthority("PLAYER");
 			user.setAuthority(role);
 			userService.saveUser(user);
-			/*Player player = new Player();
-			player.setFirstName(request.getFirstName());
-			player.setLastName(request.getLastName());
-			player.setAddress(request.getAddress());
-			player.setCity(request.getCity());
-			player.setTelephone(request.getTelephone());
-			player.setUser(user);
-			playerService.savePlayer(player);
-			*/
 		}
 	}
 

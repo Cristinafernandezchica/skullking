@@ -85,11 +85,8 @@ class AuthControllerTests {
 		signupRequest = new SignupRequest();
 		signupRequest.setUsername("username");
 		signupRequest.setPassword("password");
-		signupRequest.setAddress("Address");
-		signupRequest.setCity("City");
 		signupRequest.setFirstName("Test");
 		signupRequest.setLastName("Test");
-		signupRequest.setTelephone("999999999");
 		signupRequest.setAuthority("OWNER");
 
 		userDetails = new UserDetailsImpl(1, loginRequest.getUsername(), loginRequest.getPassword(),
@@ -137,7 +134,7 @@ class AuthControllerTests {
 
 		mockMvc.perform(post(BASE_URL + "/signup").with(csrf()).contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(signupRequest))).andExpect(status().isOk())
-				.andExpect(jsonPath("$.message").value("User registered successfully!"));
+				.andExpect(jsonPath("$.message").value("Usuario registrado exitosamente!"));
 	}
 
 	@Test
@@ -146,7 +143,7 @@ class AuthControllerTests {
 
 		mockMvc.perform(post(BASE_URL + "/signup").with(csrf()).contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(signupRequest))).andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.message").value("Error: Username is already taken!"));
+				.andExpect(jsonPath("$.message").value("Error: Nombre de usuario ya en uso!"));
 	}
 
 }

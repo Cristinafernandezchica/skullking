@@ -1,7 +1,6 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.baza;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
@@ -10,28 +9,16 @@ import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
-import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
-import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
-import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
-import es.us.dp1.lx_xy_24_25.your_game_name.configuration.SecurityConfiguration;
-import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRestController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.CsrfRequestPostProcessor;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -40,15 +27,16 @@ import java.util.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 
 @WebMvcTest(controllers = BazaRestController.class)
-@ActiveProfiles("test") // Usa un perfil de configuración de prueba
-@AutoConfigureMockMvc(addFilters = false) // Deshabilita los filtros de seguridad
+@ActiveProfiles("test")
+@AutoConfigureMockMvc(addFilters = false)
 public class BazaRestControllerTest {
 
     @Autowired
@@ -110,7 +98,7 @@ public class BazaRestControllerTest {
         baza.setPaloBaza(PaloBaza.morada);
         baza.setNumBaza(3);
         baza.setGanador(jugador);
-        //baza.setTrucoGanador(truco);
+        baza.setCartaGanadora(carta);
         baza.setRonda(ronda);
 
         mano =new Mano();
@@ -132,7 +120,7 @@ public class BazaRestControllerTest {
     }
 
     @Test
-    void testGetAllBazas() throws Exception {
+    void shouldGetAllBazas() throws Exception {
         List<Baza> bazas = Arrays.asList(baza);
         when(bazaService.getAllBazas()).thenReturn(bazas);
 
@@ -142,7 +130,7 @@ public class BazaRestControllerTest {
     }
 
     @Test
-    void testGetBazaById() throws Exception {
+    void shouldGetBazaById() throws Exception {
         when(bazaService.findById(anyInt())).thenReturn(baza);
 
         mockMvc.perform(get("/api/v1/bazas/{id}", 1))
@@ -152,27 +140,37 @@ public class BazaRestControllerTest {
     }
 
     @Test
-    void testCreateBaza() throws Exception {
+    public void shouldCreateBaza() throws Exception {
+        Baza baza = new Baza();
+        baza.setId(1);
+        baza.setPaloBaza(PaloBaza.amarillo);
+        baza.setNumBaza(3);
+        baza.setGanador(jugador);
+        baza.setTurnos(List.of());
+
         when(bazaService.saveBaza(any(Baza.class))).thenReturn(baza);
 
         mockMvc.perform(post("/api/v1/bazas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(baza)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(baza)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(baza.getId()));
+                .andExpect(jsonPath("$.id").value(1));
+
+        verify(bazaService, times(1)).saveBaza(any(Baza.class));
     }
 
     @Test
-    void testUpdateBaza() throws Exception {
+    void shouldUpdateBaza() throws Exception {
         Baza updatedBaza = new Baza();
-        //updatedBaza.setTrucoGanador(truco);
         updatedBaza.setGanador(jugador);
         updatedBaza.setNumBaza(5);
         updatedBaza.setRonda(ronda);
         updatedBaza.setPaloBaza(PaloBaza.amarillo);
+        updatedBaza.setTurnos(List.of());
+        
 
         when(bazaService.findById(1)).thenReturn(baza);
-        when(bazaService.saveBaza(any(Baza.class))).thenReturn(updatedBaza);
+        when(bazaService.updateBaza(updatedBaza,1)).thenReturn(updatedBaza);
 
         mockMvc.perform(put("/api/v1/bazas/{id}", 1)
             .contentType(MediaType.APPLICATION_JSON)
@@ -181,7 +179,7 @@ public class BazaRestControllerTest {
     }
 
     @Test
-    void testDeleteBaza() throws Exception {
+    void shouldDeleteBaza() throws Exception {
         when(bazaService.findById(1)).thenReturn(baza);
         doNothing().when(bazaService).deleteBaza(1);
 
@@ -191,7 +189,7 @@ public class BazaRestControllerTest {
     }
 
     @Test
-    void testFindBazaByIdGanador() throws Exception {
+    void shouldFindBazaByIdGanador() throws Exception {
         when(bazaService.findById(anyInt())).thenReturn(baza);
 
         mockMvc.perform(get("/api/v1/bazas/{id}/ganador", 1))
@@ -200,7 +198,7 @@ public class BazaRestControllerTest {
     }
 
     @Test
-    void testFindTrucosByBazaId() throws Exception {
+    void shouldFindTrucosByBazaId() throws Exception {
         List<Truco> trucos = Arrays.asList(truco);
         when(trucoService.findTrucosByBazaId(1)).thenReturn(trucos);
 
@@ -212,15 +210,24 @@ public class BazaRestControllerTest {
     }
 
 
-    // Test para obtener la última baza de una ronda
-    /* 
+    // Test para obtener la baza actual de una ronda
     @Test
-    void testFindUltimaBazaByRondaId() throws Exception {
-        when(bazaService.findUltimaBazaByRondaId(1)).thenReturn(baza);
+    void shouldFindBazaActualByRondaId() throws Exception {
+        when(bazaService.findBazaActualByRondaId(1)).thenReturn(baza);
 
-        mockMvc.perform(get("/api/v1/bazas/{rondaId}/ultimaBaza", 1))
+        mockMvc.perform(get("/api/v1/bazas/{rondaId}/bazaActual", 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(baza.getId()));
     }
-    */
+
+    // Test para crear trucos de una baza
+    @Test
+    void shouldCrearTrucosDeBaza() throws Exception {
+        doNothing().when(trucoService).crearTrucosBaza(1);
+
+        mockMvc.perform(post("/api/v1/bazas/{bazaId}/trucos", 1))
+                .andExpect(status().isCreated());
+    }
+
+
 }

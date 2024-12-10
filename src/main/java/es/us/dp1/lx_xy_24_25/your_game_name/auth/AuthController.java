@@ -66,7 +66,7 @@ public class AuthController {
 
 			return ResponseEntity.ok().body(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles));
 		}catch(BadCredentialsException exception){
-			return ResponseEntity.badRequest().body("Bad Credentials!");
+			return ResponseEntity.badRequest().body("Credenciales erroneas!");
 		}
 	}
 
@@ -80,10 +80,10 @@ public class AuthController {
 	@PostMapping("/signup")	
 	public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 		if (userService.existsUser(signUpRequest.getUsername()).equals(true)) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+			return ResponseEntity.badRequest().body(new MessageResponse("Error: Nombre de usuario ya en uso!"));
 		}
 		authService.createUser(signUpRequest);
-		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+		return ResponseEntity.ok(new MessageResponse("Usuario registrado exitosamente!"));
 	}
 
 }

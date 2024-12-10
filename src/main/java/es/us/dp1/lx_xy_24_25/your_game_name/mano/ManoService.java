@@ -32,14 +32,14 @@ private final Integer ID_TIGRESA_PIRATA = 72;
 
 private ManoRepository manoRepository;
 private CartaService cs;
-private JugadorService js;
+private JugadorService jugadorService;
 
 
     @Autowired
-    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorService js) {
+    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorService jugadorService) {
         this.manoRepository = manoRepository;
         this.cs = cs;
-        this.js = js;
+        this.jugadorService = jugadorService;
     }
 
 
@@ -94,7 +94,7 @@ private JugadorService js;
         // para que no se cojan las cartas comodines
         listaCartas = listaCartas.stream().filter(c -> !( c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA))).collect(Collectors.toList());
         Collections.shuffle(listaCartas);   // Barajar cartas
-        List<Jugador> jugadores = js.findJugadoresByPartidaId(partidaId);
+        List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partidaId);
         for(Jugador jugador: jugadores){
             Mano mano = new Mano();
             List<Carta> cartasBaraja = listaCartas.subList(0,getNumCartasARepartir(ronda.getNumRonda(), jugadores.size()));
@@ -127,7 +127,7 @@ private JugadorService js;
     @Transactional
     public void apuesta(Integer ap, Integer jugadorId){
         Mano mano = findLastManoByJugadorId(jugadorId);
-        Jugador jugador = js.findById(jugadorId);
+        Jugador jugador = jugadorService.findById(jugadorId);
         if (mano == null) {
             throw new ResourceNotFoundException("Mano", "id", jugadorId);
         }
@@ -139,7 +139,7 @@ private JugadorService js;
         mano.setApuesta(ap);
         jugador.setApuestaActual(ap);
         manoRepository.save(mano);
-        js.updateJugador(jugador, jugadorId);
+        jugadorService.updateJugador(jugador, jugadorId);
     }
 
     public List<Carta> cartasDisabled(Integer idMano, TipoCarta tipoCarta) {

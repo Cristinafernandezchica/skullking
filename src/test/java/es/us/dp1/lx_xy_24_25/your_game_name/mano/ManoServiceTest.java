@@ -163,7 +163,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testSaveMano() {
+    public void shouldSaveMano() {
         Mano mano = new Mano();
         when(manoRepository.save(mano)).thenReturn(mano);
 
@@ -173,7 +173,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testFindAll() {
+    public void shouldFindAll() {
         List<Mano> manos = List.of(new Mano(), new Mano());
         when(manoRepository.findAll()).thenReturn(manos);
 
@@ -184,7 +184,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testFindManoById() {
+    public void shouldFindManoById() {
         Mano mano = new Mano();
         mano.setId(1);
         when(manoRepository.findById(1)).thenReturn(Optional.of(mano));
@@ -196,19 +196,19 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testFindManoByIdNotFound() {
+    public void shouldFindManoByIdNotFound() {
         when(manoRepository.findById(1)).thenReturn(Optional.empty());
         assertThrows(ResourceNotFoundException.class, () -> manoService.findManoById(1));
     }
 
     @Test
-    public void testDeleteMano() {
+    public void shouldDeleteMano() {
         manoService.deleteMano(1);
         verify(manoRepository, times(1)).deleteById(1);
     }
 
     @Test
-    public void testUpdateMano() {
+    public void shouldUpdateMano() {
         Mano existingMano = new Mano();
         existingMano.setId(1);
         existingMano.setApuesta(3);
@@ -226,7 +226,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testFindLastManoByJugadorId() {
+    public void shouldFindLastManoByJugadorId() {
         List<Mano> manos = new ArrayList<>();
         Mano mano1 = new Mano();
         mano1.setId(1);
@@ -242,9 +242,9 @@ public class ManoServiceTest {
         assertEquals(2, lastMano.getId());
     }
 
-    // tests findAllByRondaId todas las posibilidades
+    // shoulds findAllByRondaId todas las posibilidades
     @Test
-    public void testFindAllByRondaId() {
+    public void shouldFindAllByRondaId() {
         when(manoRepository.findAllByRondaId(1)).thenReturn(Arrays.asList(mano1, mano2));
 
         List<Mano> result = manoService.findAllByRondaId(1);
@@ -257,7 +257,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testFindAllByRondaIdEmpty() {
+    public void shouldFindAllByRondaIdEmpty() {
         when(manoRepository.findAllByRondaId(1)).thenReturn(Collections.emptyList());
 
         List<Mano> result = manoService.findAllByRondaId(1);
@@ -268,7 +268,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testFindAllByRondaIdThrowsDataAccessException() {
+    public void shouldFindAllByRondaIdThrowsDataAccessException() {
         when(manoRepository.findAllByRondaId(1)).thenThrow(new DataAccessException("..."){});
 
         assertThrows(DataAccessException.class, () -> manoService.findAllByRondaId(1));
@@ -277,7 +277,7 @@ public class ManoServiceTest {
 
     // tests para iniciarManos
     @Test
-    public void testIniciarManos() {
+    public void shouldIniciarManos() {
         when(cartaService.findAll()).thenReturn(listaCartas);
         when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(jugadores);
 
@@ -289,7 +289,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testIniciarManosFiltrarCartasEspeciales() {
+    public void shouldIniciarManosFiltrarCartasEspeciales() {
         // Crear nuevas cartas con IDs correctos
         Carta cartaEspecial1 = new Carta();
         cartaEspecial1.setId(ID_TIGRESA_BANDERA_BLANCA);
@@ -324,7 +324,7 @@ public class ManoServiceTest {
 
 
     @Test
-    public void testIniciarManosDistribuirCartas() {
+    public void shouldIniciarManosDistribuirCartas() {
         when(cartaService.findAll()).thenReturn(listaCartas);
         when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(jugadores);
 
@@ -336,7 +336,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testIniciarManosBarajarCartas() {
+    public void shouldIniciarManosBarajarCartas() {
         when(cartaService.findAll()).thenReturn(listaCartas);
         when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(jugadores);
 
@@ -365,7 +365,7 @@ public class ManoServiceTest {
 
 
     @Test
-    public void testIniciarManosAsignarCartas() {
+    public void shouldIniciarManosAsignarCartas() {
         when(cartaService.findAll()).thenReturn(listaCartas);
         when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(jugadores);
 
@@ -395,7 +395,7 @@ public class ManoServiceTest {
 
     // tests numCartasARepartir
     @Test
-    public void testGetNumCartasARepartirCasoBasico() {
+    public void shouldGetNumCartasARepartirCasoBasico() {
         Integer numRonda = 5;
         Integer numJugadores = 7;
         Integer expected = 5; // numCartasTotales / numJugadores >= numRonda
@@ -404,7 +404,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testGetNumCartasARepartirRondasAltas() {
+    public void shouldGetNumCartasARepartirRondasAltas() {
         Integer numRonda = 20;
         Integer numJugadores = 5;
         Integer expected = 14; // numCartasTotales / numJugadores < numRonda
@@ -413,7 +413,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testGetNumCartasARepartirMuchosJugadores() {
+    public void shouldGetNumCartasARepartirMuchosJugadores() {
         Integer numRonda = 3;
         Integer numJugadores = 10;
         Integer expected = 3; // numCartasTotales / numJugadores >= numRonda
@@ -422,7 +422,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testGetNumCartasARepartirPocosJugadores() {
+    public void shouldGetNumCartasARepartirPocosJugadores() {
         Integer numRonda = 3;
         Integer numJugadores = 2;
         Integer expected = 3; // numCartasTotales / numJugadores >= numRonda
@@ -431,14 +431,14 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testGetNumCartasARepartirCeroJugadores() {
+    public void shouldGetNumCartasARepartirCeroJugadores() {
         Integer numRonda = 3;
         Integer numJugadores = 0;
         assertThrows(ArithmeticException.class, () -> manoService.getNumCartasARepartir(numRonda, numJugadores));
     }
 
     @Test
-    public void testGetNumCartasARepartirCeroRonda() {
+    public void shouldGetNumCartasARepartirCeroRonda() {
         Integer numRonda = 0;
         Integer numJugadores = 5;
         Integer expected = 0; // numRonda es 0
@@ -447,7 +447,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testGetNumCartasARepartirNumRondaMayor() {
+    public void shouldGetNumCartasARepartirNumRondaMayor() {
         Integer numRonda = 40;
         Integer numJugadores = 2;
         Integer expected = 35; // numCartasTotales / numJugadores < numRonda
@@ -457,7 +457,7 @@ public class ManoServiceTest {
 
     // Tests apostar
     @Test
-    public void testApuestaExito() {
+    public void shouldApuestaExito() {
         // Crear la lista de manos y asegurar que findLastManoByJugadorId devuelve la última mano
         List<Mano> manos = List.of(mano);
         when(manoRepository.findAllManoByJugadorId(jugador3.getId())).thenReturn(manos);
@@ -472,14 +472,14 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testApuestaManoNoEncontrada() {
+    public void shouldApuestaManoNoEncontrada() {
         when(manoRepository.findAllManoByJugadorId(jugador3.getId())).thenReturn(List.of());
 
         assertThrows(ResourceNotFoundException.class, () -> manoService.apuesta(2, jugador3.getId()));
     }
 
     @Test
-    public void testApuestaMayorQueNumCartas() {
+    public void shouldApuestaMayorQueNumCartas() {
         List<Mano> manos = List.of(mano);
         when(manoRepository.findAllManoByJugadorId(jugador3.getId())).thenReturn(manos);
         when(jugadorService.findById(jugador3.getId())).thenReturn(jugador3);
@@ -488,7 +488,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testApuestaExactaNumCartas() {
+    public void shouldApuestaExactaNumCartas() {
         List<Mano> manos = List.of(mano);
         when(manoRepository.findAllManoByJugadorId(jugador3.getId())).thenReturn(manos);
         when(jugadorService.findById(jugador3.getId())).thenReturn(jugador3);
@@ -502,7 +502,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testApuestaCero() {
+    public void shouldApuestaCero() {
         List<Mano> manos = List.of(mano);
         when(manoRepository.findAllManoByJugadorId(jugador3.getId())).thenReturn(manos);
         when(jugadorService.findById(jugador3.getId())).thenReturn(jugador3);
@@ -517,7 +517,7 @@ public class ManoServiceTest {
 
     // tests cartasDisabled
     @Test
-    public void testCartasDisabledManoNoEncontrada() {
+    public void shouldCartasDisabledManoNoEncontrada() {
         when(manoRepository.findById(mano3.getId())).thenReturn(Optional.empty());
 
         List<Carta> result = manoService.cartasDisabled(mano3.getId(), TipoCarta.morada);
@@ -526,7 +526,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testCartasDisabledSinTipoCarta() {
+    public void shouldCartasDisabledSinTipoCarta() {
         when(manoRepository.findById(mano3.getId())).thenReturn(Optional.of(mano3));
 
         List<Carta> result = manoService.cartasDisabled(mano3.getId(), TipoCarta.sinDeterminar);
@@ -535,7 +535,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testCartasDisabledConTipoCarta() {
+    public void shouldCartasDisabledConTipoCarta() {
         Carta carta1 =  new Carta();
         carta1 = new Carta();
         carta1.setId(1);
@@ -552,7 +552,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testCartasDisabledConCartaEspecial() {
+    public void shouldCartasDisabledConCartaEspecial() {
         Carta cartaEspecial = new Carta();
         cartaEspecial.setId(4);
         cartaEspecial.setTipoCarta(TipoCarta.pirata); // Definimos esta carta como especial según el método esCartaEspecial
@@ -573,7 +573,7 @@ public class ManoServiceTest {
     }
 
     @Test
-    public void testCartasDisabledConEspecialYPalobaza() {
+    public void shouldCartasDisabledConEspecialYPalobaza() {
         Carta cartaEspecial = new Carta();
         cartaEspecial.setId(4);
         cartaEspecial.setTipoCarta(TipoCarta.pirata); // Carta especial

@@ -118,13 +118,6 @@ public class BazaServiceTest {
         mano.setResultado(5);
         mano.setRonda(ronda);
 
-        ronda = new Ronda();
-        ronda.setId(1);
-        ronda.setEstado(RondaEstado.JUGANDO);
-        ronda.setNumBazas(3);
-        ronda.setNumRonda(4);
-        ronda.setPartida(partida);
-
         partida = new Partida();
         partida.setEstado(PartidaEstado.JUGANDO);
         partida.setFin(null);
@@ -132,6 +125,22 @@ public class BazaServiceTest {
         partida.setInicio(LocalDateTime.now());
         partida.setNombre("Partida Test");
         partida.setOwnerPartida(1);
+
+        ronda = new Ronda();
+        ronda.setId(1);
+        ronda.setEstado(RondaEstado.JUGANDO);
+        ronda.setNumBazas(3);
+        ronda.setNumRonda(4);
+        ronda.setPartida(partida);
+        /*
+        partida = new Partida();
+        partida.setEstado(PartidaEstado.JUGANDO);
+        partida.setFin(null);
+        partida.setId(5);
+        partida.setInicio(LocalDateTime.now());
+        partida.setNombre("Partida Test");
+        partida.setOwnerPartida(1);
+        */
 
         // Configuración de la entidad Baza
         baza = new Baza();
@@ -280,7 +289,7 @@ public class BazaServiceTest {
 
 
 
-/*
+
        // Test para iniciar una nueva Baza
        @Test
        void shouldIniciarBazas() {
@@ -299,7 +308,7 @@ public class BazaServiceTest {
 
            verify(bazaRepository, times(1)).save(nuevaBaza);
        }
-*/
+
 
        @Test
        void shouldCalcularTurnosNuevaBaza_PrimeraBaza() {

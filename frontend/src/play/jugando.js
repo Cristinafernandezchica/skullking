@@ -418,10 +418,17 @@ export default function Jugando() {
     useEffect(() => {
       if (BazaActual !== null && BazaActual.paloBaza === "sinDeterminar" && truco !== null && truco.carta !== null)  {
         
-        if(truco.carta.tipoCarta !== "banderaBlanca"){
-        BazaActual.paloBaza = truco.carta.tipoCarta;
-      cambiarPaloBaza(BazaActual);
-      console.log(BazaActual);}
+      if(truco.carta.tipoCarta !== "banderaBlanca"){
+        if(truco.carta.tipoCarta === "pirata" || truco.carta.tipoCarta === "skullKing" || truco.carta.tipoCarta === "sirena"){
+          BazaActual.paloBaza = "noHayPalo";
+          cambiarPaloBaza(BazaActual);
+          console.log(BazaActual);
+        }
+          BazaActual.paloBaza = truco.carta.tipoCarta;
+          cambiarPaloBaza(BazaActual);
+          console.log(BazaActual);
+      
+      }
     
   }
     }, [truco]);

@@ -1,18 +1,19 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.truco;
 
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import java.util.Map;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,11 +30,14 @@ import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.PaloBaza;
+import es.us.dp1.lx_xy_24_25.your_game_name.bazaCartaManoDTO.BazaCartaManoDTO;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoRepository;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
@@ -45,7 +49,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class TrucoServiceTests {
+public class TrucoServiceTest {
 
     // List<Truco> findTrucosByBazaId(int bazaId) throws DataAccessException
     // List<Truco> findTrucosByJugadorId(int jugadorId) throws DataAccessException
@@ -79,6 +83,12 @@ public class TrucoServiceTests {
 
     @InjectMocks
     private BazaService bazaService2;
+
+    @Mock
+    private ManoService manoService;
+
+    @InjectMocks
+    private PartidaService partidaService;
 
     private Truco truco;
     private Baza baza;
@@ -161,13 +171,9 @@ public class TrucoServiceTests {
 
 	@Test
     public void shouldFindTrucosByBazaId() throws DataAccessException {
-        // Arrange
         when(trucoRepository.findTrucosByBazaId(baza.getId())).thenReturn(List.of(truco));
 
-        // Act
         List<Truco> result = trucoService.findTrucosByBazaId(baza.getId());
-
-        // Assert
         assertEquals(1, result.size());
         assertEquals(1, result.get(0).getId());
         assertEquals(baza, result.get(0).getBaza());
@@ -183,13 +189,9 @@ public class TrucoServiceTests {
 
     @Test
     public void shouldFindTrucosByJugadorId() throws DataAccessException {
-        // Arrange
         when(trucoRepository.findByJugadorId(jugador.getId())).thenReturn(List.of(truco));
 
-        // Act
         List<Truco> result = trucoService.findTrucosByJugadorId(jugador.getId());
-
-        // Assert
         assertEquals(1, result.size());
         assertEquals(1, result.get(0).getId());
         assertEquals(jugador, result.get(0).getJugador());
@@ -205,14 +207,9 @@ public class TrucoServiceTests {
 
     @Test
     public void shouldFindTrucosByManoId() throws DataAccessException {
-        // Arrange
         when(trucoRepository.findByManoId(mano.getId())).thenReturn(List.of(truco));
 
-        // Act
-        List<Truco> result = trucoService.findTrucosByManoId(mano.getId());
-
-        // Assert
-        assertEquals(1, result.size());
+        List<Truco> result = trucoService.findTrucosByManoId(mano.getId());        assertEquals(1, result.size());
         assertEquals(1, result.get(0).getId());
         assertEquals(mano, result.get(0).getMano());
 
@@ -226,13 +223,9 @@ public class TrucoServiceTests {
 
     @Test
     public void shouldFindTrucoByBazaIdCartaId() throws DataAccessException {
-        // Arrange
         when(trucoRepository.findTrucoByBazaIdCartaId(baza.getId(), carta.getId())).thenReturn(Optional.of(truco));
 
-        // Act
         Truco result = this.trucoService.findTrucoByBazaIdCartaId(baza.getId(), carta.getId());
-
-        // Assert
         assertEquals(1, result.getId());
         verify(trucoRepository).findTrucoByBazaIdCartaId(baza.getId(), carta.getId());
     }
@@ -251,7 +244,6 @@ public class TrucoServiceTests {
         when(trucoRepository.save(truco)).thenReturn(truco);
 
         Truco result = trucoService.saveTruco(truco);
-
         assertEquals(truco.getId(), result.getId());
         verify(trucoRepository).save(truco);
     }
@@ -291,28 +283,6 @@ public class TrucoServiceTests {
         assertEquals(newTruco.getBaza(), updatedTruco.getBaza());
     }
 
-/*
-    @Test
-    public void shouldNotUpdateTrucoIncorrecto() {
-        when(trucoRepository.findById(truco.getId())).thenReturn(Optional.of(truco));
-
-        Carta newCarta = new Carta();
-        newCarta.setId(999);
-
-        Truco newTruco = new Truco();
-        newTruco.setId(truco.getId());
-        newTruco.setBaza(baza);
-        newTruco.setJugador(jugador);
-        newTruco.setMano(mano);
-        newTruco.setCarta(newCarta);
-
-        assertThrows(NoCartaDeManoException.class, () -> {
-            trucoService.updateTruco(newTruco, truco.getId());
-        }, "No se puede actualizar un Truco si el idCarta no está en las cartas de la mano");
-
-    }
-*/
-
     @Test
     public void shouldNotUpdateTrucoInexistente() {
         Truco newTruco = new Truco();
@@ -341,8 +311,39 @@ public class TrucoServiceTests {
         }, "No se puede borrar un Truco que no existe");
     }
 
+    /*
     @Test
-    void testCalculoGanador() {
+    public void shouldJugarTruco() {
+        BazaCartaManoDTO dto = mock(BazaCartaManoDTO.class);
+        Jugador jugador = mock(Jugador.class);
+        Mano mano = mock(Mano.class);
+        Carta carta = mock(Carta.class);
+        Partida partida = mock(Partida.class);
+        Baza baza = mock(Baza.class);
+        Ronda ronda = mock(Ronda.class);
+
+        when(jugadorService.findById(anyInt())).thenReturn(jugador);
+        when(dto.getBaza()).thenReturn(baza);
+        when(dto.getMano()).thenReturn(mano);
+        when(dto.getCarta()).thenReturn(carta);
+        when(baza.getRonda()).thenReturn(ronda);
+        when(ronda.getPartida()).thenReturn(partida);
+        when(jugadorService.findJugadoresByPartidaId(anyInt())).thenReturn(Arrays.asList(mock(Jugador.class), mock(Jugador.class)));
+
+        List<Carta> cartas = new ArrayList<>(List.of(carta, new Carta()));
+        when(mano.getCartas()).thenReturn(cartas);
+
+        Truco result = trucoService.jugarTruco(dto, 1);
+
+        assertNotNull(result);
+        verify(trucoRepository, times(1)).save(any(Truco.class));
+        verify(manoService, times(1)).saveMano(any(Mano.class));
+        verify(partidaService, times(1)).update(any(Partida.class), anyInt());
+    }
+*/
+
+    @Test
+    void shouldCalculoGanador() {
         Baza baza2 = new Baza();
         baza2.setId(1);
         baza2.setPaloBaza(PaloBaza.morada);
@@ -392,20 +393,44 @@ public class TrucoServiceTests {
         verify(bazaRepository, times(1)).save(baza2);
     }
 
-    // void crearTrucosBaza(Integer idBaza) ResourceNotFoundException
-    // @Test
-    // public void shouldCrearTrucosBaza() {
+    @Test
+    public void shouldGetCartaByJugador() {
+        // Arrange
+        Integer bazaId = 1;
+        Truco truco1 = mock(Truco.class);
+        Truco truco2 = mock(Truco.class);
 
-        // ronda.setPartida(partida);
-        // baza1.setRonda(ronda);
-        // when(bazaRepository.findById(baza1.getId())).thenReturn(Optional.of(baza1));
-        // when(bazaService.findById(baza1.getId())).thenReturn(baza1);
-        // when(jugadorRepository.findJugadoresByPartidaId(partida.getId())).thenReturn(List.of(jugador1, jugador2));
-        // when(manoRepository.findAllManoByJugadorId(jugador1.getId())).thenReturn(List.of(mano1));
-        // when(manoRepository.findAllManoByJugadorId(jugador2.getId())).thenReturn(List.of(mano2));
-        // when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(List.of(jugador1, jugador2));
-        // trucoService.crearTrucosBaza(baza1.getId());
-        // verify(trucoRepository, times(2)).save(any(Truco.class));
-    // }
+        when(truco1.getTurno()).thenReturn(1);
+        when(truco2.getTurno()).thenReturn(2);
+        when(trucoRepository.findTrucosByBazaId(bazaId)).thenReturn(Arrays.asList(truco1, truco2));
+        when(truco1.getCarta()).thenReturn(mock(Carta.class));
+        when(truco2.getCarta()).thenReturn(mock(Carta.class));
+        when(truco1.getJugador()).thenReturn(mock(Jugador.class));
+        when(truco2.getJugador()).thenReturn(mock(Jugador.class));
 
+        Map<Carta, Jugador> result = trucoService.getCartaByJugador(bazaId);
+        assertEquals(2, result.size());
+        verify(trucoRepository, times(1)).findTrucosByBazaId(bazaId);
+    }
+
+    /*
+    @Test
+    public void shouldCrearTrucosBaza() {
+        when(bazaRepository.findById(baza.getId())).thenReturn(Optional.of(baza));
+        when(jugadorService.findJugadoresByPartidaId(anyInt())).thenReturn(Arrays.asList(jugador, jugador));
+        when(manoService.findLastManoByJugadorId(anyInt())).thenReturn(mock(Mano.class));
+
+        trucoService.crearTrucosBaza(baza.getId());
+        verify(trucoRepository, times(2)).save(any(Truco.class));
+    }
+*/
+
+@Test
+    public void shouldSiguienteTurno() {
+        List<Integer> turnos = Arrays.asList(1, 2, 3);
+        Integer turnoActual = 1;
+
+        Integer result = trucoService.siguienteTurno(turnos, turnoActual);
+        assertEquals(2, result);
+    }
 }

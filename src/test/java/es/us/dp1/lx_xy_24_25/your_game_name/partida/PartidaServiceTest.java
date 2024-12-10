@@ -86,7 +86,7 @@ public class PartidaServiceTest {
 
     // Test para obtener todas las partidas (sin filtros)
     @Test
-    void testGetAllPartidas() {
+    void shouldGetAllPartidas() {
         when(partidaRepository.findAll()).thenReturn(Arrays.asList(partida));
 
         List<Partida> result = partidaService.getAllPartidas(null, null);
@@ -98,7 +98,7 @@ public class PartidaServiceTest {
 
     // Test para obtener todas las partidas (con filtros)
     @Test
-    void testGetAllPartidasFiltradasPorNombreYEstado() {
+    void shouldGetAllPartidasFiltradasPorNombreYEstado() {
         when(partidaRepository.findByNombreAndEstado("Partida Test", PartidaEstado.ESPERANDO))
                 .thenReturn(Arrays.asList(partida));
 
@@ -111,7 +111,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testGetAllPartidasConNombre() {
+    void shouldGetAllPartidasConNombre() {
         // Arrange
         when(partidaRepository.findByNombre("Partida Test")).thenReturn(Arrays.asList(partida));
 
@@ -126,7 +126,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testGetAllPartidasConEstado() {
+    void shouldGetAllPartidasConEstado() {
         // Arrange
         when(partidaRepository.findByEstado(PartidaEstado.ESPERANDO)).thenReturn(Arrays.asList(partida));
 
@@ -141,7 +141,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testGetAllPartidasSinResultados() {
+    void shouldGetAllPartidasSinResultados() {
         // Arrange
         when(partidaRepository.findAll()).thenReturn(Collections.emptyList());
 
@@ -155,7 +155,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testGetAllPartidasConNombreYEstadoSinResultados() {
+    void shouldGetAllPartidasConNombreYEstadoSinResultados() {
         // Arrange
         when(partidaRepository.findByNombreAndEstado("No Existe", PartidaEstado.TERMINADA))
                 .thenReturn(Collections.emptyList());
@@ -171,7 +171,7 @@ public class PartidaServiceTest {
 
     // Test para obtener una partida por ID (caso positivo)
     @Test
-    void testGetPartidaById() {
+    void shouldGetPartidaById() {
         when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
 
         Partida result = partidaService.getPartidaById(1);
@@ -183,7 +183,7 @@ public class PartidaServiceTest {
 
     // Test para obtener una partida por ID (excepción)
     @Test
-    void testGetPartidaByIdNoExiste() {
+    void shouldGetPartidaByIdNoExiste() {
         when(partidaRepository.findById(99)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> partidaService.getPartidaById(99));
@@ -191,7 +191,7 @@ public class PartidaServiceTest {
 
     // Test para guardar una partida (caso exitoso)
     @Test
-    void testSavePartida() {
+    void shouldSavePartida() {
         when(partidaRepository.findByOwnerPartidaAndEstado(eq(1), anyList())).thenReturn(List.of());
         when(partidaRepository.save(partida)).thenReturn(partida);
 
@@ -202,7 +202,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testSavePartidaMismoNombrePartidaNoTerminadaException() {
+    void shouldSavePartidaMismoNombrePartidaNoTerminadaException() {
         Partida partida = new Partida();
         partida.setNombre("Partida Test");
         partida.setOwnerPartida(1);
@@ -221,7 +221,7 @@ public class PartidaServiceTest {
 
     // Test para guardar una partida (excepción por estado)
     @Test
-    void testSavePartidaExcepcionEstado() {
+    void shouldSavePartidaExcepcionEstado() {
         when(partidaRepository.findByOwnerPartidaAndEstado(eq(1), anyList()))
                 .thenReturn(List.of(partida));
 
@@ -230,7 +230,7 @@ public class PartidaServiceTest {
 
     // Test para iniciar una partida (caso positivo)
     @Test
-    void testIniciarPartida() {
+    void shouldIniciarPartida() {
         when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
         when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(Arrays.asList(new Jugador(), new Jugador(), new Jugador()));
 
@@ -242,7 +242,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testIniciarPartidaMenosDeTresJugadores() {
+    void shouldIniciarPartidaMenosDeTresJugadores() {
         when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
         when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(Arrays.asList(new Jugador(), new Jugador()));
 
@@ -254,7 +254,7 @@ public class PartidaServiceTest {
 
     // Test para finalizar una partida (caso positivo)
     @Test
-    void testFinalizarPartida() {
+    void shouldFinalizarPartida() {
         when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
         when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(Arrays.asList(jugador));
 
@@ -268,7 +268,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    public void testFinalizarPartidaNoExiste() {
+    public void shouldFinalizarPartidaNoExiste() {
         // Simular que la partida no existe
         when(partidaRepository.findById(99)).thenReturn(Optional.empty());
 
@@ -283,7 +283,7 @@ public class PartidaServiceTest {
 
     // Test para eliminar una partida
     @Test
-    void testEliminarPartida() {
+    void shouldEliminarPartida() {
         doNothing().when(partidaRepository).deleteById(1);
 
         partidaService.delete(1);
@@ -293,7 +293,7 @@ public class PartidaServiceTest {
 
 
     @Test
-    void testUsuarioNoEsJugadorEnNingunaPartida() {
+    void shouldUsuarioNoEsJugadorEnNingunaPartida() {
         Partida partidaCrear = new Partida();
         partidaCrear.setOwnerPartida(1);
 
@@ -307,7 +307,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testMismoNombrePartidaNoTerminada() {
+    void shouldMismoNombrePartidaNoTerminada() {
         Partida partida = new Partida();
         partida.setNombre("Partida Test");
 
@@ -322,7 +322,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testMismoNombrePartidaTerminada() {
+    void shouldMismoNombrePartidaTerminada() {
         Partida partida = new Partida();
         partida.setNombre("Partida Test");
 
@@ -337,7 +337,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testGetJugadorGanador() {
+    void shouldGetJugadorGanador() {
         // Arrange
         Jugador jugador1 = new Jugador();
         jugador1.setPuntos(100);
@@ -359,7 +359,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testGetJugadorGanadorConPuntajesIguales() {
+    void shouldGetJugadorGanadorConPuntajesIguales() {
         // Arrange
         Jugador jugador1 = new Jugador();
         jugador1.setPuntos(150);
@@ -379,7 +379,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testGetJugadorGanadorListaVacia() {
+    void shouldGetJugadorGanadorListaVacia() {
         // Arrange
         List<Jugador> jugadores = Arrays.asList();
         when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(jugadores);
@@ -390,7 +390,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testUsuarioJugadorEnPartidaEnEspera() {
+    void shouldUsuarioJugadorEnPartidaEnEspera() {
         // Arrange
         Jugador jugador = new Jugador();
         jugador.setUsuario(owner);
@@ -409,7 +409,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testUsuarioJugadorEnPartidaJugando() {
+    void shouldUsuarioJugadorEnPartidaJugando() {
         // Arrange
         Jugador jugador = new Jugador();
         jugador.setUsuario(owner);
@@ -429,7 +429,7 @@ public class PartidaServiceTest {
 
 
     @Test
-    void testUsuarioJugadorEnPartidaTerminada() {
+    void shouldUsuarioJugadorEnPartidaTerminada() {
         // Arrange
         Jugador jugador = new Jugador();
         jugador.setUsuario(owner);
@@ -448,7 +448,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testUsuarioEnOtraPartida() {
+    void shouldUsuarioEnOtraPartida() {
         // Arrange
         User otroUsuario = new User();
         otroUsuario.setId(2);

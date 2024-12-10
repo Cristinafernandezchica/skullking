@@ -30,15 +30,15 @@ import jakarta.validation.Valid;
 public class PartidaService {
 
     PartidaRepository pr;
-    RondaService rs;
-    JugadorService js;
+    RondaService rondaService;
+    JugadorService jugadorService;
     UserService us;
 
     @Autowired
-    public PartidaService(PartidaRepository pr, @Lazy RondaService rs, JugadorService js, UserService us) {
+    public PartidaService(PartidaRepository pr, @Lazy RondaService rondaService, JugadorService jugadorService, UserService us) {
         this.pr = pr;
-        this.rs = rs;
-        this.js = js;
+        this.rondaService = rondaService;
+        this.jugadorService = jugadorService;
         this.us = us;
     }
 
@@ -108,14 +108,14 @@ public class PartidaService {
             throw new ResourceNotFoundException("Partida", "id", partidaId);
         }
 
-        Integer numJugadoresPartida = js.findJugadoresByPartidaId(partidaId).size();
+        Integer numJugadoresPartida = jugadorService.findJugadoresByPartidaId(partidaId).size();
         if(numJugadoresPartida < 3) {
             throw new MinJugadoresPartidaException("Tiene que haber un mínimo de 3 jugadores en la sala para empezar la partida");
         }
 
         partida.setEstado(PartidaEstado.JUGANDO);
         update(partida, partidaId);
-        rs.iniciarRonda(partida);
+        rondaService.iniciarRonda(partida);
 
     }
 
@@ -130,7 +130,7 @@ public class PartidaService {
         partida.setFin(LocalDateTime.now());
 
         Integer puntosGanador = null;
-        List<Jugador> jugadoresPartida = js.findJugadoresByPartidaId(partidaId);
+        List<Jugador> jugadoresPartida = jugadorService.findJugadoresByPartidaId(partidaId);
         for(Jugador jugador : jugadoresPartida){
             User usuarioJugador = jugador.getUsuario();
             usuarioJugador.setNumPuntosGanados(usuarioJugador.getNumPuntosGanados() + jugador.getPuntos());
@@ -160,7 +160,7 @@ public class PartidaService {
     // Excepción: Para que no pueda crear una partida si ya se ha unido a una en juego o esperando (TODO: PROBAR)
     public Boolean usuarioJugadorEnPartida(Partida partidaCrear) throws DataAccessException{
         Boolean lanzarExcepcion = false;
-        Iterable<Jugador> jugadores = js.findAll();
+        Iterable<Jugador> jugadores = jugadorService.findAll();
         List<Jugador> jugadoresFiltrados = StreamSupport.stream(jugadores.spliterator(), false)
         .filter(jugador -> jugador.getUsuario().getId() == partidaCrear.getOwnerPartida() 
         && (jugador.getPartida().getEstado().equals(PartidaEstado.ESPERANDO) 
@@ -184,7 +184,7 @@ public class PartidaService {
     }
 
     public Jugador getJugadorGanador(Integer partidaId){
-        List<Jugador> jugadores = js.findJugadoresByPartidaId(partidaId);
+        List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partidaId);
         Jugador ganador = jugadores.stream().max(Comparator.comparing(j -> j.getPuntos())).get();
         return ganador;
     }

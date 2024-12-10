@@ -190,7 +190,7 @@ const fetchPartidaJugador = async () => {
       const data = await response.json();
       setPartidaJugador(data);
   } catch (error) {
-      console.error("Error fetching partidas Jugando:", error);
+      console.error("Error buscando partidas en juego:", error);
   }
 };
 useEffect(() => {
@@ -198,10 +198,10 @@ useEffect(() => {
 }, []);
 
 const handleVolverPartida = () => {
-  if (partidaJugador && partidaJugador.estado === "JUGANDO") {
+  if (partidaJugador && ( partidaJugador.estado === "JUGANDO" || partidaJugador.estado === "ESPERANDO")) {
     navigate(partidaJugador.estado === "ESPERANDO" ? `/salaEspera/${partidaJugador.id}` : `/tablero/${partidaJugador.id}`)
   } else {
-    showError("No estás jugando ninguna partida.");
+    showError("No estas jugando ninguna partida.");
   }
 };
 

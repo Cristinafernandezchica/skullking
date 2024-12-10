@@ -1,16 +1,12 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.jugador;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.acls.model.NotFoundException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +17,6 @@ import es.us.dp1.lx_xy_24_25.your_game_name.jugador.exceptions.UsuarioMultiplesJ
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaRepository;
-import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.UserRepository;
 import jakarta.validation.Valid;
 
@@ -38,11 +33,11 @@ public class JugadorService {
         this.pr = pr;
     }
 
-        //obtener jugador por pk
-        @Transactional(readOnly = true)
-        public Jugador findById(Integer id) {
-            return jugadorRepository.findById(id).orElse(null);
-        }
+    // Get jugador por id
+    @Transactional(readOnly = true)
+    public Jugador findById(Integer id) {
+        return jugadorRepository.findById(id).orElse(null);
+    }
 
     @Transactional
     public Jugador saveJugador(Jugador jugador) throws DataAccessException {
@@ -60,7 +55,7 @@ public class JugadorService {
         }
     }
 
-    // Comprueba si el usuario ya tiene un jugador en la partida en la que se quiere meter (CREAR PRUEBA)
+    // Comprueba si el usuario ya tiene un jugador en la partida en la que se quiere meter
     @Transactional
     public Boolean jugadorEnPartida(List<Jugador> jugadoresPartida, Jugador jugadorCrear) throws DataAccessException{
         Boolean lanzarExcepcion = false;
@@ -95,25 +90,24 @@ public class JugadorService {
     }
 
 
-    // listar todos los jugadores de la base de datos
+    // List todos los jugadores de la base de datos
     @Transactional(readOnly = true)
     public Iterable<Jugador> findAll() {
         return jugadorRepository.findAll();
     }
-    //obtener jugadores por id de partida
+    // Get jugadores por id de partida
     @Transactional
     public List<Jugador> findJugadoresByPartidaId(Integer partidaId) {
         return jugadorRepository.findJugadoresByPartidaId(partidaId);
     }
 
-
-    //borrar jugador por pk
+    // Delete jugador por id
     @Transactional
     public void deleteJugador(Integer id) {
         jugadorRepository.deleteById(id);
     }
     
-    //actualizar jugador
+    // Update jugador
     @Transactional
 	public Jugador updateJugador(@Valid Jugador jugador, Integer idToUpdate) {
 		Jugador toUpdate = findById(idToUpdate);
@@ -123,7 +117,7 @@ public class JugadorService {
 		return toUpdate;
 	}
 
-    //obtener mas jugador reciente por id de usuario
+    // Get el jugador mas reciente por id de usuario
     @Transactional(readOnly = true)
     public Jugador findJugadorByUsuarioId(Integer usuarioId) {
        List<Jugador> jugadores =jugadorRepository.findJugadoresByUsuarioId(usuarioId);

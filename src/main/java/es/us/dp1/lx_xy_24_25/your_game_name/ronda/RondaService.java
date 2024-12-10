@@ -23,47 +23,47 @@ import jakarta.validation.Valid;
 @Service
 public class RondaService {
     
-    RondaRepository rr;
-    PartidaService ps;
-    ManoService ms;
-    BazaService bs;
-    JugadorService js;
+    RondaRepository rondaRepository;
+    PartidaService partidaService;
+    ManoService manoService;
+    BazaService bazaService;
+    JugadorService jugadorService;
     private static final int ULTIMA_RONDA = 10;
 
     @Autowired
-    public RondaService(RondaRepository rr, ManoService ms, @Lazy BazaService bs, JugadorService js){
-        this.rr = rr;
-        this.ms = ms;
-        this.bs = bs;
-        this.js = js;
+    public RondaService(RondaRepository rondaRepository, ManoService manoService, @Lazy BazaService bazaService, JugadorService jugadorService){
+        this.rondaRepository = rondaRepository;
+        this.manoService = manoService;
+        this.bazaService = bazaService;
+        this.jugadorService = jugadorService;
     }
 
     @Transactional(readOnly=true)
     public List<Ronda> getAllRondas(){
-        return rr.findAll();
+        return rondaRepository.findAll();
     }
 
     @Transactional
-    public Ronda save(Ronda r) {
-        rr.save(r);
-        return r;
+    public Ronda save(Ronda ronda) {
+        rondaRepository.save(ronda);
+        return ronda;
     }
 
     @Transactional(readOnly=true)
     public Ronda getRondaById(Integer id) throws DataAccessException{
-        return rr.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ronda", "id", id));
+        return rondaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ronda", "id", id));
     }
 
     @Transactional
     public void delete(Integer id) {
-        rr.deleteById(id);
+        rondaRepository.deleteById(id);
     }
 
     @Transactional
     public Ronda updateRonda(@Valid Ronda ronda, Integer idToUpdate) throws DataAccessException{
         Ronda toUpdate = getRondaById(idToUpdate);
         BeanUtils.copyProperties(ronda, toUpdate, "id");
-        rr.save(toUpdate);
+        rondaRepository.save(toUpdate);
         return toUpdate;
         
     }
@@ -75,37 +75,37 @@ public class RondaService {
         ronda.setNumRonda(1);
         ronda.setPartida(partida);
         ronda.setEstado(RondaEstado.JUGANDO);
-        Ronda res= rr.save(ronda);
-        ms.iniciarManos(partida.getId(),res);
-        bs.iniciarBazas(ronda);
+        Ronda res= rondaRepository.save(ronda);
+        manoService.iniciarManos(partida.getId(),res);
+        bazaService.iniciarBazas(ronda);
         return res;
     }
 
     // Partida accederá a dicha función proporcionándo el id de la ronda actual
     @Transactional
     public Ronda nextRonda(Integer rondaId) {
-        Ronda ronda = rr.findById(rondaId)
+        Ronda ronda = rondaRepository.findById(rondaId)
             .orElseThrow(() -> new ResourceNotFoundException("Ronda no encontrada"));
         Integer nextRonda = ronda.getNumRonda() + 1;
         finalizarRonda(rondaId);
-        Integer numJugadores = js.findJugadoresByPartidaId(ronda.getPartida().getId()).size(); 
+        Integer numJugadores = jugadorService.findJugadoresByPartidaId(ronda.getPartida().getId()).size(); 
 
         Ronda newRonda = new Ronda();
 
         // Comprobación si es la última ronda
         if(nextRonda > ULTIMA_RONDA){
-            ps.finalizarPartida(ronda.getPartida().getId());
+            partidaService.finalizarPartida(ronda.getPartida().getId());
         } else{
             newRonda.setNumRonda(nextRonda);
             // newRonda.setBazaActual(1); // Quitar atributo
             newRonda.setEstado(RondaEstado.JUGANDO);
-            // ms.iniciarManos(ronda.getPartida().getId(),newRonda);
-            newRonda.setNumBazas(ms.getNumCartasARepartir(nextRonda, numJugadores));
-            // bs.iniciarBazas(newRonda);
+            // manoService.iniciarManos(ronda.getPartida().getId(),newRonda);
+            newRonda.setNumBazas(manoService.getNumCartasARepartir(nextRonda, numJugadores));
+            // bazaService.iniciarBazas(newRonda);
         }
-        Ronda result =  rr.save(newRonda);
-        ms.iniciarManos(ronda.getPartida().getId(),newRonda);
-        bs.iniciarBazas(newRonda);
+        Ronda result =  rondaRepository.save(newRonda);
+        manoService.iniciarManos(ronda.getPartida().getId(),newRonda);
+        bazaService.iniciarBazas(newRonda);
         return result;
     }
     
@@ -117,12 +117,12 @@ public class RondaService {
         ronda.setEstado(RondaEstado.FINALIZADA);
         getPuntaje(ronda.getNumBazas(), rondaId);
 
-        rr.save(ronda);
+        rondaRepository.save(ronda);
     }
 
     @Transactional(readOnly = true)
     public Ronda findRondaActualByPartidaId(Integer partidaId) {
-        List<Ronda> rondas = rr.findByPartidaId(partidaId);
+        List<Ronda> rondas = rondaRepository.findByPartidaId(partidaId);
         Ronda rondasOrdenadas =rondas.stream()
                 .sorted((j1, j2) -> j2.getId().compareTo(j1.getId())) // Orden descendente
                 .findFirst().orElse(null);
@@ -132,7 +132,7 @@ public class RondaService {
     // Next Baza
     @Transactional
     public Baza nextBaza(Integer bazaId) {
-        Baza baza = bs.findById(bazaId);
+        Baza baza = bazaService.findById(bazaId);
         Ronda ronda = baza.getRonda();
         Integer nextBaza = baza.getNumBaza() + 1;
         Partida partida = ronda.getPartida();
@@ -141,17 +141,17 @@ public class RondaService {
 
         // Comprobación si es la última baza
         if(nextBaza > ronda.getNumBazas()){
-            // bs.calculoGanador(bazaId);
-            Mano manoGanador = ms.findLastManoByJugadorId(baza.getGanador().getId());
+            // bazaService.calculoGanador(bazaId);
+            Mano manoGanador = manoService.findLastManoByJugadorId(baza.getGanador().getId());
             Integer resultadoSinActualizar = manoGanador.getResultado();
             manoGanador.setResultado(resultadoSinActualizar + 1);
-            ms.updateMano(manoGanador,manoGanador.getId());
+            manoService.updateMano(manoGanador,manoGanador.getId());
             nextRonda(ronda.getId());
         } else{
-            List<Integer> turnos = bs.calcularTurnosNuevaBaza(partida.getId(), baza);
+            List<Integer> turnos = bazaService.calcularTurnosNuevaBaza(partida.getId(), baza);
             // Configurar turno actual de la partida
-            partida.setTurnoActual(bs.primerTurno(turnos));
-            ps.update(partida, partida.getId());
+            partida.setTurnoActual(bazaService.primerTurno(turnos));
+            partidaService.update(partida, partida.getId());
             // Configurar para la siguiente baza
             newBaza.setCartaGanadora(null);
             newBaza.setGanador(null);
@@ -159,12 +159,12 @@ public class RondaService {
             newBaza.setPaloBaza(null);
             newBaza.setTurnos(turnos);
         }    
-        return bs.saveBaza(newBaza);
+        return bazaService.saveBaza(newBaza);
     }
 
     @Transactional
     public void getPuntaje(Integer numBazas, Integer rondaId){
-         List<Mano> manos = ms.findAllByRondaId(rondaId);
+         List<Mano> manos = manoService.findAllByRondaId(rondaId);
          for(Mano m:manos){
             Integer puntaje = 0;
             Jugador jugador = m.getJugador();
@@ -177,14 +177,14 @@ public class RondaService {
             }else{
                 if(m.getApuesta().equals(m.getResultado())){
                     // Los ptos de bonificacion solo se calcula si se acierta la apuesta
-                    Integer ptosBonificacion = bs.getPtosBonificacion(rondaId, jugador.getId());
+                    Integer ptosBonificacion = bazaService.getPtosBonificacion(rondaId, jugador.getId());
                     puntaje += 20*m.getApuesta() + ptosBonificacion;
                 }else{
                     puntaje -= ULTIMA_RONDA*Math.abs(m.getApuesta()-m.getResultado());
                 } 
             }
             jugador.setPuntos(jugador.getPuntos() + puntaje);
-            js.updateJugador(jugador, jugador.getId());
+            jugadorService.updateJugador(jugador, jugador.getId());
          }
     }
 

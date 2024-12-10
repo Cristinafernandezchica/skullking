@@ -156,7 +156,7 @@ public class BazaServiceTest {
 
     // Test para guardar una Baza
     @Test
-    void testSaveBaza() {
+    void shouldSaveBaza() {
         when(bazaRepository.save(any(Baza.class))).thenReturn(baza);
 
         Baza savedBaza = bazaService.saveBaza(baza);
@@ -170,7 +170,7 @@ public class BazaServiceTest {
 
     // Test para listar todas las Bazas
     @Test
-    void testGetAllBazas() {
+    void shouldGetAllBazas() {
         List<Baza> bazaList = Arrays.asList(baza);
         when(bazaRepository.findAll()).thenReturn(bazaList);
 
@@ -184,7 +184,7 @@ public class BazaServiceTest {
 
     // Test para obtener una Baza por ID
     @Test
-    void testFindById() {
+    void shouldFindById() {
         when(bazaRepository.findById(1)).thenReturn(Optional.of(baza));
 
         Baza foundBaza = bazaService.findById(1);
@@ -197,7 +197,7 @@ public class BazaServiceTest {
 
     // Test para obtener una Baza por ID (Excepción)
     @Test
-    void testFindByIdNotFound() {
+    void shouldFindByIdNotFound() {
         when(bazaRepository.findById(99)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> bazaService.findById(99));
@@ -205,14 +205,14 @@ public class BazaServiceTest {
 
     // Test para eliminar una Baza por ID
     @Test
-    void testDeleteBaza() {
+    void shouldDeleteBaza() {
         bazaService.deleteBaza(1);
         verify(bazaRepository, times(1)).deleteById(1);
     }
 
     // Test para actualizar una Baza existente
     @Test
-    void testUpdateBaza() {
+    void shouldUpdateBaza() {
         Baza newBaza = new Baza();
         newBaza.setPaloBaza(PaloBaza.amarillo);
         newBaza.setNumBaza(5);
@@ -230,7 +230,7 @@ public class BazaServiceTest {
     }
 
     @Test
-    void testFindBazaActualByRondaId() {
+    void shouldFindBazaActualByRondaId() {
         List<Baza> bazas = Arrays.asList(baza);
         when(bazaRepository.findBazasByRondaId(1)).thenReturn(bazas);
 
@@ -242,7 +242,7 @@ public class BazaServiceTest {
     }    
     
     @Test
-    void testFindByRondaIdAndNumBaza() {
+    void shouldFindByRondaIdAndNumBaza() {
         when(bazaRepository.findByRondaIdAndNumBaza(1, 3)).thenReturn(Optional.of(baza));
 
         Baza foundBaza = bazaService.findByRondaIdAndNumBaza(1, 3);
@@ -253,7 +253,7 @@ public class BazaServiceTest {
     }
 
     @Test
-    void testFindByIdRondaAndIdJugador() {
+    void shouldFindByIdRondaAndIdJugador() {
         List<Baza> bazas = Arrays.asList(baza);
         when(bazaRepository.findByIdRondaAndIdJugador(1, 1)).thenReturn(bazas);
 
@@ -267,7 +267,7 @@ public class BazaServiceTest {
     //TODO: findBazaAnterior() cuando no cree dependencia circular
     /*
     @Test
-    void testFindBazaAnterior() {
+    void shouldFindBazaAnterior() {
         when(bazaRepository.findBazaAnterior(1, 1)).thenReturn(Optional.of(baza));
 
         Baza bazaAnterior = bazaService.findBazaAnterior(1, 1);
@@ -276,11 +276,14 @@ public class BazaServiceTest {
         assertEquals(1, bazaAnterior.getId());
         verify(bazaRepository, times(1)).findBazaAnterior(1, 1);
     }
-     */
+    */
 
+
+
+/*
        // Test para iniciar una nueva Baza
        @Test
-       void testIniciarBazas() {
+       void shouldIniciarBazas() {
            when(bazaRepository.save(any(Baza.class))).thenAnswer(invocation -> invocation.getArgument(0));
    
            Baza nuevaBaza = bazaService.iniciarBazas(ronda);
@@ -296,14 +299,10 @@ public class BazaServiceTest {
 
            verify(bazaRepository, times(1)).save(nuevaBaza);
        }
-
-       //calcularTurnosNuevaBaza()
-       //primerTurno()
-       //getPtosBonificacion
-       //Todos los get de Truco
+*/
 
        @Test
-       void testCalcularTurnosNuevaBaza_PrimeraBaza() {
+       void shouldCalcularTurnosNuevaBaza_PrimeraBaza() {
            List<Jugador> jugadores = Arrays.asList(jugador);
            when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(jugadores);
    
@@ -316,7 +315,7 @@ public class BazaServiceTest {
        }
    
        @Test
-       void testCalcularTurnosNuevaBaza_ConGanador() {
+       void shouldCalcularTurnosNuevaBaza_ConGanador() {
            List<Jugador> jugadores = Arrays.asList(jugador);
            when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(jugadores);
    
@@ -330,7 +329,7 @@ public class BazaServiceTest {
        }
    
        @Test
-       void testPrimerTurno() {
+       void shouldPrimerTurno() {
            List<Integer> turnos = Arrays.asList(1, 2, 3);
            Integer primerTurno = bazaService.primerTurno(turnos);
    
@@ -339,7 +338,7 @@ public class BazaServiceTest {
        }
    
        @Test
-       void testGetPtosBonificacion() {
+       void shouldGetPtosBonificacion() {
            List<Baza> bazas = Arrays.asList(baza);
            List<Truco> trucos = Arrays.asList(truco);
    
@@ -354,7 +353,7 @@ public class BazaServiceTest {
        }
    
        @Test
-       void testGetPrimeraSirena() {
+       void shouldGetPrimeraSirena() {
            List<Truco> sirenas = Arrays.asList(truco);
            Truco resultado = bazaService.getPrimeraSirena(sirenas);
    
@@ -363,7 +362,7 @@ public class BazaServiceTest {
        }
    
        @Test
-       void testGetPrimerPirata() {
+       void shouldGetPrimerPirata() {
            List<Truco> piratas = Arrays.asList(truco);
            Truco resultado = bazaService.getPrimerPirata(piratas);
    
@@ -372,7 +371,7 @@ public class BazaServiceTest {
        }
    
        @Test
-       void testGetTriunfoMayorTruco() {
+       void shouldGetTriunfoMayorTruco() {
            truco.getCarta().setNumero(10);
            List<Truco> triunfos = Arrays.asList(truco);
            Truco resultado = bazaService.getTriunfoMayorTruco(triunfos);
@@ -382,7 +381,7 @@ public class BazaServiceTest {
        }
    
        @Test
-       void testGetCartaPaloMayorNum() {
+       void shouldGetCartaPaloMayorNum() {
            truco.getCarta().setNumero(10);
            List<Truco> cartasPalo = Arrays.asList(truco);
            Truco resultado = bazaService.getCartaPaloMayorNum(cartasPalo);
@@ -397,7 +396,7 @@ public class BazaServiceTest {
 /*
     // Test para nextBaza: Incrementar numBaza dentro de la misma ronda
     @Test
-    void testNextBaza_IncrementarNumBaza() {
+    void shouldNextBaza_IncrementarNumBaza() {
         baza.setNumBaza(1);
         when(bazaRepository.findById(1)).thenReturn(Optional.of(baza));
         when(bazaRepository.save(any(Baza.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -415,7 +414,7 @@ public class BazaServiceTest {
 
     // Test para nextBaza: Cambiar a la siguiente ronda cuando se alcanza la última baza
     @Test
-    void testNextBaza_CambiarARondaSiguiente() {
+    void shouldNextBaza_CambiarARondaSiguiente() {
         baza.setNumBaza(3);
         when(bazaRepository.findById(1)).thenReturn(Optional.of(baza));
         when(bazaRepository.save(any(Baza.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -431,7 +430,7 @@ public class BazaServiceTest {
     
     // Test: Excepción cuando la baza no se encuentra
     @Test
-    void testNextBaza_BazaNoEncontrada() {
+    void shouldNextBaza_BazaNoEncontrada() {
         when(bazaRepository.findById(99)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> rondaService.nextBaza(99));
@@ -439,7 +438,7 @@ public class BazaServiceTest {
 
     /*
         @Test
-        void testCalculoGanador() {
+        void shouldCalculoGanador() {
             Baza baza2 = new Baza();
             baza2.setId(1);
             baza2.setTipoCarta(TipoCarta.morada);

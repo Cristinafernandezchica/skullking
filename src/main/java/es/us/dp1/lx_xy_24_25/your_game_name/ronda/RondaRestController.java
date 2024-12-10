@@ -33,29 +33,29 @@ import jakarta.validation.Valid;
 
 public class RondaRestController {
     
-    RondaService rs;
+    RondaService rondaService;
 
     @Autowired
-    public RondaRestController(RondaService rs) {
-        this.rs = rs;
+    public RondaRestController(RondaService rondaService) {
+        this.rondaService = rondaService;
     }
 
 
     @GetMapping
     public List<Ronda> getAllRondas(){
-        return rs.getAllRondas();
+        return rondaService.getAllRondas();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Ronda> getRondaById(@PathVariable("id") Integer id) {
-        Ronda ronda = rs.getRondaById(id);
+        Ronda ronda = rondaService.getRondaById(id);
         return new ResponseEntity<Ronda>(ronda, HttpStatus.OK);
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Ronda> createRonda(@Valid @RequestBody Ronda r) {
-        r = rs.save(r);
+        r = rondaService.save(r);
         URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
@@ -67,29 +67,29 @@ public class RondaRestController {
     @PutMapping(value="/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<MessageResponse>  updateRonda(@Valid @RequestBody Ronda r, @PathVariable("id") Integer id) {
-        RestPreconditions.checkNotNull(rs.getRondaById(id), "Ronda", "ID", id);
-        Ronda rToUpdate = rs.getRondaById(id);
+        RestPreconditions.checkNotNull(rondaService.getRondaById(id), "Ronda", "ID", id);
+        Ronda rToUpdate = rondaService.getRondaById(id);
         BeanUtils.copyProperties(r, rToUpdate, "id");
-        rs.save(rToUpdate);
+        rondaService.save(rToUpdate);
         return new ResponseEntity<>(new MessageResponse("Ronda actualizada"), HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<MessageResponse> deleteRonda(@PathVariable("id") Integer id) {
-        RestPreconditions.checkNotNull(rs.getRondaById(id), "Ronda", "ID", id);
-        rs.delete(id);
+        RestPreconditions.checkNotNull(rondaService.getRondaById(id), "Ronda", "ID", id);
+        rondaService.delete(id);
         return new ResponseEntity<>(new MessageResponse("Ronda eliminada"), HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/{partidaId}/partida")
     public Ronda getRondaByPartidaId(@PathVariable("partidaId") Integer partidaId) {
-        return rs.findRondaActualByPartidaId(partidaId);
+        return rondaService.findRondaActualByPartidaId(partidaId);
     }
 
     @PostMapping("/bazaActual/{bazaId}/next-baza") 
     public ResponseEntity<Baza> nextBaza(@PathVariable Integer bazaId) { 
-    Baza newBaza = rs.nextBaza(bazaId); 
+    Baza newBaza = rondaService.nextBaza(bazaId); 
     return ResponseEntity.ok(newBaza);
     }
 

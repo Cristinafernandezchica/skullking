@@ -23,11 +23,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -37,6 +34,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.PaloBaza;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 
 @WebMvcTest(controllers = RondaRestController.class)
@@ -50,7 +48,7 @@ public class RondaControllerTest {
 	private RondaRestController rc;
 
 	@MockBean
-	private RondaService rs;
+	private RondaService rondaService;
 
     @MockBean
     private PartidaService partidaService;
@@ -96,12 +94,20 @@ public class RondaControllerTest {
         bazaV.setPaloBaza(PaloBaza.verde);
         bazaV.setNumBaza(4);
 
+        partida = new Partida();
+        partida.setEstado(PartidaEstado.JUGANDO);
+        partida.setFin(null);
+        partida.setId(5);
+        partida.setInicio(LocalDateTime.now());
+        partida.setNombre("Partida Test");
+        partida.setOwnerPartida(1); 
+
     }
 
     @Test
     @WithMockUser("player")
     void shoudlFindAll() throws Exception {
-        when(rs.getAllRondas()).thenReturn(List.of(ronda1, ronda2));
+        when(rondaService.getAllRondas()).thenReturn(List.of(ronda1, ronda2));
 
         mockMvc.perform(get(BASE_URL)) 
             .andExpect(status().isOk()) 
@@ -117,7 +123,7 @@ public class RondaControllerTest {
     @Test
     @WithMockUser("player")
     void shouldGetRondaById() throws Exception {
-        when(rs.getRondaById(TEST_RONDA_ID)).thenReturn(ronda1);
+        when(rondaService.getRondaById(TEST_RONDA_ID)).thenReturn(ronda1);
 
         mockMvc.perform(get(BASE_URL + "/{id}", TEST_RONDA_ID))
             .andExpect(status().isOk())
@@ -128,8 +134,8 @@ public class RondaControllerTest {
 
     @Test
     @WithMockUser("player")
-    void shouldReturnNotFounRonda() throws Exception {
-        when(rs.getRondaById(TEST_RONDA_ID)).thenThrow(ResourceNotFoundException.class);
+    void shouldGetRondaById_SiNoExiste() throws Exception {
+        when(rondaService.getRondaById(TEST_RONDA_ID)).thenThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(get(BASE_URL + "/{id}", TEST_RONDA_ID))
             .andExpect(status().isNotFound());
@@ -144,7 +150,7 @@ public class RondaControllerTest {
         newRonda.setNumRonda(4);
         newRonda.setPartida(partida);
 
-        when(rs.save(any(Ronda.class))).thenReturn(newRonda);
+        when(rondaService.save(any(Ronda.class))).thenReturn(newRonda);
 
         mockMvc.perform(post(BASE_URL).with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
@@ -154,31 +160,30 @@ public class RondaControllerTest {
     }
 
     @Test
-@WithMockUser("player")
-void shouldUpdateRonda() throws Exception {
-    Ronda updatedRonda = new Ronda();
-    updatedRonda.setEstado(RondaEstado.FINALIZADA);
-    updatedRonda.setNumBazas(4);
-    updatedRonda.setNumRonda(4);
-    updatedRonda.setPartida(partida);
+    @WithMockUser("player")
+    void shouldUpdateRonda() throws Exception {
+        Ronda updatedRonda = new Ronda();
+        updatedRonda.setEstado(RondaEstado.FINALIZADA);
+        updatedRonda.setNumBazas(4);
+        updatedRonda.setNumRonda(4);
+        updatedRonda.setPartida(partida);
 
-    when(rs.getRondaById(2)).thenReturn(ronda2);
-    when(rs.save(any(Ronda.class))).thenReturn(updatedRonda);
+        when(rondaService.getRondaById(2)).thenReturn(ronda2);
+        when(rondaService.save(any(Ronda.class))).thenReturn(updatedRonda);
 
-    mockMvc.perform(put(BASE_URL + "/{id}", 2).with(csrf())
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(updatedRonda)))
-        .andExpect(status().isNoContent())
-        .andExpect(jsonPath("$.message").value("Ronda actualizada"));
-
-}
+        mockMvc.perform(put(BASE_URL + "/{id}", 2).with(csrf())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(updatedRonda)))
+            .andExpect(status().isNoContent())
+            .andExpect(jsonPath("$.message").value("Ronda actualizada"));
+    }
 
 
     @Test
     @WithMockUser("player")
     void shouldDeleteRonda() throws Exception {
-        when(rs.getRondaById(2)).thenReturn(ronda2);
-        doNothing().when(rs).delete(2);
+        when(rondaService.getRondaById(2)).thenReturn(ronda2);
+        doNothing().when(rondaService).delete(2);
 
         mockMvc.perform(delete(BASE_URL + "/{id}", 2).with(csrf()))
             .andExpect(status().isNoContent())
@@ -186,23 +191,36 @@ void shouldUpdateRonda() throws Exception {
     }
 
     @Test
-    void testNextBaza_Success() {
+    @WithMockUser("player")
+    void shouldFindRondaActualByPartidaId() throws Exception {
+        when(rondaService.findRondaActualByPartidaId(1)).thenReturn(ronda1);
+
+        // Realizar la solicitud y verificar la respuesta
+        mockMvc.perform(get(BASE_URL + "/{partidaId}/partida", 1)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(ronda1.getId()));
+    }
+
+
+    @Test
+    void shouldNextBaza_Success() {
         // Arrange
         Integer bazaId = baza.getId();
 
-        when(rs.nextBaza(bazaId)).thenReturn(bazaV);
+        when(rondaService.nextBaza(bazaId)).thenReturn(bazaV);
 
         ResponseEntity<Baza> response = rc.nextBaza(bazaId);
         assertNotNull(response);
         assertEquals(200, response.getStatusCode().value());
         assertEquals(bazaV, response.getBody());
-        verify(rs).nextBaza(bazaId);
+        verify(rondaService).nextBaza(bazaId);
     }
 
     @Test
-    void testNextBaza_ErrorHandling() {
+    void shouldNextBaza_ErrorHandling() {
         Integer bazaId = bazaV.getId();
-        when(rs.nextBaza(bazaId)).thenThrow(new RuntimeException("Error al calcular la próxima baza"));
+        when(rondaService.nextBaza(bazaId)).thenThrow(new RuntimeException("Error al calcular la próxima baza"));
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
             rc.nextBaza(bazaId);
@@ -211,7 +229,7 @@ void shouldUpdateRonda() throws Exception {
         // Assert
         assertNotNull(exception);
         assertEquals("Error al calcular la próxima baza", exception.getMessage());
-        verify(rs).nextBaza(bazaId);
+        verify(rondaService).nextBaza(bazaId);
     }
 
 }

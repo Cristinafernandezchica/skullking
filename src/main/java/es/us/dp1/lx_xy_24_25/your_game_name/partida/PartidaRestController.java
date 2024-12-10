@@ -33,24 +33,24 @@ import jakarta.validation.Valid;
 @SecurityRequirement(name = "bearerAuth")
 public class PartidaRestController {
 
-    PartidaService ps;
-    JugadorService js;
+    PartidaService partidaService;
+    JugadorService jugadorService;
 
     @Autowired
-    public PartidaRestController(PartidaService ps, JugadorService js) {
-        this.ps = ps;
-        this.js = js;
+    public PartidaRestController(PartidaService partidaService, JugadorService jugadorService) {
+        this.partidaService = partidaService;
+        this.jugadorService = jugadorService;
     }
 
     // @RequestParam es para filtrar por esos valores, por tanto no hacen falta los métodos PartidasByName y PartidasByEstado
     @GetMapping
     public List<Partida> getAllPartidas(@ParameterObject() @RequestParam(value="nombre", required = false) String nombre, @ParameterObject @RequestParam(value="estado",required = false) PartidaEstado estado){
-        return ps.getAllPartidas(nombre, estado);
+        return partidaService.getAllPartidas(nombre, estado);
     }
 
     @GetMapping("/{id}")
     public Partida getPartidaById(@PathVariable("id")Integer id){
-        Partida p = ps.getPartidaById(id);
+        Partida p = partidaService.getPartidaById(id);
         return p;
     }
 
@@ -58,7 +58,7 @@ public class PartidaRestController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Partida> createPartida(@Valid @RequestBody Partida p){
-        p=ps.save(p);
+        p=partidaService.save(p);
         URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
@@ -70,15 +70,15 @@ public class PartidaRestController {
     @PutMapping(value="/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Partida> updatePartida(@Valid @RequestBody Partida p, @PathVariable("id") Integer id){
-        RestPreconditions.checkNotNull(ps.getPartidaById(id), "Partida", "ID", id);
-        return new ResponseEntity<>(this.ps.update(p,id), HttpStatus.OK);
+        RestPreconditions.checkNotNull(partidaService.getPartidaById(id), "Partida", "ID", id);
+        return new ResponseEntity<>(this.partidaService.update(p,id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<MessageResponse> deletePartida(@PathVariable("id")Integer id){
-        RestPreconditions.checkNotNull(ps.getPartidaById(id), "Partida", "ID", id);
-        ps.delete(id);
+        RestPreconditions.checkNotNull(partidaService.getPartidaById(id), "Partida", "ID", id);
+        partidaService.delete(id);
         return new ResponseEntity<>(new MessageResponse("Partida eliminada"), HttpStatus.NO_CONTENT); 
     }
 
@@ -87,7 +87,7 @@ public class PartidaRestController {
     // Te devulve el jugador con la contraseña incluida, para frontend solo queremos el username
     @GetMapping("/{id}/jugadores")
     public ResponseEntity<List<Jugador>> getJugadoresByPartidaId(@PathVariable("id")Integer id){
-        List<Jugador> jugadoresPartida = js.findJugadoresByPartidaId(id);
+        List<Jugador> jugadoresPartida = jugadorService.findJugadoresByPartidaId(id);
         return ResponseEntity.ok(jugadoresPartida);
     }
 
@@ -95,21 +95,21 @@ public class PartidaRestController {
     /* 
     @GetMapping("/{id}/rondas")
     public List<Ronda> getRondasByPartidaId(@PathVariable("id")Integer id){
-        return rs.getRondasByPartidaId(id);
+        return rondaService.getRondasByPartidaId(id);
     }
     */
 
     // Para iniciar una partida desde frontend
     @PutMapping("/{id}/iniciar-partida")
     public ResponseEntity<Void> iniciarPartida(@PathVariable("id") Integer id){
-        ps.iniciarPartida(id);
+        partidaService.iniciarPartida(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}/jugadorGanador")
     public ResponseEntity<Jugador> ganadorPartida (@PathVariable("id") Integer id){
-        ps.getJugadorGanador(id);
-        return new ResponseEntity<>(ps.getJugadorGanador(id), HttpStatus.OK);
+        partidaService.getJugadorGanador(id);
+        return new ResponseEntity<>(partidaService.getJugadorGanador(id), HttpStatus.OK);
     }
     
 

@@ -43,7 +43,7 @@ public class PartidaRepositoryTest {
     }
 
     @Test
-    public void testFindByNombre() {
+    public void shouldFindByNombre() {
         String nombre = "Partida Test";
         when(partidaRepository.findByNombre(nombre)).thenReturn(List.of(partida));
 
@@ -56,7 +56,7 @@ public class PartidaRepositoryTest {
     }
 
     @Test
-    public void testFindByEstado() {
+    public void shouldFindByEstado() {
         PartidaEstado estado = PartidaEstado.ESPERANDO;
         when(partidaRepository.findByEstado(estado)).thenReturn(List.of(partida, partidaEsperando));
 
@@ -69,7 +69,7 @@ public class PartidaRepositoryTest {
     }
 
     @Test
-    public void testFindByNombreAndEstado() {
+    public void shouldFindByNombreAndEstado() {
         String nombre = "Partida Test";
         PartidaEstado estado = PartidaEstado.ESPERANDO;
 
@@ -85,7 +85,7 @@ public class PartidaRepositoryTest {
     }
 
     @Test
-    public void testFindByOwnerPartidaAndEstado() {
+    public void shouldFindByOwnerPartidaAndEstado() {
         Integer ownerPartida = 1;
         List<PartidaEstado> estados = List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO);
 

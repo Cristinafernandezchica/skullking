@@ -52,7 +52,7 @@ public class ManoRestController {
     //update Mano
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Mano> putMethodName(@PathVariable Integer id, @RequestBody @Valid Mano Mano) {
+    public ResponseEntity<Mano> update(@PathVariable Integer id, @RequestBody @Valid Mano Mano) {
         RestPreconditions.checkNotNull(manoService.findManoById(id), "Mano", "ID", id);
 		return new ResponseEntity<>(this.manoService.updateMano(Mano, id), HttpStatus.OK);
     }

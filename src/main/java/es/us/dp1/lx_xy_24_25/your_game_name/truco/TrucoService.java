@@ -7,13 +7,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.AccessDeniedException;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.NoCartaDeManoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
-import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
@@ -22,10 +20,8 @@ import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.CalculoGanadorConte
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.CartasPaloState;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.PersonajesState;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.TriunfosState;
-import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.NoCartaDeManoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
-import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.bazaCartaManoDTO.BazaCartaManoDTO;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 

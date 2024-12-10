@@ -45,14 +45,21 @@ public class UserService {
 
 	@Transactional
 	public User saveUser(User user) throws DataAccessException {
-		UserStats stats = userStatsMap.computeIfAbsent(user.getId(), key -> new UserStats());
-        stats.setNumPartidasJugadas(user.getNumPartidasJugadas());
-        stats.setNumPartidasGanadas(user.getNumPartidasGanadas());
-        stats.setNumPuntosGanados(user.getNumPuntosGanados());
+    User savedUser = userRepository.save(user);
+	// Save realizado antes para que user.getId() tenga un valor antes de que el usuario sea guardado en la base de datos, 
+	// computeIfAbsent no contempla el null ( si nos pasa en algún lado algo asi, por si acaso, meto una excepcion ahi)
+    if (savedUser.getId() == null) {
+        throw new IllegalStateException("El usuario guardado no tiene aún un ID generado");
+    }
 
-		userRepository.save(user);
-		return user;
-	}
+    UserStats stats = userStatsMap.computeIfAbsent(savedUser.getId(), key -> new UserStats());
+    stats.setNumPartidasJugadas(user.getNumPartidasJugadas());
+    stats.setNumPartidasGanadas(user.getNumPartidasGanadas());
+    stats.setNumPuntosGanados(user.getNumPuntosGanados());
+
+    return savedUser;
+}
+
 
 	@Transactional(readOnly = true)
 	public User findUser(String username) {

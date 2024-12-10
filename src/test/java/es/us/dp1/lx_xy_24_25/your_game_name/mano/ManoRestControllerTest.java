@@ -96,7 +96,7 @@ public class ManoRestControllerTest {
 
     // Test para obtener todas las manos
     @Test
-    void testFindAll() {
+    void shouldFindAll() {
         List<Mano> manos = Arrays.asList(mano);
         given(manoService.findAll()).willReturn(manos);
 
@@ -109,7 +109,7 @@ public class ManoRestControllerTest {
 
     // Test para crear una mano
     @Test
-    void testCreate() {
+    void shouldCreate() {
         given(manoService.saveMano(any(Mano.class))).willReturn(mano);
 
         ResponseEntity<Mano> response = new ManoRestController(manoService, trucoService).create(mano);
@@ -121,11 +121,11 @@ public class ManoRestControllerTest {
 
     // Test para actualizar una mano
     @Test
-    void testUpdateMano() {
+    void shouldUpdateMano() {
         given(manoService.findManoById(1)).willReturn(mano);
         given(manoService.updateMano(any(Mano.class), eq(1))).willReturn(mano);
 
-        ResponseEntity<Mano> response = new ManoRestController(manoService, trucoService).putMethodName(1, mano);
+        ResponseEntity<Mano> response = new ManoRestController(manoService, trucoService).update(1, mano);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -134,7 +134,7 @@ public class ManoRestControllerTest {
 
     // Test para eliminar una mano
     @Test
-    void testDeleteMano() {
+    void shouldDeleteMano() {
         given(manoService.findManoById(1)).willReturn(mano);
         doNothing().when(manoService).deleteMano(1);
 
@@ -149,7 +149,7 @@ public class ManoRestControllerTest {
 
     // Test para obtener una mano por jugador
     @Test
-    void testFindLastManoByJugadorId() {
+    void shouldFindLastManoByJugadorId() {
         given(manoService.findLastManoByJugadorId(1)).willReturn(mano);
 
         ResponseEntity<Mano> response = new ManoRestController(manoService, trucoService).findLastManoByJugadorId(1);
@@ -161,7 +161,7 @@ public class ManoRestControllerTest {
 
     // Test para obtener los trucos de una mano
     @Test
-    void testFindTrucosByManoId() {
+    void shouldFindTrucosByManoId() {
         Truco truco = new Truco();
         truco.setId(1);
         List<Truco> trucos = Arrays.asList(truco);
@@ -176,7 +176,7 @@ public class ManoRestControllerTest {
     }
 
     @Test
-    void testApuesta_ValidInput() {
+    void shouldApuesta_ValidInput() {
         // Configurar mocks
         doNothing().when(manoService).apuesta(10, 1);
 
@@ -190,7 +190,7 @@ public class ManoRestControllerTest {
     }
 
     @Test
-    void testApuesta_NullApuesta() {
+    void shouldApuesta_NullApuesta() {
         // Llamar al método con apuesta nula y capturar excepción
         IllegalArgumentException exception = assertThrows(
             IllegalArgumentException.class,
@@ -203,7 +203,7 @@ public class ManoRestControllerTest {
     }
 
     @Test
-    void testApuesta_NegativeApuesta() {
+    void shouldApuesta_NegativeApuesta() {
         // Simular un error al llamar al servicio con una apuesta negativa
         doThrow(new IllegalArgumentException("Apuesta debe ser un número positivo"))
             .when(manoService).apuesta(-5, 1);
@@ -219,7 +219,7 @@ public class ManoRestControllerTest {
     }
 
     @Test
-    void testApuesta_JugadorNotFound() {
+    void shouldApuesta_JugadorNotFound() {
         // Simular el caso donde el jugador no existe
         doThrow(new NoSuchElementException("Jugador no encontrado"))
             .when(manoService).apuesta(10, 99);
@@ -235,7 +235,7 @@ public class ManoRestControllerTest {
     }
 
     @Test
-    void testApuesta_ServiceError() {
+    void shouldApuesta_ServiceError() {
         // Simular un error genérico del servicio
         doThrow(new RuntimeException("Error interno del servicio"))
             .when(manoService).apuesta(10, 1);
@@ -251,7 +251,7 @@ public class ManoRestControllerTest {
     }
 
     @Test
-    void testCartasDisabled_SuccessNonEmpty() {
+    void shouldCartasDisabled_SuccessNonEmpty() {
         // Configurar mocks
         Carta carta1 = new Carta();
         carta1.setId(1);
@@ -278,7 +278,7 @@ public class ManoRestControllerTest {
     }
 
     @Test
-    void testCartasDisabled_SuccessEmpty() {
+    void shouldCartasDisabled_SuccessEmpty() {
         // Configurar mocks
         given(manoService.cartasDisabled(1, TipoCarta.morada)).willReturn(new ArrayList<>());
 
@@ -292,7 +292,7 @@ public class ManoRestControllerTest {
     }
 
     @Test
-    void testCartasDisabled_ManoNotFound() {
+    void shouldCartasDisabled_ManoNotFound() {
         // Configurar mocks para simular mano no encontrada
         given(manoService.cartasDisabled(99, TipoCarta.morada)).willThrow(new NoSuchElementException("Mano no encontrada"));
 
@@ -307,7 +307,7 @@ public class ManoRestControllerTest {
     }
 
     @Test
-    void testCartasDisabled_InvalidTipoCarta() {
+    void shouldCartasDisabled_InvalidTipoCarta() {
         // Configurar mocks para simular comportamiento con tipoCarta nulo
         given(manoService.cartasDisabled(1, null)).willReturn(new ArrayList<>());
 
@@ -322,7 +322,7 @@ public class ManoRestControllerTest {
 
 
     @Test
-    void testCartasDisabled_ServiceError() {
+    void shouldCartasDisabled_ServiceError() {
         // Configurar mocks para simular un error inesperado en el servicio
         given(manoService.cartasDisabled(1, TipoCarta.morada)).willThrow(new RuntimeException("Error interno"));
 
@@ -438,7 +438,7 @@ public class ManoRestControllerTest {
 
     // Test para apuesta exitosa
     @Test
-    void testApuestaExitosa() throws Exception {
+    void shouldApuestaExitosa() throws Exception {
         doNothing().when(manoService).apuesta(any(Integer.class), any(Integer.class));
 
         mockMvc.perform(put("/apuesta/1")
@@ -451,7 +451,7 @@ public class ManoRestControllerTest {
 
     // Test para apuesta no válida
     @Test
-    void testApuestaNoValida() throws Exception {
+    void shouldApuestaNoValida() throws Exception {
         Mockito.doThrow(new ApuestaNoValidaException("Apuesta no válida")).when(manoService).apuesta(any(Integer.class), any(Integer.class));
 
         mockMvc.perform(put("/apuesta/1")
@@ -462,7 +462,7 @@ public class ManoRestControllerTest {
 
     // Test para jugador no encontrado
     @Test
-    void testJugadorNoEncontrado() throws Exception {
+    void shouldJugadorNoEncontrado() throws Exception {
         Mockito.doThrow(new ResourceNotFoundException("Jugador", "id", 1)).when(manoService).apuesta(any(Integer.class), any(Integer.class));
 
         mockMvc.perform(put("/apuesta/1")
@@ -473,7 +473,7 @@ public class ManoRestControllerTest {
 
     // Test para error en el servidor
     @Test
-    void testErrorEnElServidor() throws Exception {
+    void shouldErrorEnElServidor() throws Exception {
         Mockito.doThrow(new RuntimeException("Error interno")).when(manoService).apuesta(any(Integer.class), any(Integer.class));
 
         mockMvc.perform(put("/apuesta/1")

@@ -346,6 +346,13 @@ En el backend, el método jugarTruco del servicio TrucoService recibe como pará
    - Seguridad: Encapsula la lógica de serialización, reduciendo la exposición innecesaria de datos sensibles.
    - Bajo acoplamiento: Facilita la separación entre frontend y backend, mejorando la mantenibilidad del código.
 
+### Decisión 10: Contenido visualizado a español
+
+#### Descripción del problema
+Parte del texto que se mostraba por pantalla estaba en español y otra en inglés, lo que generaba confusión en la información presentada.
+
+#### Justificación de la solución adoptada
+Se determinó que todo el contenido estuviera a español, por lo que se procedió a su traducción. De esta manera, se presenta un texto más coherente y cohesionado
 
 ## Refactorizaciones aplicadas
 
@@ -361,15 +368,6 @@ Había números cuyo significado no estaba claro, lo que dificultaba la legibili
 Ahora, esos valores sin contexto se han convertido en constantes, cuyo nombre indica lo que representan. Además, nos permite utilizar el mismo número en diferentes partes de una misma clase, puesto que ahora solo es necesario hacer referencia a la constante correspondiente.
 
 ### Refactorización 2:
-En esta refactorización se ha realizado la traducción de todo el contenido visualizado en pantalla del inglés al español.
-
-#### Problema que nos hizo realizar la refactorización
-Parte del texto estaba en español y otra en inglés, lo que generaba confusión en la información presentada.
-
-#### Ventajas que presenta la nueva versión del código respecto de la versión original
-Se presenta un texto más coherente y cohesionado, y se establece como norma que todo el texto mostrado en pantalla esté en español.
-
-### Refactorización 3:
 En esta refactorización se ha realizado la eliminación de código innecesario. Se ha subsanado el antipatrón Boat Anchor. Se eliminó la propiedad turno de la clase Jugador, la propiedad bazaActual de la entidad Ronda, un constructor de la entidad Truco que estaba en desuso y código del proyecto base que se nos proporcionó del React-PetClinic.
 
 #### Problema que nos hizo realizar la refactorización
@@ -378,7 +376,7 @@ Había código que no solo los desarrolladores no sabían para qué servía, sin
 #### Ventajas que presenta la nueva versión del código respecto de la versión original
 Estos cambios optimizan el código al eliminar elementos redundantes o sin utilidad, mejorando su claridad y mantenibilidad.
 
-### Refactorización 4:
+### Refactorización 3:
 En esta refactorización se ha llevado a cabo la operación de refactorización de Inline Function, en la cual se han homogeneizado las funciones findManoByJugador y findLastManoByJugador.
 
 #### Problema que nos hizo realizar la refactorización
@@ -386,6 +384,15 @@ Se duplicaba el código en dos funciones distintas, aunque ambas realizaban la m
 
 #### Ventajas que presenta la nueva versión del código respecto de la versión original
 Evade la confusión por cuando usar cada uno de los dos métodos, ya que ambos realizan los mismo. Al eliminar código duplicado, evitamos redundancias.
+
+### Refactorización 4:
+Se ha llevado a cabo la refactorización move method, trasladando varios métodos desde el servicio correspondiente a la entidad de origen hacia el servicio de la entidad donde son utilizados con mayor frecuencia.
+
+#### Problema que nos hizo realizar la refactorización
+Al invocar desde un servicio específico métodos pertenecientes a otros servicios, se generaba una dependencia circular que impedía la construcción de la aplicación.
+
+#### Ventajas que presenta la nueva versión del código respecto de la versión original
+Se han resuelto los problemas de dependencia circular y se ha optimizado el número de parámetros en los constructores de los servicios. Asimismo, se han corregido los code smells provocados por las message chains.
 
 
 ### Refactorización X: 

@@ -44,46 +44,46 @@ public class AuthController {
 
 	@Autowired
 	public AuthController(AuthenticationManager authenticationManager, UserService userService, JwtUtils jwtUtils,
-<span class="fc" id="L47">			AuthService authService) {</span>
-<span class="fc" id="L48">		this.userService = userService;</span>
-<span class="fc" id="L49">		this.jwtUtils = jwtUtils;</span>
-<span class="fc" id="L50">		this.authenticationManager = authenticationManager;</span>
-<span class="fc" id="L51">		this.authService = authService;</span>
-<span class="fc" id="L52">	}</span>
+<span class="nc" id="L47">			AuthService authService) {</span>
+<span class="nc" id="L48">		this.userService = userService;</span>
+<span class="nc" id="L49">		this.jwtUtils = jwtUtils;</span>
+<span class="nc" id="L50">		this.authenticationManager = authenticationManager;</span>
+<span class="nc" id="L51">		this.authService = authService;</span>
+<span class="nc" id="L52">	}</span>
 
 	@PostMapping(&quot;/signin&quot;)
 	public ResponseEntity authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 		try{
-<span class="fc" id="L57">			Authentication authentication = authenticationManager.authenticate(</span>
-<span class="fc" id="L58">				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));</span>
+<span class="nc" id="L57">			Authentication authentication = authenticationManager.authenticate(</span>
+<span class="nc" id="L58">				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));</span>
 
-<span class="fc" id="L60">			SecurityContextHolder.getContext().setAuthentication(authentication);</span>
-<span class="fc" id="L61">			String jwt = jwtUtils.generateJwtToken(authentication);</span>
+<span class="nc" id="L60">			SecurityContextHolder.getContext().setAuthentication(authentication);</span>
+<span class="nc" id="L61">			String jwt = jwtUtils.generateJwtToken(authentication);</span>
 
-<span class="fc" id="L63">			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();</span>
-<span class="fc" id="L64">			List&lt;String&gt; roles = userDetails.getAuthorities().stream().map(item -&gt; item.getAuthority())</span>
-<span class="fc" id="L65">				.collect(Collectors.toList());</span>
+<span class="nc" id="L63">			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();</span>
+<span class="nc" id="L64">			List&lt;String&gt; roles = userDetails.getAuthorities().stream().map(item -&gt; item.getAuthority())</span>
+<span class="nc" id="L65">				.collect(Collectors.toList());</span>
 
-<span class="fc" id="L67">			return ResponseEntity.ok().body(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles));</span>
+<span class="nc" id="L67">			return ResponseEntity.ok().body(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles));</span>
 <span class="nc" id="L68">		}catch(BadCredentialsException exception){</span>
-<span class="nc" id="L69">			return ResponseEntity.badRequest().body(&quot;Bad Credentials!&quot;);</span>
+<span class="nc" id="L69">			return ResponseEntity.badRequest().body(&quot;Credenciales erroneas!&quot;);</span>
 		}
 	}
 
 	@GetMapping(&quot;/validate&quot;)
 	public ResponseEntity&lt;Boolean&gt; validateToken(@RequestParam String token) {
-<span class="fc" id="L75">		Boolean isValid = jwtUtils.validateJwtToken(token);</span>
-<span class="fc" id="L76">		return ResponseEntity.ok(isValid);</span>
+<span class="nc" id="L75">		Boolean isValid = jwtUtils.validateJwtToken(token);</span>
+<span class="nc" id="L76">		return ResponseEntity.ok(isValid);</span>
 	}
 
 	
 	@PostMapping(&quot;/signup&quot;)	
 	public ResponseEntity&lt;MessageResponse&gt; registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-<span class="fc bfc" id="L82" title="All 2 branches covered.">		if (userService.existsUser(signUpRequest.getUsername()).equals(true)) {</span>
-<span class="fc" id="L83">			return ResponseEntity.badRequest().body(new MessageResponse(&quot;Error: Username is already taken!&quot;));</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">		if (userService.existsUser(signUpRequest.getUsername()).equals(true)) {</span>
+<span class="nc" id="L83">			return ResponseEntity.badRequest().body(new MessageResponse(&quot;Error: Nombre de usuario ya en uso!&quot;));</span>
 		}
-<span class="fc" id="L85">		authService.createUser(signUpRequest);</span>
-<span class="fc" id="L86">		return ResponseEntity.ok(new MessageResponse(&quot;User registered successfully!&quot;));</span>
+<span class="nc" id="L85">		authService.createUser(signUpRequest);</span>
+<span class="nc" id="L86">		return ResponseEntity.ok(new MessageResponse(&quot;Usuario registrado exitosamente!&quot;));</span>
 	}
 
 }

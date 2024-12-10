@@ -241,7 +241,7 @@ A continuación se definen todas las historias de usuario a implementar:
 ## Diagrama conceptual del sistema
 En esta sección proporcionamos un diagrama UML de clases que describe el modelo de datos a implementar en la aplicación. Este diagrama esta anotado con las restricciones simples de los datos a gestionar por la aplicación.
 
-![Diagrama UML conceptual](/docs/diagrams/Diagrama%20UML.png)
+![Diagrama UML conceptual](/docs/diagrams/Modelo%20conceptual.png)
 
 
 ## Reglas de Negocio

@@ -102,6 +102,7 @@ public class RondaService {
             // manoService.iniciarManos(ronda.getPartida().getId(),newRonda);
             newRonda.setNumBazas(manoService.getNumCartasARepartir(nextRonda, numJugadores));
             // bazaService.iniciarBazas(newRonda);
+            newRonda.setPartida(ronda.getPartida());
         }
         Ronda result =  rondaRepository.save(newRonda);
         manoService.iniciarManos(ronda.getPartida().getId(),newRonda);
@@ -130,7 +131,7 @@ public class RondaService {
     }
 
     // Next Baza
-    @Transactional
+    //@Transactional
     public Baza nextBaza(Integer bazaId) {
         Baza baza = bazaService.findById(bazaId);
         Ronda ronda = baza.getRonda();

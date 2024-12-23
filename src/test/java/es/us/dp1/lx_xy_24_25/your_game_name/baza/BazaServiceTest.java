@@ -28,6 +28,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -118,13 +119,6 @@ public class BazaServiceTest {
         mano.setResultado(5);
         mano.setRonda(ronda);
 
-        ronda = new Ronda();
-        ronda.setId(1);
-        ronda.setEstado(RondaEstado.JUGANDO);
-        ronda.setNumBazas(3);
-        ronda.setNumRonda(4);
-        ronda.setPartida(partida);
-
         partida = new Partida();
         partida.setEstado(PartidaEstado.JUGANDO);
         partida.setFin(null);
@@ -133,7 +127,13 @@ public class BazaServiceTest {
         partida.setNombre("Partida Test");
         partida.setOwnerPartida(1);
 
-        // Configuración de la entidad Baza
+        ronda = new Ronda();
+        ronda.setId(1);
+        ronda.setEstado(RondaEstado.JUGANDO);
+        ronda.setNumBazas(3);
+        ronda.setNumRonda(4);
+        ronda.setPartida(partida);
+
         baza = new Baza();
         baza.setId(1);
         baza.setPaloBaza(PaloBaza.morada);
@@ -143,7 +143,6 @@ public class BazaServiceTest {
         baza.setCartaGanadora(carta);
         baza.setRonda(ronda);
 
-        // Configuración de la entidad Baza
         bazaV = new Baza();
         bazaV.setId(2);
         bazaV.setPaloBaza(PaloBaza.verde);
@@ -390,6 +389,42 @@ public class BazaServiceTest {
            assertEquals(1, resultado.getId());
        }
 
+       @Test
+       void testGetPrimerTruco() {
+        Carta carta1 = new Carta();
+        carta1.setNumero(5);
+
+        Carta carta2 = new Carta();
+        carta2.setNumero(10);
+
+        Carta carta3 = new Carta();
+        carta3.setNumero(3);
+
+        Truco truco1 = new Truco();
+        truco1.setCarta(carta1);
+
+        Truco truco2 = new Truco();
+        truco2.setCarta(carta2);
+
+        Truco truco3 = new Truco();
+        truco3.setCarta(carta3);
+
+        // Lista de trucos
+        List<Truco> cartasPalo = new ArrayList<>();
+        cartasPalo.add(truco1);
+        cartasPalo.add(truco2);
+        cartasPalo.add(truco3);
+
+        // Llamar al método a probar
+        Truco resultado = bazaService.getPrimerTruco(cartasPalo);
+
+        // Validar el resultado
+        assertEquals(truco2, resultado); // truco2 tiene la carta con el número más alto
+        assertEquals(10, resultado.getCarta().getNumero()); // Validar que el número más alto es 10
+    }
+
+
+
    }
 
 
@@ -435,56 +470,4 @@ public class BazaServiceTest {
 
         assertThrows(ResourceNotFoundException.class, () -> rondaService.nextBaza(99));
     }
-
-    /*
-        @Test
-        void shouldCalculoGanador() {
-            Baza baza2 = new Baza();
-            baza2.setId(1);
-            baza2.setTipoCarta(TipoCarta.morada);
-            baza2.setNumBaza(1);
-            baza2.setGanador(null);
-            baza2.setTrucoGanador(null);
-            baza2.setRonda(ronda);
-
-            Carta carta2 = new Carta();
-            carta2.setId(30);
-            carta2.setImagenFrontal("./images/cartas/verde_1.png");
-            carta2.setImagenTrasera("./images/cartas/parte_trasera.png");
-            carta2.setNumero(10);
-            carta2.setTipoCarta(TipoCarta.morada);
-
-            Carta carta1 = new Carta();
-            carta1.setId(15);
-            carta1.setImagenFrontal("./images/cartas/verde_1.png");
-            carta1.setImagenTrasera("./images/cartas/parte_trasera.png");
-            carta1.setNumero(3);
-            carta1.setTipoCarta(TipoCarta.morada);
-
-            Truco truco2 = new Truco();
-            truco2.setId(10);
-            truco2.setBaza(baza2);
-            truco2.setCarta(carta2);
-            truco2.setJugador(jugador);
-            truco2.setMano(mano);
-            truco2.setTurno(2);
-
-            Truco truco1 = new Truco();
-            truco1.setId(15);
-            truco1.setBaza(baza2);
-            truco1.setCarta(carta1);
-            truco1.setJugador(jugador);
-            truco1.setMano(mano);
-            truco1.setTurno(3);
-
-            when(bazaRepository.findById(baza2.getId())).thenReturn(Optional.of(baza2));
-            when(trucoRepository.findTrucosByBazaId(baza2.getId())).thenReturn(List.of(truco1, truco2));
-    
-            bazaService.calculoGanador(baza2.getId());
-            Baza bazaActualizada = bazaService.findById(baza2.getId());
-    
-            assertEquals(truco2.getCarta(), bazaActualizada.getTrucoGanador().getCarta());
-    
-            verify(bazaRepository, times(1)).save(baza2);
-        }
-    */
+        */

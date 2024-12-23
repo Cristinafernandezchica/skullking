@@ -25,44 +25,32 @@ public class AuthService {
 	
 
 	@Autowired
-	public AuthService(PasswordEncoder encoder, AuthoritiesService authoritiesService, UserService userService
-			// PlayerService playerService
-<span class="fc" id="L30">			) {</span>
-<span class="fc" id="L31">		this.encoder = encoder;</span>
-<span class="fc" id="L32">		this.authoritiesService = authoritiesService;</span>
-<span class="fc" id="L33">		this.userService = userService;</span>
-		//this.playerService = ownerService;		
-<span class="fc" id="L35">	}</span>
+<span class="nc" id="L28">	public AuthService(PasswordEncoder encoder, AuthoritiesService authoritiesService, UserService userService) {</span>
+<span class="nc" id="L29">		this.encoder = encoder;</span>
+<span class="nc" id="L30">		this.authoritiesService = authoritiesService;</span>
+<span class="nc" id="L31">		this.userService = userService;</span>
+<span class="nc" id="L32">	}</span>
 
 	@Transactional
 	public void createUser(@Valid SignupRequest request) {
-<span class="fc" id="L39">		User user = new User();</span>
-<span class="fc" id="L40">		user.setUsername(request.getUsername());</span>
-<span class="fc" id="L41">		user.setPassword(encoder.encode(request.getPassword()));</span>
-<span class="fc" id="L42">		String strRoles = request.getAuthority();</span>
+<span class="nc" id="L36">		User user = new User();</span>
+<span class="nc" id="L37">		user.setUsername(request.getUsername());</span>
+<span class="nc" id="L38">		user.setPassword(encoder.encode(request.getPassword()));</span>
+<span class="nc" id="L39">		String strRoles = request.getAuthority();</span>
 		Authorities role;
 
-<span class="fc bfc" id="L45" title="All 2 branches covered.">		switch (strRoles.toLowerCase()) {</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">		switch (strRoles.toLowerCase()) {</span>
 		case &quot;admin&quot;:
-<span class="fc" id="L47">			role = authoritiesService.findByAuthority(&quot;ADMIN&quot;);</span>
-<span class="fc" id="L48">			user.setAuthority(role);</span>
-<span class="fc" id="L49">			userService.saveUser(user);</span>
-<span class="fc" id="L50">			break;</span>
+<span class="nc" id="L44">			role = authoritiesService.findByAuthority(&quot;ADMIN&quot;);</span>
+<span class="nc" id="L45">			user.setAuthority(role);</span>
+<span class="nc" id="L46">			userService.saveUser(user);</span>
+<span class="nc" id="L47">			break;</span>
 		default:
-<span class="fc" id="L52">			role = authoritiesService.findByAuthority(&quot;PLAYER&quot;);</span>
-<span class="fc" id="L53">			user.setAuthority(role);</span>
-<span class="fc" id="L54">			userService.saveUser(user);</span>
-			/*Player player = new Player();
-			player.setFirstName(request.getFirstName());
-			player.setLastName(request.getLastName());
-			player.setAddress(request.getAddress());
-			player.setCity(request.getCity());
-			player.setTelephone(request.getTelephone());
-			player.setUser(user);
-			playerService.savePlayer(player);
-			*/
+<span class="nc" id="L49">			role = authoritiesService.findByAuthority(&quot;PLAYER&quot;);</span>
+<span class="nc" id="L50">			user.setAuthority(role);</span>
+<span class="nc" id="L51">			userService.saveUser(user);</span>
 		}
-<span class="fc" id="L65">	}</span>
+<span class="nc" id="L53">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

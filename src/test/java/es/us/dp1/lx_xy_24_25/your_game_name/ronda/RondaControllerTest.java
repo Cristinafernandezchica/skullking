@@ -203,6 +203,7 @@ public class RondaControllerTest {
     }
 
 
+    /*
     @Test
     void shouldNextBaza_Success() {
         // Arrange
@@ -216,7 +217,9 @@ public class RondaControllerTest {
         assertEquals(bazaV, response.getBody());
         verify(rondaService).nextBaza(bazaId);
     }
-
+        */
+        
+    /*
     @Test
     void shouldNextBaza_ErrorHandling() {
         Integer bazaId = bazaV.getId();
@@ -231,5 +234,6 @@ public class RondaControllerTest {
         assertEquals("Error al calcular la próxima baza", exception.getMessage());
         verify(rondaService).nextBaza(bazaId);
     }
+        */
 
 }

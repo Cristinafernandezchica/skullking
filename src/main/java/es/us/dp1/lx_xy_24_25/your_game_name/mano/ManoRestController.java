@@ -81,13 +81,14 @@ public class ManoRestController {
 
     // Para apostar
     //@PostMapping("/apuesta/{jugadorId}")
+    // Cambiar a Partida muy probablemente
     @PutMapping("/apuesta/{jugadorId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> apuesta(@RequestParam Integer apuesta, @PathVariable Integer jugadorId) {
         if (apuesta == null) {
             throw new IllegalArgumentException("Apuesta no puede ser nula");
         }
-        manoService.apuesta(apuesta, jugadorId);
+        //manoService.apuesta(apuesta, jugadorId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

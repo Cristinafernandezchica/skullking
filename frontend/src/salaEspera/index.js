@@ -95,7 +95,7 @@ export default function SalaEspera() {
   const iniciarPartida = async () => {
     try {
       console.log(id);
-      const response = await fetch(`/api/v1/partidas/${id}/iniciar-partida`, {
+      const response = await fetch(`/api/v1/partidas/${id}/iniciar-partida-prueba`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${jwt}`,

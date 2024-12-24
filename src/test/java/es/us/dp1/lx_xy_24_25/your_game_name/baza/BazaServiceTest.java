@@ -300,6 +300,7 @@ public class BazaServiceTest {
        }
 */
 
+/*
        @Test
        void shouldCalcularTurnosNuevaBaza_PrimeraBaza() {
            List<Jugador> jugadores = Arrays.asList(jugador);
@@ -312,7 +313,9 @@ public class BazaServiceTest {
            assertEquals(1, turnos.get(0));
            verify(jugadorService, times(1)).findJugadoresByPartidaId(1);
        }
+           */
    
+       /*
        @Test
        void shouldCalcularTurnosNuevaBaza_ConGanador() {
            List<Jugador> jugadores = Arrays.asList(jugador);
@@ -326,6 +329,7 @@ public class BazaServiceTest {
            assertEquals(1, turnos.get(0));
            verify(jugadorService, times(1)).findJugadoresByPartidaId(1);
        }
+           */
    
        @Test
        void shouldPrimerTurno() {

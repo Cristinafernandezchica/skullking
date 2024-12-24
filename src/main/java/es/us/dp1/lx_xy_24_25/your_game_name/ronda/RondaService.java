@@ -24,18 +24,18 @@ import jakarta.validation.Valid;
 public class RondaService {
     
     RondaRepository rondaRepository;
-    PartidaService partidaService;
-    ManoService manoService;
-    BazaService bazaService;
-    JugadorService jugadorService;
+    // PartidaService partidaService;
+    //ManoService manoService;
+    //BazaService bazaService;
+    //JugadorService jugadorService;
     private static final int ULTIMA_RONDA = 10;
 
     @Autowired
-    public RondaService(RondaRepository rondaRepository, ManoService manoService, @Lazy BazaService bazaService, JugadorService jugadorService){
+    public RondaService(RondaRepository rondaRepository){ // ManoService manoService, @Lazy BazaService bazaService, JugadorService jugadorService
         this.rondaRepository = rondaRepository;
-        this.manoService = manoService;
-        this.bazaService = bazaService;
-        this.jugadorService = jugadorService;
+        //this.manoService = manoService;
+        //this.bazaService = bazaService;
+        //this.jugadorService = jugadorService;
     }
 
     @Transactional(readOnly=true)
@@ -76,12 +76,14 @@ public class RondaService {
         ronda.setPartida(partida);
         ronda.setEstado(RondaEstado.JUGANDO);
         Ronda res= rondaRepository.save(ronda);
-        manoService.iniciarManos(partida.getId(),res);
-        bazaService.iniciarBazas(ronda);
+        // Cambios para prueba
+        // manoService.iniciarManos(partida.getId(),res);
+        // bazaService.iniciarBazas(res);
         return res;
     }
 
     // Partida accederá a dicha función proporcionándo el id de la ronda actual
+    /*
     @Transactional
     public Ronda nextRonda(Integer rondaId) {
         Ronda ronda = rondaRepository.findById(rondaId)
@@ -109,14 +111,43 @@ public class RondaService {
         bazaService.iniciarBazas(newRonda);
         return result;
     }
+    */
+
+    // Next Ronda para prueba fin dependencias
+    @Transactional
+    public Ronda nextRondaPrueba(Integer rondaId, Integer numBazas) {
+        Ronda ronda = rondaRepository.findById(rondaId)
+            .orElseThrow(() -> new ResourceNotFoundException("Ronda no encontrada"));
+        Integer nextRonda = ronda.getNumRonda() + 1;
+
+        Ronda newRonda = new Ronda();
+        newRonda.setNumRonda(nextRonda);
+        newRonda.setEstado(RondaEstado.JUGANDO);
+        newRonda.setNumBazas(numBazas);
+        newRonda.setPartida(ronda.getPartida());
+        Ronda result =  rondaRepository.save(newRonda);
+        return result;
+    }
     
 
+    /*
     @Transactional
     public void finalizarRonda(Integer rondaId){
         Ronda ronda = getRondaById(rondaId);
 
         ronda.setEstado(RondaEstado.FINALIZADA);
         getPuntaje(ronda.getNumBazas(), rondaId);
+
+        rondaRepository.save(ronda);
+    }
+    */
+
+    @Transactional
+    public void finalizarRondaPrueba(Integer rondaId){
+        Ronda ronda = getRondaById(rondaId);
+
+        ronda.setEstado(RondaEstado.FINALIZADA);
+        // getPuntaje(ronda.getNumBazas(), rondaId);
 
         rondaRepository.save(ronda);
     }
@@ -130,6 +161,7 @@ public class RondaService {
         return rondasOrdenadas;
     }
 
+    /*
     // Next Baza
     //@Transactional
     public Baza nextBaza(Integer bazaId) {
@@ -162,7 +194,8 @@ public class RondaService {
         }    
         return bazaService.saveBaza(newBaza);
     }
-
+    */
+    /*
     @Transactional
     public void getPuntaje(Integer numBazas, Integer rondaId){
          List<Mano> manos = manoService.findAllByRondaId(rondaId);
@@ -188,5 +221,6 @@ public class RondaService {
             jugadorService.updateJugador(jugador, jugador.getId());
          }
     }
+    */
 
 }

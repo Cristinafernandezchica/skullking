@@ -81,75 +81,129 @@ Administrador: Persona autorizada a intervenir entre los usuarios y a acceder a 
 
 A continuación se definen todas las historias de usuario a implementar:
 
-### HGJ1-(ISSUE#49): Registrar usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/49#issue-2565870591]())
+### HGJ1-(ISSUE#49): Registrar usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/49]())
 | "Como jugador quiero poder registrarme en el juego para poder jugar al mismo."| 
 |-----|
 |![Registro](../mockups/Registro.png)|
 |![RegistroJugador](../mockups/Datos_registro.png)|
-|Puedes presionar el boton "player" para registrate como jugador, esto te enviará a un formulario en el cual simplemente debes introducir los datos indicados y presionar "save" para guardar tu perfil.|
+|Puedes presionar el boton "Jugador" para registrarte como jugador,esto te enviará a un formulario en el cual simplemente debes introducir los datos indicados y presionar "Guardar" para guardar tu perfil.|
 |Caso negativo: Si el usuario ya existe, se mostrará un error en el que se indicará que el usuario está ocupado.|
 
- ### HGJ2-(ISSUE#50): Hacer log-in ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/50#issue-2565890369]())
-| "Como jugador quiero poder loguearme en el juego para jugar desde mi usuario."| 
+### HGJ2-(ISSUE#50): Iniciar sesión ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/50]())
+| "Como jugador quiero poder iniciar sesión en el juego para jugar desde mi usuario."| 
 |-----|
-|![Login](../mockups/Login.png)|
-|Tienes que rellenar los datos solicitados para verificar que efectivamente es tu usuario, finalmente puedes presionar "Log-in", en el cual si los datos son correctos entrarás en tu perfil, en caso contrario deberás introducirlos nuevamente.|
+|![Iniciar sesión](../mockups/Login.png)|
+|Tienes que rellenar los datos solicitados para verificar que efectivamente es tu usuario, finalmente puedes presionar "Iniciar sesión", en el cual si los datos son correctos entrarás en tu perfil, en caso contrario deberás introducirlos nuevamente.|
 |Caso negativo: Si el usuario o la contraseña son incorrectos, se mostrará un error en el que se indicará que los datos de inicio de sesión son incorrectos.|
 
- ### HGJ3-(ISSUE#51): Hacer log-out ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/51#issue-2565892501]())
-| "Como jugador quiero poder hacer log-out para salirme de mi usuario y evitar que otras personas lo usen"| 
+### HGJ3-(ISSUE#51): Cerrar sesión ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/51]())
+| "Como jugador quiero poder cerrar sesión para salirme de mi usuario y evitar que otras personas lo usen"| 
 |-----|
-|![Logout](../mockups/Logout.png)|
-|Siempre y cuando estés logado, aparecerá en el navbar el botón "log-out", una vez presionado ya no estarás logado en tu perfil.|
+|![Cerrar sesión](../mockups/Logout.png)|
+|Siempre y cuando tengas la sesión abierta, aparecerá en el navbar el botón "Cerrar sesión", una vez presionado ya no estarás con la sesión abierta en tu perfil.|
 
- ### HGJ4-(ISSUE#52): Editar perfil de usuario  ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/52#issue-2565901340]())
+### HGJ4-(ISSUE#52): Editar perfil de usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/52]())
 | "Como jugador quiero poder editar mi perfil para poner mi información correctamente."| 
 |-----|
 |![Editar perfil](../mockups/Editar_perfil.png)|
 |  |
 
- ### HGA1-(ISSUE#30): Listado usuarios registrados ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/30#issue-2561421045]())
+### HGA1-(ISSUE#30): Listado usuarios registrados ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/30]())
 | "Como administrador quiero ver el listado de usuarios registrados para llevar un control sobre la cantidad de usuarios en el sistema."| 
 |-----|
 |![Listado de usuarios](../mockups/Listado_usuarios.png)|
 |Se despliega una lista de todos los usuarios registrados en el sistema.|
 
- ### HGA2-(ISSUE#53): Borrar un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/53#issue-2565933479]())
+### HGA2-(ISSUE#53): Borrar un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/53]())
 | "Como administrador quiero poder borrar usuarios para llevar un control adecuado de los usuarios del sistema."|
 |-----|
 |![Borrar usuario](../mockups/Listado_usuarios.png)|
-|En la lista de usuarios tienes las opciones para editar los datos de los usuarios usando el boton "edit", crear uno con el boton "add user" y eliminarlo usando "delete", ademas haciendo click en el nombre del usuario puedes ver su perfil.|
+|En la lista de usuarios tienes las opciones para editar los datos de los usuarios usando el boton "editar", crear uno con el boton "añadir usuario" y eliminarlo usando "eliminar", ademas haciendo click en el nombre del usuario puedes ver su perfil.|
 
- ### HGA3-(ISSUE#54): Editar un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/54#issue-2565956464]())
+### HGA3-(ISSUE#54): Editar un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/54]())
 | "Como administrador quiero poder editar el perfil de un usuario para ayudar a los jugadores que hayan olvidado sus credenciales."|
 |-----|
 |![Edición jugador](../mockups/Cambio_de_credenciales.png)|
 |En el formulario que aparece puedes modificar los datos del usuario especificado.|
 
- ### HGA4-(ISSUE#53): Crear un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/53#issue-2565933479]())
+### HGA4-(ISSUE#53): Crear un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/53]())
 | "Como administrador quiero poder crear un usuario para llevar una administración del sistema"|
 |-----|
 |![Creación jugador](../mockups/Listado_usuarios.png)|
-|Pulsando el botón "Add User", el administrador deberá rellenar los datos correspondientes y confirmar la creación.|
+|Pulsando el botón "Añadir usuario", el administrador deberá rellenar los datos correspondientes y confirmar la creación.|
 
-### HJJ8-(ISSUE#47): Conocer reglas de juego ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/47#issue-2565864686]())
+### HJA1-(ISSUE#44): Ver listado de partidas filtradas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/44]())
+| "Como administrador quiero poder ver el listado de partidas, incluyendo nombre de la partida, creador, estado y jugadores participantes para llevar un control sobre las partidas."| 
+|-----|
+|![Listado de partidas en curso](../mockups/listado_partidas.png)|
+|El administrador, en la parte superior de la pantalla, tendrá un botón 'Partidas'. Dentro de esta pantalla encontrará una barra de búsqueda para filtrar las partidas por nombre. Además, encontrará diversos botones para filtrar en función del estado de las partidas.|
+
+### HJA2-(ISSUE#177): Ver estadísticas usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/177]())
+| "Como usuario con la sesión iniciada quiero poder ver las estadísticas de los usuarios para saber cuáles son los datos de partidas de los usuarios."| 
+|-----|
+|![Ver estadísticas usuarios](../mockups/ver_estadisticas_usuarios.png)|
+|Cualquier usuario podrá ver las estadísticas en la pestaña con este mismo nombre.|
+
+### HJJ1-(ISSUE#36): Jugar una carta durante mi turno ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/36]())
+| "Como jugador quiero poder jugar una carta durante mi turno para intentar ganar una baza."| 
+|-----|
+|![Jugar una carta durante mi turno](../mockups/Poder_jugar_una_carta.png)|
+|El jugador selecciona una de sus cartas disponibles siempre y cuando el juego le permita echarla en base a las reglas del juego, si no es posible, el jugador deberá escoger otra de sus cartas.|
+
+### HJJ2-(ISSUE#37): Ver puntuación actualizada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/37]())
+| "Como jugador quiero poder ver mi puntuación actualizada tras cada ronda."| 
+|-----|
+|![Ver puntuación actualizada](../mockups/Ver_puntuacion.png)|
+|El jugador podrá observar su puntuación y la de sus compañeros actualizada tras cada ronda en el margen izquierdo de la pantalla. Esta se mantendrá visible durante toda la ronda siguiente hasta que se actualice al final de la ronda.|
+
+### HJJ3-(ISSUE#38): Usar cartas especiales ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/38]())
+| "Como jugador quiero poder usar cartas especiales (pirata, sirena o Skull King) en lugar del palo predominante para intentar ganar una baza."| 
+|-----|
+|![Usar cartas especiales](../mockups/Usar_cartas_especiales.png)|
+|El jugador selecciona una carta especial de su mano durante su turno, podrá echarla independientemente del palo que predomine durante la baza.|
+
+### HJJ4-(ISSUE#39): Usar carta bandera blanca/de escape ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/39]())
+| "Como jugador quiero poder usar una carta bandera blanca/de escape para perder una baza y acertar mi apuesta."| 
+|-----|
+|![Usar carta bandera blanca/de escape](../mockups/Jugar_carta_escape.png)|
+|El jugador selecciona una carta bandera blanca/de escape de su mano durante su turno, podrá echarla independientemente del palo que predomine durante la baza.|
+
+### HJJ5-(ISSUE#40): Ver apuestas de la ronda ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/40]())
+| "Como jugador quiero poder ver todas las apuestas realizadas en la ronda actual para poder perjudicar las apuestas de otros jugadores."| 
+|-----|
+|![Ver apuestas de la ronda](../mockups/Ver_apuestas_para_hacer_estrategia.png)|
+|El jugador podrá observar las apuestas de todos los jugadores actualizada tras cada ronda en el margen izquierdo de la pantalla. Esta se mantendrá visible durante toda la ronda hasta que se actualice en la siguiente ronda.|
+
+### HJJ6-(ISSUE#41): Elegir rol de la carta Tigresa ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/41]())
+| "Como jugador quiero poder escoger el rol de la carta Tigresa (bandera blanca o pirata) para poder cumplir con mi apuesta."| 
+|-----|
+|![Elegir rol de la carta Tigresa](../mockups/Elegir_la_carta_Tigresa.png)|
+|El jugador selecciona la carta Tigresa, aparece una ventana emergente donde le aparecerán dos botones con cada una de las opciones, deberá pulsar una de los dos para elegir el rol. Una vez pulsado el rol quedará seleccionado.|
+
+### HJJ7-(ISSUE#42): Salir de la partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/42]())
+| "Como jugador quiero poder rendirme y salir en mitad de la partida para evitar seguir jugando en caso de que me surja un imprevisto."| 
+|-----|
+|![Salir de la partida](../mockups/Poder_salir_en_mitad_de_la_partida.png)|
+|El jugador debe pulsar el botón 'Salir', situado en la esquina inferior derecha.|
+
+### HJJ8-(ISSUE#47): Conocer reglas de juego ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/47]())
 | "Como jugador quiero conocer las reglas del juego para poder jugar correctamente."| 
 |-----|
 |![Ver instrucciones](../mockups/Ver_Instrucciones.png)|
 |Puedes acceder al pdf con todas las reglas del juego e incluso descargar dicho pdf para tenerlo en tu computadora.|
 
- ### HJJ13-(ISSUE#109): Ver jugadores en la sala ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/109]())
-| "Como jugador quiero poder ver los jugadores que se unen a la partida para poder saber con quienes voy a jugar."| 
-|-----|
-|![Lobby](../mockups/iniciar_partida.png)|
-|Una vez el jugador se encuentre en la sala de espera de la partida, el jugador podrá ver los jugadores que hay en la partida. Estos se van actualizando conforme se van uniendo.|
-
- ### HJJ9-(ISSUE#48): Crear partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/48#issue-2565866251]())
+ ### HJJ9-(ISSUE#48): Crear partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/48]())
 | "Como jugador quiero poder crear partidas para poder jugar."| 
 |-----|
 |![Lobby](../mockups/Lobby_partidas.png)|
 |Puedes presionar en el botón "Crear partida" para crear una sala en la que las personas puedan entrar.|
 |Caso negativo: Si ya estás en una partida en estado "JUGANDO" o "ESPERANDO", se lanzará una excepción y no podrás crear otra partida.|
+
+### HJJ10-(ISSUE#43): Hacer apuestas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/43]())
+| "Como jugador quiero poder hacer apuestas sobre cuántas bazas ganaré para poder planificar mi estrategia."| 
+|-----|
+|![Hacer apuestas](../mockups/Hacer_apuesta_sobre_cuantas_bazas_ganare.png)|
+|Al inicio de cada ronda aparecerá una ventana emergente con botones del 0 al número de cartas repartidas en la ronda actual, el jugador deberá pulsar uno de los números en función de la predicción de bazas que cree que va a ganar en la ronda.|
 
  ### HJJ11-(ISSUE#106): Unirse a partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/106]())
 | "Como jugador quiero poder unirme a una partida para poder jugar."| 
@@ -165,77 +219,17 @@ A continuación se definen todas las historias de usuario a implementar:
 |Una vez el jugador se encuentre en la sala de espera de la partida, si ha creado la partida, puede presionar el botón "Iniciar Prtida".|
 |Caso negativo: Si en la partida hay menos de 3 jugadores, no se podrá iniciar, aparecerá una excepción que lo indique.|
 
-### HJJ12-(ISSUE#108): Volver a partida empezada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/108]())
+ ### HJJ13-(ISSUE#109): Ver jugadores en la sala ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/109]())
+| "Como jugador quiero poder ver los jugadores que se unen a la partida para poder saber con quienes voy a jugar."| 
+|-----|
+|![Lobby](../mockups/iniciar_partida.png)|
+|Una vez el jugador se encuentre en la sala de espera de la partida, el jugador podrá ver los jugadores que hay en la partida. Estos se van actualizando conforme se van uniendo.|
+
+### HJJ14-(ISSUE#155): Volver a partida empezada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/155]())
 | "Como jugador quiero poder volver a la partida empezada anteriormente."| 
 |-----|
 |![Lobby](../mockups/volverAPartida.png)|
 |Una vez el jugador se encuentre en una partida en espera o empezada, puede presionar el botón "Volver a Partida".|
-
- ### HJJ10-(ISSUE#43): Hacer apuestas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/43]())
-| "Como jugador quiero poder hacer apuestas sobre cuántas bazas ganaré para poder planificar mi estrategia."| 
-|-----|
-|![Hacer apuestas](../mockups/Hacer_apuesta_sobre_cuantas_bazas_ganare.png)|
-|Al inicio de cada ronda aparecerá una ventana emergente con botones del 0 al número de cartas repartidas en la ronda actual, el jugador deberá pulsar uno de los números en función de la predicción de bazas que cree que va a ganar en la ronda.|
-
- ### HJA1-(ISSUE#44): Ver listado de partidas filtradas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/44]())
-| "Como administrador quiero poder ver el listado de partidas, incluyendo nombre de la partida, creador, estado y jugadores participantes para llevar un control sobre las partidas."| 
-|-----|
-|![Listado de partidas en curso](../mockups/listado_partidas.png)|
-|El administrador, en la parte superior de la pantalla, tendrá un botón 'Partidas'. Dentro de esta pantalla encontrará una barra de búsqueda para filtrar las partidas por nombre. Además, encontrará diversos botones para filtrar en función del estado de las partidas.|
-
-### HJA2-(ISSUE#177): Ver estadísticas usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/177]())
-| "Como administrador quiero poder ver las estadísticas de los usuarios para saber cuáles son los datos de partidas de los usuarios."| 
-|-----|
-|![Ver estadísiticas usuarios](../mockups/ver_estadisticas_usuarios.png)|
-|El administrador podrá ver las estadísitcas en la pestaña con este mismo nombre.|
-
-### HJJ5-(ISSUE#40): Ver apuestas de la ronda ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/40]())
-| "Como jugador quiero poder ver todas las apuestas realizadas en la ronda actual para poder perjudicar las apuestas de otros jugadores."| 
-|-----|
-|![Ver apuestas de la ronda](../mockups/Ver_apuestas_para_hacer_estrategia.png)|
-|El jugador podrá observar las apuestas de todos los jugadores actualizada tras cada ronda en el margen izquierdo de la pantalla. Esta se mantendrá visible durante toda la ronda hasta que se actualice en la siguiente ronda.|
-
- ### HJJ1-(ISSUE#36): Jugar una carta durante mi turno ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/36]())
-| "Como jugador quiero poder jugar una carta durante mi turno para intentar ganar una baza."| 
-|-----|
-|![Jugar una carta durante mi turno](../mockups/Poder_jugar_una_carta.png)|
-|El jugador selecciona una de sus cartas disponibles siempre y cuando el juego le permita echarla en base a las reglas del juego, si no es posible, el jugador deberá escoger otra de sus cartas.|
-
- ### HJJ3-(ISSUE#38): Usar cartas especiales ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/38]())
-| "Como jugador quiero poder usar cartas especiales (pirata, sirena o Skull King) en lugar del palo predominante para intentar ganar una baza."| 
-|-----|
-|![Usar cartas especiales](../mockups/Usar_cartas_especiales.png)|
-|El jugador selecciona una carta especial de su mano durante su turno, podrá echarla independientemente del palo que predomine durante la baza.|
-
- ### HJJ4-(ISSUE#39): Usar carta blanca/de escape ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/39]())
-| "Como jugador quiero poder usar una carta blanca/de escape para perder una baza y acertar mi apuesta."| 
-|-----|
-|![Usar carta blanca/de escape](../mockups/Jugar_carta_escape.png)|
-|El jugador selecciona una carta blanca/de escape de su mano durante su turno, podrá echarla independientemente del palo que predomine durante la baza.|
-
- ### HJJ6-(ISSUE#41): Elegir rol de la carta Tigresa ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/41]())
-| "Como jugador quiero poder escoger el rol de la carta Tigresa (bandera blanca o pirata) para poder cumplir con mi apuesta."| 
-|-----|
-|![Elegir rol de la carta Tigresa](../mockups/Elegir_la_carta_Tigresa.png)|
-|El jugador selecciona la carta Tigresa, aparece una ventana emergente donde le aparecerán dos botones con cada una de las opciones, deberá pulsar una de los dos para elegir el rol. Una vez pulsado el rol quedará seleccionado.|
-
-### HJJ2-(ISSUE#37): Ver puntuación actualizada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/37]())
-| "Como jugador quiero poder ver mi puntuación actualizada tras cada ronda para saber si voy ganando o no."| 
-|-----|
-|![Ver puntuación actualizada](../mockups/Ver_puntuacion.png)|
-|El jugador podrá observar su puntuación y la de sus compañeros actualizada tras cada ronda en el margen izquierdo de la pantalla. Esta se mantendrá visible durante toda la ronda siguiente hasta que se actualice al final de la ronda.|
-
-### HJJ14-(ISSUE#175): Ver ganador baza ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/175]())
-| "Como jugador quiero poder ver el ganador de la baza tras su finalización para saber si quién ha sido el ganador."| 
-|-----|
-|![Ver ganador baza](../mockups/ver_ganador_baza.png)|
-|El jugador podrá observar el ganador de cada baza tras su finalización (una vez todos los jugadores hayan jugador su correspondiente carta) a trvés de un modal que aparecerá automaticamente en pantalla. Se cerrará al pasar a la siguiente baza o ronda.|
-
- ### HJJ7-(ISSUE#42): Salir de la partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/42]())
-| "Como jugador quiero poder rendirme y salir en mitad de la partida para evitar seguir jugando en caso de que me surja un imprevisto."| 
-|-----|
-|![Salir de la partida](../mockups/Poder_salir_en_mitad_de_la_partida.png)|
-|El jugador debe pulsar el botón 'Exit', situado en la esquina inferior derecha.|
 
 
 ## Diagrama conceptual del sistema

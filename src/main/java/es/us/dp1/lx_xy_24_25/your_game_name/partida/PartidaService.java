@@ -121,23 +121,6 @@ public class PartidaService {
             throw new ResourceNotFoundException("Partida", "id", partidaId);
         }
 
-        Integer numJugadoresPartida = jugadorService.findJugadoresByPartidaId(partidaId).size();
-        if(numJugadoresPartida < 3) {
-            throw new MinJugadoresPartidaException("Tiene que haber un mínimo de 3 jugadores en la sala para empezar la partida");
-        }
-
-        partida.setEstado(PartidaEstado.JUGANDO);
-        update(partida, partidaId);
-        rondaService.iniciarRonda(partida);
-    }
-
-    @Transactional
-    public void iniciarPartidaPrueba(Integer partidaId){
-        Partida partida = getPartidaById(partidaId);
-        if (partida == null) {
-            throw new ResourceNotFoundException("Partida", "id", partidaId);
-        }
-
         List<Jugador> jugadoresPartida = jugadorService.findJugadoresByPartidaId(partidaId);
         if(jugadoresPartida.size() < 3) {
             throw new MinJugadoresPartidaException("Tiene que haber un mínimo de 3 jugadores en la sala para empezar la partida");
@@ -147,7 +130,7 @@ public class PartidaService {
         update(partida, partidaId);
         Ronda ronda = rondaService.iniciarRonda(partida);
         manoService.iniciarManos(partida.getId(), ronda, jugadoresPartida);
-        Baza baza = bazaService.iniciarBazaPrueba(ronda, jugadoresPartida);
+        Baza baza = bazaService.iniciarBaza(ronda, jugadoresPartida);
         // Actualizamos turno actual
         partida.setTurnoActual(primerTurno(baza.getTurnos()));
         update(partida, partida.getId());
@@ -234,7 +217,7 @@ public class PartidaService {
         Ronda ronda = baza.getRonda();
         // Si es la última Baza de la ronda, finalizamos la ronda y actualizamos el resultado de las manos
         if(nextBaza > ronda.getNumBazas()){
-            rondaService.finalizarRondaPrueba(ronda.getId());
+            rondaService.finalizarRonda(ronda.getId());
             getPuntaje(ronda.getNumBazas(), ronda.getId());
             manoService.actualizarResultadoMano(baza);
             Integer nextRonda = ronda.getNumRonda() + 1;
@@ -245,13 +228,13 @@ public class PartidaService {
             } else{
                 Integer numJugadores = jugadorService.findJugadoresByPartidaId(partidaId).size(); 
                 Integer numBazas = manoService.getNumCartasARepartir(nextRonda, numJugadores);
-                Ronda newRonda = rondaService.nextRondaPrueba(ronda.getId(), numBazas);
+                Ronda newRonda = rondaService.nextRonda(ronda.getId(), numBazas);
                 manoService.iniciarManos(ronda.getPartida().getId(), newRonda, jugadores);
-                bazaService.iniciarBazaPrueba(newRonda, jugadores);
+                bazaService.iniciarBaza(newRonda, jugadores);
             }
         // Si no es la última baza de la ronda, cambiamos de baza
         } else{
-            Baza newBaza = bazaService.nextBazaPrueba(bazaId, jugadores);
+            Baza newBaza = bazaService.nextBaza(bazaId, jugadores);
             // Actualizamos aquí el turno actual
             partida.setTurnoActual(primerTurno(newBaza.getTurnos()));
             update(partida, partida.getId());
@@ -263,6 +246,7 @@ public class PartidaService {
 		return turnos.get(0);
 	}
 
+    // Se ha movido aquí para evitar dependencias con Mano
     @Transactional
     public void getPuntaje(Integer numBazas, Integer rondaId){
          List<Mano> manos = manoService.findAllByRondaId(rondaId);

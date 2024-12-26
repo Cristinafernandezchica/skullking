@@ -126,28 +126,6 @@ private JugadorRepository jugadorRepository;
         return cartasARepartir;
     }
 
-    // Para apostar
-    // TODO: Hay que cambiarlo para que el jugador se pase por parámetro, de momento llamar a repository
-    // Si no mover a Partida, es más sencillo
-    /*
-    @Transactional
-    public void apuesta(Integer ap, Integer jugadorId){
-        Mano mano = findLastManoByJugadorId(jugadorId);
-        Jugador jugador = jugadorRepository.findById(jugadorId).get();
-        if (mano == null) {
-            throw new ResourceNotFoundException("Mano", "id", jugadorId);
-        }
-
-        if (ap > mano.getCartas().size()) {
-            throw new ApuestaNoValidaException("La apuesta no puede ser mayor a " + mano.getCartas().size());
-        }
-
-        mano.setApuesta(ap);
-        jugador.setApuestaActual(ap);
-        manoRepository.save(mano);
-        jugadorService.updateJugador(jugador, jugadorId);
-    }
-        */
 
     public List<Carta> cartasDisabled(Integer idMano, TipoCarta tipoCarta) {
         Mano manoActual = manoRepository.findById(idMano).orElse(null);

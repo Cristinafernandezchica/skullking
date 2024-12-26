@@ -100,13 +100,6 @@ public class PartidaRestController {
     }
     */
 
-    // Para iniciar una partida desde frontend
-    @PutMapping("/{id}/iniciar-partida")
-    public ResponseEntity<Void> iniciarPartida(@PathVariable("id") Integer id){
-        partidaService.iniciarPartida(id);
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping("/{id}/jugadorGanador")
     public ResponseEntity<Jugador> ganadorPartida (@PathVariable("id") Integer id){
         partidaService.getJugadorGanador(id);
@@ -114,9 +107,9 @@ public class PartidaRestController {
     }
 
     // Para iniciar una partida desde frontend
-    @PutMapping("/{id}/iniciar-partida-prueba")
-    public ResponseEntity<Void> iniciarPartidaPrueba(@PathVariable("id") Integer id){
-        partidaService.iniciarPartidaPrueba(id);
+    @PutMapping("/{id}/iniciar-partida")
+    public ResponseEntity<Void> iniciarPartida(@PathVariable("id") Integer id){
+        partidaService.iniciarPartida(id);
         return ResponseEntity.ok().build();
     }
 

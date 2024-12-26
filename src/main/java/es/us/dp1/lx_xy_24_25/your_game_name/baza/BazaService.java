@@ -15,10 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
-import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
-import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
@@ -30,15 +27,11 @@ public class BazaService {
     
     private BazaRepository bazaRepository;
     private TrucoRepository trucoRepository;
-    //private PartidaService partidaService;
-    //private JugadorService jugadorService;
 
     @Autowired
-    public BazaService(BazaRepository bazaRepository,TrucoRepository trucoRepository, @Lazy PartidaService partidaService, JugadorService jugadorService) {
+    public BazaService(BazaRepository bazaRepository,TrucoRepository trucoRepository) {
         this.bazaRepository = bazaRepository;
         this.trucoRepository = trucoRepository;
-        //this.partidaService = partidaService;
-        //this.jugadorService = jugadorService;
     }
 
     //Save las bazas en la base de datos
@@ -116,36 +109,11 @@ public class BazaService {
     }
     */
 
-    /*
-    // Iniciar una Baza
+    // Iniciar la primera baza de cada ronda
     @Transactional
-    public Baza iniciarBazas (Ronda ronda) {
+    public Baza iniciarBaza(Ronda ronda, List<Jugador> jugadores) {
         Partida partida = ronda.getPartida();
-        List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partida.getId());
-        // List<Integer> turnos  = calcularTurnosNuevaBaza(partida.getId(), null);
-        List<Integer> turnos = jugadores.stream().map(Jugador::getId).collect(Collectors.toList());
-        Baza baza = new Baza();
-        baza.setCartaGanadora(null);
-        baza.setNumBaza(1);
-        baza.setGanador(null);
-        baza.setPaloBaza(PaloBaza.sinDeterminar);
-        baza.setRonda(ronda);
-        baza.setTurnos(turnos);
-        Baza resBaza = bazaRepository.save(baza);
-        partida.setTurnoActual(primerTurno(turnos));
-        partidaService.update(partida, partida.getId());
-        //trucoService.crearTrucosBazaConTurno(baza.getId()); // cambiado para turnos
-        return resBaza;
-    }
-    */
-
-    // Iniciar una Baza
-    @Transactional
-    public Baza iniciarBazaPrueba(Ronda ronda, List<Jugador> jugadores) {
-        Partida partida = ronda.getPartida();
-        // List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partida.getId());
         List<Integer> turnos  = calcularTurnosNuevaBaza(partida.getId(), null, jugadores);
-        // List<Integer> turnos = jugadores.stream().map(Jugador::getId).collect(Collectors.toList());
         Baza baza = new Baza();
         baza.setCartaGanadora(null);
         baza.setNumBaza(1);
@@ -159,8 +127,6 @@ public class BazaService {
 
     @Transactional
     public List<Integer> calcularTurnosNuevaBaza(int partidaId, Baza bazaAnterior, List<Jugador> jugadores) {
-        // List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partidaId);
-
         // Si es la primera baza, el orden es el orden de unión de los jugadores
         if (bazaAnterior == null) {
 			List<Integer> turnosJugadores = jugadores.stream().map(Jugador::getId).collect(Collectors.toList());
@@ -193,7 +159,7 @@ public class BazaService {
 
     // Next Baza
     @Transactional
-    public Baza nextBazaPrueba(Integer bazaId, List<Jugador> jugadores) {
+    public Baza nextBaza(Integer bazaId, List<Jugador> jugadores) {
         Baza baza = findById(bazaId);
         Ronda ronda = baza.getRonda();
         Integer nextBaza = baza.getNumBaza() + 1;
@@ -208,6 +174,9 @@ public class BazaService {
         newBaza.setTurnos(turnos);   
         return saveBaza(newBaza);
     }
+
+    
+    // Quizás mover a Patida junto con getPuntaje, así no tendríamos que poner el trucoRepository
     @Transactional
     public Integer getPtosBonificacion(Integer idRonda, Integer idJugador){
         // se cogen las bazas de la ronda en la que el jugador haya ganado

@@ -281,7 +281,7 @@ public class ManoServiceTest {
         when(cartaService.findAll()).thenReturn(listaCartas);
         when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(jugadores);
 
-        manoService.iniciarManos(partida.getId(), ronda);
+        manoService.iniciarManos(partida.getId(), ronda, jugadores);
 
         verify(cartaService, times(1)).findAll();
         verify(jugadorService, times(1)).findJugadoresByPartidaId(partida.getId());
@@ -309,7 +309,7 @@ public class ManoServiceTest {
         when(cartaService.findAll()).thenReturn(listaCartas);
         when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(jugadores);
 
-        manoService.iniciarManos(partida.getId(), ronda);
+        manoService.iniciarManos(partida.getId(), ronda, jugadores);
 
         // Verifica que las cartas especiales no están presentes
         List<Carta> cartasFiltradas = listaCartas.stream()
@@ -328,7 +328,7 @@ public class ManoServiceTest {
         when(cartaService.findAll()).thenReturn(listaCartas);
         when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(jugadores);
 
-        manoService.iniciarManos(partida.getId(), ronda);
+        manoService.iniciarManos(partida.getId(), ronda, jugadores);
 
         verify(cartaService, times(1)).findAll();
         verify(jugadorService, times(1)).findJugadoresByPartidaId(partida.getId());
@@ -343,7 +343,7 @@ public class ManoServiceTest {
         // Crear una copia de los IDs de las cartas antes de barajar
         List<Integer> copiaIdsCartas = listaCartas.stream().map(Carta::getId).collect(Collectors.toList());
 
-        manoService.iniciarManos(partida.getId(), ronda);
+        manoService.iniciarManos(partida.getId(), ronda, jugadores);
 
         verify(cartaService, times(1)).findAll();
         verify(jugadorService, times(1)).findJugadoresByPartidaId(partida.getId());
@@ -369,7 +369,7 @@ public class ManoServiceTest {
         when(cartaService.findAll()).thenReturn(listaCartas);
         when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(jugadores);
 
-        manoService.iniciarManos(partida.getId(), ronda);
+        manoService.iniciarManos(partida.getId(), ronda, jugadores);
 
         verify(cartaService, times(1)).findAll();
         verify(jugadorService, times(1)).findJugadoresByPartidaId(partida.getId());
@@ -455,7 +455,8 @@ public class ManoServiceTest {
         assertEquals(expected, result);
     }
 
-    // Tests apostar
+    // Tests apostar --> LO COMENTO SE HA MOVIDO A Partida
+    /*
     @Test
     public void shouldApuestaExito() {
         // Crear la lista de manos y asegurar que findLastManoByJugadorId devuelve la última mano
@@ -514,6 +515,7 @@ public class ManoServiceTest {
         verify(manoRepository, times(1)).save(mano);
         verify(jugadorService, times(1)).updateJugador(jugador3, jugador3.getId());
     }
+        */
 
     // tests cartasDisabled
     @Test

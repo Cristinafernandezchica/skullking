@@ -133,29 +133,30 @@ export default function Jugando() {
 };
 
 
-    useEffect(() => {
-
-    const fetchManosOtrosJugadores = async () => { 
-      try { 
-        const nuevasManos = {}; 
-        for (const jugador of jugadores) { 
-          if (jugador.id !== tu.id) { 
-            const response = await fetch(`/api/v1/manos/${jugador.id}`, { 
-              headers: { "Authorization": `Bearer ${jwt}`, 
-              'Content-Type': 'application/json' } }); 
-              if (!response.ok) { 
-                throw new Error("Network response was not ok"); 
-              } 
-              const data = await response.json(); 
-              nuevasManos[jugador.id] = data; 
+const fetchManosOtrosJugadores = async () => { 
+  try { 
+    const nuevasManos = {}; 
+    for (const jugador of jugadores) { 
+      if (jugador.id !== tu.id) { 
+        const response = await fetch(`/api/v1/manos/${jugador.id}`, { 
+          headers: { "Authorization": `Bearer ${jwt}`, 
+          'Content-Type': 'application/json' } }); 
+          if (!response.ok) { 
+            throw new Error("Network response was not ok"); 
           } 
-        } 
-        setManosOtrosJugadores(nuevasManos); 
-        } catch (error) { 
-          console.error("Error encontrando manos de otros jugadores:", error); 
-          setMessage(error.message); setVisible(true); 
-        } 
-      }; 
+          const data = await response.json(); 
+          nuevasManos[jugador.id] = data; 
+      } 
+    } 
+    setManosOtrosJugadores(nuevasManos); 
+    } catch (error) { 
+      console.error("Error encontrando manos de otros jugadores:", error); 
+      setMessage(error.message); setVisible(true); 
+    } 
+  }; 
+
+
+    useEffect(() => {
         if (tu !== null) { 
           fetchMano(tu.id); 
           fetchManosOtrosJugadores(); 
@@ -225,7 +226,7 @@ export default function Jugando() {
 
     const apostar = async (ap) => {
       try {
-          const response = await fetch(`/api/v1/manos/apuesta/${tu.id}?apuesta=${ap}`, {
+          const response = await fetch(`/api/v1/partidas/apuesta/${tu.id}?apuesta=${ap}`, {
               method: 'PUT',
               headers: {
                   'Content-Type': 'application/json',
@@ -298,30 +299,67 @@ export default function Jugando() {
 
 
 
+  const fetchRondaActual = async (partidaId) => {
+    try {
+        const response = await fetch(`/api/v1/rondas/${partidaId}/partida`, {
+            headers: {
+                "Authorization": `Bearer ${jwt}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setRonda(data);
+        
+    } catch (error) {
+        console.error("Error encontrando partidas:", error);
+        setMessage(error.message);
+        setVisible(true);
+    }
+};
 
     useEffect(() => {
-      const fetchRondaActual = async (partidaId) => {
-          try {
-              const response = await fetch(`/api/v1/rondas/${partidaId}/partida`, {
-                  headers: {
-                      "Authorization": `Bearer ${jwt}`,
-                      'Content-Type': 'application/json'
-                  }
-              });
-              if (!response.ok) {
-                  throw new Error("Network response was not ok");
-              }
-              const data = await response.json();
-              setRonda(data);
-              
-          } catch (error) {
-              console.error("Error encontrando partidas:", error);
-              setMessage(error.message);
-              setVisible(true);
-          }
-      };
+
       fetchRondaActual(idPartida);
     }, []);
+
+    const siguienteEstado = async () => {
+      try {
+        const response = await fetch(`/api/v1/partidas/${idPartida}/bazas/${BazaActual.id}/siguiente-estado`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${jwt}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(),
+        });
+
+
+        if (!response.ok) {
+          console.log("Fallo al crear la nueva baza")
+          throw new Error('Network response was not ok');
+        }
+
+
+        const data = await response.json();
+        console.log("Dime que se creo la nueva baza",data);
+
+
+        await fetchRondaActual(idPartida);
+        await fetchBazaActual();
+        await fetchMano();
+        await fetchManosOtrosJugadores();
+        await fetchPartida();
+
+
+        return data;
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
     
 
 
@@ -352,6 +390,11 @@ export default function Jugando() {
       await iniciarTruco(tu.id,cartaFinal);
       console.log("Truco a jugar:", cartaFinal);
       await fetchMano(tu.id);
+
+      if (ListaDeTrucos.length + 1 === jugadores.length) {
+        await siguienteEstado();
+      }
+
     };
 
     const iniciarTruco = async (jugadorId,cartaAJugar) => {

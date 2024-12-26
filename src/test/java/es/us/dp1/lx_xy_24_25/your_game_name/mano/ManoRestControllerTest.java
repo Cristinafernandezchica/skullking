@@ -175,6 +175,8 @@ public class ManoRestControllerTest {
         assertEquals(1, response.getBody().size());
     }
 
+    // COMENTO TEST APUESTA PORQUE SE HA MOVIDO A Partida
+    /*
     @Test
     void shouldApuesta_ValidInput() {
         // Configurar mocks
@@ -249,6 +251,7 @@ public class ManoRestControllerTest {
         assertEquals("Error interno del servicio", exception.getMessage());
         verify(manoService).apuesta(10, 1);
     }
+    */
 
     @Test
     void shouldCartasDisabled_SuccessNonEmpty() {

@@ -163,7 +163,7 @@ public class TrucoService {
 			partida.setTurnoActual(siguienteTurno(turnos, turnoAntesCambio));
 			partidaService.update(partida, partida.getId());
 		}
-		// Si es el último truco de la Baza, se llama a nextBaza
+		// Si es el último truco de la Baza, se calcula el ganador de la baza
 		
 		else if(numJugadores == numTrucosBaza){
 			calculoGanador(bazaId);

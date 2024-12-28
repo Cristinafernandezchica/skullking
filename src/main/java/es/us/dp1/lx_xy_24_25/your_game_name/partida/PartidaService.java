@@ -3,15 +3,19 @@ package es.us.dp1.lx_xy_24_25.your_game_name.partida;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.aspectj.bridge.Message;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,16 +47,18 @@ public class PartidaService {
     BazaService bazaService;
     ManoService manoService;
     private static final int ULTIMA_RONDA = 10;
+    private SimpMessagingTemplate messagingTemplate;
 
 
     @Autowired
-    public PartidaService(PartidaRepository pr, RondaService rondaService, JugadorService jugadorService, UserService us, BazaService bazaService, ManoService manoService) {
+    public PartidaService(PartidaRepository pr, RondaService rondaService, JugadorService jugadorService, UserService us, BazaService bazaService, ManoService manoService, SimpMessagingTemplate messagingTemplate) {
         this.pr = pr;
         this.rondaService = rondaService;
         this.jugadorService = jugadorService;
         this.us = us;
         this.bazaService = bazaService;
         this.manoService = manoService;
+        this.messagingTemplate = messagingTemplate;
     }
 
     // Con este método se puede filtrar por nombre y estado
@@ -134,6 +140,15 @@ public class PartidaService {
         // Actualizamos turno actual
         partida.setTurnoActual(primerTurno(baza.getTurnos()));
         update(partida, partida.getId());
+
+        // Crear el mensaje de notificación
+        Map<String, Object> message = new HashMap<>();
+        message.put("status", "JUGANDO"); // Estado de la partida
+        message.put("partidaId", partidaId); // ID de la partida
+        message.put("message", "Partida iniciada");
+
+        // Enviar el mensaje a través de WebSocket
+        messagingTemplate.convertAndSend("/topic/partida/" + partidaId, message);
 
     }
 

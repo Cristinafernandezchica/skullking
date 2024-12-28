@@ -18,6 +18,8 @@ import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.UserRepository;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 import jakarta.validation.Valid;
 
 @Service
@@ -26,11 +28,13 @@ public class JugadorService {
     private PartidaRepository pr;
     private UserRepository userRepository;
     private static final Integer MAX_JUGADORES = 8;
+    private SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    public JugadorService(JugadorRepository jugadorRepository, PartidaRepository pr) {
+    public JugadorService(JugadorRepository jugadorRepository, PartidaRepository pr, SimpMessagingTemplate messagingTemplate) {
         this.jugadorRepository = jugadorRepository;
         this.pr = pr;
+        this.messagingTemplate = messagingTemplate;
     }
 
     // Get jugador por id
@@ -51,7 +55,11 @@ public class JugadorService {
         } else if(partidaEnJuegoEspera(jugador)){
             throw new UsuarioPartidaEnJuegoEsperandoException("El usuario ya tiene un jugador en una partida no finalizada.");
         } else{
-            return jugadorRepository.save(jugador);
+            Jugador nuevoJugador = jugadorRepository.save(jugador);
+            // Envía la lista actualizada de jugadores al canal WebSocket
+            messagingTemplate.convertAndSend("/topic/partida/" + partida.getId(), findJugadoresByPartidaId(partida.getId()));
+
+            return nuevoJugador;
         }
     }
 

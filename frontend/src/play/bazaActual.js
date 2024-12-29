@@ -1,4 +1,4 @@
-export default class BazaActual {
+export default class Baza {
     static async fetchBazaActual(rondaId, jwt) {
         try {
             const response = await fetch(`/api/v1/bazas/${rondaId}/bazaActual`, {
@@ -13,10 +13,36 @@ export default class BazaActual {
             }
 
             const data = await response.json();
+            console.log("bazaActual fetchBazaActual:", data);
             return data; // Devuelve los datos de la baza actual
         } catch (error) {
             console.error("Error encontrando baza actual:", error);
-            throw error; // Propaga el error para manejarlo en el componente que lo utiliza
+            throw error; // Propaga el error para manejo externo
+        }
+    }
+
+    static async cambiarPaloBaza(baza, jwt) {
+        try {
+            const response = await fetch(`/api/v1/bazas/${baza.id}`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${jwt}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(baza),
+            });
+
+            if (!response.ok) {
+                console.log("Algo falla");
+                throw new Error("Network response was not ok");
+            }
+
+            const data = await response.json();
+            console.log("La baza con el palo dominante:", data);
+            return data; // Devuelve la baza actualizada
+        } catch (error) {
+            console.error("Error al cambiar el palo dominante de la baza:", error);
+            throw error; // Propaga el error para manejo externo
         }
     }
 }

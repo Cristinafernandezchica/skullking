@@ -7,6 +7,14 @@ import getIdFromUrl from '../util/getIdFromUrl';
 import ApuestaModal from '../components/modals/ApostarModal';
 import ElegirTigresaModal from '../components/modals/ElegirTigresaModal';
 import GanadorBazaModal from '../components/modals/GanadorBazaModal';
+import Partida from './partidaActual';
+import Mano from './manoActual';
+import Carta from './carta';
+import Trucos from './trucos';
+import Jugadores from './jugadores';
+import Baza from './bazaActual';
+import Ronda from './rondaActual';
+import Apuesta from './apuesta';
 
 const jwt = tokenService.getLocalAccessToken();
 const user = tokenService.getUser();
@@ -52,27 +60,17 @@ export default function Jugando() {
     const [ejecutadoGanadorBaza, setEjecutadoGanadorBaza] = useState(0);
 
 
-     const fetchPartida = async (idPartida) => {
+    const fetchPartida = async (idPartida) => {
       try {
-          const response = await fetch(`/api/v1/partidas/${idPartida}`, {
-              headers: {
-                  "Authorization": `Bearer ${jwt}`,
-                  'Content-Type': 'application/json'
-              }
-          });
-          if (!response.ok) {
-              throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          console.log("comprobar partida")
-          setPartida(data);
-
+          const data = await Partida.fetchPartida(idPartida, jwt); // Usa el método de la clase Partida
+          console.log("comprobar partida");
+          setPartida(data); // Asigna los datos obtenidos
       } catch (error) {
           console.error("Error fetching partida:", error);
           setMessage(error.message);
           setVisible(true);
       }
-    }
+    };
 
     useEffect(() => {
       const intervalo = setInterval(() => {
@@ -84,77 +82,43 @@ export default function Jugando() {
     }, [idPartida, tu]);
 
 
-    const fetchMano = async (jugadorId) => {
+    const fetchMano = async (jugadorId) => { 
       try {
-          const response = await fetch(`/api/v1/manos/${jugadorId}`, {
-              headers: {
-                  "Authorization": `Bearer ${jwt}`,
-                  'Content-Type': 'application/json'
-              }
-          });
-          if (!response.ok) {
-              throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
+          const data = await Mano.fetchMano(jugadorId, jwt); // Llama al método estático de la clase Mano
           setMano(data);
-          console.log("Nueva mano", mano)
-          // Fetch jugadores for each partida    
-          await fetchCartasDisabled(data.id, BazaActual.paloBaza)                                                          
+          console.log("Nueva mano", data);
+  
+          // Después de obtener la mano, se hace la solicitud para obtener las cartas deshabilitadas
+          await fetchCartasDisabled(data.id, BazaActual.paloBaza); 
       } catch (error) {
           console.error("Error encontrando mano:", error);
           setMessage(error.message);
           setVisible(true);
       }
-  };
+    };
  
-  const fetchCartasDisabled = async (idMano, paloActual) => {
-    try {
-        const response = await fetch(`/api/v1/manos/${idMano}/manoDisabled?tipoCarta=${paloActual}`, {
-            headers: {
-                "Authorization": `Bearer ${jwt}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        
-        const responseData = await response.text();
-        console.log("Response text:", responseData);
-        
-        const data = JSON.parse(responseData);
-        setCartasDisabled(data);
-        console.log("Cartas disabled:", data);
-    } catch (error) {
-        console.error("Error encontrando partidas:", error);
-        setMessage(error.message);
-        setVisible(true);
-    }
-};
+    const fetchCartasDisabled = async (idMano, paloActual) => { 
+      try {
+          const data = await Carta.fetchCartasDisabled(idMano, paloActual, jwt); // Llama al método estático de la clase Carta
+          setCartasDisabled(data); // Asigna las cartas deshabilitadas obtenidas
+          console.log("Cartas deshabilitadas:", data); // Imprime las cartas deshabilitadas
+      } catch (error) {
+          console.error("Error encontrando cartas deshabilitadas:", error);
+          setMessage(error.message);
+          setVisible(true);
+      }
+    };
 
-
-const fetchManosOtrosJugadores = async () => { 
-  try { 
-    const nuevasManos = {}; 
-    for (const jugador of jugadores) { 
-      if (jugador.id !== tu.id) { 
-        const response = await fetch(`/api/v1/manos/${jugador.id}`, { 
-          headers: { "Authorization": `Bearer ${jwt}`, 
-          'Content-Type': 'application/json' } }); 
-          if (!response.ok) { 
-            throw new Error("Network response was not ok"); 
-          } 
-          const data = await response.json(); 
-          nuevasManos[jugador.id] = data; 
+    const fetchManosOtrosJugadores = async () => {  
+      try { 
+          const nuevasManos = await Mano.fetchManosOtrosJugadores(jugadores, tu.id, jwt); // Llama al método estático de la clase Mano
+          setManosOtrosJugadores(nuevasManos); // Actualiza el estado con las nuevas manos obtenidas
+      } catch (error) { 
+          console.error("Error encontrando manos de otros jugadores:", error); 
+          setMessage(error.message); 
+          setVisible(true); 
       } 
-    } 
-    setManosOtrosJugadores(nuevasManos); 
-    } catch (error) { 
-      console.error("Error encontrando manos de otros jugadores:", error); 
-      setMessage(error.message); setVisible(true); 
-    } 
-  }; 
-
+    };
 
     useEffect(() => {
         if (tu !== null) { 
@@ -163,45 +127,25 @@ const fetchManosOtrosJugadores = async () => {
         } 
       }, [jugadores, tu]);
 
-      const fetchListaDeTrucos = async (bazaId) => {
-        try {
-            const response = await fetch(`/api/v1/bazas/${bazaId}/trucos`, {
-                headers: {
-                    "Authorization": `Bearer ${jwt}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            const data = await response.json();
-            console.log("Este es la lista de trucos",data)
-            setListaDeTrucos(data);
-        } catch (error) {
-            console.error("Error encontrando jugadores:", error);
-            setMessage(error.message);
-            setVisible(true);
-        }
-      };
-
-
-    const fetchJugadores = async () => {
+    const fetchListaDeTrucos = async (bazaId) => { 
       try {
-          const response = await fetch(`/api/v1/jugadores/${idPartida}`, {
-              headers: {
-                  "Authorization": `Bearer ${jwt}`,
-                  'Content-Type': 'application/json'
-              }
-          });
-          if (!response.ok) {
-              throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          setJugadores(data);
+          const listaDeTrucos = await Trucos.fetchListaDeTrucos(bazaId, jwt); // Llama al método estático de la clase Trucos
+          setListaDeTrucos(listaDeTrucos); // Actualiza el estado con la lista de trucos obtenida
       } catch (error) {
-          console.error("Error encontrando jugadores:", error);
-          setMessage(error.message);
-          setVisible(true);
+          console.error("Error encontrando jugadores:", error); 
+          setMessage(error.message); 
+          setVisible(true); 
+      }
+    };
+
+    const fetchJugadores = async () => { 
+      try {
+          const listaDeJugadores = await Jugadores.fetchJugadores(idPartida, jwt); // Llama al método estático de la clase
+          setJugadores(listaDeJugadores); // Actualiza el estado con la lista de jugadores obtenida
+      } catch (error) {
+          console.error("Error encontrando jugadores:", error); 
+          setMessage(error.message); 
+          setVisible(true); 
       }
     };
 
@@ -226,52 +170,33 @@ const fetchManosOtrosJugadores = async () => {
 
     const apostar = async (ap) => {
       try {
-          const response = await fetch(`/api/v1/partidas/apuesta/${tu.id}?apuesta=${ap}`, {
-              method: 'PUT',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${jwt}`,
-              }
-          });
-
-          if (!response.ok) {
-              const errorData = await response.json();
-              throw new Error(errorData.message || 'Error desconocido');
-          }
-
-        //  console.log("Apuesta realizada con éxito");
+          // Llama al método estático de la clase Apuesta
+          await Apuesta.realizarApuesta(tu.id, ap, jwt);
+  
+          // Actualiza la interfaz de usuario tras una apuesta exitosa
           toggleApuestaModal();
-          fetchJugadores();
-
+          await fetchJugadores(); // Asegúrate de que fetchJugadores esté implementado correctamente
       } catch (error) {
-          console.error('Error:', error);
-          throw error;
+          console.error("Error:", error);
+          setMessage(error.message); // Muestra el mensaje de error al usuario
+          setVisible(true);
       }
-    };
-
+  };
 
     const fetchBazaActual = async () => {
       try {
-          const response = await fetch(`/api/v1/bazas/${ronda.id}/bazaActual`, {
-              headers: {
-                  "Authorization": `Bearer ${jwt}`,
-                  'Content-Type': 'application/json'
-              }
-          });
-          if (!response.ok) {
-              throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          setBazaActual(data);
-          console.log("bazaActual fetchBazaActual: ",data);
+          const bazaActualData = await Baza.fetchBazaActual(ronda.id, jwt);
+  
+          // Actualiza el estado con la baza actual obtenida
+          setBazaActual(bazaActualData);
+          console.log("bazaActual fetchBazaActual: ", bazaActualData);
       } catch (error) {
           console.error("Error encontrando baza:", error);
           setMessage(error.message);
           setVisible(true);
       }
-  };
+    };
   
-
   useEffect(() => {
     if (BazaActual !== null)  {
     
@@ -298,27 +223,19 @@ const fetchManosOtrosJugadores = async () => {
   }, [ronda,ListaDeTrucos]);
 
 
-
   const fetchRondaActual = async (partidaId) => {
     try {
-        const response = await fetch(`/api/v1/rondas/${partidaId}/partida`, {
-            headers: {
-                "Authorization": `Bearer ${jwt}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setRonda(data);
-        
+        // Llama al método estático de la clase Ronda
+        const rondaActualData = await Ronda.fetchRondaActual(partidaId, jwt);
+
+        // Actualiza el estado con la ronda actual obtenida
+        setRonda(rondaActualData);
     } catch (error) {
         console.error("Error encontrando partidas:", error);
         setMessage(error.message);
         setVisible(true);
     }
-};
+  };
 
     useEffect(() => {
 
@@ -327,136 +244,80 @@ const fetchManosOtrosJugadores = async () => {
 
     const siguienteEstado = async () => {
       try {
-        const response = await fetch(`/api/v1/partidas/${idPartida}/bazas/${BazaActual.id}/siguiente-estado`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${jwt}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(),
-        });
-
-
-        if (!response.ok) {
-          console.log("Fallo al crear la nueva baza")
-          throw new Error('Network response was not ok');
-        }
-
-
-        const data = await response.json();
-        console.log("Dime que se creo la nueva baza",data);
-
-
-        await fetchRondaActual(idPartida);
-        await fetchBazaActual();
-        await fetchMano();
-        await fetchManosOtrosJugadores();
-        await fetchPartida();
-
-
-        return data;
+          // Llama al método estático de la clase Partida para avanzar al siguiente estado
+          const data = await Partida.siguienteEstado(idPartida, BazaActual.id, jwt);
+  
+          // Actualiza los estados relevantes en la interfaz de usuario
+          await fetchRondaActual(idPartida);
+          await fetchBazaActual();
+          await fetchMano();
+          await fetchManosOtrosJugadores();
+          await fetchPartida();
+  
+          return data;
       } catch (error) {
-        console.error('Error:', error);
+          console.error("Error:", error);
+          setMessage(error.message); // Muestra el mensaje de error al usuario
+          setVisible(true);
       }
     };
-
-    
-
 
     const jugarTruco = async (cartaAJugar, tipoCarta = eleccion) => {
-      let cartaFinal = cartaAJugar;
-      if(cartaAJugar.tipoCarta == "tigresa" && tipoCarta){
-        try{
-          const response = await fetch(`/api/v1/cartas/tigresa/${tipoCarta}`, {
-            headers: {
-              "Authorization": `Bearer ${jwt}`,
-              'Content-Type': 'application/json'
-            }
-          })
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          console.log("Se esta jugando tigresa",data);
-          setNuevaTigresa(data);
-          cartaFinal = data;
-        } catch (error) {
-          console.error("Error fetching cambioTigresa:", error);
-          setMessage(error.message);
-          setVisible(true);
-        }
-      }
-      console.log("Carta a jugar:", cartaFinal);
-      await iniciarTruco(tu.id,cartaFinal);
-      console.log("Truco a jugar:", cartaFinal);
-      await fetchMano(tu.id);
-
-      if (ListaDeTrucos.length + 1 === jugadores.length) {
-        await siguienteEstado();
-      }
-
-    };
-
-    const iniciarTruco = async (jugadorId,cartaAJugar) => {
-      const BazaCartaManoDTO= {}
-      BazaCartaManoDTO.baza = BazaActual
-      BazaCartaManoDTO.mano = mano
-      BazaCartaManoDTO.carta = cartaAJugar
-      BazaCartaManoDTO.turno = ListaDeTrucos.length +1
       try {
-        const response = await fetch(`/api/v1/trucos/${jugadorId}/jugar`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${jwt}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(BazaCartaManoDTO),
-        });
-
-        if (!response.ok) {
-          console.log("Algo falla")
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        setTruco(data);
-        console.log("Dime que se creo el truco",data);
-        // Para mostrar el ganador de la baza, SIN ESTO NO FUNCIONA NO QUITAR
-        await fetchBazaActual();
-
-        return data;
+          // Llama al método estático de la clase Trucos para gestionar la jugada
+          const cartaFinal = await Trucos.jugarTruco(
+              cartaAJugar,
+              tipoCarta,
+              jwt,
+              tu.id,
+              iniciarTruco,
+              fetchMano,
+              siguienteEstado,
+              ListaDeTrucos,
+              jugadores
+          );
+  
+          console.log("Truco jugado con éxito:", cartaFinal);
       } catch (error) {
-        console.error('Error:', error);
+          console.error("Error jugando truco:", error);
+          setMessage(error.message); // Muestra el mensaje de error en la UI
+          setVisible(true);
       }
     };
 
-    
+    const iniciarTruco = async (jugadorId, cartaAJugar) => {
+      try {
+          // Llama al método estático de la clase Trucos para gestionar el inicio del truco
+          const data = await Trucos.iniciarTruco(
+              jugadorId,
+              cartaAJugar,
+              BazaActual,
+              mano,
+              ListaDeTrucos,
+              jwt,
+              fetchBazaActual
+          );
+  
+          setTruco(data); // Actualiza el truco en el estado
+          console.log("Truco iniciado con éxito:", data);
+      } catch (error) {
+          console.error("Error al iniciar truco:", error);
+          setMessage(error.message); // Muestra el mensaje de error en la UI
+          setVisible(true);
+      }
+    };
 
     const cambiarPaloBaza = async (baza) => {
       try {
-        const response = await fetch(`/api/v1/bazas/${baza.id}`, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${jwt}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(baza),
-        });
-
-        if (!response.ok) {
-          console.log("Algo falla")
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        setBazaActual(data);
-        console.log("La baza con el palo dominante",data);
+          const data = await Baza.cambiarPaloBaza(baza, jwt); // Llama al método de la clase Baza
+          setBazaActual(data); // Actualiza la baza actual en el estado
+          console.log("La baza con el palo dominante actualizada:", data);
       } catch (error) {
-        console.error('Error:', error);
+          console.error("Error al cambiar el palo dominante de la baza:", error);
+          setMessage(error.message); // Muestra el mensaje de error en la UI
+          setVisible(true);
       }
     };
-
-
 
     useEffect(() => {
       if (BazaActual !== null && BazaActual.paloBaza === "sinDeterminar" && truco !== null && truco.carta !== null)  {
@@ -483,8 +344,6 @@ const fetchManosOtrosJugadores = async () => {
       jugarTruco({ tipoCarta: 'tigresa' }, eleccion); // Pasar la elección al jugarTruco
       console.log("pase", nuevaTigresa);
     };
-
-
 
     /*
 

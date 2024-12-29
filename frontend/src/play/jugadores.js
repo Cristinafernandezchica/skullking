@@ -1,11 +1,11 @@
-export default class JugadoresPartida {
+export default class Jugadores {
     static async fetchJugadores(idPartida, jwt) {
         try {
             const response = await fetch(`/api/v1/jugadores/${idPartida}`, {
                 headers: {
                     "Authorization": `Bearer ${jwt}`,
-                    'Content-Type': 'application/json'
-                }
+                    "Content-Type": "application/json",
+                },
             });
 
             if (!response.ok) {
@@ -13,10 +13,11 @@ export default class JugadoresPartida {
             }
 
             const data = await response.json();
-            return data; // Devuelve los datos de los jugadores
+            console.log("Jugadores obtenidos:", data);
+            return data; // Devuelve la lista de jugadores
         } catch (error) {
             console.error("Error encontrando jugadores:", error);
-            throw error; // Propaga el error para manejo en el componente que la utiliza
+            throw error; // Propaga el error para manejarlo en el componente que lo utiliza
         }
     }
 }

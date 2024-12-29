@@ -32,6 +32,8 @@ import java.util.Optional;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 
 @Service
 public class TrucoService {
@@ -44,6 +46,7 @@ public class TrucoService {
 	// private BazaService bazaService;	// Para turnos
 	private PartidaService partidaService;
 	private RondaService rondaService;
+	private SimpMessagingTemplate messagingTemplate;
 
 	private final Integer idComodinPirata = 72;
 	private final Integer idComodinBanderaBlanca = 71;
@@ -51,7 +54,7 @@ public class TrucoService {
 
 
     @Autowired
-	public TrucoService(TrucoRepository trucoRepository,  BazaRepository bazaRepository,  ManoService manoService, JugadorService jugadorService, @Lazy PartidaService partidaService, RondaService rondaService) { // , @Lazy BazaService bazaService ,ManoRepository manoRepository
+	public TrucoService(TrucoRepository trucoRepository,  BazaRepository bazaRepository,  ManoService manoService, JugadorService jugadorService, @Lazy PartidaService partidaService, RondaService rondaService, SimpMessagingTemplate messagingTemplate) { // , @Lazy BazaService bazaService ,ManoRepository manoRepository
 		this.trucoRepository = trucoRepository;
         this.bazaRepository = bazaRepository;
         // this.manoRepository = manoRepository;
@@ -60,6 +63,7 @@ public class TrucoService {
 		this.manoService = manoService;
 		this.partidaService = partidaService;
 		this.rondaService = rondaService;
+		this.messagingTemplate = messagingTemplate;
 	}
 
     @Transactional(readOnly = true)
@@ -139,6 +143,9 @@ public class TrucoService {
 		trucoIniciado.setTurno(DTO.getTurno());
 		trucoIniciado.setCarta(DTO.getCarta());
 		trucoRepository.save(trucoIniciado);
+
+		// Envía la lista actualizada de trucos al canal WebSocket
+		messagingTemplate.convertAndSend("/topic/baza/truco/" + trucoIniciado.getBaza().getId(), findTrucosByBazaId(trucoIniciado.getBaza().getId()));
 
 		Mano manoSinCartaJugada = trucoIniciado.getMano();
 		List<Carta> nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().

@@ -7,6 +7,8 @@ import getIdFromUrl from "../util/getIdFromUrl";
 import ApuestaModal from "../components/modals/ApostarModal";
 import ElegirTigresaModal from "../components/modals/ElegirTigresaModal";
 import GanadorBazaModal from "../components/modals/GanadorBazaModal";
+import SockJS from "sockjs-client";
+import { Stomp } from "@stomp/stompjs";
 
 const jwt = tokenService.getLocalAccessToken();
 const user = tokenService.getUser();
@@ -37,6 +39,7 @@ export default function Jugando() {
   const [ronda, setRonda] = useState(null);
   const [truco, setTruco] = useState(null);
   const [BazaActual, setBazaActual] = useState(null);
+  const [idBaza, setIdBaza] = useState(null);
   const [ListaDeTrucos, setListaDeTrucos] = useState([]);
   const [seCambiaPalo, setSeCambiaPalo] = useState(true);
   const [buscarUnaVezListaDeTrucos, setBuscarUnaVezListaDeTrucos] =
@@ -193,6 +196,35 @@ export default function Jugando() {
     }
   };
 
+  useEffect(() => {
+    // Segundo useEffect: Conexión al WebSocket
+    if (BazaActual!==null) {
+      const socket = new SockJS("http://localhost:8080/ws");
+      const stompClient = Stomp.over(() => socket);
+
+      stompClient.connect({}, (frame) => {
+        console.log("Connected: " + frame);
+
+        stompClient.subscribe(
+          `/topic/baza/truco/${BazaActual.id}`,
+          (messageOutput) => {
+            const data = JSON.parse(messageOutput.body);
+            console.log("Mensaje recibido: ", data); // Verifica que el mensaje se reciba correctamente
+
+            setListaDeTrucos(data); // Actualizamos la lista de trucos con los datos recibidos
+          }
+        );
+      });
+
+      // Cleanup: Desconectar el WebSocket cuando el componente se desmonte
+      return () => {
+        stompClient.disconnect(() => {
+          console.log("Disconnected");
+        });
+      };
+    }
+  }, [idBaza]); // Solo se ejecuta cuando cambia de baza
+
   const fetchJugadores = async () => {
     try {
       const response = await fetch(`/api/v1/jugadores/${idPartida}`, {
@@ -272,6 +304,7 @@ export default function Jugando() {
       }
       const data = await response.json();
       setBazaActual(data);
+      setIdBaza(data.id);
       console.log("bazaActual fetchBazaActual: ", data);
     } catch (error) {
       console.error("Error encontrando baza:", error);
@@ -279,7 +312,7 @@ export default function Jugando() {
       setVisible(true);
     }
   };
-
+  /* COMENTAR PARA PROBAR EL LISTADO DE TRUCOS DE SOCKET
   useEffect(() => {
     if (BazaActual !== null) {
       if (buscarUnaVezListaDeTrucos) {
@@ -291,7 +324,7 @@ export default function Jugando() {
       }
     }
   }, [BazaActual]);
-
+*/
   useEffect(() => {
     if (ronda !== null) {
       console.log("bazaActual por listaTrucos");
@@ -427,6 +460,7 @@ export default function Jugando() {
       console.log("Dime que se creo el truco", data);
       // Para mostrar el ganador de la baza, SIN ESTO NO FUNCIONA NO QUITAR
       await fetchBazaActual();
+      if(BazaActual!==null)await fetchListaDeTrucos(BazaActual.id);
 
       return data;
     } catch (error) {

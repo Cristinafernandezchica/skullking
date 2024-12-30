@@ -201,7 +201,7 @@ const handleVolverPartida = () => {
   if (partidaJugador && ( partidaJugador.estado === "JUGANDO" || partidaJugador.estado === "ESPERANDO")) {
     navigate(partidaJugador.estado === "ESPERANDO" ? `/salaEspera/${partidaJugador.id}` : `/tablero/${partidaJugador.id}`)
   } else {
-    showError("No estas jugando ninguna partida.");
+    showError("No estás jugando ninguna partida.");
   }
 };
 
@@ -225,7 +225,7 @@ const handleVolverPartida = () => {
             </div>
 
             <div style={{ marginBottom: 20 }}>
-              {partidaJugador && ( // Verifica que partidaJugador no sea null
+              {partidaJugador && (partidaJugador.estado === "JUGANDO" || partidaJugador.estado === "ESPERANDO") && (
                 <Button outline color="success" onClick={handleVolverPartida}>Volver a partida</Button>
               )}
             </div>

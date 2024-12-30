@@ -149,7 +149,7 @@ INSERT INTO carta_mano(mano_id, carta_id) VALUES (500, 65);  -- Mano 2 contiene 
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (3, 1);  -- Mano 3 contiene Carta 1
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (3, 4);  -- Mano 3 contiene Carta 4
 
-
+INSERT INTO chat(id,jugador_id,mensaje) VALUES (1,2,'hola como estan');
 -- Pruebas para Baza
 -- INSERT INTO Baza(id, numBaza, tipo_carta, jugador_id, carta_id, ronda_id, turnos) VALUES (1,2,'triunfo',1,1,1,[]);
 -- INSERT INTO Baza(id, numBaza, tipo_carta, jugador_id, carta_id, ronda_id, turnos) VALUES (2,3,'pirata',3,8,2,[]);

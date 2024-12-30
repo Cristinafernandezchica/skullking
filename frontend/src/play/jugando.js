@@ -431,6 +431,7 @@ export default function Jugando() {
 
     if (ListaDeTrucos.length + 1 === jugadores.length) {
       await siguienteEstado();
+      await fetchBazaActual();
     }
   };
 

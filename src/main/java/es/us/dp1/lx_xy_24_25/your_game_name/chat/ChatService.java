@@ -6,20 +6,25 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import jakarta.validation.Valid;
 
+
+
 @Service
 public class ChatService {
     
     private ChatRepository chatRepository;
+    private SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    public ChatService(ChatRepository chatRepository) {
+    public ChatService(ChatRepository chatRepository, SimpMessagingTemplate messagingTemplate) {
         this.chatRepository = chatRepository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @Transactional
@@ -63,6 +68,8 @@ public class ChatService {
 
     @Transactional
     public Chat enviarMensajes(Chat chat){
-        return chatRepository.save(chat);
+        Chat nuevoChat=chatRepository.save(chat);
+        messagingTemplate.convertAndSend("/topic/baza/chats/" + chat.getJugador().getPartida().getId(), findAllChatByPartidaId(nuevoChat.getJugador().getPartida().getId()));
+        return nuevoChat;
     }
 }

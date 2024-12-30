@@ -3,12 +3,14 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Input, FormGroup, L
 import tokenService from "../../services/token.service";
 import "../../static/css/chat/chat.css";
 
+import SockJS from "sockjs-client";
+import { Stomp } from "@stomp/stompjs";
+
 export default function ChatModal({ isVisible, onCancel, partida, jugadorQueEscribe }) {
     const jwt = tokenService.getLocalAccessToken();
     const [texto, setTexto] = useState("");
     const [chatList, setChatList] = useState([]);
     const chatEndRef = useRef(null); // Crear una referencia para el final del chat
-    const intervalRef = useRef(null); // Crear una referencia para el intervalo
 
     const fetchChat = async () => {
         try {
@@ -27,14 +29,36 @@ export default function ChatModal({ isVisible, onCancel, partida, jugadorQueEscr
             console.error("Error encontrando partidas:", error);
         }
     };
+    useEffect(()=>{
+        fetchChat()
+    },[])
 
-    useEffect(() => {
-        fetchChat();
-        intervalRef.current = setInterval(() => {
-            fetchChat();
-            console.log("me sigo ejecutando");
-        }, 5000); // Cada 5 segundos
-    }, []); // Solo se ejecuta una vez cuando se monta el componente
+     useEffect(() => {
+        // Segundo useEffect: Conexión al WebSocket
+          const socket = new SockJS("http://localhost:8080/ws");
+          const stompClient = Stomp.over(() => socket);
+    
+          stompClient.connect({}, (frame) => {
+            console.log("Connected: " + frame);
+    
+            stompClient.subscribe(
+              `/topic/baza/chats/${partida}`,
+              (messageOutput) => {
+                const data = JSON.parse(messageOutput.body);
+                console.log("Mensaje recibido: ", data); // Verifica que el mensaje se reciba correctamente
+                setChatList(data); // Actualizamos la lista de trucos con los datos recibidos
+              }
+            );
+          });
+    
+          // Cleanup: Desconectar el WebSocket cuando el componente se desmonte
+          return () => {
+            stompClient.disconnect(() => {
+              console.log("Disconnected");
+            });
+          };
+        
+      }, []); // Solo se ejecuta cuando cambia de baza
 
     // Efecto para desplazar al último mensaje después de que la lista de chats se actualiza
     useEffect(() => {
@@ -67,9 +91,7 @@ export default function ChatModal({ isVisible, onCancel, partida, jugadorQueEscr
         }
     };
 
-    // Limpia el intervalo al cerrar el modal
     const handleClose = () => {
-        clearInterval(intervalRef.current); // Limpiar el intervalo si está en ejecución
         onCancel(); // Llamar a la función onCancel para cerrar el modal
     };
 

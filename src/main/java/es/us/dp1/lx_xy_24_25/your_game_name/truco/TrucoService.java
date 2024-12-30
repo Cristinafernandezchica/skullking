@@ -114,8 +114,6 @@ public class TrucoService {
         return truco;
 	}
 
-
-
     @Transactional
 	public Truco updateTruco(Truco truco, int trucoId) throws DataAccessException {
 		Truco toUpdate = findTrucoById(trucoId);

@@ -41,6 +41,7 @@ export default function Jugando() {
 
   // para las cartas del resto de jugadores
   const [manosOtrosJugadores, setManosOtrosJugadores] = useState({});
+  
   // Para lógica de apuesta
 
   const [apuestaModalOpen, setApuestaModalOpen] = useState(false);
@@ -87,29 +88,6 @@ export default function Jugando() {
     return () => clearInterval(intervalo);
   }, [idPartida, tu]);
 
-  const fetchMano = async (jugadorId) => {
-    try {
-      const response = await fetch(`/api/v1/manos/${jugadorId}`, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      setMano(data);
-      console.log("Nueva mano", mano);
-      // Fetch jugadores for each partida
-      await fetchCartasDisabled(data.id, BazaActual.paloBaza);
-    } catch (error) {
-      console.error("Error encontrando mano:", error);
-      setMessage(error.message);
-      setVisible(true);
-    }
-  };
-
   const fetchCartasDisabled = async (idMano, paloActual) => {
     try {
       const response = await fetch(
@@ -138,25 +116,31 @@ export default function Jugando() {
     }
   };
 
-  const fetchManosOtrosJugadores = async () => {
+  const fetchManosJugadores = async () => {
     try {
       const nuevasManos = {};
+      let nuevaMano = null;
       for (const jugador of jugadores) {
+        const response = await fetch(`/api/v1/manos/${jugador.id}`, {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+            "Content-Type": "application/json",
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
         if (jugador.id !== tu.id) {
-          const response = await fetch(`/api/v1/manos/${jugador.id}`, {
-            headers: {
-              Authorization: `Bearer ${jwt}`,
-              "Content-Type": "application/json",
-            },
-          });
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
           const data = await response.json();
           nuevasManos[jugador.id] = data;
+        }else{
+          nuevaMano = await response.json();
+          await fetchCartasDisabled(nuevaMano.id, BazaActual.paloBaza);
         }
       }
       setManosOtrosJugadores(nuevasManos);
+      setMano(nuevaMano);
     } catch (error) {
       console.error("Error encontrando manos de otros jugadores:", error);
       setMessage(error.message);
@@ -164,10 +148,40 @@ export default function Jugando() {
     }
   };
 
+  /*
+  useEffect(() => {
+    // Segundo useEffect: Conexión al WebSocket
+    if (ronda!==null) {
+      const socket = new SockJS("http://localhost:8080/ws");
+      const stompClient = Stomp.over(() => socket);
+
+      stompClient.connect({}, (frame) => {
+        console.log("Connected: " + frame);
+
+        stompClient.subscribe(
+          `/topic/mano/${ronda.id}`,
+          (messageOutput) => {
+            const data = JSON.parse(messageOutput.body);
+            console.log("Mensaje recibido: ", data); // Verifica que el mensaje se reciba correctamente
+
+            setManos(data); // Actualizamos la lista de trucos con los datos recibidos
+          }
+        );
+      });
+
+      // Cleanup: Desconectar el WebSocket cuando el componente se desmonte
+      return () => {
+        stompClient.disconnect(() => {
+          console.log("Disconnected");
+        });
+      };
+    }
+  }, [idBaza]);
+*/
   useEffect(() => {
     if (tu !== null) {
-      fetchMano(tu.id);
-      fetchManosOtrosJugadores();
+      //fetchMano(tu.id);
+      fetchManosJugadores();
     }
   }, [jugadores, tu]);
 
@@ -387,8 +401,8 @@ export default function Jugando() {
 
       await fetchRondaActual(idPartida);
       await fetchBazaActual();
-      await fetchMano();
-      await fetchManosOtrosJugadores();
+      //await fetchMano();
+      await fetchManosJugadores();
       await fetchPartida();
 
       return data;
@@ -423,7 +437,7 @@ export default function Jugando() {
     console.log("Carta a jugar:", cartaFinal);
     await iniciarTruco(tu.id, cartaFinal);
     console.log("Truco a jugar:", cartaFinal);
-    await fetchMano(tu.id);
+    await fetchManosJugadores(tu.id);
 
     if (ListaDeTrucos.length + 1 === jugadores.length) {
       await siguienteEstado();

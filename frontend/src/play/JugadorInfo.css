@@ -161,3 +161,25 @@
   justify-content: center;
   align-items: center;
 }
+.boton-flotante-chat {
+  position: fixed;
+  bottom: 20px; /* Distancia desde la parte inferior */
+  right: 20px;  /* Distancia desde el lado derecho */
+  width: 60px;  /* Ancho del botón */
+  height: 60px; /* Alto del botón */
+  border-radius: 50%; /* Hace que el botón sea circular */
+  background-color: #007bff; /* Color de fondo */
+  color: white; /* Color del ícono o texto */
+  border: none; /* Sin borde */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+  font-size: 24px; /* Tamaño del ícono o texto */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+  display: flex; /* Alinear contenido */
+  align-items: center; /* Centrar verticalmente */
+  justify-content: center; /* Centrar horizontalmente */
+  transition: background-color 0.3s ease;
+}
+
+.boton-flotante-chat:hover {
+  background-color: #0056b3; /* Cambia el color al pasar por encima */
+}

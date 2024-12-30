@@ -308,6 +308,19 @@ export default function Jugando() {
       setVisible(true);
     }
   };
+  /* COMENTAR PARA PROBAR EL LISTADO DE TRUCOS DE SOCKET
+  useEffect(() => {
+    if (BazaActual !== null) {
+      if (buscarUnaVezListaDeTrucos) {
+        fetchListaDeTrucos(BazaActual.id);
+        setInterval(() => {
+          fetchListaDeTrucos(BazaActual.id);
+        }, 3000);
+        setBuscarUnaVezListaDeTrucos(false);
+      }
+    }
+  }, [BazaActual]);
+*/
   useEffect(() => {
     if (ronda !== null) {
       console.log("bazaActual por listaTrucos");

@@ -628,7 +628,7 @@ export default function Jugando() {
       />
 
       <ChatModal
-      isVisible = {true}
+      isVisible = {false}
       />
 
     </div>

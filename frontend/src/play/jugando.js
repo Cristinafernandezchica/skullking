@@ -5,6 +5,7 @@ import tokenService from "../services/token.service";
 import useFetchState from '../util/useFetchState';
 import getIdFromUrl from '../util/getIdFromUrl';
 import ApuestaModal from '../components/modals/ApostarModal';
+import ChatModal from '../components/modals/ChatModal';
 import ElegirTigresaModal from '../components/modals/ElegirTigresaModal';
 import GanadorBazaModal from '../components/modals/GanadorBazaModal';
 
@@ -23,6 +24,7 @@ export default function Jugando() {
       setMessage,
       setVisible
     );
+    const [modalApostarOpen, setModalApostarOpen] = useState(false);
     const [modalTigresaOpen, setModalTigresaOpen] = useState(false); 
     const [eleccion, setEleccion] = useState('');
     const [nuevaTigresa, setNuevaTigresa] = useState();
@@ -529,6 +531,10 @@ export default function Jugando() {
         isVisible={ganadorBazaModal}
         ganador={ganadorBaza}
         onClose={() => setGanadorBazaModal(false)}
+      />
+
+      <ChatModal
+      isVisible = {true}
       />
 
     </div>

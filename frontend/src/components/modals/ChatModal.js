@@ -1,52 +1,132 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Input, FormGroup, Label } from "reactstrap";
+import tokenService from "../../services/token.service";
+import "../../static/css/chat/chat.css";
 
-export default function ChatModal({ isVisible, onCancel, onSend }) {
-    const [newMessage, setNewMessage] = useState("");
+import SockJS from "sockjs-client";
+import { Stomp } from "@stomp/stompjs";
+
+export default function ChatModal({ isVisible, onCancel, partida, jugadorQueEscribe }) {
+    const jwt = tokenService.getLocalAccessToken();
+    const [texto, setTexto] = useState("");
     const [chatList, setChatList] = useState([]);
+    const chatEndRef = useRef(null); // Crear una referencia para el final del chat
 
-    const handleSendMessage = () => {
-        if (newMessage.trim() === "") {
+    const fetchChat = async () => {
+        try {
+            const response = await fetch(`/api/v1/chats/${partida}`, {
+                headers: {
+                    Authorization: `Bearer ${jwt}`,
+                    "Content-Type": "application/json",
+                },
+            });
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+            setChatList(data);
+        } catch (error) {
+            console.error("Error encontrando partidas:", error);
+        }
+    };
+    useEffect(()=>{
+        fetchChat()
+    },[])
+
+     useEffect(() => {
+        // Segundo useEffect: Conexión al WebSocket
+          const socket = new SockJS("http://localhost:8080/ws");
+          const stompClient = Stomp.over(() => socket);
+    
+          stompClient.connect({}, (frame) => {
+            console.log("Connected: " + frame);
+    
+            stompClient.subscribe(
+              `/topic/baza/chats/${partida}`,
+              (messageOutput) => {
+                const data = JSON.parse(messageOutput.body);
+                console.log("Mensaje recibido: ", data); // Verifica que el mensaje se reciba correctamente
+                setChatList(data); // Actualizamos la lista de trucos con los datos recibidos
+              }
+            );
+          });
+    
+          // Cleanup: Desconectar el WebSocket cuando el componente se desmonte
+          return () => {
+            stompClient.disconnect(() => {
+              console.log("Disconnected");
+            });
+          };
+        
+      }, []); // Solo se ejecuta cuando cambia de baza
+
+    // Efecto para desplazar al último mensaje después de que la lista de chats se actualiza
+    useEffect(() => {
+        chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [chatList]); // Ejecutar el scroll cada vez que chatList cambia
+
+    const handleConfirmClick = async () => {
+        if (texto.trim() === "") {
             alert("El mensaje no puede estar vacío.");
             return;
         }
-        onSend(newMessage); // Enviar el mensaje al componente padre o actualizar el estado
-        setNewMessage(""); // Limpiar el campo de entrada
+        const Chat = { jugador: jugadorQueEscribe, mensaje: texto };
+        try {
+            const response = await fetch(`/api/v1/chats`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${jwt}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(Chat),
+            });
+            if (!response.ok) {
+                console.log("Algo falla");
+                throw new Error("Network response was not ok");
+            }
+            setTexto(""); // Limpiar el campo de entrada
+            fetchChat(); // Volver a obtener el chat después de enviar un mensaje
+        } catch (error) {
+            console.error("Error:", error);
+        }
     };
 
+    const handleClose = () => {
+        onCancel(); // Llamar a la función onCancel para cerrar el modal
+    };
 
     return (
-        <Modal isOpen={isVisible} toggle={onCancel}>
-            <ModalHeader toggle={onCancel}>Chat</ModalHeader>
+        <Modal isOpen={isVisible} toggle={handleClose}>
+            <ModalHeader toggle={handleClose}>Chat</ModalHeader>
             <ModalBody>
-                <div style={{ maxHeight: "300px", overflowY: "auto", marginBottom: "1rem" }}>
+                <div className="chat-list" style={{ maxHeight: "300px", overflowY: "auto" }}>
                     {chatList.length > 0 ? (
                         chatList.map((chat, index) => (
                             <div key={index} style={{ marginBottom: "0.5rem" }}>
-                                <strong>{chat.jugador}:</strong> {chat.mensaje}
+                                <span style={{ color: 'red' }}>{chat.jugador.usuario.username}</span>: {chat.mensaje}
                             </div>
                         ))
                     ) : (
                         <p>No hay mensajes aún.</p>
                     )}
+                    <div ref={chatEndRef} /> {/* Este div actúa como un marcador para el scroll */}
                 </div>
                 <FormGroup>
                     <Label for="newMessage">Escribe un mensaje:</Label>
                     <Input
                         type="text"
-                        id="newMessage"
                         placeholder="Escribir mensaje"
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
+                        value={texto}
+                        onChange={(e) => setTexto(e.target.value)}
                     />
                 </FormGroup>
             </ModalBody>
             <ModalFooter>
-                <Button color="primary" onClick={handleSendMessage}>
+                <Button color="primary" onClick={handleConfirmClick}>
                     Enviar
                 </Button>
-                <Button color="secondary" onClick={onCancel}>
-                    Cancelar
+                <Button color="secondary" onClick={handleClose}>
+                    Cerrar Chat
                 </Button>
             </ModalFooter>
         </Modal>

@@ -46,6 +46,8 @@ export default function Jugando() {
   const [apuestaModalOpen, setApuestaModalOpen] = useState(false);
   const toggleApuestaModal = () => setApuestaModalOpen(!apuestaModalOpen);
   const [visualizandoCartas, setVisualizandoCartas] = useState(true);
+  const [chatModalVisible, setChatModalVisible] = useState(false);
+  const toggleChatModal = () => setChatModalVisible(!chatModalVisible);
 
   // Mano disabled
   const [cartasDisabled, setCartasDisabled] = useState([]);
@@ -76,12 +78,12 @@ export default function Jugando() {
     }
   };
 
+  //preguntar que hace
   useEffect(() => {
     const intervalo = setInterval(() => {
       fetchPartida(idPartida);
       // fetchBazaActual();
     }, 5000); // Cada 5 segundos
-
     return () => clearInterval(intervalo);
   }, [idPartida, tu]);
 
@@ -609,6 +611,13 @@ export default function Jugando() {
           ))}
       </div>
 
+      <button
+        className="boton-flotante-chat"
+        onClick={() => setChatModalVisible(true)}
+      >
+        💬
+      </button>
+
       <ApuestaModal
         isVisible={apuestaModalOpen}
         onCancel={toggleApuestaModal}
@@ -628,7 +637,10 @@ export default function Jugando() {
       />
 
       <ChatModal
-      isVisible = {true}
+      isVisible = {chatModalVisible}
+      onCancel={toggleChatModal}
+      partida= {idPartida}
+      jugadorQueEscribe={tu}
       />
 
     </div>

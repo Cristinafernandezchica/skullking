@@ -245,7 +245,9 @@ public class PartidaService {
                 Integer numBazas = manoService.getNumCartasARepartir(nextRonda, numJugadores);
                 Ronda newRonda = rondaService.nextRonda(ronda.getId(), numBazas);
                 manoService.iniciarManos(ronda.getPartida().getId(), newRonda, jugadores);
-                bazaService.iniciarBaza(newRonda, jugadores);
+                Baza primeraBaza = bazaService.iniciarBaza(newRonda, jugadores);
+                partida.setTurnoActual(primerTurno(primeraBaza.getTurnos()));
+                update(partida, partida.getId());
             }
         // Si no es la última baza de la ronda, cambiamos de baza
         } else{

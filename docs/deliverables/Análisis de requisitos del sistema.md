@@ -82,28 +82,28 @@ Administrador: Persona autorizada a intervenir entre los usuarios y a acceder a 
 A continuación se definen todas las historias de usuario a implementar:
 
 ### HGJ1-(ISSUE#49): Registrar usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/49]())
-| "Como jugador quiero poder registrarme en el juego para poder jugar al mismo."| 
+| "Como jugador o administrador quiero poder registrarme en el juego para poder jugar al mismo o gestionarlo."| 
 |-----|
 |![Registro](../mockups/Registro.png)|
 |![RegistroJugador](../mockups/Datos_registro.png)|
-|Puedes presionar el boton "Jugador" para registrarte como jugador,esto te enviará a un formulario en el cual simplemente debes introducir los datos indicados y presionar "Guardar" para guardar tu perfil.|
+|Puedes presionar el botón "Jugador" para registrarte como jugador, esto te enviará a un formulario en el cuál simplemente debes introducir los datos indicados y presionar "Guardar" para registrar tu perfil. Lo mismo ocurre con el botón "Administrador", y por tanto, te registrarás como administrador.|
 |Caso negativo: Si el usuario ya existe, se mostrará un error en el que se indicará que el usuario está ocupado.|
 
 ### HGJ2-(ISSUE#50): Iniciar sesión ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/50]())
-| "Como jugador quiero poder iniciar sesión en el juego para jugar desde mi usuario."| 
+| "Como jugador o administrador quiero poder iniciar sesión en el juego para jugar desde mi usuario."| 
 |-----|
 |![Iniciar sesión](../mockups/Login.png)|
-|Tienes que rellenar los datos solicitados para verificar que efectivamente es tu usuario, finalmente puedes presionar "Iniciar sesión", en el cual si los datos son correctos entrarás en tu perfil, en caso contrario deberás introducirlos nuevamente.|
-|Caso negativo: Si el usuario o la contraseña son incorrectos, se mostrará un error en el que se indicará que los datos de inicio de sesión son incorrectos.|
+|Tienes que rellenar los datos solicitados para verificar que efectivamente es tu usuario, finalmente puedes presionar "Iniciar sesión", en el cual si los datos son correctos entrarás en tu perfil redirigiendote a la página principal.|
+|Caso negativo: Si el usuario o la contraseña son incorrectos, se mostrará un error en el que se indicará que los datos de inicio de sesión son incorrectos, pudiendo introducirlos nuevamente.|
 
 ### HGJ3-(ISSUE#51): Cerrar sesión ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/51]())
-| "Como jugador quiero poder cerrar sesión para salirme de mi usuario y evitar que otras personas lo usen"| 
+| "Como jugador o administrador quiero poder cerrar sesión para salirme de mi usuario y evitar que otras personas lo usen."| 
 |-----|
 |![Cerrar sesión](../mockups/Logout.png)|
-|Siempre y cuando tengas la sesión abierta, aparecerá en el navbar el botón "Cerrar sesión", una vez presionado ya no estarás con la sesión abierta en tu perfil.|
+|Siempre y cuando tengas la sesión abierta, aparecerá en la barra de navegación el botón "Cerrar sesión", una vez presionado te redirigirá a una pantalla de cierre de sesión en la que confirmará la selección y ya no estarás con la sesión abierta en tu perfil.|
 
 ### HGJ4-(ISSUE#52): Editar perfil de usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/52]())
-| "Como jugador quiero poder editar mi perfil para poner mi información correctamente."| 
+| "Como jugador quiero poder editar mi perfil para modificar mi información a mi elección."| 
 |-----|
 |![Editar perfil](../mockups/Editar_perfil.png)|
 |  |
@@ -114,17 +114,17 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Listado de usuarios](../mockups/Listado_usuarios.png)|
 |Se despliega una lista de todos los usuarios registrados en el sistema.|
 
-### HGA2-(ISSUE#53): Borrar un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/53]())
+### HGA2-(ISSUE#197): Borrar un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/197]())
 | "Como administrador quiero poder borrar usuarios para llevar un control adecuado de los usuarios del sistema."|
 |-----|
-|![Borrar usuario](../mockups/Listado_usuarios.png)|
-|En la lista de usuarios tienes las opciones para editar los datos de los usuarios usando el boton "editar", crear uno con el boton "añadir usuario" y eliminarlo usando "eliminar", ademas haciendo click en el nombre del usuario puedes ver su perfil.|
+|![Borrar usuario](../mockups/Eliminar_usuario.png)|
+|Al presionar el botón "Borrar" en la visualización de los usuarios se mostrará una advertencia en el navegador en la cuál debes confirmar la acción realizada y se eliminará el usuario.|
 
 ### HGA3-(ISSUE#54): Editar un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/54]())
-| "Como administrador quiero poder editar el perfil de un usuario para ayudar a los jugadores que hayan olvidado sus credenciales."|
+| "Como administrador quiero poder editar el perfil de un usuario para reestablecimiento de credenciales manualmente."|
 |-----|
 |![Edición jugador](../mockups/Cambio_de_credenciales.png)|
-|En el formulario que aparece puedes modificar los datos del usuario especificado.|
+|Al presionar el botón "Editar" en la visualización de los usuarios se mostrará un formulario en el que se podrá modificar los datos del usuario especifico.|
 
 ### HGA4-(ISSUE#53): Crear un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/53]())
 | "Como administrador quiero poder crear un usuario para llevar una administración del sistema"|
@@ -132,11 +132,11 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Creación jugador](../mockups/Listado_usuarios.png)|
 |Pulsando el botón "Añadir usuario", el administrador deberá rellenar los datos correspondientes y confirmar la creación.|
 
-### HJA1-(ISSUE#44): Ver listado de partidas filtradas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/44]())
-| "Como administrador quiero poder ver el listado de partidas, incluyendo nombre de la partida, creador, estado y jugadores participantes para llevar un control sobre las partidas."| 
+### HJA1-(ISSUE#44): Ver listado de partidas ordenadas y por filtros ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/44]())
+| "Como administrador quiero poder ver el listado de partidas, incluyendo nombre de la partida, estado, jugadores participantes, jugador creador y la fecha de creación para llevar un control sobre las partidas creadas."| 
 |-----|
 |![Listado de partidas en curso](../mockups/listado_partidas.png)|
-|El administrador, en la parte superior de la pantalla, tendrá un botón 'Partidas'. Dentro de esta pantalla encontrará una barra de búsqueda para filtrar las partidas por nombre. Además, encontrará diversos botones para filtrar en función del estado de las partidas.|
+|El administrador, en la parte superior de la pantalla, tendrá un botón 'Partidas'. Dentro de esta pantalla encontrará una barra de búsqueda para filtrar las partidas por nombre y otra para realizar paginación en función a la cantidad de partidas que quieras por página. Además, encontrará diversos botones para filtrar en función del estado de las partidas.|
 
 ### HJA2-(ISSUE#177): Ver estadísticas usuarios ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/177]())
 | "Como usuario con la sesión iniciada quiero poder ver las estadísticas de los usuarios para saber cuáles son los datos de partidas de los usuarios."| 
@@ -166,7 +166,7 @@ A continuación se definen todas las historias de usuario a implementar:
 | "Como jugador quiero poder usar una carta bandera blanca/de escape para perder una baza y acertar mi apuesta."| 
 |-----|
 |![Usar carta bandera blanca/de escape](../mockups/Jugar_carta_escape.png)|
-|El jugador selecciona una carta bandera blanca/de escape de su mano durante su turno, podrá echarla independientemente del palo que predomine durante la baza.|
+|El jugador selecciona una carta bandera blanca/de escape de su mano durante su turno, podrá usarla independientemente del palo que predomine durante la baza.|
 
 ### HJJ5-(ISSUE#40): Ver apuestas de la ronda ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/40]())
 | "Como jugador quiero poder ver todas las apuestas realizadas en la ronda actual para poder perjudicar las apuestas de otros jugadores."| 
@@ -190,7 +190,7 @@ A continuación se definen todas las historias de usuario a implementar:
 | "Como jugador quiero conocer las reglas del juego para poder jugar correctamente."| 
 |-----|
 |![Ver instrucciones](../mockups/Ver_Instrucciones.png)|
-|Puedes acceder al pdf con todas las reglas del juego e incluso descargar dicho pdf para tenerlo en tu computadora.|
+|Puedes acceder al PDF con todas las reglas del juego e incluso descargar dicho pdf para tenerlo en tu dispositivo.|
 
  ### HJJ9-(ISSUE#48): Crear partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/48]())
 | "Como jugador quiero poder crear partidas para poder jugar."| 
@@ -212,24 +212,24 @@ A continuación se definen todas las historias de usuario a implementar:
 |Puedes presionar en el botón "Unirse a partida" para unirte a una partida que esté en estado "ESPERANDO".|
 |Caso negativo: Si ya estás en una partida en estado "JUGANDO" o "ESPERANDO", se lanzará una excepción y no podrás unirte a otra partida.|
 
- ### HJJ12-(ISSUE#108): Iniciar a partida creada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/108]())
+ ### HJJ12-(ISSUE#108): Iniciar partida creada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/108]())
 | "Como jugador quiero poder iniciar una partida que he creado para poder jugar."| 
 |-----|
 |![Lobby](../mockups/iniciar_partida.png)|
-|Una vez el jugador se encuentre en la sala de espera de la partida, si ha creado la partida, puede presionar el botón "Iniciar Prtida".|
+|Una vez el jugador se encuentre en la sala de espera de la partida, si ha creado la partida, puede presionar el botón "Iniciar Partida".|
 |Caso negativo: Si en la partida hay menos de 3 jugadores, no se podrá iniciar, aparecerá una excepción que lo indique.|
 
  ### HJJ13-(ISSUE#109): Ver jugadores en la sala ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/109]())
-| "Como jugador quiero poder ver los jugadores que se unen a la partida para poder saber con quienes voy a jugar."| 
+| "Como jugador quiero poder ver los jugadores que se unen a la partida para poder saber con quién voy a jugar."| 
 |-----|
 |![Lobby](../mockups/iniciar_partida.png)|
 |Una vez el jugador se encuentre en la sala de espera de la partida, el jugador podrá ver los jugadores que hay en la partida. Estos se van actualizando conforme se van uniendo.|
 
-### HJJ14-(ISSUE#155): Volver a partida empezada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/155]())
+### HJJ14-(ISSUE#155): Volver a partida en curso ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/155]())
 | "Como jugador quiero poder volver a la partida empezada anteriormente."| 
 |-----|
 |![Lobby](../mockups/volverAPartida.png)|
-|Una vez el jugador se encuentre en una partida en espera o empezada, puede presionar el botón "Volver a Partida".|
+|Una vez el jugador se encuentre en una partida en espera o empezada, puede presionar el botón "Volver a partida".|
 
 
 ## Diagrama conceptual del sistema

@@ -3,24 +3,34 @@ package es.us.dp1.lx_xy_24_25.your_game_name.partida;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.aspectj.bridge.Message;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.UsuarioPartidaEnJuegoEsperandoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.exceptions.ApuestaNoValidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MinJugadoresPartidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MismoNombrePartidaNoTerminadaException;
+import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.UserService;
@@ -33,13 +43,22 @@ public class PartidaService {
     RondaService rondaService;
     JugadorService jugadorService;
     UserService us;
+    // Añadir a Autowired cuando esté todo
+    BazaService bazaService;
+    ManoService manoService;
+    private static final int ULTIMA_RONDA = 10;
+    private SimpMessagingTemplate messagingTemplate;
+
 
     @Autowired
-    public PartidaService(PartidaRepository pr, @Lazy RondaService rondaService, JugadorService jugadorService, UserService us) {
+    public PartidaService(PartidaRepository pr, RondaService rondaService, JugadorService jugadorService, UserService us, BazaService bazaService, ManoService manoService, SimpMessagingTemplate messagingTemplate) {
         this.pr = pr;
         this.rondaService = rondaService;
         this.jugadorService = jugadorService;
         this.us = us;
+        this.bazaService = bazaService;
+        this.manoService = manoService;
+        this.messagingTemplate = messagingTemplate;
     }
 
     // Con este método se puede filtrar por nombre y estado
@@ -108,14 +127,28 @@ public class PartidaService {
             throw new ResourceNotFoundException("Partida", "id", partidaId);
         }
 
-        Integer numJugadoresPartida = jugadorService.findJugadoresByPartidaId(partidaId).size();
-        if(numJugadoresPartida < 3) {
+        List<Jugador> jugadoresPartida = jugadorService.findJugadoresByPartidaId(partidaId);
+        if(jugadoresPartida.size() < 3) {
             throw new MinJugadoresPartidaException("Tiene que haber un mínimo de 3 jugadores en la sala para empezar la partida");
         }
 
         partida.setEstado(PartidaEstado.JUGANDO);
         update(partida, partidaId);
-        rondaService.iniciarRonda(partida);
+        Ronda ronda = rondaService.iniciarRonda(partida);
+        manoService.iniciarManos(partida.getId(), ronda, jugadoresPartida);
+        Baza baza = bazaService.iniciarBaza(ronda, jugadoresPartida);
+        // Actualizamos turno actual
+        partida.setTurnoActual(primerTurno(baza.getTurnos()));
+        update(partida, partida.getId());
+
+        // Crear el mensaje de notificación
+        Map<String, Object> message = new HashMap<>();
+        message.put("status", "JUGANDO"); // Estado de la partida
+        message.put("partidaId", partidaId); // ID de la partida
+        message.put("message", "Partida iniciada");
+
+        // Enviar el mensaje a través de WebSocket
+        messagingTemplate.convertAndSend("/topic/partida/" + partidaId, message);
 
     }
 
@@ -187,6 +220,91 @@ public class PartidaService {
         List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partidaId);
         Jugador ganador = jugadores.stream().max(Comparator.comparing(j -> j.getPuntos())).get();
         return ganador;
+    }
+
+    // Este método se llamará desde el frontend cuando sea el último truco de una baza (condición comprobada en frontend)
+    @Transactional
+    public void siguienteEstado(Integer partidaId, Integer bazaId){ 
+        Partida partida = getPartidaById(partidaId);
+        List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partidaId);
+        Baza baza = bazaService.findById(bazaId);
+        Integer nextBaza = baza.getNumBaza() + 1;
+        Ronda ronda = baza.getRonda();
+        // Si es la última Baza de la ronda, finalizamos la ronda y actualizamos el resultado de las manos
+        if(nextBaza > ronda.getNumBazas()){
+            rondaService.finalizarRonda(ronda.getId());
+            getPuntaje(ronda.getNumBazas(), ronda.getId());
+            manoService.actualizarResultadoMano(baza);
+            Integer nextRonda = ronda.getNumRonda() + 1;
+            // Si es la última ronda, finalizamos partida
+            if(nextRonda > ULTIMA_RONDA){
+                finalizarPartida(ronda.getPartida().getId());
+            // Si no, pasamos de ronda, iniciamos sus manos e iniciamos la primera baza
+            } else{
+                Integer numJugadores = jugadorService.findJugadoresByPartidaId(partidaId).size(); 
+                Integer numBazas = manoService.getNumCartasARepartir(nextRonda, numJugadores);
+                Ronda newRonda = rondaService.nextRonda(ronda.getId(), numBazas);
+                manoService.iniciarManos(ronda.getPartida().getId(), newRonda, jugadores);
+                bazaService.iniciarBaza(newRonda, jugadores);
+            }
+        // Si no es la última baza de la ronda, cambiamos de baza
+        } else{
+            Baza newBaza = bazaService.nextBaza(bazaId, jugadores);
+            // Actualizamos aquí el turno actual
+            partida.setTurnoActual(primerTurno(newBaza.getTurnos()));
+            update(partida, partida.getId());
+        }
+    }
+
+    @Transactional
+	public Integer primerTurno(List<Integer> turnos){
+		return turnos.get(0);
+	}
+
+    // Se ha movido aquí para evitar dependencias con Mano
+    @Transactional
+    public void getPuntaje(Integer numBazas, Integer rondaId){
+         List<Mano> manos = manoService.findAllByRondaId(rondaId);
+         for(Mano m:manos){
+            Integer puntaje = 0;
+            Jugador jugador = m.getJugador();
+            if(m.getApuesta()==0){
+                if(m.getApuesta().equals(m.getResultado())){
+                    puntaje += ULTIMA_RONDA*numBazas;
+                }else{
+                    puntaje -= ULTIMA_RONDA*numBazas;
+                }
+            }else{
+                if(m.getApuesta().equals(m.getResultado())){
+                    // Los ptos de bonificacion solo se calcula si se acierta la apuesta
+                    Integer ptosBonificacion = bazaService.getPtosBonificacion(rondaId, jugador.getId());
+                    puntaje += 20*m.getApuesta() + ptosBonificacion;
+                }else{
+                    puntaje -= ULTIMA_RONDA*Math.abs(m.getApuesta()-m.getResultado());
+                } 
+            }
+            jugador.setPuntos(jugador.getPuntos() + puntaje);
+            jugadorService.updateJugador(jugador, jugador.getId());
+         }
+    }
+
+    // Para apostar
+    @Transactional
+    public void apuesta(Integer ap, Integer jugadorId){
+        Mano mano = manoService.findLastManoByJugadorId(jugadorId);
+        Jugador jugador = jugadorService.findById(jugadorId);
+        if (mano == null) {
+            throw new ResourceNotFoundException("Mano", "id", jugadorId);
+        }
+
+        if (ap > mano.getCartas().size()) {
+            throw new ApuestaNoValidaException("La apuesta no puede ser mayor a " + mano.getCartas().size());
+        }
+
+        mano.setApuesta(ap);
+        jugador.setApuestaActual(ap);
+        manoService.saveMano(mano);
+        jugadorService.updateJugador(jugador, jugadorId);
     }
 
 }

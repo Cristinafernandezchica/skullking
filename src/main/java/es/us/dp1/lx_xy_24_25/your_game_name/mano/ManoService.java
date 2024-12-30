@@ -18,6 +18,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.CartaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.exceptions.ApuestaNoValidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
@@ -32,14 +33,16 @@ private final Integer ID_TIGRESA_PIRATA = 72;
 
 private ManoRepository manoRepository;
 private CartaService cs;
-private JugadorService jugadorService;
+//private JugadorService jugadorService;
+private JugadorRepository jugadorRepository;
 
 
     @Autowired
-    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorService jugadorService) {
+    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorRepository jugadorRepository) {
         this.manoRepository = manoRepository;
         this.cs = cs;
-        this.jugadorService = jugadorService;
+        //this.jugadorService = jugadorService;
+        this.jugadorRepository = jugadorRepository;
     }
 
 
@@ -89,12 +92,12 @@ private JugadorService jugadorService;
 
     // para iniciar las manos de los jugadores
     @Transactional
-    public void iniciarManos(Integer partidaId, Ronda ronda){
+    public void iniciarManos(Integer partidaId, Ronda ronda, List<Jugador> jugadores){
         List<Carta> listaCartas =(List<Carta>) cs.findAll();
         // para que no se cojan las cartas comodines
         listaCartas = listaCartas.stream().filter(c -> !( c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA))).collect(Collectors.toList());
         Collections.shuffle(listaCartas);   // Barajar cartas
-        List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partidaId);
+        //List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partidaId);
         for(Jugador jugador: jugadores){
             Mano mano = new Mano();
             List<Carta> cartasBaraja = listaCartas.subList(0,getNumCartasARepartir(ronda.getNumRonda(), jugadores.size()));
@@ -123,24 +126,6 @@ private JugadorService jugadorService;
         return cartasARepartir;
     }
 
-    // Para apostar
-    @Transactional
-    public void apuesta(Integer ap, Integer jugadorId){
-        Mano mano = findLastManoByJugadorId(jugadorId);
-        Jugador jugador = jugadorService.findById(jugadorId);
-        if (mano == null) {
-            throw new ResourceNotFoundException("Mano", "id", jugadorId);
-        }
-
-        if (ap > mano.getCartas().size()) {
-            throw new ApuestaNoValidaException("La apuesta no puede ser mayor a " + mano.getCartas().size());
-        }
-
-        mano.setApuesta(ap);
-        jugador.setApuestaActual(ap);
-        manoRepository.save(mano);
-        jugadorService.updateJugador(jugador, jugadorId);
-    }
 
     public List<Carta> cartasDisabled(Integer idMano, TipoCarta tipoCarta) {
         Mano manoActual = manoRepository.findById(idMano).orElse(null);
@@ -176,6 +161,14 @@ private JugadorService jugadorService;
         }
         
         return result;
-    }    
+    }
+    
+    @Transactional
+    public void actualizarResultadoMano(Baza baza){
+        Mano manoGanador = findLastManoByJugadorId(baza.getGanador().getId());
+        Integer resultadoSinActualizar = manoGanador.getResultado();
+        manoGanador.setResultado(resultadoSinActualizar + 1);
+        updateMano(manoGanador,manoGanador.getId());
+    }
     
 }

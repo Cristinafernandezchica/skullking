@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -99,6 +100,12 @@ public class PartidaRestController {
     }
     */
 
+    @GetMapping("/{id}/jugadorGanador")
+    public ResponseEntity<Jugador> ganadorPartida (@PathVariable("id") Integer id){
+        partidaService.getJugadorGanador(id);
+        return new ResponseEntity<>(partidaService.getJugadorGanador(id), HttpStatus.OK);
+    }
+
     // Para iniciar una partida desde frontend
     @PutMapping("/{id}/iniciar-partida")
     public ResponseEntity<Void> iniciarPartida(@PathVariable("id") Integer id){
@@ -106,10 +113,22 @@ public class PartidaRestController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}/jugadorGanador")
-    public ResponseEntity<Jugador> ganadorPartida (@PathVariable("id") Integer id){
-        partidaService.getJugadorGanador(id);
-        return new ResponseEntity<>(partidaService.getJugadorGanador(id), HttpStatus.OK);
+    // Para cambiar el estado de una partida desde frontend
+    @PostMapping("/{partidaId}/bazas/{bazaId}/siguiente-estado")
+    public ResponseEntity<Void> siguienteEstado(@PathVariable("partidaId") Integer partidaId, @PathVariable("bazaId") Integer bazaId){
+        partidaService.siguienteEstado(partidaId, bazaId);
+        return ResponseEntity.ok().build();
+    }
+
+    // Para apostar
+    @PutMapping("/apuesta/{jugadorId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Void> apuesta(@RequestParam Integer apuesta, @PathVariable Integer jugadorId) {
+        if (apuesta == null) {
+            throw new IllegalArgumentException("Apuesta no puede ser nula");
+        }
+        partidaService.apuesta(apuesta, jugadorId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     
 

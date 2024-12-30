@@ -50,9 +50,20 @@ public class Carta extends BaseEntity {
                 tipoCarta == TipoCarta.verde;
     }
 
+    /*
     public Boolean esCatorce(){
         return numero == 14;
     }
+    */
+
+    public Boolean esCatorce(){
+        Boolean esCatorce = false;
+        if(numero != null && numero == 14){
+            esCatorce = true;
+        }
+        return esCatorce;
+    }
+
     
 
 }

@@ -18,6 +18,9 @@ import Instructions from "./player/instrucciones";
 import PartidaListAdmin from "./admin/partidas/PartidaListAdmin";
 import Jugando from "./play/jugando";
 import UserStatisticsDashboard from "./admin/users/UserDashboard";
+import EditarPerfil from "./perfil/editarPerfil";
+import Perfil from "./perfil";
+
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
@@ -62,6 +65,8 @@ function App() {
           <Route path="/play" exact={true} element={<PrivateRoute><Play/></PrivateRoute>} />
           <Route path="/salaEspera/:partidaId" exact={true} element={<PrivateRoute><SalaEspera/></PrivateRoute>} />
           <Route path="/tablero/:partidaId" exact={true} element={<PrivateRoute><Jugando/></PrivateRoute>} />
+          <Route path="/perfil" element={<PrivateRoute><Perfil /></PrivateRoute>} />
+          <Route path="/editarPerfil" element={<PrivateRoute><EditarPerfil/></PrivateRoute>} />
         </>)
     }    
   })
@@ -75,7 +80,8 @@ function App() {
   } else {
     userRoutes = (
       <>
-        {/* <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} /> */}        
+        {/* <Route path="/users/statistics" element={<UserStatisticsDashboard />} /> */} 
+
         <Route path="/logout" element={<Logout />} />
         <Route path="/login" element={<Login />} />
       </>
@@ -89,7 +95,7 @@ function App() {
         <Routes>
           <Route path="/" exact={true} element={<Home />} />
           <Route path="/docs" element={<SwaggerDocs />} />
-          <Route path="/Instructions" element={<Instructions />} />
+          <Route path="/instructions" element={<Instructions />} />
           {publicRoutes}
           {userRoutes}
           {adminRoutes}

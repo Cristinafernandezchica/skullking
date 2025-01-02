@@ -1,0 +1,81 @@
+.editar-perfil-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.editar-perfil-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.editar-perfil-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.form-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.form-button {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.save-button {
+    background-color: #28a745;
+    color: white;
+}
+
+.save-button:hover {
+    background-color: #218838;
+}
+
+.cancel-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.cancel-button:hover {
+    background-color: #c82333;
+}

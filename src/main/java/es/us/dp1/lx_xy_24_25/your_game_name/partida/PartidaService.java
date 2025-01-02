@@ -154,7 +154,7 @@ public class PartidaService {
 
     // Finalizamos la partida
     @Transactional
-    public void finalizarPartida(Integer partidaId){
+    public void finalizarPartida(Integer partidaId) {
         Partida partida = getPartidaById(partidaId);
         if (partida == null) {
             throw new ResourceNotFoundException("Partida", "id", partidaId);
@@ -164,21 +164,34 @@ public class PartidaService {
 
         Integer puntosGanador = null;
         List<Jugador> jugadoresPartida = jugadorService.findJugadoresByPartidaId(partidaId);
-        for(Jugador jugador : jugadoresPartida){
+        for (Jugador jugador : jugadoresPartida) {
             User usuarioJugador = jugador.getUsuario();
+            if (usuarioJugador.getNumPuntosGanados() == null) {
+                usuarioJugador.setNumPuntosGanados(0);
+            }
+            if (usuarioJugador.getNumPartidasJugadas() == null) {
+                usuarioJugador.setNumPartidasJugadas(0);
+            }
+
             usuarioJugador.setNumPuntosGanados(usuarioJugador.getNumPuntosGanados() + jugador.getPuntos());
             usuarioJugador.setNumPartidasJugadas(usuarioJugador.getNumPartidasJugadas() + 1);
-            if(puntosGanador == null || jugador.getPuntos() > puntosGanador){
+            us.saveUser(usuarioJugador);
+
+            if (puntosGanador == null || jugador.getPuntos() > puntosGanador) {
                 puntosGanador = jugador.getPuntos();
             }
         }
 
         Integer puntosFinalGanador = puntosGanador;
-        List<User> ganadores = jugadoresPartida.stream().filter(j-> j.getPuntos().equals(puntosFinalGanador)).map(j-> j.getUsuario()).collect(Collectors.toList());
-        ganadores.forEach(u-> u.setNumPartidasGanadas(u.getNumPartidasGanadas()+1));
-
-        List<User> usuarios = jugadoresPartida.stream().map(j-> j.getUsuario()).collect(Collectors.toList());
-        for(User u : usuarios){
+        List<User> ganadores = jugadoresPartida.stream()
+                .filter(j -> j.getPuntos().equals(puntosFinalGanador))
+                .map(Jugador::getUsuario)
+                .collect(Collectors.toList());
+        for (User u : ganadores) {
+            if (u.getNumPartidasGanadas() == null) {
+                u.setNumPartidasGanadas(0);
+            }
+            u.setNumPartidasGanadas(u.getNumPartidasGanadas() + 1);
             us.saveUser(u);
         }
         update(partida, partidaId);

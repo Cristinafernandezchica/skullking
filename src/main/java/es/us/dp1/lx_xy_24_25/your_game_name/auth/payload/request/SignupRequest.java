@@ -26,4 +26,8 @@ public class SignupRequest {
 	@NotBlank
 	private String lastName;
 
+	private String descripcionPerfil;
+
+	private String imagenPerfil;
+
 }

@@ -24,12 +24,10 @@ public class Jugador extends BaseEntity {
     @NotNull
     private Integer puntos;
 
-
     @ManyToOne
     @JoinColumn(name = "partida_id")
     private Partida partida;      
 
-    // hacer pull
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")

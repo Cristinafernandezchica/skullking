@@ -1,18 +1,3 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package es.us.dp1.lx_xy_24_25.your_game_name.user;
 
 import java.util.List;
@@ -24,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.AccessDeniedException;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -82,21 +68,18 @@ class UserRestController {
 	}
 
 	@PutMapping(value = "{userId}")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<User> update(@PathVariable("userId") Integer id, @RequestBody @Valid User user) {
 		RestPreconditions.checkNotNull(userService.findUser(id), "User", "ID", id);
-		return new ResponseEntity<>(this.userService.updateUser(user, id), HttpStatus.OK);
+		return new ResponseEntity<>(this.userService.updateUser(user, id), HttpStatus.NO_CONTENT);
 	}
 
 	@DeleteMapping(value = "{userId}")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<MessageResponse> delete(@PathVariable("userId") int id) {
 		RestPreconditions.checkNotNull(userService.findUser(id), "User", "ID", id);
-		if (userService.findCurrentUser().getId() != id) {
-			userService.deleteUser(id);
-			return new ResponseEntity<>(new MessageResponse("User deleted!"), HttpStatus.OK);
-		} else
-			throw new AccessDeniedException("You can't delete yourself!");
+		userService.deleteUser(id);
+		return new ResponseEntity<>(new MessageResponse("Usuario eliminado"), HttpStatus.OK);
 	}
 
 	//AÑADIDOS PARA LAS ESTADÍSTICAS
@@ -114,5 +97,20 @@ class UserRestController {
 		List<UserStats> usersByWinPercentage = userService.getUsersSortedByWinPercentage();
 		return new ResponseEntity<>(usersByWinPercentage, HttpStatus.OK);
 	}
+
+	// Añadido para facilitar el editar perfil
+	@GetMapping("/current")
+	public ResponseEntity<User> findCurrentUserProfile() {
+    	User currentUser = userService.findCurrentUser();
+    	return new ResponseEntity<>(currentUser, HttpStatus.OK);
+	}
+
+	@GetMapping("/current/jugadores")
+	public ResponseEntity<List<Jugador>> getJugadoresByCurrentUser() {
+    	List<Jugador> jugadores = userService.getJugadoresByCurrentUser();
+    	return new ResponseEntity<>(jugadores, HttpStatus.OK);
+	}
+
+
 
 }

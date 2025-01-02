@@ -15,37 +15,41 @@ const jwt = tokenService.getLocalAccessToken();
 const user = tokenService.getUser();
 
 export default function Jugando() {
-    const idPartida = getIdFromUrl(2);
-    const [partida, setPartida] = useState(null);
-    const [message, setMessage] = useState(null);
-    const [visible, setVisible] = useState(false);
-    const [jugadores, setJugadores] = useFetchState(
-      [],
-      `/api/v1/jugadores/${idPartida}`,
-      jwt,
-      setMessage,
-      setVisible
-    );
-    const [modalTigresaOpen, setModalTigresaOpen] = useState(false); 
-    const [eleccion, setEleccion] = useState('');
-    const [nuevaTigresa, setNuevaTigresa] = useState();
-    const [tu,setTu] = useFetchState(null,`/api/v1/jugadores/${user.id}/usuario`,jwt,setMessage,setVisible); 
-    const [mano, setMano] = useState(null);
-    const [ronda,setRonda] = useState(null);
-    const [truco,setTruco] = useState(null);
-    const [BazaActual, setBazaActual] = useState(null)
-    const [ListaDeTrucos, setListaDeTrucos] = useState([])
-    const [seCambiaPalo, setSeCambiaPalo] = useState(true)
-    const [buscarUnaVezListaDeTrucos, setBuscarUnaVezListaDeTrucos] =useState(true)
-    const [idBaza, setIdBaza] = useState(null);
+  const idPartida = getIdFromUrl(2);
+  const [partida, setPartida] = useState(null);
+  const [message, setMessage] = useState(null);
+  const [visible, setVisible] = useState(false);
+  const [jugadores, setJugadores] = useFetchState(
+    [],
+    `/api/v1/jugadores/${idPartida}`,
+    jwt,
+    setMessage,
+    setVisible
+  );
+  const [modalTigresaOpen, setModalTigresaOpen] = useState(false);
+  const [eleccion, setEleccion] = useState('');
+  const [nuevaTigresa, setNuevaTigresa] = useState();
+  const [tu, setTu] = useFetchState(null, `/api/v1/jugadores/${user.id}/usuario`, jwt, setMessage, setVisible);
+  const [mano, setMano] = useState(null);
+  const [ronda, setRonda] = useState(null);
+  const [truco, setTruco] = useState(null);
+  const [BazaActual, setBazaActual] = useState(null)
+  const [ListaDeTrucos, setListaDeTrucos] = useState([])
+  const [seCambiaPalo, setSeCambiaPalo] = useState(true)
+  const [buscarUnaVezListaDeTrucos, setBuscarUnaVezListaDeTrucos] = useState(true)
+  const [idBaza, setIdBaza] = useState(null);
 
   // para las cartas del resto de jugadores
   const [manosOtrosJugadores, setManosOtrosJugadores] = useState({});
   // Para lógica de apuesta
-
   const [apuestaModalOpen, setApuestaModalOpen] = useState(false);
   const toggleApuestaModal = () => setApuestaModalOpen(!apuestaModalOpen);
   const [visualizandoCartas, setVisualizandoCartas] = useState(true);
+
+  // Para turno
+  const [turnoAct, setTurnoAct] = useState(null);
+
+  // Para chat
   const [chatModalVisible, setChatModalVisible] = useState(false);
   const toggleChatModal = () => setChatModalVisible(!chatModalVisible);
 
@@ -80,12 +84,17 @@ export default function Jugando() {
 
   //preguntar que hace
   useEffect(() => {
+    fetchPartida(idPartida);
+  }, []);
+  /*
+  useEffect(() => {
     const intervalo = setInterval(() => {
       fetchPartida(idPartida);
       // fetchBazaActual();
     }, 5000); // Cada 5 segundos
     return () => clearInterval(intervalo);
   }, [idPartida, tu]);
+  */
 
   const fetchMano = async (jugadorId) => {
     try {
@@ -164,6 +173,7 @@ export default function Jugando() {
     }
   };
 
+  // Carga inicial manos
   useEffect(() => {
     if (tu !== null) {
       fetchMano(tu.id);
@@ -194,20 +204,98 @@ export default function Jugando() {
 
   useEffect(() => {
     // Segundo useEffect: Conexión al WebSocket
-    if (BazaActual!==null) {
+    if (true) { //BazaActual !== null
       const socket = new SockJS("http://localhost:8080/ws");
       const stompClient = Stomp.over(() => socket);
 
       stompClient.connect({}, (frame) => {
         console.log("Connected: " + frame);
 
+        // Para trucos
         stompClient.subscribe(
-          `/topic/baza/truco/${BazaActual.id}`,
+          `/topic/baza/truco/partida/${idPartida}`,
           (messageOutput) => {
             const data = JSON.parse(messageOutput.body);
             console.log("Mensaje recibido: ", data); // Verifica que el mensaje se reciba correctamente
 
             setListaDeTrucos(data); // Actualizamos la lista de trucos con los datos recibidos
+          }
+        );
+
+        // Para ronda
+        stompClient.subscribe(
+          `/topic/nuevaRonda/partida/${idPartida}`,
+          (messageOutput) => {
+            const data = JSON.parse(messageOutput.body);
+            console.log("Nueva ronda: ", data);
+
+            setRonda(data); // Actualizamos la ronda actual con los datos recibidos
+          }
+        );
+
+        // Para baza
+        stompClient.subscribe(
+          `/topic/nuevaBaza/partida/${idPartida}`,
+          (messageOutput) => {
+            const data = JSON.parse(messageOutput.body);
+            console.log("Nueva baza: ", data);
+
+            setBazaActual(data); // Actualizamos la baza actual con los datos recibidos
+          }
+        );
+
+        // Para renovar lista trucos al cambiar de baza
+        stompClient.subscribe(
+          `/topic/listaTrucos/partida/${idPartida}`,
+          (messageOutput) => {
+            const data = JSON.parse(messageOutput.body);
+            console.log("Lista trucos vacía: ", data);
+
+            setListaDeTrucos(data); // Actualizacion lista trucos
+          }
+        );
+
+        // Para turno
+        stompClient.subscribe(
+          `/topic/turnoActual/${idPartida}`,
+          (messageOutput) => {
+            const data = JSON.parse(messageOutput.body);
+            console.log("Nuevo turno: ", data);
+
+            setTurnoAct(data); // Actualizamos el turno actual con los datos recibidos
+          }
+        );
+
+        // Para manos
+        stompClient.subscribe(
+          `/topic/nuevasManos/partida/${idPartida}`,
+          (messageOutput) => {
+            const data = JSON.parse(messageOutput.body);
+            console.log("Nuevas manos: ", data);
+            for (const d of data) {
+              if (d.jugador.id === tu.id) {
+                console.log("mi mano: ", d)
+                setMano(d);
+              } else if (d.jugador.id !== tu.id) {
+                let nuevasManosOtros = [];
+                nuevasManosOtros.push(d);
+                setManosOtrosJugadores(nuevasManosOtros);
+                console.log("manos otros jugadores: ", manosOtrosJugadores);
+                // setManosOtrosJugadores({ ...manosOtrosJugadores, [d.jugador.id]: d });
+                // console.log("manos otros jugadores: ", manosOtrosJugadores);
+              }
+            }
+          }
+        );
+
+        // Para apuestas
+        stompClient.subscribe(
+          `/topic/apuesta/partida/${idPartida}`,
+          (messageOutput) => {
+            const data = JSON.parse(messageOutput.body);
+            console.log("Nueva apuesta: ", data);
+
+            setJugadores(data); // Actualizamos el turno actual con los datos recibidos
           }
         );
       });
@@ -219,27 +307,28 @@ export default function Jugando() {
         });
       };
     }
-  }, [idBaza]); // Solo se ejecuta cuando cambia de baza
-
-  const fetchJugadores = async () => {
-    try {
-      const response = await fetch(`/api/v1/jugadores/${idPartida}`, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+  }, [tu]); // Solo se ejecuta una vez
+  /*
+    const fetchJugadores = async () => {
+      try {
+        const response = await fetch(`/api/v1/jugadores/${idPartida}`, {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+            "Content-Type": "application/json",
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setJugadores(data);
+      } catch (error) {
+        console.error("Error encontrando jugadores:", error);
+        setMessage(error.message);
+        setVisible(true);
       }
-      const data = await response.json();
-      setJugadores(data);
-    } catch (error) {
-      console.error("Error encontrando jugadores:", error);
-      setMessage(error.message);
-      setVisible(true);
-    }
-  };
+    };
+    */
 
   // Para abrir el modal de apuesta
   useEffect(() => {
@@ -248,17 +337,17 @@ export default function Jugando() {
     }, 5000); // Cambiar a 30 (30000)
 
     return () => clearTimeout(timerAbrirApuestas);
-  }, []);
+  }, [ronda]);
 
   // Para actualizar la visualización de la apuesta en todos los jugadores
   useEffect(() => {
     const timerCerrarApuestas = setTimeout(() => {
       setVisualizandoCartas(false);
-      fetchJugadores();
+      // fetchJugadores();
     }, 16000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
 
     return () => clearTimeout(timerCerrarApuestas);
-  }, []);
+  }, [ronda]);
 
   const apostar = async (ap) => {
     try {
@@ -280,7 +369,8 @@ export default function Jugando() {
 
       //  console.log("Apuesta realizada con éxito");
       toggleApuestaModal();
-      fetchJugadores();
+      // fetchJugadores();
+      setTurnoAct(partida.turnoActual);
     } catch (error) {
       console.error("Error:", error);
       throw error;
@@ -308,19 +398,7 @@ export default function Jugando() {
       setVisible(true);
     }
   };
-  /* COMENTAR PARA PROBAR EL LISTADO DE TRUCOS DE SOCKET
-  useEffect(() => {
-    if (BazaActual !== null) {
-      if (buscarUnaVezListaDeTrucos) {
-        fetchListaDeTrucos(BazaActual.id);
-        setInterval(() => {
-          fetchListaDeTrucos(BazaActual.id);
-        }, 3000);
-        setBuscarUnaVezListaDeTrucos(false);
-      }
-    }
-  }, [BazaActual]);
-*/
+
   useEffect(() => {
     if (ronda !== null) {
       console.log("bazaActual por listaTrucos");
@@ -359,6 +437,7 @@ export default function Jugando() {
     }
   };
 
+  // Carga inicial ronda
   useEffect(() => {
     fetchRondaActual(idPartida);
   }, []);
@@ -378,17 +457,17 @@ export default function Jugando() {
       );
 
       if (!response.ok) {
-        console.log("Fallo al crear la nueva baza");
+        console.log("Fallo al cambiar de estado");
         throw new Error("Network response was not ok");
       }
 
       const data = await response.json();
-      console.log("Dime que se creo la nueva baza", data);
+      console.log("Se cambió de estado", data);
 
       await fetchRondaActual(idPartida);
       await fetchBazaActual();
-      await fetchMano();
-      await fetchManosOtrosJugadores();
+      //await fetchMano();
+      //await fetchManosOtrosJugadores();
       await fetchPartida();
 
       return data;
@@ -423,12 +502,13 @@ export default function Jugando() {
     console.log("Carta a jugar:", cartaFinal);
     await iniciarTruco(tu.id, cartaFinal);
     console.log("Truco a jugar:", cartaFinal);
-    await fetchMano(tu.id);
-
+    //await fetchMano(tu.id);
+    /*
     if (ListaDeTrucos.length + 1 === jugadores.length) {
       await siguienteEstado();
       await fetchBazaActual();
     }
+      */
   };
 
   const iniciarTruco = async (jugadorId, cartaAJugar) => {
@@ -457,7 +537,7 @@ export default function Jugando() {
       console.log("Dime que se creo el truco", data);
       // Para mostrar el ganador de la baza, SIN ESTO NO FUNCIONA NO QUITAR
       await fetchBazaActual();
-      if(BazaActual!==null)await fetchListaDeTrucos(BazaActual.id);
+      if (BazaActual !== null) await fetchListaDeTrucos(BazaActual.id);
 
       return data;
     } catch (error) {
@@ -583,10 +663,10 @@ export default function Jugando() {
                 className="boton-agrandable"
                 disabled={
                   visualizandoCartas ||
-                  partida.turnoActual !== tu.id ||
+                  turnoAct !== tu.id /*||
                   cartasDisabled.some(
                     (disabledCarta) => disabledCarta.id === carta.id
-                  )
+                  )*/
                 }
                 onClick={() => {
                   if (carta.tipoCarta === "tigresa") {
@@ -638,10 +718,10 @@ export default function Jugando() {
       />
 
       <ChatModal
-      isVisible = {chatModalVisible}
-      onCancel={toggleChatModal}
-      partida= {idPartida}
-      jugadorQueEscribe={tu}
+        isVisible={chatModalVisible}
+        onCancel={toggleChatModal}
+        partida={idPartida}
+        jugadorQueEscribe={tu}
       />
 
     </div>

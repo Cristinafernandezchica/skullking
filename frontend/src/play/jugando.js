@@ -2,48 +2,42 @@ import React, { useEffect, useState } from "react";
 import "./JugadorInfo.css";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import tokenService from "../services/token.service";
-import useFetchState from "../util/useFetchState";
-import getIdFromUrl from "../util/getIdFromUrl";
-import ApuestaModal from "../components/modals/ApostarModal";
-import ElegirTigresaModal from "../components/modals/ElegirTigresaModal";
-import GanadorBazaModal from "../components/modals/GanadorBazaModal";
+import useFetchState from '../util/useFetchState';
+import getIdFromUrl from '../util/getIdFromUrl';
+import ApuestaModal from '../components/modals/ApostarModal';
+import ElegirTigresaModal from '../components/modals/ElegirTigresaModal';
+import GanadorBazaModal from '../components/modals/GanadorBazaModal';
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
+import ChatModal from '../components/modals/ChatModal';
 
 const jwt = tokenService.getLocalAccessToken();
 const user = tokenService.getUser();
 
 export default function Jugando() {
-  const idPartida = getIdFromUrl(2);
-  const [partida, setPartida] = useState(null);
-  const [message, setMessage] = useState(null);
-  const [visible, setVisible] = useState(false);
-  const [jugadores, setJugadores] = useFetchState(
-    [],
-    `/api/v1/jugadores/${idPartida}`,
-    jwt,
-    setMessage,
-    setVisible
-  );
-  const [modalTigresaOpen, setModalTigresaOpen] = useState(false);
-  const [eleccion, setEleccion] = useState("");
-  const [nuevaTigresa, setNuevaTigresa] = useState();
-  const [tu, setTu] = useFetchState(
-    null,
-    `/api/v1/jugadores/${user.id}/usuario`,
-    jwt,
-    setMessage,
-    setVisible
-  );
-  const [mano, setMano] = useState(null);
-  const [ronda, setRonda] = useState(null);
-  const [truco, setTruco] = useState(null);
-  const [BazaActual, setBazaActual] = useState(null);
-  const [idBaza, setIdBaza] = useState(null);
-  const [ListaDeTrucos, setListaDeTrucos] = useState([]);
-  const [seCambiaPalo, setSeCambiaPalo] = useState(true);
-  const [buscarUnaVezListaDeTrucos, setBuscarUnaVezListaDeTrucos] =
-    useState(true);
+    const idPartida = getIdFromUrl(2);
+    const [partida, setPartida] = useState(null);
+    const [message, setMessage] = useState(null);
+    const [visible, setVisible] = useState(false);
+    const [jugadores, setJugadores] = useFetchState(
+      [],
+      `/api/v1/jugadores/${idPartida}`,
+      jwt,
+      setMessage,
+      setVisible
+    );
+    const [modalTigresaOpen, setModalTigresaOpen] = useState(false); 
+    const [eleccion, setEleccion] = useState('');
+    const [nuevaTigresa, setNuevaTigresa] = useState();
+    const [tu,setTu] = useFetchState(null,`/api/v1/jugadores/${user.id}/usuario`,jwt,setMessage,setVisible); 
+    const [mano, setMano] = useState(null);
+    const [ronda,setRonda] = useState(null);
+    const [truco,setTruco] = useState(null);
+    const [BazaActual, setBazaActual] = useState(null)
+    const [ListaDeTrucos, setListaDeTrucos] = useState([])
+    const [seCambiaPalo, setSeCambiaPalo] = useState(true)
+    const [buscarUnaVezListaDeTrucos, setBuscarUnaVezListaDeTrucos] =useState(true)
+    const [idBaza, setIdBaza] = useState(null);
 
   // para las cartas del resto de jugadores
   const [manosOtrosJugadores, setManosOtrosJugadores] = useState({});
@@ -52,6 +46,8 @@ export default function Jugando() {
   const [apuestaModalOpen, setApuestaModalOpen] = useState(false);
   const toggleApuestaModal = () => setApuestaModalOpen(!apuestaModalOpen);
   const [visualizandoCartas, setVisualizandoCartas] = useState(true);
+  const [chatModalVisible, setChatModalVisible] = useState(false);
+  const toggleChatModal = () => setChatModalVisible(!chatModalVisible);
 
   // Mano disabled
   const [cartasDisabled, setCartasDisabled] = useState([]);
@@ -82,12 +78,12 @@ export default function Jugando() {
     }
   };
 
+  //preguntar que hace
   useEffect(() => {
     const intervalo = setInterval(() => {
       fetchPartida(idPartida);
       // fetchBazaActual();
     }, 5000); // Cada 5 segundos
-
     return () => clearInterval(intervalo);
   }, [idPartida, tu]);
 
@@ -431,6 +427,7 @@ export default function Jugando() {
 
     if (ListaDeTrucos.length + 1 === jugadores.length) {
       await siguienteEstado();
+      await fetchBazaActual();
     }
   };
 
@@ -618,6 +615,13 @@ export default function Jugando() {
           ))}
       </div>
 
+      <button
+        className="boton-flotante-chat"
+        onClick={() => setChatModalVisible(true)}
+      >
+        💬
+      </button>
+
       <ApuestaModal
         isVisible={apuestaModalOpen}
         onCancel={toggleApuestaModal}
@@ -635,6 +639,14 @@ export default function Jugando() {
         ganador={ganadorBaza}
         onClose={() => setGanadorBazaModal(false)}
       />
+
+      <ChatModal
+      isVisible = {chatModalVisible}
+      onCancel={toggleChatModal}
+      partida= {idPartida}
+      jugadorQueEscribe={tu}
+      />
+
     </div>
   );
 }

@@ -92,20 +92,35 @@ A continuación se definen todas las historias de usuario a implementar:
 ### HGJ2-(ISSUE#50): Iniciar sesión ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/50]())
 | "Como jugador o administrador quiero poder iniciar sesión en el juego para jugar desde mi usuario."| 
 |-----|
-|![Iniciar sesión](../mockups/Login.png)|
+|![Iniciar sesión](../mockups/Iniciar_sesion.png)|
 |Tienes que rellenar los datos solicitados para verificar que efectivamente es tu usuario, finalmente puedes presionar "Iniciar sesión", en el cual si los datos son correctos entrarás en tu perfil redirigiendote a la página principal.|
 |Caso negativo: Si el usuario o la contraseña son incorrectos, se mostrará un error en el que se indicará que los datos de inicio de sesión son incorrectos, pudiendo introducirlos nuevamente.|
 
 ### HGJ3-(ISSUE#51): Cerrar sesión ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/51]())
 | "Como jugador o administrador quiero poder cerrar sesión para salirme de mi usuario y evitar que otras personas lo usen."| 
 |-----|
-|![Cerrar sesión](../mockups/Logout.png)|
+|![Cerrar sesión](../mockups/Cerrar_sesion.png)|
 |Siempre y cuando tengas la sesión abierta, aparecerá en la barra de navegación el botón "Cerrar sesión", una vez presionado te redirigirá a una pantalla de cierre de sesión en la que confirmará la selección y ya no estarás con la sesión abierta en tu perfil.|
 
-### HGJ4-(ISSUE#52): Editar perfil de usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/52]())
+
+### HGJ4-(ISSUE#203): Ver perfil de usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/203]())
+| "Como jugador quiero poder ver mi perfil para saber la información que muestro en el juego."| 
+|-----|
+|![Ver perfil](../mockups/Ver_perfil.png)|
+| Siempre que se encuentre con la sesión abierta podrá ver su propio perfil y tendrá la opción de editar o eliminar su cuenta.|
+|Caso negativo: Si el usuario ya se encuentra en una sala de espera para jugar o en una partida en curso el sistema no le permitirá eliminar ni modificar su perfil hasta que termine la partida. En cambio le aparecerá un botón para volver a la partida.|
+|![Ver perfil en juego](../mockups/Ver_perfil_jugando.png)|
+
+### HGJ5-(ISSUE#52): Editar perfil de usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/52]())
 | "Como jugador quiero poder editar mi perfil para modificar mi información a mi elección."| 
 |-----|
 |![Editar perfil](../mockups/Editar_perfil.png)|
+|  |
+
+### HGJ6-(ISSUE#204): Eliminar perfil de usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/204]())
+| "Como jugador quiero poder eliminar mi propia cuenta."| 
+|-----|
+|![Editar perfil](../mockups/Eliminar_perfil.png)|
 |  |
 
 ### HGA1-(ISSUE#30): Listado usuarios registrados ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/30]())
@@ -368,3 +383,9 @@ No pueden existir dos partidas en curso o en espera con el mismo nombre.
 
 ### R42 - Tiempo de apuesta
 Tras el reparto de cartas se deberá apostar dentro del tiempo establecido (20 segundos), en otro caso, la apuesta se establecerá a 0.
+
+### R43 - Borrar su propio usuario
+Una vez te encuentras en la sala de espera de una partida o en una partida en curso no podrás borrar tu propia cuenta hasta que no termines la partida iniciada.
+
+### R44 - Editar su propio usuario
+Una vez te encuentras en la sala de espera de una partida o en una partida en curso no podrás editar ninguna información de tu propia cuenta hasta que no termines la partida iniciada.

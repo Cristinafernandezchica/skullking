@@ -113,6 +113,14 @@ export default function Perfil() {
         return <p>No se encontraron datos del usuario.</p>;
     }
 
+    const handleVolverPartida = () => {
+        if (lastPlayer && ( lastPlayer.partida.estado === "JUGANDO" || lastPlayer.partida.estado === "ESPERANDO")) {
+          navigate(lastPlayer.partida.estado === "ESPERANDO" ? `/salaEspera/${lastPlayer.partida.id}` : `/tablero/${lastPlayer.partida.id}`)
+        } else {
+          alert("No estás jugando ninguna partida.");
+        }
+      };
+
     return (
         <div className="perfil-container">
             <h2 className="perfil-title">Mi Perfil</h2>
@@ -153,6 +161,12 @@ export default function Perfil() {
                         >
                             Eliminar Perfil
                         </Button>
+                    </>
+                )}
+
+                {hasRestrictedPlayer && (
+                    <>
+                        <Button outline color="success" onClick={handleVolverPartida}>Volver a partida</Button>
                     </>
                 )}
                 <Button

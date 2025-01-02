@@ -69,7 +69,7 @@ public class ChatService {
     @Transactional
     public Chat enviarMensajes(Chat chat){
         Chat nuevoChat=chatRepository.save(chat);
-        messagingTemplate.convertAndSend("/topic/baza/chats/" + chat.getJugador().getPartida().getId(), findAllChatByPartidaId(nuevoChat.getJugador().getPartida().getId()));
+        messagingTemplate.convertAndSend("/topic/chats/" + chat.getJugador().getPartida().getId(), findAllChatByPartidaId(nuevoChat.getJugador().getPartida().getId()));
         return nuevoChat;
     }
 }

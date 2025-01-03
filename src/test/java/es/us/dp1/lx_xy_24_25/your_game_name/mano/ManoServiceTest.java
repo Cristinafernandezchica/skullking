@@ -247,7 +247,7 @@ public class ManoServiceTest {
     public void shouldFindAllByRondaId() {
         when(manoRepository.findAllByRondaId(1)).thenReturn(Arrays.asList(mano1, mano2));
 
-        List<Mano> result = manoService.findAllByRondaId(1);
+        List<Mano> result = manoService.findAllManosByRondaId(1);
 
         assertNotNull(result);
         assertEquals(2, result.size());
@@ -260,7 +260,7 @@ public class ManoServiceTest {
     public void shouldFindAllByRondaIdEmpty() {
         when(manoRepository.findAllByRondaId(1)).thenReturn(Collections.emptyList());
 
-        List<Mano> result = manoService.findAllByRondaId(1);
+        List<Mano> result = manoService.findAllManosByRondaId(1);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -271,7 +271,7 @@ public class ManoServiceTest {
     public void shouldFindAllByRondaIdThrowsDataAccessException() {
         when(manoRepository.findAllByRondaId(1)).thenThrow(new DataAccessException("..."){});
 
-        assertThrows(DataAccessException.class, () -> manoService.findAllByRondaId(1));
+        assertThrows(DataAccessException.class, () -> manoService.findAllManosByRondaId(1));
         verify(manoRepository, times(1)).findAllByRondaId(1);
     }
 

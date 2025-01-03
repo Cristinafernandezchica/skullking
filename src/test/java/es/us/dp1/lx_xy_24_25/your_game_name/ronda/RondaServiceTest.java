@@ -431,7 +431,7 @@ public class RondaServiceTest {
         ronda.setNumBazas(3);
 
         // Configuración de mocks
-        when(manoService.findAllByRondaId(2)).thenReturn(List.of(mano));
+        when(manoService.findAllManosByRondaId(2)).thenReturn(List.of(mano));
         when(bazaService.getPtosBonificacion(2, 1)).thenReturn(10);
 
         // Act

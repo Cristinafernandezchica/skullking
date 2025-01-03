@@ -135,8 +135,11 @@ public class PartidaService {
         partida.setEstado(PartidaEstado.JUGANDO);
         update(partida, partidaId);
         Ronda ronda = rondaService.iniciarRonda(partida);
+        messagingTemplate.convertAndSend("/topic/nuevaRonda/partida/" + partidaId, rondaService.rondaActual(partidaId));
         manoService.iniciarManos(partida.getId(), ronda, jugadoresPartida);
         Baza baza = bazaService.iniciarBaza(ronda, jugadoresPartida);
+        messagingTemplate.convertAndSend("/topic/nuevaBaza/partida/" + partidaId, bazaService.findBazaActualByRondaId(ronda.getId()));
+
         // Actualizamos turno actual
         partida.setTurnoActual(primerTurno(baza.getTurnos()));
         update(partida, partida.getId());
@@ -230,6 +233,8 @@ public class PartidaService {
         Baza baza = bazaService.findById(bazaId);
         Integer nextBaza = baza.getNumBaza() + 1;
         Ronda ronda = baza.getRonda();
+        messagingTemplate.convertAndSend("/topic/listaTrucos/partida/" + partidaId, new ArrayList<>());
+
         // Si es la última Baza de la ronda, finalizamos la ronda y actualizamos el resultado de las manos
         if(nextBaza > ronda.getNumBazas()){
             rondaService.finalizarRonda(ronda.getId());
@@ -244,17 +249,25 @@ public class PartidaService {
                 Integer numJugadores = jugadorService.findJugadoresByPartidaId(partidaId).size(); 
                 Integer numBazas = manoService.getNumCartasARepartir(nextRonda, numJugadores);
                 Ronda newRonda = rondaService.nextRonda(ronda.getId(), numBazas);
+                messagingTemplate.convertAndSend("/topic/nuevaRonda/partida/" + partidaId, rondaService.rondaActual(partidaId));
                 manoService.iniciarManos(ronda.getPartida().getId(), newRonda, jugadores);
+                messagingTemplate.convertAndSend("/topic/nuevasManos/partida/" + partidaId, manoService.findAllManosByRondaId(newRonda.getId()));
                 Baza primeraBaza = bazaService.iniciarBaza(newRonda, jugadores);
+                // Renovar baza
+                messagingTemplate.convertAndSend("/topic/nuevaBaza/partida/" + partidaId, bazaService.findBazaActualByRondaId(newRonda.getId()));
+
                 partida.setTurnoActual(primerTurno(primeraBaza.getTurnos()));
                 update(partida, partida.getId());
+                messagingTemplate.convertAndSend("/topic/turnoActual/" + partida.getId(), partida.getTurnoActual());
             }
         // Si no es la última baza de la ronda, cambiamos de baza
         } else{
             Baza newBaza = bazaService.nextBaza(bazaId, jugadores);
+            messagingTemplate.convertAndSend("/topic/nuevaBaza/partida/" + partidaId, bazaService.findBazaActualByRondaId(ronda.getId()));
             // Actualizamos aquí el turno actual
             partida.setTurnoActual(primerTurno(newBaza.getTurnos()));
             update(partida, partida.getId());
+            messagingTemplate.convertAndSend("/topic/turnoActual/" + partida.getId(), partida.getTurnoActual());
         }
     }
 
@@ -266,7 +279,7 @@ public class PartidaService {
     // Se ha movido aquí para evitar dependencias con Mano
     @Transactional
     public void getPuntaje(Integer numBazas, Integer rondaId){
-         List<Mano> manos = manoService.findAllByRondaId(rondaId);
+         List<Mano> manos = manoService.findAllManosByRondaId(rondaId);
          for(Mano m:manos){
             Integer puntaje = 0;
             Jugador jugador = m.getJugador();
@@ -295,6 +308,7 @@ public class PartidaService {
     public void apuesta(Integer ap, Integer jugadorId){
         Mano mano = manoService.findLastManoByJugadorId(jugadorId);
         Jugador jugador = jugadorService.findById(jugadorId);
+        Partida partida = jugador.getPartida();
         if (mano == null) {
             throw new ResourceNotFoundException("Mano", "id", jugadorId);
         }
@@ -307,6 +321,8 @@ public class PartidaService {
         jugador.setApuestaActual(ap);
         manoService.saveMano(mano);
         jugadorService.updateJugador(jugador, jugadorId);
+        messagingTemplate.convertAndSend("/topic/apuesta/partida/" + partida.getId(), jugadorService.findJugadoresByPartidaId(partida.getId()));
+
     }
 
 }

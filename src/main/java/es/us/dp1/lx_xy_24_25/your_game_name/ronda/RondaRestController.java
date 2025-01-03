@@ -84,7 +84,7 @@ public class RondaRestController {
 
     @GetMapping("/{partidaId}/partida")
     public Ronda getRondaByPartidaId(@PathVariable("partidaId") Integer partidaId) {
-        return rondaService.findRondaActualByPartidaId(partidaId);
+        return rondaService.rondaActual(partidaId);
     }
 
     /*

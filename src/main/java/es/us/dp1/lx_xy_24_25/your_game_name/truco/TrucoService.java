@@ -15,6 +15,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
+import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.CalculoGanadorContext;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.CartasPaloState;
@@ -25,6 +26,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.bazaCartaManoDTO.BazaCartaManoDTO;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -54,7 +56,7 @@ public class TrucoService {
 
 
     @Autowired
-	public TrucoService(TrucoRepository trucoRepository,  BazaRepository bazaRepository,  ManoService manoService, JugadorService jugadorService, @Lazy PartidaService partidaService, RondaService rondaService, SimpMessagingTemplate messagingTemplate) { // , @Lazy BazaService bazaService ,ManoRepository manoRepository
+	public TrucoService(TrucoRepository trucoRepository,  BazaRepository bazaRepository,  ManoService manoService, JugadorService jugadorService, PartidaService partidaService, RondaService rondaService, SimpMessagingTemplate messagingTemplate) { // , @Lazy BazaService bazaService ,ManoRepository manoRepository
 		this.trucoRepository = trucoRepository;
         this.bazaRepository = bazaRepository;
         // this.manoRepository = manoRepository;
@@ -134,7 +136,9 @@ public class TrucoService {
 
 	@Transactional
 	public Truco jugarTruco(BazaCartaManoDTO DTO, Integer jugadorId){
+		
 		Jugador jugador =jugadorService.findById(jugadorId);
+		Partida partida = jugador.getPartida();
 
 		Truco trucoIniciado= new Truco();
 		trucoIniciado.setBaza(DTO.getBaza());
@@ -145,7 +149,7 @@ public class TrucoService {
 		trucoRepository.save(trucoIniciado);
 
 		// Envía la lista actualizada de trucos al canal WebSocket
-		messagingTemplate.convertAndSend("/topic/baza/truco/" + trucoIniciado.getBaza().getId(), findTrucosByBazaId(trucoIniciado.getBaza().getId()));
+		messagingTemplate.convertAndSend("/topic/baza/truco/partida/" + partida.getId(), findTrucosByBazaId(trucoIniciado.getBaza().getId()));
 
 		Mano manoSinCartaJugada = trucoIniciado.getMano();
 		List<Carta> nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
@@ -158,28 +162,36 @@ public class TrucoService {
 		manoSinCartaJugada.setCartas(nuevaListaCarta);
 		manoService.saveMano(manoSinCartaJugada);
 
-		Partida partida = trucoIniciado.getBaza().getRonda().getPartida();
+		Ronda ronda = trucoIniciado.getBaza().getRonda();
+		messagingTemplate.convertAndSend("/topic/nuevasManos/partida/" + partida.getId(), manoService.findAllManosByRondaId(ronda.getId()));
+
 		Integer numJugadores = jugadorService.findJugadoresByPartidaId(partida.getId()).size();
 		Integer bazaId = trucoIniciado.getBaza().getId();
 		Integer numTrucosBaza = findTrucosByBazaId(bazaId).size();
 
+
 		// Si no es el último truco de la Baza, se actualiza el turno
 		if(numJugadores > numTrucosBaza){
-			List<Integer> turnos = trucoIniciado.getBaza().getTurnos();
 			Integer turnoAntesCambio = partida.getTurnoActual();
-			partida.setTurnoActual(siguienteTurno(turnos, turnoAntesCambio));
+			List<Integer> turnos = trucoIniciado.getBaza().getTurnos();
+			Integer nuevoTurno = siguienteTurno(turnos, turnoAntesCambio);
+			partida.setTurnoActual(nuevoTurno);
 			partidaService.update(partida, partida.getId());
+			messagingTemplate.convertAndSend("/topic/turnoActual/" + partida.getId(), partida.getTurnoActual());
 		}
 		// Si es el último truco de la Baza, se calcula el ganador de la baza
 		
 		else if(numJugadores == numTrucosBaza){
 			calculoGanador(bazaId);
-			// rondaService.nextBaza(bazaId);
+			messagingTemplate.convertAndSend("/topic/listaTrucos/partida/" + partida.getId(), new ArrayList<>());
+			partidaService.siguienteEstado(partida.getId(), bazaId);
 		}
 		
 
 		return trucoIniciado;
 	}
+
+	
 
 	// Método calculoGanador usando Patrón State
     @Transactional

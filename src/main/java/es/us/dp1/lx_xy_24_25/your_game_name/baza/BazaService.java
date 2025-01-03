@@ -171,7 +171,7 @@ public class BazaService {
         newBaza.setGanador(null);
         newBaza.setNumBaza(nextBaza);
         newBaza.setRonda(ronda);
-        newBaza.setPaloBaza(null);
+        newBaza.setPaloBaza(PaloBaza.sinDeterminar);
         newBaza.setTurnos(turnos);   
         return saveBaza(newBaza);
     }

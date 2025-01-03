@@ -19,7 +19,7 @@ import PartidaListAdmin from "./admin/partidas/PartidaListAdmin";
 import Jugando from "./play/jugando";
 import UserStatisticsDashboard from "./admin/users/UserDashboard";
 import EditarPerfil from "./perfil/editarPerfil";
-import Perfil from "./perfil";
+import Perfil from "./perfil/index";
 
 
 function ErrorFallback({ error, resetErrorBoundary }) {

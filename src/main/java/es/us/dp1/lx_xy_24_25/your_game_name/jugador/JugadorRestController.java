@@ -106,4 +106,14 @@ public class JugadorRestController {
         return new ResponseEntity<>(this.jugadorService.findPartidaByUsuarioId(usuarioId), HttpStatus.OK);
     }
     
+    // Get todos los jugadores asociados a un usuario
+    @GetMapping("/{usuarioId}/usuarios")
+    public ResponseEntity<List<Jugador>> findJugadoresByUsuarioId(@PathVariable("usuarioId") int usuarioId) {
+        List<Jugador> jugadores = jugadorService.findJugadoresByUsuarioId(usuarioId);
+        if (jugadores.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(jugadores, HttpStatus.OK);
+    }
+
 }

@@ -98,6 +98,13 @@ public class RondaService {
                 .findFirst().orElse(null);
         return rondasOrdenadas;
     }
+
+    @Transactional(readOnly = true)
+    public Ronda rondaActual(Integer partidaId){
+        List<Ronda> rondas = rondaRepository.findByPartidaId(partidaId);
+        Ronda rondaActual = rondas.get(rondas.size()-1);
+        return rondaActual;
+    }
     
 
 }

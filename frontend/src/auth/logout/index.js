@@ -4,17 +4,17 @@ import "../../static/css/auth/authButton.css";
 import "../../static/css/auth/authPage.css";
 import tokenService from "../../services/token.service";
 
-const Logout = () => {
-  function sendLogoutRequest() {
-    const jwt = window.localStorage.getItem("jwt");
-    if (jwt || typeof jwt === "undefined") {
-      tokenService.removeUser();
-      window.location.href = "/";
-    } else {
-      alert("No hay ningún usuario con la sesión abierta");
-    }
+export function sendLogoutRequest() {
+  const jwt = window.localStorage.getItem("jwt");
+  if (jwt || typeof jwt === "undefined") {
+    tokenService.removeUser();
+    window.location.href = "/";
+  } else {
+    alert("No hay ningún usuario con la sesión abierta");
   }
+}
 
+const Logout = () => {
   return (
     <div className="auth-page-container">
       <div className="auth-form-container">

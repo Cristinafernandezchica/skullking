@@ -33,4 +33,20 @@ export const registerFormUserInput = [
     isRequired: true,
     validators: [formValidators.notEmptyValidator],
   },
+  {
+    tag: "Descripción",
+    name: "descripcionPerfil",
+    type: "text",
+    defaultValue: "",
+    isRequired: true,
+    validators: [formValidators.descriptionValidator],
+  },
+  {
+    tag: "Foto de perfil",
+    name: "imagenPerfil",
+    type: "text",
+    defaultValue: "https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg",
+    isRequired: true,
+    validators: [formValidators.pictureValidator],
+  },
 ];

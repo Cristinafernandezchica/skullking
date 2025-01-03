@@ -73,7 +73,7 @@ private SimpMessagingTemplate messagingTemplate;
     }
 
     @Transactional(readOnly = true)
-    public List<Mano> findAllByRondaId(Integer rondaId){
+    public List<Mano> findAllManosByRondaId(Integer rondaId){
         return manoRepository.findAllByRondaId(rondaId);
     }
     

@@ -86,10 +86,17 @@ public class ManoRestController {
 		return new ResponseEntity<>(trucoService.findTrucosByManoId(id), HttpStatus.OK);
 	}
 
-    @GetMapping(value = "{manoId}/manoDisabled")
+    @GetMapping(value = "/{manoId}/manoDisabled")
 	public ResponseEntity<List<Carta>> cartasDisabled(@PathVariable("manoId") int id, @RequestParam TipoCarta tipoCarta) {
         List<Carta> res = manoService.cartasDisabled(id, tipoCarta);
 		return new ResponseEntity<>(res!=null? res: new ArrayList<>(), HttpStatus.OK);
 	}
+
+    // Pruebas para webSocket
+    @GetMapping(value = "/rondas/{rondaId}")
+    public ResponseEntity<List<Mano>> findManoByRondaId(@PathVariable("rondaId") Integer rondaId) {
+        List<Mano> res = manoService.findAllManosByRondaId(rondaId);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 
 }

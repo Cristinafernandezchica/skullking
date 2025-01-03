@@ -147,6 +147,11 @@ public class JugadorService {
         return partida;
     }
 
+    @Transactional(readOnly = true)
+    public List<Jugador> findJugadoresByUsuarioId(Integer usuarioId) {
+        return jugadorRepository.findJugadoresByUsuarioId(usuarioId);
+    }
+
 
     /*
     // Para ver el turno del jugador

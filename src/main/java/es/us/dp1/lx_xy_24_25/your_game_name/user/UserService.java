@@ -29,11 +29,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorRepository;
 
 @Service
 public class UserService {
 
 	private UserRepository userRepository;	
+	private JugadorRepository jugadorRepository;	
 
 	private final ConcurrentHashMap<Integer, UserStats> userStatsMap = new ConcurrentHashMap<>();
 
@@ -157,6 +160,12 @@ public class UserService {
 				.collect(Collectors.toList());
 	}
 
+	// Método que devuelve los jugadores asociados a un usuario.
+	@Transactional(readOnly = true)
+	public List<Jugador> getJugadoresByCurrentUser() {
+		User currentUser = findCurrentUser();
+		return jugadorRepository.findJugadoresByUsuarioId(currentUser.getId());
+	}
 }
 
 class UserStats {

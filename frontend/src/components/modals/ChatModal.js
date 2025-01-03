@@ -42,7 +42,7 @@ export default function ChatModal({ isVisible, onCancel, partida, jugadorQueEscr
             console.log("Connected: " + frame);
     
             stompClient.subscribe(
-              `/topic/baza/chats/${partida}`,
+              `/topic/chats/${partida}`,
               (messageOutput) => {
                 const data = JSON.parse(messageOutput.body);
                 console.log("Mensaje recibido: ", data); // Verifica que el mensaje se reciba correctamente

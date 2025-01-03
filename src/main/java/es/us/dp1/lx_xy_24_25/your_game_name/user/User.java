@@ -4,20 +4,13 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-import java.util.List;
-
-import org.json.JSONPropertyIgnore;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.model.BaseEntity;
 import jakarta.persistence.Transient;
 
@@ -34,6 +27,15 @@ public class User extends BaseEntity {
 	String username;
 
 	String password;
+
+    @Column(name = "descripcion_perfil")
+	@Size(max = 100)
+	private String descripcionPerfil;
+
+	@Lob
+    @Column(name = "imagen_perfil")
+	private String imagenPerfil;
+
 
 	@NotNull
 	@ManyToOne(optional = false)

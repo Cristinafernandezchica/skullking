@@ -6,9 +6,11 @@ import org.hibernate.annotations.OnDeleteAction;
 import es.us.dp1.lx_xy_24_25.your_game_name.model.BaseEntity;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.EqualsAndHashCode;
@@ -24,15 +26,15 @@ public class Jugador extends BaseEntity {
     @NotNull
     private Integer puntos;
 
-
     @ManyToOne
     @JoinColumn(name = "partida_id")
     private Partida partida;      
 
-    // hacer pull
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
+
+	@OneToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.REMOVE })
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User usuario;
 

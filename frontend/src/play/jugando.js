@@ -617,7 +617,10 @@ export default function Jugando() {
         {jugadores !== null &&
           jugadores.map((jugador) => (
             <div key={jugador.id} className="jugador-info">
-              <h3>{jugador.usuario.username}</h3>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <img src={jugador.usuario.imagenPerfil} alt="Perfil" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "10px" }} />
+                <h3>{jugador.usuario.username}</h3>
+              </div>
               <p>Apuesta: {jugador.apuestaActual}</p>
               <p>Puntos: {jugador.puntos}</p>
             </div>

@@ -3,6 +3,7 @@ import { Navbar, NavbarBrand, NavLink, NavItem, Nav, NavbarText, NavbarToggler, 
 import { Link } from "react-router-dom";
 import tokenService from "./services/token.service";
 import jwt_decode from "jwt-decode";
+import logo from "./static/images/gamelogo_sin_fondo.png";
 import "./styles.css";
 
 function AppNavbar() {
@@ -172,7 +173,7 @@ function AppNavbar() {
         <div>
             <Navbar expand="md" dark color="dark">
                 <NavbarBrand href="/">
-                    <img alt="logo" src="./static/images/gamelogo_sin_fondo.png" className="animated-logo" />
+                    <img alt="logo" src={logo} className="animated-logo" />
                     Skull King
                 </NavbarBrand>
                 <NavbarToggler onClick={toggleNavbar} className="ms-2" />

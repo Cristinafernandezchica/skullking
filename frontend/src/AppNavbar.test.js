@@ -61,6 +61,6 @@ describe("AppNavbar", () => {
     render(<AppNavbar />);
     const logoElement = screen.getByAltText("logo");
     expect(logoElement).toBeInTheDocument();
-    expect(logoElement).toHaveAttribute("src", expect.stringContaining("gamelogo_sin_fondo.png"));
+    expect(logoElement).toHaveAttribute("src", expect.stringContaining("test-file-stub"));
   });
 });

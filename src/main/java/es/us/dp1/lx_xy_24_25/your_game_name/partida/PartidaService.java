@@ -117,6 +117,8 @@ public class PartidaService {
         pr.deleteById(id);
     }
 
+
+
     // Lógica de juego
 
     // Inciamos la partida
@@ -234,12 +236,11 @@ public class PartidaService {
         Integer nextBaza = baza.getNumBaza() + 1;
         Ronda ronda = baza.getRonda();
         messagingTemplate.convertAndSend("/topic/listaTrucos/partida/" + partidaId, new ArrayList<>());
-
+        manoService.actualizarResultadoMano(baza);
         // Si es la última Baza de la ronda, finalizamos la ronda y actualizamos el resultado de las manos
         if(nextBaza > ronda.getNumBazas()){
             rondaService.finalizarRonda(ronda.getId());
             getPuntaje(ronda.getNumBazas(), ronda.getId());
-            manoService.actualizarResultadoMano(baza);
             Integer nextRonda = ronda.getNumRonda() + 1;
             // Si es la última ronda, finalizamos partida
             if(nextRonda > ULTIMA_RONDA){
@@ -285,9 +286,9 @@ public class PartidaService {
             Jugador jugador = m.getJugador();
             if(m.getApuesta()==0){
                 if(m.getApuesta().equals(m.getResultado())){
-                    puntaje += ULTIMA_RONDA*numBazas;
+                    puntaje += 10*numBazas;
                 }else{
-                    puntaje -= ULTIMA_RONDA*numBazas;
+                    puntaje -= 10*numBazas;
                 }
             }else{
                 if(m.getApuesta().equals(m.getResultado())){
@@ -295,7 +296,7 @@ public class PartidaService {
                     Integer ptosBonificacion = bazaService.getPtosBonificacion(rondaId, jugador.getId());
                     puntaje += 20*m.getApuesta() + ptosBonificacion;
                 }else{
-                    puntaje -= ULTIMA_RONDA*Math.abs(m.getApuesta()-m.getResultado());
+                    puntaje -= 10*Math.abs(m.getApuesta()-m.getResultado());
                 } 
             }
             jugador.setPuntos(jugador.getPuntos() + puntaje);

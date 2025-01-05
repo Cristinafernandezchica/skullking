@@ -130,6 +130,5 @@ public class PartidaRestController {
         partidaService.apuesta(apuesta, jugadorId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    
 
 }

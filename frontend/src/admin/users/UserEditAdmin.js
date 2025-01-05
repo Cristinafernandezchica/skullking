@@ -1,77 +1,127 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Form, Input, Label } from "reactstrap";
+import { Form, Input, Label, Button } from "reactstrap";
 import tokenService from "../../services/token.service";
 import "../../static/css/admin/adminPage.css";
 import getErrorModal from "../../util/getErrorModal";
 import getIdFromUrl from "../../util/getIdFromUrl";
-import useFetchData from "../../util/useFetchData";
-import useFetchState from "../../util/useFetchState";
+import {sendLogoutRequest} from '../../auth/logout';
+import jwt_decode from "jwt-decode"; // Decodificar el token JWT
 
 const jwt = tokenService.getLocalAccessToken();
 
 export default function UserEditAdmin() {
+  const currentUser = jwt_decode(jwt).sub; // Extraer el usuario actual desde el token
   const emptyItem = {
     id: null,
     username: "",
-    password: "",
+    descripcionPerfil: "",
+    imagenPerfil: "",
     authority: null,
   };
+
   const id = getIdFromUrl(2);
+  const [user, setUser] = useState(emptyItem);
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
-  const [user, setUser] = useFetchState(
-    emptyItem,
-    `/api/v1/users/${id}`,
-    jwt,
-    setMessage,
-    setVisible,
-    id
-  );
-  const auths = useFetchData(`/api/v1/users/authorities`, jwt);
+  const [auths, setAuths] = useState([]);
+
+  useEffect(() => {
+    if (id) {
+      // Obtener datos del usuario por ID
+      fetch(`/api/v1/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Error al obtener datos del usuario");
+          }
+          return response.json();
+        })
+        .then((data) => setUser(data))
+        .catch((error) => {
+          setMessage(error.message);
+          setVisible(true);
+        });
+    }
+
+    // Obtener lista de autoridades
+    fetch(`/api/v1/users/authorities`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al obtener autoridades");
+        }
+        return response.json();
+      })
+      .then((data) => setAuths(data))
+      .catch((error) => {
+        setMessage(error.message);
+        setVisible(true);
+      });
+  }, [id]);
 
   function handleChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+    const { name, value } = event.target;
+
     if (name === "authority") {
-      const auth = auths.find((a) => a.id === Number(value));
-      setUser({ ...user, authority: auth });
-    } else setUser({ ...user, [name]: value });
+      const selectedAuth = auths.find((auth) => auth.id === Number(value));
+      setUser({ ...user, authority: selectedAuth });
+    } else if (name !== "password") {
+      // Ignorar cambios en la contraseña
+      setUser({ ...user, [name]: value });
+    }
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-
-    fetch("/api/v1/users" + (user.id ? "/" + user.id : ""), {
+  
+    const userToUpdate = { ...user };
+    delete userToUpdate.password; // Omitir contraseña
+  
+    fetch(`/api/v1/users${user.id ? `/${user.id}` : ""}`, {
       method: user.id ? "PUT" : "POST",
       headers: {
         Authorization: `Bearer ${jwt}`,
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(user),
+      body: JSON.stringify(userToUpdate),
     })
-      .then((response) => response.json())
-      .then((json) => {
-        if (json.message) {
-          setMessage(json.message);
-          setVisible(true);
-        } else window.location.href = "/users";
+      .then((response) => {
+        if (response.status === 204) return; // Manejar respuestas sin contenido
+        if (!response.ok) {
+          throw new Error("Error al guardar el usuario");
+        }
+        return response.json();
       })
-      .catch((message) => alert(message));
+      .then(() => {
+        if (user.username === currentUser && user.authority?.authority !== jwt_decode(jwt).authority) {
+          // Redirigir al usuario actual a "/" si cambió su autoridad
+          sendLogoutRequest();
+          window.location.reload();
+          window.location.href = "/";
+
+        } else {
+          window.location.href = "/users";
+        }
+      })
+      .catch((error) => {
+        setMessage(error.message);
+        setVisible(true);
+      });
   }
 
   const modal = getErrorModal(setVisible, visible, message);
-  const authOptions = auths.map((auth) => (
-    <option key={auth.id} value={auth.id}>
-      {auth.authority}
-    </option>
-  ));
 
   return (
     <div className="auth-page-container">
-      {<h2>{user.id ? "Editar usuario" : "Añadir usuario"}</h2>}
+      <h2>{user.id ? "Editar usuario" : "Añadir usuario"}</h2>
       {modal}
       <div className="auth-form-container">
         <Form onSubmit={handleSubmit}>
@@ -90,55 +140,57 @@ export default function UserEditAdmin() {
             />
           </div>
           <div className="custom-form-input">
-            <Label for="lastName" className="custom-form-input-label">
-              Contraseña
+            <Label for="descripcionPerfil" className="custom-form-input-label">
+              Descripción del perfil
             </Label>
             <Input
-              type="password"
-              required
-              name="password"
-              id="password"
-              value={user.password || ""}
+              type="textarea"
+              name="descripcionPerfil"
+              id="descripcionPerfil"
+              value={user.descripcionPerfil || ""}
               onChange={handleChange}
               className="custom-input"
             />
           </div>
-          <Label for="authority" className="custom-form-input-label">
-            Autoridad
-          </Label>
           <div className="custom-form-input">
-            {user.id ? (
-              <Input
-                type="select"
-                disabled
-                name="authority"
-                id="authority"
-                value={user.authority?.id || ""}
-                onChange={handleChange}
-                className="custom-input"
-              >
-                <option value="">None</option>
-                {authOptions}
-              </Input>
-            ) : (
-              <Input
-                type="select"
-                required
-                name="authority"
-                id="authority"
-                value={user.authority?.id || ""}
-                onChange={handleChange}
-                className="custom-input"
-              >
-                <option value="">None</option>
-                {authOptions}
-              </Input>
-            )}
+            <Label for="imagenPerfil" className="custom-form-input-label">
+              Imagen del perfil (URL)
+            </Label>
+            <Input
+              type="url"
+              name="imagenPerfil"
+              id="imagenPerfil"
+              value={user.imagenPerfil || ""}
+              onChange={handleChange}
+              className="custom-input"
+            />
+          </div>
+          <div className="custom-form-input">
+            <Label for="authority" className="custom-form-input-label">
+              Autoridad
+            </Label>
+            <Input
+              type="select"
+              name="authority"
+              id="authority"
+              value={user.authority?.id || ""}
+              onChange={handleChange}
+              className="custom-input"
+            >
+              <option value="">Seleccionar autoridad</option>
+              {auths.map((auth) => (
+                <option key={auth.id} value={auth.id}>
+                  {auth.authority}
+                </option>
+              ))}
+            </Input>
           </div>
           <div className="custom-button-row">
-            <button className="auth-button">Guardar</button>
+            <Button type="submit" color="primary" className="auth-button">
+              Guardar
+            </Button>
             <Link
-              to={`/users`}
+              to="/users"
               className="auth-button"
               style={{ textDecoration: "none" }}
             >

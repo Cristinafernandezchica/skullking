@@ -131,9 +131,4 @@ public class PartidaRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/jugadas/{userId}")
-    public List<Partida> getPartidasJugadasByUserId(@PathVariable("userId") Integer userId){
-        return partidaService.findPartidasJugadasByUserId(userId);
-    }
-
 }

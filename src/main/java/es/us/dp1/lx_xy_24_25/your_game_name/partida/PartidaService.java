@@ -117,10 +117,7 @@ public class PartidaService {
         pr.deleteById(id);
     }
 
-    @Transactional
-    public List<Partida> findPartidasJugadasByUserId(Integer userId){
-        return pr.findPartidasJugadasByUserId(userId);
-    }
+
 
     // Lógica de juego
 

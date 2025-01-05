@@ -20,5 +20,7 @@ public interface PartidaRepository extends CrudRepository<Partida, Integer> {
 
     @Query("SELECT p FROM Partida p WHERE p.ownerPartida = :ownerPartida AND p.estado IN :estados")
     List<Partida> findByOwnerPartidaAndEstado(@Param("ownerPartida") Integer ownerPartida, @Param("estados") List<PartidaEstado> estados);
-
+    
+    @Query("SELECT p FROM Partida p JOIN p.jugadores j WHERE j.usuario.id = :userId")
+    List<Partida> findPartidasJugadasByUserId(@Param("userId") Integer userId);
 }

@@ -117,6 +117,11 @@ function AppNavbar() {
                             Estadísticas
                         </NavLink>
                     </NavItem>
+                    <NavItem>
+                        <NavLink style={{ color: "white" }} tag={Link} to="/users/partidas">
+                            Partidas jugadas
+                        </NavLink>
+                    </NavItem>
                 </>
             );
             userLogout = (

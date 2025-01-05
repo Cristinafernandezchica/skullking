@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,24 +35,20 @@ private ManoRepository manoRepository;
 private CartaService cs;
 //private JugadorService jugadorService;
 private JugadorRepository jugadorRepository;
-private SimpMessagingTemplate messagingTemplate;
 
 
     @Autowired
-    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorRepository jugadorRepository,SimpMessagingTemplate messagingTemplate) {
+    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorRepository jugadorRepository) {
         this.manoRepository = manoRepository;
         this.cs = cs;
         //this.jugadorService = jugadorService;
         this.jugadorRepository = jugadorRepository;
-        this.messagingTemplate = messagingTemplate;
     }
 
 
     //save a Mano en la base de datos
     @Transactional
     public Mano saveMano(Mano mano) {
-        messagingTemplate.convertAndSend("/topic/mano/" + mano.getRonda().getId(), findAllByRondaId(mano.getRonda().getId()));
-
         return manoRepository.save(mano);
     }
     // listar todos los Manoes de la base de datos

@@ -17,6 +17,7 @@ import SalaEspera from "./salaEspera";
 import Instructions from "./player/instrucciones";
 import PartidaListAdmin from "./admin/partidas/PartidaListAdmin";
 import Jugando from "./play/jugando";
+import UserPartidas from "./admin/users/UserPartidas";
 import UserStatisticsDashboard from "./admin/users/UserDashboard";
 import EditarPerfil from "./perfil/editarPerfil";
 import Perfil from "./perfil/index";
@@ -81,7 +82,7 @@ function App() {
     userRoutes = (
       <>
         {/* <Route path="/users/statistics" element={<UserStatisticsDashboard />} /> */} 
-
+        <Route path="/users/partidas" element={<UserPartidas />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/login" element={<Login />} />
       </>

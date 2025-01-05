@@ -41,7 +41,6 @@ export default function Jugando() {
 
   // para las cartas del resto de jugadores
   const [manosOtrosJugadores, setManosOtrosJugadores] = useState({});
-  
   // Para lógica de apuesta
   const [apuestaModalOpen, setApuestaModalOpen] = useState(false);
   const toggleApuestaModal = () => setApuestaModalOpen(!apuestaModalOpen);
@@ -148,31 +147,25 @@ export default function Jugando() {
     }
   };
 
-  const fetchManosJugadores = async () => {
+  const fetchManosOtrosJugadores = async () => {
     try {
       const nuevasManos = {};
-      let nuevaMano = null;
       for (const jugador of jugadores) {
-        const response = await fetch(`/api/v1/manos/${jugador.id}`, {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-            "Content-Type": "application/json",
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
         if (jugador.id !== tu.id) {
+          const response = await fetch(`/api/v1/manos/${jugador.id}`, {
+            headers: {
+              Authorization: `Bearer ${jwt}`,
+              "Content-Type": "application/json",
+            },
+          });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
           const data = await response.json();
           nuevasManos[jugador.id] = data;
-        }else{
-          nuevaMano = await response.json();
-          await fetchCartasDisabled(nuevaMano.id, BazaActual.paloBaza);
         }
       }
       setManosOtrosJugadores(nuevasManos);
-      setMano(nuevaMano);
     } catch (error) {
       console.error("Error encontrando manos de otros jugadores:", error);
       setMessage(error.message);
@@ -180,10 +173,11 @@ export default function Jugando() {
     }
   };
 
+  // Carga inicial manos
   useEffect(() => {
     if (tu !== null) {
-      //fetchMano(tu.id);
-      fetchManosJugadores();
+      fetchMano(tu.id);
+      fetchManosOtrosJugadores();
     }
   }, [jugadores, tu]);
 
@@ -472,8 +466,8 @@ export default function Jugando() {
 
       await fetchRondaActual(idPartida);
       await fetchBazaActual();
-      await fetchMano();
-      await fetchManosOtrosJugadores();
+      //await fetchMano();
+      //await fetchManosOtrosJugadores();
       await fetchPartida();
 
       return data;
@@ -508,8 +502,8 @@ export default function Jugando() {
     console.log("Carta a jugar:", cartaFinal);
     await iniciarTruco(tu.id, cartaFinal);
     console.log("Truco a jugar:", cartaFinal);
-    await fetchMano(tu.id);
-
+    //await fetchMano(tu.id);
+    /*
     if (ListaDeTrucos.length + 1 === jugadores.length) {
       await siguienteEstado();
       await fetchBazaActual();

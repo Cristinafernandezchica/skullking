@@ -7,9 +7,11 @@ import java.util.stream.StreamSupport;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.chat.ChatRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.UsuarioPartidaEnJuegoEsperandoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.exceptions.MaximoJugadoresPartidaException;
@@ -25,15 +27,15 @@ import jakarta.validation.Valid;
 @Service
 public class JugadorService {
     private JugadorRepository jugadorRepository;
-    private PartidaRepository pr;
+    private PartidaRepository partidaRepository;
     private UserRepository userRepository;
     private static final Integer MAX_JUGADORES = 8;
     private SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    public JugadorService(JugadorRepository jugadorRepository, PartidaRepository pr, SimpMessagingTemplate messagingTemplate) {
+    public JugadorService(JugadorRepository jugadorRepository, PartidaRepository partidaRepository, SimpMessagingTemplate messagingTemplate) {
         this.jugadorRepository = jugadorRepository;
-        this.pr = pr;
+        this.partidaRepository = partidaRepository;
         this.messagingTemplate = messagingTemplate;
     }
 
@@ -79,7 +81,7 @@ public class JugadorService {
     @Transactional
     public Boolean partidaEnJuegoEspera(Jugador jugadorCrear) throws DataAccessException{
         Boolean lanzarExcepcion = false;
-        Iterable<Partida> partidas = pr.findAll();
+        Iterable<Partida> partidas = partidaRepository.findAll();
         List<Partida> partidasFiltradas = StreamSupport.stream(partidas.spliterator(), false)
                 .filter(partida -> partida.getEstado().equals(PartidaEstado.ESPERANDO) || 
                 partida.getEstado().equals(PartidaEstado.JUGANDO))
@@ -112,8 +114,13 @@ public class JugadorService {
     // Delete jugador por id
     @Transactional
     public void deleteJugador(Integer id) {
-        jugadorRepository.deleteById(id);
+        try {
+            jugadorRepository.deleteById(id);
+        } catch (DataIntegrityViolationException ex) {
+            throw new ResourceNotFoundException("No se puede eliminar el jugador debido a una restricción de integridad." + ex);
+        }
     }
+
     
     // Update jugador
     @Transactional
@@ -176,7 +183,7 @@ public class JugadorService {
     // Método para verificar si un usuario tiene una partida en juego o esperando
     /*
     public boolean usuarioPartidaEnJuegoEsperando(Integer usuarioId) {
-        List<Partida> partidas = pr.findByOwnerPartidaAndEstado(usuarioId, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO));
+        List<Partida> partidas = partidaRepository.findByOwnerPartidaAndEstado(usuarioId, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO));
         return !partidas.isEmpty();
     }
     */

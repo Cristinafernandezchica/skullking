@@ -3,6 +3,7 @@ package es.us.dp1.lx_xy_24_25.your_game_name.chat;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.model.BaseEntity;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -15,7 +16,7 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode(of = "id", callSuper = true)
 public class Chat extends BaseEntity{
-    @ManyToOne
+    @ManyToOne(optional = false, cascade = CascadeType.REMOVE)
     @JoinColumn(name="jugador_id")
     private Jugador jugador;
 

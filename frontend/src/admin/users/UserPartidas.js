@@ -151,7 +151,7 @@ export default function UserPartidas() {
         const jugadoresList = jugadores[partida.id]?.map((jugador) => (
             <div key={jugador.id}>{jugador.usuario.username}</div>
         )) || <div>Cargando jugadores...</div>;
-        const ownerName = partida.owner==user.id? "Sí" :"No"|| "Cargando creador...";
+        const ownerName = partida.ownerPartida === user.id ? "Sí" :"No" ;        
         return (
             <tr key={partida.id}>
                 <td>{partida.nombre}</td>
@@ -202,7 +202,7 @@ export default function UserPartidas() {
                             <th>Nombre</th>
                             <th>Estado</th>
                             <th>Jugadores</th>
-                            <th>Creador</th>
+                            <th>Ha creado la partida</th>
                             <th>Fecha de creación</th>
                         </tr>
                     </thead>

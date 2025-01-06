@@ -130,8 +130,10 @@ function AppNavbar() {
                     <NavItem>
                         <NavLink style={{ color: "white" }} id="profile" tag={Link} to="/perfil">
                             <div style={{ display: "flex", alignItems: "center", padding: "0" }}>
-                                {profileImage && (
+                                {(profileImage && (
                                     <img src={profileImage} alt="Perfil" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "-5px", marginTop: "-2px", marginBottom: "-5px" }} />
+                                )) || ( 
+                                    <img src={"https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg"} alt="Perfil" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "-5px", marginTop: "-2px", marginBottom: "-5px" }} />
                                 )}
                             </div>
                         </NavLink>

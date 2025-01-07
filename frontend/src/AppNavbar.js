@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-    Navbar,
-    NavbarBrand,
-    NavLink,
-    NavItem,
-    Nav,
-    NavbarText,
-    NavbarToggler,
-    Collapse,
-} from "reactstrap";
+import { Navbar, NavbarBrand, NavLink, NavItem, Nav, NavbarText, NavbarToggler, Collapse} from "reactstrap";
 import { Link } from "react-router-dom";
 import tokenService from "./services/token.service";
 import jwt_decode from "jwt-decode";
@@ -115,6 +106,11 @@ function AppNavbar() {
                     <NavItem>
                         <NavLink style={{ color: "white" }} tag={Link} to="/users/statistics">
                             Estadísticas
+                        </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink style={{ color: "white" }} tag={Link} to="/users/partidas">
+                            Partidas jugadas
                         </NavLink>
                     </NavItem>
                 </>

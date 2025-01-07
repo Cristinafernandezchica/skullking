@@ -31,11 +31,8 @@ public class Jugador extends BaseEntity {
     private Partida partida;      
 
     @NotNull
-    @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
-
-	@OneToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.REMOVE })
-    @OnDelete(action = OnDeleteAction.CASCADE)
+	@ManyToOne(optional = false, cascade = CascadeType.REMOVE)
     private User usuario;
 
     @PositiveOrZero

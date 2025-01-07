@@ -225,7 +225,7 @@ const handleVolverPartida = () => {
             </div>
 
             <div style={{ marginBottom: 20 }}>
-              {partidaJugador && (partidaJugador.estado === "JUGANDO" || partidaJugador.estado === "ESPERANDO") && (
+              {partidaJugador  && (
                 <Button outline color="success" onClick={handleVolverPartida}>Volver a partida</Button>
               )}
             </div>

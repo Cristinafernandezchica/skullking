@@ -22,7 +22,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.CartasPaloState;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.PersonajesState;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.TriunfosState;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
-import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.bazaCartaManoDTO.BazaCartaManoDTO;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 
@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -41,13 +40,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 public class TrucoService {
 		
     private TrucoRepository trucoRepository;
-	private BazaRepository bazaRepository;
-	// private ManoRepository manoRepository;
+	private BazaService bazaService;
 	private JugadorService jugadorService;
 	private ManoService manoService;
-	// private BazaService bazaService;	// Para turnos
 	private PartidaService partidaService;
-	private RondaService rondaService;
 	private SimpMessagingTemplate messagingTemplate;
 
 	private final Integer idComodinPirata = 72;
@@ -56,15 +52,12 @@ public class TrucoService {
 
 
     @Autowired
-	public TrucoService(TrucoRepository trucoRepository,  BazaRepository bazaRepository,  ManoService manoService, JugadorService jugadorService, PartidaService partidaService, RondaService rondaService, SimpMessagingTemplate messagingTemplate) { // , @Lazy BazaService bazaService ,ManoRepository manoRepository
+	public TrucoService(TrucoRepository trucoRepository, BazaService bazaService, ManoService manoService, JugadorService jugadorService, PartidaService partidaService, SimpMessagingTemplate messagingTemplate) { // , @Lazy BazaService bazaService ,ManoRepository manoRepository
 		this.trucoRepository = trucoRepository;
-        this.bazaRepository = bazaRepository;
-        // this.manoRepository = manoRepository;
+        this.bazaService = bazaService;
         this.jugadorService = jugadorService;
-		// this.bazaService = bazaService;
 		this.manoService = manoService;
 		this.partidaService = partidaService;
-		this.rondaService = rondaService;
 		this.messagingTemplate = messagingTemplate;
 	}
 
@@ -148,6 +141,7 @@ public class TrucoService {
 
 		// Envía la lista actualizada de trucos al canal WebSocket
 		messagingTemplate.convertAndSend("/topic/baza/truco/partida/" + partida.getId(), findTrucosByBazaId(trucoIniciado.getBaza().getId()));
+		// messagingTemplate.convertAndSend("/topic/nuevaBaza/partida/" + partida.getId(), bazaService.findBazaActualByRondaId(trucoIniciado.getBaza().getRonda().getId()));
 
 		Mano manoSinCartaJugada = trucoIniciado.getMano();
 		List<Carta> nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
@@ -180,7 +174,8 @@ public class TrucoService {
 		// Si es el último truco de la Baza, se calcula el ganador de la baza
 		
 		else if(numJugadores == numTrucosBaza){
-			calculoGanador(bazaId);
+			Jugador ganadorBaza = calculoGanador(bazaId);
+			messagingTemplate.convertAndSend("/topic/ganadorBaza/partida/" + partida.getId(), ganadorBaza);
 			messagingTemplate.convertAndSend("/topic/listaTrucos/partida/" + partida.getId(), new ArrayList<>());
 			partidaService.siguienteEstado(partida.getId(), bazaId);
 		}
@@ -189,12 +184,12 @@ public class TrucoService {
 		return trucoIniciado;
 	}
 
-	
+
 
 	// Método calculoGanador usando Patrón State
     @Transactional
-    public void calculoGanador(Integer idBaza) {
-        Baza baza = bazaRepository.findById(idBaza).get();
+    public Jugador calculoGanador(Integer idBaza) {
+        Baza baza = bazaService.findById(idBaza);
         List<Truco> trucosBaza = trucoRepository.findTrucosByBazaId(idBaza);
         CalculoGanadorContext context = new CalculoGanadorContext();
         // Determinar el estado basado en las condiciones
@@ -214,7 +209,8 @@ public class TrucoService {
 		
         baza.setCartaGanadora(trucoGanador.getCarta());
         baza.setGanador(trucoGanador.getJugador());
-        bazaRepository.save(baza);
+        bazaService.saveBaza(baza);
+		return baza.getGanador();
     }
 
 
@@ -234,11 +230,7 @@ public class TrucoService {
 	@Transactional
     public void crearTrucosBaza(Integer idBaza) {
         // Determinamos Baza, Ronda, Partida y Jugadores a los que pertenecen los Trucos
-        Optional<Baza> posibleBaza = bazaRepository.findById(idBaza);
-        if(!posibleBaza.isPresent()) {
-			throw new ResourceNotFoundException("Baza", "id", idBaza);
-        }
-		Baza baza = posibleBaza.get();
+        Baza baza = bazaService.findById(idBaza);        
 
         Integer idPartida = baza.getRonda().getPartida().getId();
         List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(idPartida);

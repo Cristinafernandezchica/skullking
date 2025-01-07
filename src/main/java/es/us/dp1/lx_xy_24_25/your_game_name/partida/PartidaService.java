@@ -137,10 +137,8 @@ public class PartidaService {
         partida.setEstado(PartidaEstado.JUGANDO);
         update(partida, partidaId);
         Ronda ronda = rondaService.iniciarRonda(partida);
-        messagingTemplate.convertAndSend("/topic/nuevaRonda/partida/" + partidaId, rondaService.rondaActual(partidaId));
         manoService.iniciarManos(partida.getId(), ronda, jugadoresPartida);
         Baza baza = bazaService.iniciarBaza(ronda, jugadoresPartida);
-        messagingTemplate.convertAndSend("/topic/nuevaBaza/partida/" + partidaId, bazaService.findBazaActualByRondaId(ronda.getId()));
 
         // Actualizamos turno actual
         partida.setTurnoActual(primerTurno(baza.getTurnos()));
@@ -149,8 +147,6 @@ public class PartidaService {
         // Crear el mensaje de notificación
         Map<String, Object> message = new HashMap<>();
         message.put("status", "JUGANDO"); // Estado de la partida
-        message.put("partidaId", partidaId); // ID de la partida
-        message.put("message", "Partida iniciada");
 
         // Enviar el mensaje a través de WebSocket
         messagingTemplate.convertAndSend("/topic/partida/" + partidaId, message);
@@ -187,6 +183,12 @@ public class PartidaService {
             us.saveUser(u);
         }
         update(partida, partidaId);
+
+        Map<String, Object> message = new HashMap<>();
+        message.put("status", "FINALIZADA"); // Estado de la partida
+
+        // Enviar el mensaje a través de WebSocket
+        messagingTemplate.convertAndSend("/topic/partida/" + partidaId, message);
     }
 
     // Para Excepción: Si ya tiene una partida creada en juego o esperando, no podrá crear otra partida
@@ -238,10 +240,13 @@ public class PartidaService {
         messagingTemplate.convertAndSend("/topic/listaTrucos/partida/" + partidaId, new ArrayList<>());
         manoService.actualizarResultadoMano(baza);
         // Si es la última Baza de la ronda, finalizamos la ronda y actualizamos el resultado de las manos
+        manoService.actualizarResultadoMano(baza);
+        messagingTemplate.convertAndSend("/topic/nuevasManos/partida/" + partida.getId(), manoService.findAllManosByRondaId(ronda.getId()));
         if(nextBaza > ronda.getNumBazas()){
             rondaService.finalizarRonda(ronda.getId());
             getPuntaje(ronda.getNumBazas(), ronda.getId());
             Integer nextRonda = ronda.getNumRonda() + 1;
+            // messagingTemplate.convertAndSend("/topic/esUltimaBaza/partida/" + partidaId, true);
             // Si es la última ronda, finalizamos partida
             if(nextRonda > ULTIMA_RONDA){
                 finalizarPartida(ronda.getPartida().getId());

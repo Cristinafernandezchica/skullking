@@ -41,8 +41,9 @@ public class UserService {
 	private final ConcurrentHashMap<Integer, UserStats> userStatsMap = new ConcurrentHashMap<>();
 
 	@Autowired
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository, JugadorRepository jugadorRepository) {
 		this.userRepository = userRepository;
+		this.jugadorRepository = jugadorRepository;
 		
 	}
 
@@ -113,9 +114,8 @@ public class UserService {
 	@Transactional
 	public User updateUser(@Valid User user, Integer idToUpdate) {
 		User toUpdate = findUser(idToUpdate);
-		BeanUtils.copyProperties(user, toUpdate, "id");
+		BeanUtils.copyProperties(user, toUpdate, "id", "password");
 		userRepository.save(toUpdate);
-
 		return toUpdate;
 	}
 

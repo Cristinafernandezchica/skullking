@@ -11,12 +11,14 @@ import Logout from "./auth/logout";
 import tokenService from "./services/token.service";
 import UserListAdmin from "./admin/users/UserListAdmin";
 import UserEditAdmin from "./admin/users/UserEditAdmin";
+import UserCreateAdmin from "./admin/users/UserCreateAdmin";
 import SwaggerDocs from "./public/swagger";
 import Play from "./play";
 import SalaEspera from "./salaEspera";
 import Instructions from "./player/instrucciones";
 import PartidaListAdmin from "./admin/partidas/PartidaListAdmin";
 import Jugando from "./play/jugando";
+import UserPartidas from "./admin/users/UserPartidas";
 import UserStatisticsDashboard from "./admin/users/UserDashboard";
 import EditarPerfil from "./perfil/editarPerfil";
 import Perfil from "./perfil/index";
@@ -54,7 +56,8 @@ function App() {
       adminRoutes = (
         <>
           <Route path="/users" exact={true} element={<PrivateRoute><UserListAdmin /></PrivateRoute>} />
-          <Route path="/users/:username" exact={true} element={<PrivateRoute><UserEditAdmin /></PrivateRoute>} />
+          <Route path="/users/:id" exact={true} element={<PrivateRoute><UserEditAdmin /></PrivateRoute>} />
+          <Route path="/users/new" exact={true} element={<PrivateRoute><UserCreateAdmin /></PrivateRoute>} />
           <Route path="/partidas" exact={true} element={<PrivateRoute><PartidaListAdmin /></PrivateRoute>} />
           <Route path="/users/statistics" exact={true} element={<PrivateRoute><UserStatisticsDashboard /></PrivateRoute>} />         
         </>)
@@ -81,7 +84,7 @@ function App() {
     userRoutes = (
       <>
         {/* <Route path="/users/statistics" element={<UserStatisticsDashboard />} /> */} 
-
+        <Route path="/users/partidas" element={<UserPartidas />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/login" element={<Login />} />
       </>

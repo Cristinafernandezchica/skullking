@@ -1,53 +1,28 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Form, Input, Label, Button } from "reactstrap";
 import tokenService from "../../services/token.service";
 import "../../static/css/admin/adminPage.css";
 import getErrorModal from "../../util/getErrorModal";
-import getIdFromUrl from "../../util/getIdFromUrl";
-import {sendLogoutRequest} from '../../auth/logout';
-import jwt_decode from "jwt-decode"; // Decodificar el token JWT
 
 const jwt = tokenService.getLocalAccessToken();
 
-export default function UserEditAdmin() {
-  const currentUser = jwt_decode(jwt).sub; // Extraer el usuario actual desde el token
+export default function UserCreateAdmin() {
+  const navigate = useNavigate();
   const emptyItem = {
-    id: null,
     username: "",
+    password: "",
     descripcionPerfil: "",
     imagenPerfil: "",
     authority: null,
   };
-
-  const id = getIdFromUrl(2);
   const [user, setUser] = useState(emptyItem);
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
   const [auths, setAuths] = useState([]);
 
   useEffect(() => {
-    if (id) {
-      // Obtener datos del usuario por ID
-      fetch(`/api/v1/users/${id}`, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Error al obtener datos del usuario");
-          }
-          return response.json();
-        })
-        .then((data) => setUser(data))
-        .catch((error) => {
-          setMessage(error.message);
-          setVisible(true);
-        });
-    }
-
-    // Obtener lista de autoridades
+    // Fetch available authorities
     fetch(`/api/v1/users/authorities`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -64,7 +39,7 @@ export default function UserEditAdmin() {
         setMessage(error.message);
         setVisible(true);
       });
-  }, [id]);
+  }, []);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -72,8 +47,7 @@ export default function UserEditAdmin() {
     if (name === "authority") {
       const selectedAuth = auths.find((auth) => auth.id === Number(value));
       setUser({ ...user, authority: selectedAuth });
-    } else if (name !== "password") {
-      // Ignorar cambios en la contraseña
+    } else {
       setUser({ ...user, [name]: value });
     }
   }
@@ -81,35 +55,39 @@ export default function UserEditAdmin() {
   function handleSubmit(event) {
     event.preventDefault();
   
-    const userToUpdate = { ...user };
-    delete userToUpdate.password; // Omitir contraseña
+    // Validar campos requeridos
+    if (!user.username || !user.password || !user.authority) {
+      setMessage("Todos los campos obligatorios deben estar completos.");
+      setVisible(true);
+      return;
+    }
   
-    fetch(`/api/v1/users/${user.id}}`, {
-      method: "PUT",
+    // Preparar el objeto para enviar al backend
+    const userToCreate = {
+      ...user,
+      authority: user.authority?.authority, // Enviar solo el nombre de la autoridad
+    };
+  
+    fetch(`/api/v1/auth/signup`, {
+      method: "POST",
       headers: {
-        Authorization: `Bearer ${jwt}`,
         Accept: "application/json",
         "Content-Type": "application/json",
+        Authorization: `Bearer ${jwt}`, // Para asegurarse de que solo los administradores puedan crear usuarios
       },
-      body: JSON.stringify(userToUpdate),
+      body: JSON.stringify(userToCreate),
     })
       .then((response) => {
-        if (response.status === 204) return; // Manejar respuestas sin contenido
         if (!response.ok) {
-          throw new Error("Error al guardar el usuario");
+          return response.json().then((error) => {
+            throw new Error(error.message || "Error al crear el usuario");
+          });
         }
         return response.json();
       })
-      .then(() => {
-        if (user.username === currentUser && user.authority?.authority !== jwt_decode(jwt).authority) {
-          // Redirigir al usuario actual a "/" si cambió su autoridad
-          sendLogoutRequest();
-          window.location.reload();
-          window.location.href = "/";
-
-        } else {
-          window.location.href = "/users";
-        }
+      .then((data) => {
+        alert("Usuario creado exitosamente!");
+        window.location.href = "/users";
       })
       .catch((error) => {
         setMessage(error.message);
@@ -121,10 +99,36 @@ export default function UserEditAdmin() {
 
   return (
     <div className="auth-page-container">
-      <h2>{"Editar usuario"}</h2>
+      <h2>Crear nuevo usuario</h2>
       {modal}
       <div className="auth-form-container">
         <Form onSubmit={handleSubmit}>
+          <div className="custom-form-input">
+            <Label for="firstName" className="custom-form-input-label">
+              Nombre
+            </Label>
+            <Input
+              type="text"
+              name="Nombre"
+              id="firstName"
+              value={user.firstName}
+              onChange={handleChange}
+              className="custom-input"
+            />
+          </div>
+          <div className="custom-form-input">
+            <Label for="firstName" className="custom-form-input-label">
+              Apellido
+            </Label>
+            <Input
+              type="text"
+              name="Apellido"
+              id="lastName"
+              value={user.lastName}
+              onChange={handleChange}
+              className="custom-input"
+            />
+          </div>
           <div className="custom-form-input">
             <Label for="username" className="custom-form-input-label">
               Nombre de usuario
@@ -134,7 +138,21 @@ export default function UserEditAdmin() {
               required
               name="username"
               id="username"
-              value={user.username || ""}
+              value={user.username}
+              onChange={handleChange}
+              className="custom-input"
+            />
+          </div>
+          <div className="custom-form-input">
+            <Label for="password" className="custom-form-input-label">
+              Contraseña
+            </Label>
+            <Input
+              type="password"
+              required
+              name="password"
+              id="password"
+              value={user.password}
               onChange={handleChange}
               className="custom-input"
             />
@@ -147,7 +165,7 @@ export default function UserEditAdmin() {
               type="textarea"
               name="descripcionPerfil"
               id="descripcionPerfil"
-              value={user.descripcionPerfil || ""}
+              value={user.descripcionPerfil}
               onChange={handleChange}
               className="custom-input"
             />
@@ -160,7 +178,7 @@ export default function UserEditAdmin() {
               type="url"
               name="imagenPerfil"
               id="imagenPerfil"
-              value={user.imagenPerfil || ""}
+              value={user.imagenPerfil || "https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg"}
               onChange={handleChange}
               className="custom-input"
             />
@@ -171,6 +189,7 @@ export default function UserEditAdmin() {
             </Label>
             <Input
               type="select"
+              required
               name="authority"
               id="authority"
               value={user.authority?.id || ""}

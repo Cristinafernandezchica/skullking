@@ -26,13 +26,13 @@ public class Jugador extends BaseEntity {
     @NotNull
     private Integer puntos;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "partida_id")
     private Partida partida;      
 
     @NotNull
     @JoinColumn(name = "user_id")
-	@ManyToOne(optional = false, cascade = CascadeType.REMOVE)
+	@ManyToOne(optional = false)
     private User usuario;
 
     @PositiveOrZero

@@ -2,6 +2,7 @@ package es.us.dp1.lx_xy_24_25.your_game_name.ronda;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.model.BaseEntity;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -27,7 +28,7 @@ public class Ronda extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private RondaEstado estado;
 
-    @ManyToOne(optional=false)
+    @ManyToOne(optional=false, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "partida_id")
     private Partida partida;
 

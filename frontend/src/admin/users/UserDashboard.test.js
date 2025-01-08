@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
-import UserStatisticsDashboard from '../UserDashboard'; // Asegúrate de importar el componente correcto
+import UserStatisticsDashboard from './UserDashboard'; // Asegúrate de importar el componente correcto
 
 // Mock para los endpoints de la API
 const server = setupServer(

@@ -77,7 +77,7 @@ export default function Perfil() {
 
     useEffect(() => {
         fetchListaDeAmigos(usuarioActual.id,setListaDeAmigos,jwt);
-    })
+    },[]);
 
     useEffect(() => {
         async function fetchUserAndPlayers() {

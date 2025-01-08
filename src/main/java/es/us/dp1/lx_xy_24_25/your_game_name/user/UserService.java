@@ -28,14 +28,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import es.us.dp1.lx_xy_24_25.your_game_name.chat.ChatRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaRepository;
-import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaRepository;
-import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoRepository;
 
 @Service
 public class UserService {
@@ -44,15 +40,12 @@ public class UserService {
 	private JugadorRepository jugadorRepository;	
 	private JugadorService jugadorService;
 
-	
-
 	private final ConcurrentHashMap<Integer, UserStats> userStatsMap = new ConcurrentHashMap<>();
 
 	@Autowired
 	public UserService(UserRepository userRepository, JugadorRepository jugadorRepository) {
 		this.userRepository = userRepository;
 		this.jugadorRepository = jugadorRepository;
-
 	}
 
 	@Transactional
@@ -126,75 +119,6 @@ public class UserService {
 		userRepository.save(toUpdate);
 		return toUpdate;
 	}
-/*
-	@Transactional
-	public void deleteUser(Integer id) {
-		User user = findUser(id);
-	
-		// Obtener jugadores asociados al usuario
-		List<Jugador> jugadores = jugadorRepository.findJugadoresByUsuarioId(id);
-	
-		// Validar si algún jugador está en partida activa
-		for (Jugador jugador : jugadores) {
-			Partida partida = jugador.getPartida();
-			if (partida != null && (partida.getEstado().equals(PartidaEstado.ESPERANDO)
-				|| partida.getEstado().equals(PartidaEstado.JUGANDO))) {
-				throw new IllegalStateException(
-					String.format("El usuario %s no puede eliminarse porque tiene jugadores en partidas activas.", user.getUsername())
-				);
-			}
-		}
-		// Eliminar jugadores restantes en partidas terminadas
-		for (Jugador jugador : jugadores) {
-			deleteJugadorConDependencias(jugador.getId());
-		}
-	
-		// Finalmente, eliminar al usuario
-		userRepository.delete(user);
-	}
-
-	@Transactional
-	public void deletePartidaConDependencias(Integer id) {
-		Partida partida = partidaRepository.findById(id).orElseThrow(
-			() -> new ResourceNotFoundException("Partida no encontrada.")
-		);
-
-		// Eliminar jugadores de la partida
-		List<Jugador> jugadores = jugadorRepository.findJugadoresByPartidaId(id);
-		for (Jugador jugador : jugadores) {
-			jugadorRepository.delete(jugador);
-		}
-			// Eliminar dependencias de la partida
-			rondaRepository.deleteByPartidaId(id);
-
-		// Finalmente eliminar la partida
-		partidaRepository.delete(partida);
-	}
-
-	
-
-
-	@Transactional
-	public void deleteJugadorConDependencias(Integer id) {
-		Jugador jugador = jugadorRepository.findById(id).orElseThrow(
-			() -> new ResourceNotFoundException("Jugador no encontrado.")
-		);
-	
-		// Si el jugador es el owner de la partida, eliminar la partida
-		Partida partida = jugador.getPartida();
-		if (partida.getOwnerPartida().equals(jugador.getUsuario().getId())) {
-			deletePartidaConDependencias(partida.getId());
-		}
-	
-
-		// Eliminar dependencias relacionadas con el jugador
-		chatRepository.deleteByJugadorId(jugador.getId());
-		trucoRepository.deleteByJugadorId(jugador.getId());
-	
-		// Finalmente, eliminar al jugador
-		jugadorRepository.delete(jugador);
-	}
-*/
 
 	@Transactional
 	public void deleteUser(Integer id) {

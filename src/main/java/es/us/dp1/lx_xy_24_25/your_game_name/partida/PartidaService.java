@@ -10,10 +10,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import org.aspectj.bridge.Message;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -31,6 +29,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.mano.exceptions.ApuestaNoValidaExcep
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MinJugadoresPartidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MismoNombrePartidaNoTerminadaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
+import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.UserService;
@@ -43,23 +42,26 @@ public class PartidaService {
 
     private static final Logger logger = LoggerFactory.getLogger(PartidaService.class);
 
-    PartidaRepository pr;
+    PartidaRepository partidaRepository;
     RondaService rondaService;
     JugadorService jugadorService;
-    UserService us;
+    UserService userService;
     // Añadir a Autowired cuando esté todo
     BazaService bazaService;
     ManoService manoService;
+    RondaRepository rondaRepository;
     private static final int ULTIMA_RONDA = 10;
     private SimpMessagingTemplate messagingTemplate;
 
 
     @Autowired
-    public PartidaService(PartidaRepository pr, RondaService rondaService, JugadorService jugadorService, UserService us, BazaService bazaService, ManoService manoService, SimpMessagingTemplate messagingTemplate) {
-        this.pr = pr;
+    public PartidaService(PartidaRepository partidaRepository, RondaService rondaService, JugadorService jugadorService, 
+    UserService userService, RondaRepository rondaRepository, BazaService bazaService, ManoService manoService, SimpMessagingTemplate messagingTemplate) {
+        this.partidaRepository = partidaRepository;
         this.rondaService = rondaService;
         this.jugadorService = jugadorService;
-        this.us = us;
+        this.userService = userService;
+        this.rondaRepository = rondaRepository;
         this.bazaService = bazaService;
         this.manoService = manoService;
         this.messagingTemplate = messagingTemplate;
@@ -69,13 +71,13 @@ public class PartidaService {
     @Transactional(readOnly=true)
     public List<Partida> getAllPartidas(String nombre, PartidaEstado estado) throws DataAccessException{
         if(nombre != null && estado != null){
-            return pr.findByNombreAndEstado(nombre, estado);
+            return partidaRepository.findByNombreAndEstado(nombre, estado);
         } else if(nombre != null){
-            return pr.findByNombre(nombre);
+            return partidaRepository.findByNombre(nombre);
         } else if(estado != null){
-            return pr.findByEstado(estado);
+            return partidaRepository.findByEstado(estado);
         } else {
-            Iterable<Partida> iterablePartidas = pr.findAll();
+            Iterable<Partida> iterablePartidas = partidaRepository.findAll();
             List<Partida> listaPartidas = new ArrayList<>(); 
             iterablePartidas.forEach(listaPartidas::add);
             return listaPartidas;
@@ -84,7 +86,7 @@ public class PartidaService {
 
     @Transactional(readOnly = true)
     public Partida getPartidaById(Integer id) throws DataAccessException{
-        Optional<Partida> partida = pr.findById(id);
+        Optional<Partida> partida = partidaRepository.findById(id);
         if(partida.isPresent()){
             return partida.get();
         } else{
@@ -103,7 +105,7 @@ public class PartidaService {
         } else if(usuarioJugadorEnPartida(p)){
             throw new UsuarioPartidaEnJuegoEsperandoException("No puede crear una partida, ya tiene una en espera o en juego.");
         }
-        return pr.save(p);
+        return partidaRepository.save(p);
     }
 
 
@@ -111,16 +113,29 @@ public class PartidaService {
     public Partida update(@Valid Partida partida, Integer idToUpdate) throws DataAccessException{
         Partida toUpdate = getPartidaById(idToUpdate);
         BeanUtils.copyProperties(partida, toUpdate, "id");
-        pr.save(toUpdate);
+        partidaRepository.save(toUpdate);
         return toUpdate;
     }
 
-
     @Transactional
     public void delete(Integer id) throws DataAccessException{
-        pr.deleteById(id);
+        Partida partida = partidaRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("Partida no encontrada.")
+        );
+    
+        // Eliminar jugadores asociados a la partida
+        List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(id);
+        if (!jugadores.isEmpty()) {
+            for (Jugador jugador : jugadores) {
+                jugadorService.deleteJugador(jugador.getId());
+            }
+        }
+        
+        // Eliminar dependencias de la partida
+		rondaRepository.deleteByPartidaId(id);
+    
+        partidaRepository.delete(partida);
     }
-
 
 
     // Lógica de juego
@@ -192,7 +207,7 @@ public class PartidaService {
 
             usuarioJugador.setNumPuntosGanados(usuarioJugador.getNumPuntosGanados() + jugador.getPuntos());
             usuarioJugador.setNumPartidasJugadas(usuarioJugador.getNumPartidasJugadas() + 1);
-            us.saveUser(usuarioJugador);
+            userService.saveUser(usuarioJugador);
 
             logger.info("Estadísticas actualizadas para el jugador {}: Puntos totales: {}, Partidas jugadas: {}",
                     usuarioJugador.getUsername(),
@@ -215,7 +230,7 @@ public class PartidaService {
                 u.setNumPartidasGanadas(0);
             }
             u.setNumPartidasGanadas(u.getNumPartidasGanadas() + 1);
-            us.saveUser(u);
+            userService.saveUser(u);
             logger.info("El usuario {} ha ganado la partida y ahora tiene {} partidas ganadas.",
                     u.getUsername(),
                     u.getNumPartidasGanadas());
@@ -233,7 +248,7 @@ public class PartidaService {
     }
     // Para Excepción: Si ya tiene una partida creada en juego o esperando, no podrá crear otra partida
     public Boolean usuarioPartidaEnJuegoEsperando(Integer ownerId){
-        List<Partida> partidasEnProgresoEsperando = pr.findByOwnerPartidaAndEstado(ownerId, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO));
+        List<Partida> partidasEnProgresoEsperando = partidaRepository.findByOwnerPartidaAndEstado(ownerId, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO));
         return !partidasEnProgresoEsperando.isEmpty();
     }
 
@@ -255,8 +270,8 @@ public class PartidaService {
     // Excepción: No puede haber dos partidas (no finalizadas) con el mismo nombre TODO: PPROBAR
     public Boolean mismoNombrePartidaNoTerminada(Partida partidaCrear) throws DataAccessException{
         Boolean lanzarExcepcion = false;
-        List<Partida> partidasFiltradasEsperando = pr.findByNombreAndEstado(partidaCrear.getNombre(), PartidaEstado.ESPERANDO);
-        List<Partida> partidasFiltradasJugando = pr.findByNombreAndEstado(partidaCrear.getNombre(), PartidaEstado.JUGANDO);
+        List<Partida> partidasFiltradasEsperando = partidaRepository.findByNombreAndEstado(partidaCrear.getNombre(), PartidaEstado.ESPERANDO);
+        List<Partida> partidasFiltradasJugando = partidaRepository.findByNombreAndEstado(partidaCrear.getNombre(), PartidaEstado.JUGANDO);
         if(partidasFiltradasEsperando.size() > 0 || partidasFiltradasJugando.size() > 0){
             lanzarExcepcion = true;
         }

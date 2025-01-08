@@ -144,27 +144,88 @@ export default function Perfil() {
     const eliminarCuenta = async () => {
         if (window.confirm("¿Estás seguro de que quieres eliminar tu cuenta? Esta acción es irreversible.")) {
             try {
-                const response = await fetch(`/api/v1/users/${user.id}`, {
+                // Obtener jugadores asociados al usuario actual
+                const jugadoresResponse = await fetch(`/api/v1/jugadores/${user.id}/usuarios`, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${jwt}`,
                     },
-                    method: "DELETE",
                 });
-
-                if (response.ok) {
-                    alert("Cuenta eliminada con éxito.");
-                    tokenService.removeUser();
-                    navigate("/");
-                    window.location.reload();
-                } else {
-                    alert("Error al eliminar la cuenta.");
+    
+                if (!jugadoresResponse.ok) {
+                    if (jugadoresResponse.status === 404) {
+                        console.warn("No tiene jugadores asociados.");
+                        await eliminarUsuarioDirectamente(user.id);
+                        return;
+                    }
+                    throw new Error("Error al verificar jugadores asociados.");
                 }
+    
+                const jugadores = await jugadoresResponse.json();
+    
+                // Verificar si todos los jugadores están en partidas TERMINADAS
+                for (const jugador of jugadores) {
+                    const partidaEstado = jugador.partida.estado.trim().toUpperCase();
+    
+                    if (["JUGANDO", "ESPERANDO"].includes(partidaEstado)) {
+                        alert(`No se puede eliminar la cuenta porque el jugador está en una partida en estado "${partidaEstado}".`);
+                        return;
+                    }
+    
+                    // Si el jugador es owner de una partida, eliminar la partida y sus dependencias
+                    if (jugador.partida.ownerPartida === jugador.id) {
+                        await fetch(`/api/v1/partidas/${jugador.partida.id}`, {
+                            method: "DELETE",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${jwt}`,
+                            },
+                        });
+                    }
+    
+                    // Eliminar el jugador
+                    await fetch(`/api/v1/jugadores/${jugador.id}`, {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${jwt}`,
+                        },
+                    });
+                }
+    
+                // Eliminar el usuario directamente
+                await eliminarUsuarioDirectamente(user.id);
             } catch (error) {
                 console.error("Error al eliminar la cuenta:", error);
+                alert("Error al eliminar la cuenta.");
             }
         }
     };
+    
+    async function eliminarUsuarioDirectamente(userId) {
+        try {
+            const response = await fetch(`/api/v1/users/${userId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${jwt}`,
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error("Error al eliminar el usuario.");
+            }
+    
+            alert("Cuenta eliminada con éxito.");
+            tokenService.removeUser();
+            navigate("/");
+            window.location.reload();
+        } catch (error) {
+            console.error("Error al eliminar el usuario:", error);
+            alert("Error al eliminar el usuario.");
+        }
+    }
+    
 
     if (isLoading) {
         return (
@@ -191,7 +252,6 @@ export default function Perfil() {
         <div className="perfil-container">
             <h2 className="perfil-title">Mi Perfil</h2>
 
-            {/* Mostrar mensajes de error y éxito */}
             <div className="validation-messages">
                 {errors.length > 0 && errors.map((error, index) => (
                     <Alert key={index} color="danger">{error}</Alert>
@@ -211,7 +271,6 @@ export default function Perfil() {
                 <p className="perfil-description">{user.descripcionPerfil}</p>
             </div>
 
-            {/* Mostrar frase basada en el estado del último jugador */}
             {lastPlayer && (
                 <div className="player-status-message">
                     {lastPlayer.partida.estado === "ESPERANDO" && (
@@ -223,115 +282,114 @@ export default function Perfil() {
                 </div>
             )}
 
-<div className="perfil-actions" style={{ marginTop: "20px", marginBottom:"20px" }}>
-    {!hasRestrictedPlayer && (
-        <>
-            <Button
-                className="perfil-button edit-button"
-                onClick={() => navigate("/editarPerfil")}
-            >
-                Editar Perfil
-            </Button>
-            <Button
-                className="perfil-button delete-button"
-                onClick={eliminarCuenta}
-            >
-                Eliminar Perfil
-            </Button>
-        </>
-    )}
+            <div className="perfil-actions" style={{ marginTop: "20px", marginBottom:"20px" }}>
+                {!hasRestrictedPlayer && (
+                    <>
+                        <Button
+                            className="perfil-button edit-button"
+                            onClick={() => navigate("/editarPerfil")}
+                        >
+                            Editar Perfil
+                        </Button>
+                        <Button
+                            className="perfil-button delete-button"
+                            onClick={eliminarCuenta}
+                        >
+                            Eliminar Perfil
+                        </Button>
+                    </>
+                )}
 
-    {hasRestrictedPlayer && (
-        <>
-            <Button outline color="success" onClick={handleVolverPartida}>
-                Volver a partida
-            </Button>
-        </>
-    )}
-    <Button
-        className="perfil-button back-button"
-        onClick={() => navigate("/")}
-    >
-        Volver al Inicio
-    </Button>
-</div>
-
-            {/* Input para enviar solicitud */}
-            <div className="solicitud-container" style={{ marginBottom: "20px" }}>
-    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Escribe el nombre de usuario"
-            className="solicitud-input"
-            style={{
-                padding: "10px",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                flexGrow: 1,
-            }}
-        />
-        <Button color="primary" onClick={handleEnviarSolicitud}>
-            Enviar Solicitud
-        </Button>
-    </div>
-</div>
-
-<div className="amigos-lista">
-    <h3>Lista de Amigos</h3>
-    <ul style={{ padding: 0, listStyleType: "none" }}>
-        {listaDeAmigos.map((amigo) => (
-            <li 
-                key={amigo.id} 
-                className="amigo-item" 
-                style={{ 
-                    display: "flex", 
-                    alignItems: "center", 
-                    justifyContent: "space-between", 
-                    marginBottom: "10px" 
-                }}
-            >
-                <div style={{ display: "flex", alignItems: "center" }}>
-                    {amigo.imagenPerfil && (
-                        <img 
-                            src={amigo.imagenPerfil} 
-                            alt="Perfil" 
-                            style={{ 
-                                width: "40px", 
-                                height: "40px", 
-                                borderRadius: "50%", 
-                                marginRight: "10px" 
-                            }} 
-                        />
-                    )}
-                    <span style={{ fontSize: "18px", fontWeight: "bold", textAlign: "left" }}>
-                        {amigo.username}
-                    </span>
-                    {amigo.conectado && (
-                        <span 
-                            className="status-circle" 
-                            style={{ 
-                                backgroundColor: "green", 
-                                width: "10px", 
-                                height: "10px", 
-                                borderRadius: "50%", 
-                                marginLeft: "10px" 
-                            }}
-                        />
-                    )}
-                </div>
-                <button 
-                    className="unfriend-button" 
-                    onClick={() => handleEliminarAmigo(amigo.id)}
-                    title="Eliminar amigo"
+                {hasRestrictedPlayer && (
+                    <>
+                        <Button outline color="success" onClick={handleVolverPartida}>
+                            Volver a partida
+                        </Button>
+                    </>
+                )}
+                <Button
+                    className="perfil-button back-button"
+                    onClick={() => navigate("/")}
                 >
-                    🚫
-                </button>
-            </li>
-        ))}
-    </ul>
-</div>
+                    Volver al Inicio
+                </Button>
+            </div>
+
+            <div className="solicitud-container" style={{ marginBottom: "20px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <input
+                        type="text"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        placeholder="Escribe el nombre de usuario"
+                        className="solicitud-input"
+                        style={{
+                            padding: "10px",
+                            border: "1px solid #ccc",
+                            borderRadius: "5px",
+                            flexGrow: 1,
+                        }}
+                    />
+                    <Button color="primary" onClick={handleEnviarSolicitud}>
+                        Enviar Solicitud
+                    </Button>
+                </div>
+            </div>
+
+            <div className="amigos-lista">
+                <h3>Lista de Amigos</h3>
+                <ul style={{ padding: 0, listStyleType: "none" }}>
+                    {listaDeAmigos.map((amigo) => (
+                        <li 
+                            key={amigo.id} 
+                            className="amigo-item" 
+                            style={{ 
+                                display: "flex", 
+                                alignItems: "center", 
+                                justifyContent: "space-between", 
+                                marginBottom: "10px" 
+                            }}
+                        >
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                                {amigo.imagenPerfil && (
+                                    <img 
+                                        src={amigo.imagenPerfil} 
+                                        alt="Perfil" 
+                                        style={{ 
+                                            width: "40px", 
+                                            height: "40px", 
+                                            borderRadius: "50%", 
+                                            marginRight: "10px" 
+                                        }} 
+                                    />
+                                )}
+                                <span style={{ fontSize: "18px", fontWeight: "bold", textAlign: "left" }}>
+                                    {amigo.username}
+                                </span>
+                                {amigo.conectado && (
+                                    <span 
+                                        className="status-circle" 
+                                        style={{ 
+                                            backgroundColor: "green", 
+                                            width: "10px", 
+                                            height: "10px", 
+                                            borderRadius: "50%", 
+                                            marginLeft: "10px" 
+                                        }}
+                                    />
+                                )}
+                            </div>
+                            <button 
+                                className="unfriend-button" 
+                                onClick={() => handleEliminarAmigo(amigo.id)}
+                                title="Eliminar amigo"
+                            >
+                                🚫
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 }

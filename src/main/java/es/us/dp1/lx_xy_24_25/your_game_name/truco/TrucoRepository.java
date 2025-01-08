@@ -1,7 +1,10 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.truco;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 
@@ -34,4 +37,10 @@ public interface TrucoRepository extends CrudRepository<Truco, Integer> {
     @Query("SELECT DISTINCT t.jugador FROM Truco t WHERE t.baza.id = :bazaId AND t.idCarta = :cartaId")
 	public Optional<Integer> findJugadorIdByBazaIdCartaId(Integer bazaId, Integer cartaId);
     */
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Truco t WHERE t.jugador.id = :jugadorId")
+    void deleteByJugadorId(@Param("jugadorId") Integer jugadorId);
+
 }

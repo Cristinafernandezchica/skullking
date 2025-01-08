@@ -7,19 +7,20 @@ import java.util.stream.StreamSupport;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.chat.ChatRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.UsuarioPartidaEnJuegoEsperandoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.exceptions.MaximoJugadoresPartidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.exceptions.UsuarioMultiplesJugadoresEnPartidaException;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaRepository;
-import es.us.dp1.lx_xy_24_25.your_game_name.user.UserRepository;
+import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoRepository;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import jakarta.validation.Valid;
@@ -28,14 +29,23 @@ import jakarta.validation.Valid;
 public class JugadorService {
     private JugadorRepository jugadorRepository;
     private PartidaRepository partidaRepository;
-    private UserRepository userRepository;
+    private ChatRepository chatRepository;
+	private TrucoRepository trucoRepository;
+    private BazaRepository bazaRepository;
+    private ManoRepository manoRepository;
+
     private static final Integer MAX_JUGADORES = 8;
     private SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    public JugadorService(JugadorRepository jugadorRepository, PartidaRepository partidaRepository, SimpMessagingTemplate messagingTemplate) {
+    public JugadorService(JugadorRepository jugadorRepository, PartidaRepository partidaRepository, BazaRepository bazaRepository, ManoRepository manoRepository,
+    ChatRepository chatRepository, TrucoRepository trucoRepository, SimpMessagingTemplate messagingTemplate) {
         this.jugadorRepository = jugadorRepository;
         this.partidaRepository = partidaRepository;
+		this.chatRepository = chatRepository;
+		this.trucoRepository = trucoRepository;
+        this.bazaRepository = bazaRepository;
+        this.manoRepository = manoRepository;
         this.messagingTemplate = messagingTemplate;
     }
 
@@ -114,12 +124,20 @@ public class JugadorService {
     // Delete jugador por id
     @Transactional
     public void deleteJugador(Integer id) {
-        try {
-            jugadorRepository.deleteById(id);
-        } catch (DataIntegrityViolationException ex) {
-            throw new ResourceNotFoundException("No se puede eliminar el jugador debido a una restricción de integridad." + ex);
-        }
+        Jugador jugador = jugadorRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("Jugador no encontrado.")
+        );
+
+        
+		// Eliminar dependencias relacionadas con el jugador
+		chatRepository.deleteByJugadorId(jugador.getId());
+		trucoRepository.deleteByJugadorId(jugador.getId());
+        bazaRepository.deleteByJugadorId(jugador.getId());
+        manoRepository.deleteByJugadorId(jugador.getId());
+        
+        jugadorRepository.delete(jugador);
     }
+
 
     
     // Update jugador

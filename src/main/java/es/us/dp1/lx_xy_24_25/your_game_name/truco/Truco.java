@@ -4,6 +4,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.model.BaseEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.EqualsAndHashCode;
@@ -22,23 +23,23 @@ import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 public class Truco extends BaseEntity{
 
     // @Valid
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "baza_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Baza baza;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "jugador_id")
     private Jugador jugador;
 
     // @Valid
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "mano_id")
 	private Mano mano;
 
 
     // Carta sacada de la relación con la entidad Mano
-    @ManyToOne(optional = true)
+    @ManyToOne(optional = true, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "carta_id")
     private Carta carta;
 

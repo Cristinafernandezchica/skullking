@@ -36,6 +36,8 @@ public class AuthService {
 		User user = new User();
 		user.setUsername(request.getUsername());
 		user.setPassword(encoder.encode(request.getPassword()));
+		user.setDescripcionPerfil(request.getDescripcionPerfil());
+		user.setImagenPerfil(request.getImagenPerfil());
 		String strRoles = request.getAuthority();
 		Authorities role;
 

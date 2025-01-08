@@ -167,12 +167,17 @@ public class PartidaService {
     // Finalizamos la partida
     @Transactional
     public void finalizarPartida(Integer partidaId) {
+        logger.info("Intentando finalizar la partida con ID: {}", partidaId);
+
         Partida partida = getPartidaById(partidaId);
         if (partida == null) {
+            logger.error("Partida con ID {} no encontrada. No se puede finalizar.", partidaId);
             throw new ResourceNotFoundException("Partida", "id", partidaId);
         }
+
         partida.setEstado(PartidaEstado.TERMINADA);
         partida.setFin(LocalDateTime.now());
+        logger.info("La partida con ID {} ha sido marcada como TERMINADA.", partidaId);
 
         Integer puntosGanador = null;
         List<Jugador> jugadoresPartida = jugadorService.findJugadoresByPartidaId(partidaId);
@@ -189,6 +194,11 @@ public class PartidaService {
             usuarioJugador.setNumPartidasJugadas(usuarioJugador.getNumPartidasJugadas() + 1);
             us.saveUser(usuarioJugador);
 
+            logger.info("Estadísticas actualizadas para el jugador {}: Puntos totales: {}, Partidas jugadas: {}",
+                    usuarioJugador.getUsername(),
+                    usuarioJugador.getNumPuntosGanados(),
+                    usuarioJugador.getNumPartidasJugadas());
+
             if (puntosGanador == null || jugador.getPuntos() > puntosGanador) {
                 puntosGanador = jugador.getPuntos();
             }
@@ -199,22 +209,28 @@ public class PartidaService {
                 .filter(j -> j.getPuntos().equals(puntosFinalGanador))
                 .map(Jugador::getUsuario)
                 .collect(Collectors.toList());
+
         for (User u : ganadores) {
             if (u.getNumPartidasGanadas() == null) {
                 u.setNumPartidasGanadas(0);
             }
             u.setNumPartidasGanadas(u.getNumPartidasGanadas() + 1);
             us.saveUser(u);
+            logger.info("El usuario {} ha ganado la partida y ahora tiene {} partidas ganadas.",
+                    u.getUsername(),
+                    u.getNumPartidasGanadas());
         }
+
         update(partida, partidaId);
+        logger.info("La partida con ID {} ha sido finalizada y actualizada en la base de datos.", partidaId);
 
         Map<String, Object> message = new HashMap<>();
         message.put("status", "FINALIZADA"); // Estado de la partida
 
         // Enviar el mensaje a través de WebSocket
         messagingTemplate.convertAndSend("/topic/partida/" + partidaId, message);
+        logger.info("Se envió notificación de finalización de partida con ID {} a través de WebSocket.", partidaId);
     }
-
     // Para Excepción: Si ya tiene una partida creada en juego o esperando, no podrá crear otra partida
     public Boolean usuarioPartidaEnJuegoEsperando(Integer ownerId){
         List<Partida> partidasEnProgresoEsperando = pr.findByOwnerPartidaAndEstado(ownerId, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO));

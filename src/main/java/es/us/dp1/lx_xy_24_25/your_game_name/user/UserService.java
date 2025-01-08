@@ -48,7 +48,13 @@ public class UserService {
 
     @Transactional
     public User saveUser(User user) throws DataAccessException {
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        // Save realizado antes para que user.getId() tenga un valor antes de que el usuario sea guardado en la base de datos, 
+        // computeIfAbsent no contempla el null ( si nos pasa en algún lado algo asi, por si acaso, meto una excepcion ahi)
+        if (savedUser.getId() == null) {
+            throw new IllegalStateException("El usuario guardado no tiene aún un ID generado");
+        }
+        return savedUser;
     }
 
     @Transactional(readOnly = true)
@@ -64,14 +70,14 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User findCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null) {
-            throw new ResourceNotFoundException("Nobody authenticated!");
-        }
-        return userRepository.findByUsername(auth.getName())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", auth.getName()));
-    }
+	public User findCurrentUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth == null)
+			throw new ResourceNotFoundException("Nobody authenticated!");
+		else
+			return userRepository.findByUsername(auth.getName())
+					.orElseThrow(() -> new ResourceNotFoundException("User", "Username", auth.getName()));
+	}
 
     public Boolean existsUser(String username) {
         return userRepository.existsByUsername(username);
@@ -90,26 +96,29 @@ public class UserService {
     public User updateUser(@Valid User user, Integer idToUpdate) {
         User toUpdate = findUser(idToUpdate);
         BeanUtils.copyProperties(user, toUpdate, "id");
-        return userRepository.save(toUpdate);
+        userRepository.save(toUpdate);
+		return toUpdate;
     }
 
     @Transactional
     public void deleteUser(Integer id) {
         User toDelete = findUser(id);
-        userRepository.delete(toDelete);
+//		deleteRelations(id, toDelete.getAuthority().getAuthority());
+//		this.userRepository.deletePlayerRelation(id);
+		this.userRepository.delete(toDelete);
     }
 
     // Método para obtener usuarios ordenados por puntos totales
     @Transactional(readOnly = true)
-public List<User> getUsersSortedByPoints() {
-    List<User> users = (List<User>) findAll();
-    return users.stream()
-            .filter(u -> !u.hasAuthority("ADMIN"))
-            .sorted((u1, u2) -> Integer.compare(
-                    Optional.ofNullable(u2.getNumPuntosGanados()).orElse(0),
-                    Optional.ofNullable(u1.getNumPuntosGanados()).orElse(0)))
-            .collect(Collectors.toList());
-}
+    public List<User> getUsersSortedByPoints() {
+        List<User> users = (List<User>) findAll();
+        return users.stream()
+                .filter(u -> !u.hasAuthority("ADMIN"))
+                .sorted((u1, u2) -> Integer.compare(
+                        Optional.ofNullable(u2.getNumPuntosGanados()).orElse(0),
+                        Optional.ofNullable(u1.getNumPuntosGanados()).orElse(0)))
+                .collect(Collectors.toList());
+    }
 
     // Nuevo método: Obtener usuarios ordenados por porcentaje de victorias
     @Transactional(readOnly = true)

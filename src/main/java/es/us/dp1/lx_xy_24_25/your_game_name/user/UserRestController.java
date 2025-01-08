@@ -31,87 +31,73 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @SecurityRequirement(name = "bearerAuth")
 class UserRestController {
 
-	private final UserService userService;
-	private final AuthoritiesService authService;
+    private final UserService userService;
+    private final AuthoritiesService authService;
 
-	@Autowired
-	public UserRestController(UserService userService, AuthoritiesService authService) {
-		this.userService = userService;
-		this.authService = authService;
-	}
+    @Autowired
+    public UserRestController(UserService userService, AuthoritiesService authService) {
+        this.userService = userService;
+        this.authService = authService;
+    }
 
-	@GetMapping
-	public ResponseEntity<List<User>> findAll(@RequestParam(required = false) String auth) {
-		List<User> res;
-		if (auth != null) {
-			res = (List<User>) userService.findAllByAuthority(auth);
-		} else
-			res = (List<User>) userService.findAll();
-		return new ResponseEntity<>(res, HttpStatus.OK);
-	}
+    @GetMapping
+    public ResponseEntity<List<User>> findAll(@RequestParam(required = false) String auth) {
+        List<User> res;
+        if (auth != null) {
+            res = (List<User>) userService.findAllByAuthority(auth);
+        } else {
+            res = (List<User>) userService.findAll();
+        }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 
-	@GetMapping("authorities")
-	public ResponseEntity<List<Authorities>> findAllAuths() {
-		List<Authorities> res = (List<Authorities>) authService.findAll();
-		return new ResponseEntity<>(res, HttpStatus.OK);
-	}
+    @GetMapping("authorities")
+    public ResponseEntity<List<Authorities>> findAllAuths() {
+        List<Authorities> res = (List<Authorities>) authService.findAll();
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 
-	@GetMapping(value = "{id}")
-	public ResponseEntity<User> findById(@PathVariable("id") Integer id) {
-		return new ResponseEntity<>(userService.findUser(id), HttpStatus.OK);
-	}
+    @GetMapping(value = "{id}")
+    public ResponseEntity<User> findById(@PathVariable("id") Integer id) {
+        return new ResponseEntity<>(userService.findUser(id), HttpStatus.OK);
+    }
 
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<User> create(@RequestBody @Valid User user) {
-		User savedUser = userService.saveUser(user);
-		return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
-	}
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<User> create(@RequestBody @Valid User user) {
+        User savedUser = userService.saveUser(user);
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    }
 
-	@PutMapping(value = "{userId}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public ResponseEntity<User> update(@PathVariable("userId") Integer id, @RequestBody @Valid User user) {
-		RestPreconditions.checkNotNull(userService.findUser(id), "User", "ID", id);
-		return new ResponseEntity<>(this.userService.updateUser(user, id), HttpStatus.NO_CONTENT);
-	}
+    @PutMapping(value = "{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<User> update(@PathVariable("userId") Integer id, @RequestBody @Valid User user) {
+        RestPreconditions.checkNotNull(userService.findUser(id), "User", "ID", id);
+        return new ResponseEntity<>(this.userService.updateUser(user, id), HttpStatus.NO_CONTENT);
+    }
 
-	@DeleteMapping(value = "{userId}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public ResponseEntity<MessageResponse> delete(@PathVariable("userId") int id) {
-		RestPreconditions.checkNotNull(userService.findUser(id), "User", "ID", id);
-		userService.deleteUser(id);
-		return new ResponseEntity<>(new MessageResponse("Usuario eliminado"), HttpStatus.OK);
-	}
+    @DeleteMapping(value = "{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<MessageResponse> delete(@PathVariable("userId") int id) {
+        RestPreconditions.checkNotNull(userService.findUser(id), "User", "ID", id);
+        userService.deleteUser(id);
+        return new ResponseEntity<>(new MessageResponse("Usuario eliminado"), HttpStatus.OK);
+    }
 
-	//AÑADIDOS PARA LAS ESTADÍSTICAS
+    // Método para obtener usuarios ordenados por puntos totales
+    @GetMapping("/sorted-by-points")
+    public ResponseEntity<List<User>> getUsersSortedByPoints() {
+        List<User> usersByPoints = userService.getUsersSortedByPoints();
+        return new ResponseEntity<>(usersByPoints, HttpStatus.OK);
+    }
 
-	// Método para obtener usuarios ordenados por puntos totales
-	@GetMapping("/sorted-by-points")
-	public ResponseEntity<List<UserStats>> getUsersSortedByPoints() {
-		List<UserStats> usersByPoints = userService.getUsersSortedByPoints();
-		return new ResponseEntity<>(usersByPoints, HttpStatus.OK);
-	}
-
-	// Método para obtener usuarios ordenados por porcentaje de victorias
-	@GetMapping("/sorted-by-win-percentage")
-	public ResponseEntity<List<UserStats>> getUsersSortedByWinPercentage() {
-		List<UserStats> usersByWinPercentage = userService.getUsersSortedByWinPercentage();
-		return new ResponseEntity<>(usersByWinPercentage, HttpStatus.OK);
-	}
-
-	// Añadido para facilitar el editar perfil
-	@GetMapping("/current")
-	public ResponseEntity<User> findCurrentUserProfile() {
-    	User currentUser = userService.findCurrentUser();
-    	return new ResponseEntity<>(currentUser, HttpStatus.OK);
-	}
-
-	@GetMapping("/current/jugadores")
-	public ResponseEntity<List<Jugador>> getJugadoresByCurrentUser() {
-    	List<Jugador> jugadores = userService.getJugadoresByCurrentUser();
-    	return new ResponseEntity<>(jugadores, HttpStatus.OK);
-	}
-
+    // Método para obtener usuarios ordenados por porcentaje de victorias
+    @GetMapping("/sorted-by-win-percentage")
+    public ResponseEntity<List<User>> getUsersSortedByWinPercentage() {
+        List<User> usersByWinPercentage = userService.getUsersSortedByWinPercentage();
+        return new ResponseEntity<>(usersByWinPercentage, HttpStatus.OK);
+    }
+    
 	@PutMapping(value="conectarODesconectar/{userId}/{conectar}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<User> aceptarORechazarSolicitud(
@@ -120,5 +106,16 @@ class UserRestController {
 		return new ResponseEntity<>(userService.conectarseODesconectarse(userId, conectar), HttpStatus.OK);
     }
 
+    // Obtener el perfil del usuario actual
+    @GetMapping("/current")
+    public ResponseEntity<User> findCurrentUserProfile() {
+        User currentUser = userService.findCurrentUser();
+        return new ResponseEntity<>(currentUser, HttpStatus.OK);
+    }
 
+    @GetMapping("/current/jugadores")
+    public ResponseEntity<List<Jugador>> getJugadoresByCurrentUser() {
+        List<Jugador> jugadores = userService.getJugadoresByCurrentUser();
+        return new ResponseEntity<>(jugadores, HttpStatus.OK);
+    }
 }

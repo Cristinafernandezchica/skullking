@@ -82,3 +82,49 @@
     height: 100vh;
     color: #555;
 }
+
+/* App.css o el archivo CSS que estés utilizando */
+@keyframes slide-down {
+    0% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    20% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    80% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+  }
+  
+  .validation-errors {
+    position: fixed;
+    top: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .slide-down-alert {
+    animation: slide-down 5s ease-in-out;
+  }
+
+  .unfriend-button {
+    background-color: transparent; /* Fondo transparente */
+    border: none; /* Sin bordes */
+    cursor: pointer; /* Cambia el cursor a mano */
+    font-size: 18px; /* Tamaño del ícono */
+    color: red; /* Color rojo */
+}
+
+.unfriend-button:hover {
+    color: red; /* Cambia a rojo al pasar el mouse */
+    transform: scale(1.5);
+}

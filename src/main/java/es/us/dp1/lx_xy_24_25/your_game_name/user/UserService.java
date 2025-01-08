@@ -140,7 +140,17 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    // Método que devuelve los jugadores asociados a un usuario.
+	@Transactional
+	public User conectarseODesconectarse(Integer userId, Boolean conectado){
+		User usuarioAUpdatear= userRepository.findById(userId).orElse(null);
+		if(usuarioAUpdatear==null){
+			throw new ResourceNotFoundException("User", "id", userId);
+		}
+		usuarioAUpdatear.setConectado(conectado);
+		return userRepository.save(usuarioAUpdatear);
+	}
+
+	// Método que devuelve los jugadores asociados a un usuario.
 	@Transactional(readOnly = true)
 	public List<Jugador> getJugadoresByCurrentUser() {
 		User currentUser = findCurrentUser();

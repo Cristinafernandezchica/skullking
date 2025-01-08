@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
@@ -95,6 +96,14 @@ class UserRestController {
     public ResponseEntity<List<User>> getUsersSortedByWinPercentage() {
         List<User> usersByWinPercentage = userService.getUsersSortedByWinPercentage();
         return new ResponseEntity<>(usersByWinPercentage, HttpStatus.OK);
+    }
+    
+	@PutMapping(value="conectarODesconectar/{userId}/{conectar}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<User> aceptarORechazarSolicitud(
+        @PathVariable("userId")Integer userId,
+        @PathVariable("conectar") Boolean conectar ){
+		return new ResponseEntity<>(userService.conectarseODesconectarse(userId, conectar), HttpStatus.OK);
     }
 
     // Obtener el perfil del usuario actual

@@ -32,19 +32,23 @@ import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final JugadorRepository jugadorRepository;
+	private UserRepository userRepository;	
+	private JugadorRepository jugadorRepository;	
+	private JugadorService jugadorService;
 
-    @Autowired
-    public UserService(UserRepository userRepository, JugadorRepository jugadorRepository) {
-        this.userRepository = userRepository;
-        this.jugadorRepository = jugadorRepository;
-    }
+	//private final ConcurrentHashMap<Integer, UserStats> userStatsMap = new ConcurrentHashMap<>();
+
+	@Autowired
+	public UserService(UserRepository userRepository, JugadorRepository jugadorRepository) {
+		this.userRepository = userRepository;
+		this.jugadorRepository = jugadorRepository;
+	}
 
     @Transactional
     public User saveUser(User user) throws DataAccessException {
@@ -70,14 +74,14 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-	public User findCurrentUser() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth == null)
-			throw new ResourceNotFoundException("Nobody authenticated!");
-		else
-			return userRepository.findByUsername(auth.getName())
-					.orElseThrow(() -> new ResourceNotFoundException("User", "Username", auth.getName()));
-	}
+    public User findCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            throw new ResourceNotFoundException("Nobody authenticated!");
+        }
+        return userRepository.findByUsername(auth.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", auth.getName()));
+    }
 
     public Boolean existsUser(String username) {
         return userRepository.existsByUsername(username);
@@ -100,13 +104,22 @@ public class UserService {
 		return toUpdate;
     }
 
-    @Transactional
-    public void deleteUser(Integer id) {
-        User toDelete = findUser(id);
-//		deleteRelations(id, toDelete.getAuthority().getAuthority());
-//		this.userRepository.deletePlayerRelation(id);
-		this.userRepository.delete(toDelete);
-    }
+	@Transactional
+	public void deleteUser(Integer id) {
+		User user = findUser(id);
+
+		// Eliminar jugadores y partidas asociadas directamente desde el repositorio
+		jugadorRepository.deletePartidasByOwner(user.getId());
+
+		List<Jugador> jugadores = jugadorRepository.findJugadoresByUsuarioId(id);
+		if (!jugadores.isEmpty()) {
+			for (Jugador jugador : jugadores) {
+				jugadorService.deleteJugador(jugador.getId());
+			}
+		}
+		// Finalmente, eliminar al usuario
+		userRepository.delete(user);
+	}
 
     // Método para obtener usuarios ordenados por puntos totales
     @Transactional(readOnly = true)

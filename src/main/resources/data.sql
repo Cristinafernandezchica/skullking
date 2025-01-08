@@ -32,6 +32,9 @@ INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (1,15,3,
 INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (2,15,3,6,0);
 INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (4,30,4,7,0);
 INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (5,10,2,14,0);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (6,20,4,5,0);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (7,25,4,14,0);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (8,5,2,7,0);
 
 
 -- moradas
@@ -135,6 +138,9 @@ INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUE
 INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (1, 1, 1, 1);
 INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (500, 2, 1, 0);
 INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (3, 3, 0, 0);
+INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (4, 4, 0, 0);
+INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (5, 8, 0, 0);
+
 
 -- Asignar cartas a la mano 1
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 1);  -- Mano 1 contiene Carta 1
@@ -149,7 +155,20 @@ INSERT INTO carta_mano(mano_id, carta_id) VALUES (500, 65);  -- Mano 2 contiene 
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (3, 1);  -- Mano 3 contiene Carta 1
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (3, 4);  -- Mano 3 contiene Carta 4
 
+
+-- Asignar cartas a la mano 4
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (4, 2);  -- Mano 4 contiene Carta 2
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (4, 4);  -- Mano 4 contiene Carta 4
+
+
+-- Asignar cartas a la mano 5
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (5, 3);  -- Mano 5 contiene Carta 3
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (5, 1);  -- Mano 5 contiene Carta 1
+
+
 INSERT INTO chat(id,jugador_id,mensaje) VALUES (1,2,'hola como están');
+INSERT INTO chat(id,jugador_id,mensaje) VALUES (2,4,'JAJAJAJAJAJA');
+
 -- Pruebas para Baza
 -- INSERT INTO Baza(id, numBaza, tipo_carta, jugador_id, carta_id, ronda_id, turnos) VALUES (1,2,'triunfo',1,1,1,[]);
 -- INSERT INTO Baza(id, numBaza, tipo_carta, jugador_id, carta_id, ronda_id, turnos) VALUES (2,3,'pirata',3,8,2,[]);

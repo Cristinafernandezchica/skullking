@@ -40,11 +40,6 @@ function AppNavbar() {
     }
     const toggleNavbar = () => setCollapsed(!collapsed);
 
-
-
-
-
-
     useEffect(() => {
         if (jwt) {
             const decodedToken = jwt_decode(jwt);
@@ -182,7 +177,6 @@ function AppNavbar() {
         tag="div" 
         className="d-flex justify-content-between align-items-center"
     >
-        {/* Mostrar imagen de perfil y nombre de usuario */}
         <div style={{ display: "flex", alignItems: "center" }}>
             {usuario.imagenPerfil && (
                 <img 
@@ -199,7 +193,6 @@ function AppNavbar() {
             <span>{usuario.username}</span>
         </div>
         <div>
-            {/* Botones de aceptar/rechazar */}
             <Button
                 className="btn btn-success btn-sm mx-1"
                 onClick={async () => await aceptarORechazarSolicitud(usuarioActual.id, usuario.id, true, jwt)}
@@ -224,7 +217,6 @@ function AppNavbar() {
         tag="div" 
         className="d-flex justify-content-between align-items-center"
     >
-        {/* Mostrar imagen de perfil y nombre de usuario */}
         <div style={{ display: "flex", alignItems: "center" }}>
             {usuario.imagenPerfil && (
                 <img 
@@ -253,8 +245,10 @@ function AppNavbar() {
                     <NavItem>
                         <NavLink style={{ color: "white" }} id="profile" tag={Link} to="/perfil">
                             <div style={{ display: "flex", alignItems: "center", padding: "0" }}>
-                                {profileImage && (
+                                {(profileImage && (
                                     <img src={profileImage} alt="Perfil" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "-5px", marginTop: "-2px", marginBottom: "-5px" }} />
+                                )) || ( 
+                                    <img src={"https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg"} alt="Perfil" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "-5px", marginTop: "-2px", marginBottom: "-5px" }} />
                                 )}
                             </div>
                         </NavLink>

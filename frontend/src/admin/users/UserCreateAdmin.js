@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Form, Input, Label, Button } from "reactstrap";
 import tokenService from "../../services/token.service";
 import "../../static/css/admin/adminPage.css";
@@ -8,12 +8,11 @@ import getErrorModal from "../../util/getErrorModal";
 const jwt = tokenService.getLocalAccessToken();
 
 export default function UserCreateAdmin() {
-  const navigate = useNavigate();
   const emptyItem = {
     username: "",
     password: "",
     descripcionPerfil: "",
-    imagenPerfil: "",
+    imagenPerfil: "https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg",
     authority: null,
   };
   const [user, setUser] = useState(emptyItem);
@@ -104,32 +103,6 @@ export default function UserCreateAdmin() {
       <div className="auth-form-container">
         <Form onSubmit={handleSubmit}>
           <div className="custom-form-input">
-            <Label for="firstName" className="custom-form-input-label">
-              Nombre
-            </Label>
-            <Input
-              type="text"
-              name="Nombre"
-              id="firstName"
-              value={user.firstName}
-              onChange={handleChange}
-              className="custom-input"
-            />
-          </div>
-          <div className="custom-form-input">
-            <Label for="firstName" className="custom-form-input-label">
-              Apellido
-            </Label>
-            <Input
-              type="text"
-              name="Apellido"
-              id="lastName"
-              value={user.lastName}
-              onChange={handleChange}
-              className="custom-input"
-            />
-          </div>
-          <div className="custom-form-input">
             <Label for="username" className="custom-form-input-label">
               Nombre de usuario
             </Label>
@@ -178,7 +151,7 @@ export default function UserCreateAdmin() {
               type="url"
               name="imagenPerfil"
               id="imagenPerfil"
-              value={user.imagenPerfil || "https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg"}
+              value={user.imagenPerfil}
               onChange={handleChange}
               className="custom-input"
             />

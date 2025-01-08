@@ -50,10 +50,10 @@ public class AuthServiceTests {
 	private SignupRequest createRequest(String auth, String username) {
 		SignupRequest request = new SignupRequest();
 		request.setAuthority(auth);
-		request.setFirstName("prueba");
-		request.setLastName("prueba");
 		request.setPassword("prueba");
 		request.setUsername(username);
+		request.setDescripcionPerfil("A jugar!");
+		request.setImagenPerfil("https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg");
 
 		if(auth == "PLAYER") {
 			User usuario = new User();

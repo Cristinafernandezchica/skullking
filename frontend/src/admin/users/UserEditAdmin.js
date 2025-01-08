@@ -16,7 +16,7 @@ export default function UserEditAdmin() {
     id: null,
     username: "",
     descripcionPerfil: "",
-    imagenPerfil: "",
+    imagenPerfil: "https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg",
     authority: null,
   };
 
@@ -84,7 +84,7 @@ export default function UserEditAdmin() {
     const userToUpdate = { ...user };
     delete userToUpdate.password; // Omitir contraseña
   
-    fetch(`/api/v1/users/${user.id}}`, {
+    fetch(`/api/v1/users/${user.id}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${jwt}`,

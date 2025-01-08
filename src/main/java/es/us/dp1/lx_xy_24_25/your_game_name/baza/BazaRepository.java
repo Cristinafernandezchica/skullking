@@ -4,9 +4,11 @@ package es.us.dp1.lx_xy_24_25.your_game_name.baza;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface BazaRepository extends CrudRepository<Baza, Integer>{
 
@@ -25,4 +27,9 @@ public interface BazaRepository extends CrudRepository<Baza, Integer>{
     // Para el calculo de ptos de bonificación
     @Query("SELECT b FROM Baza b WHERE b.ronda.id = :rondaId AND b.ganador.id = :jugadorId")
     List<Baza> findByIdRondaAndIdJugador(@Param("rondaId") Integer rondaId, @Param("jugadorId") Integer jugadorId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Baza b WHERE b.ganador.id = :jugadorId")
+    void deleteByJugadorId(@Param("jugadorId") Integer jugadorId);
 }

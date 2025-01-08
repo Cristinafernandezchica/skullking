@@ -1,0 +1,1751 @@
+2025-01-06 12:11:38 - Starting GameApplication using Java 20.0.2 with PID 10544 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:11:38 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:11:39 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:11:39 - Finished Spring Data repository scanning in 48 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:11:39 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:11:39 - Starting service [Tomcat]
+2025-01-06 12:11:39 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:11:39 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:11:39 - Root WebApplicationContext: initialization completed in 892 ms
+2025-01-06 12:11:39 - testdb - Starting...
+2025-01-06 12:11:39 - testdb - Added connection conn40: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:11:39 - testdb - Start completed.
+2025-01-06 12:11:39 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:11:39 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:11:39 - HHH000026: Second-level cache disabled
+2025-01-06 12:11:39 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:11:40 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:11:40 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:11:40 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:11:40 - Filter 'corsFilter' configured for use
+2025-01-06 12:11:40 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:11:40 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:11:41 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:11:41 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:11:41 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:11:41 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:11:41 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:11:41 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:11:41 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:11:41 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:11:41 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:11:41 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:11:41 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:11:41 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:11:41 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:11:41 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:11:41 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:11:41 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:11:41 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:11:41 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:11:41 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:11:41 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:11:41 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:11:41 - LiveReload server is running on port 35729
+2025-01-06 12:11:41 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:11:41 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:11:41 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:11:41 - Starting...
+2025-01-06 12:11:41 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6486d1de]
+2025-01-06 12:11:41 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6486d1de]
+2025-01-06 12:11:41 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6486d1de]]
+2025-01-06 12:11:41 - Started.
+2025-01-06 12:11:41 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:41 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:41 - Started GameApplication in 3.056 seconds (process running for 56.749)
+2025-01-06 12:11:41 - Condition evaluation unchanged
+2025-01-06 12:11:43 - Restarting due to 3 class path changes (1 addition, 0 deletions, 2 modifications)
+2025-01-06 12:11:43 - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:11:43 - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:11:43 - Stopping...
+2025-01-06 12:11:43 - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6486d1de]]
+2025-01-06 12:11:43 - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6486d1de]
+2025-01-06 12:11:43 - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6486d1de]
+2025-01-06 12:11:43 - Stopped.
+2025-01-06 12:11:43 - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:43 - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:43 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:11:43 - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-06 12:11:43 - testdb - Shutdown initiated...
+2025-01-06 12:11:43 - testdb - Shutdown completed.
+2025-01-06 12:11:43 - Starting GameApplication using Java 20.0.2 with PID 10544 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:11:43 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:11:44 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:11:44 - Finished Spring Data repository scanning in 41 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:11:44 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:11:44 - Starting service [Tomcat]
+2025-01-06 12:11:44 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:11:44 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:11:44 - Root WebApplicationContext: initialization completed in 934 ms
+2025-01-06 12:11:44 - testdb - Starting...
+2025-01-06 12:11:44 - testdb - Added connection conn50: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:11:44 - testdb - Start completed.
+2025-01-06 12:11:44 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:11:45 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:11:45 - HHH000026: Second-level cache disabled
+2025-01-06 12:11:45 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:11:45 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:11:45 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:11:45 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:11:45 - Filter 'corsFilter' configured for use
+2025-01-06 12:11:45 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:11:46 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:11:46 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:11:46 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:11:46 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:11:46 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:11:46 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:11:46 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:11:46 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:11:46 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:11:46 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:11:46 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:11:46 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:11:46 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:11:46 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:11:46 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:11:46 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:11:46 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:11:46 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:11:46 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:11:46 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:11:46 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:11:46 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:11:46 - LiveReload server is running on port 35729
+2025-01-06 12:11:46 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:11:46 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:11:46 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:11:46 - Starting...
+2025-01-06 12:11:46 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3c02d020]
+2025-01-06 12:11:46 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3c02d020]
+2025-01-06 12:11:46 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3c02d020]]
+2025-01-06 12:11:46 - Started.
+2025-01-06 12:11:46 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:46 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:46 - Started GameApplication in 2.997 seconds (process running for 61.84)
+2025-01-06 12:11:46 - Condition evaluation unchanged
+2025-01-06 12:11:48 - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-06 12:11:48 - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:11:48 - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:11:48 - Stopping...
+2025-01-06 12:11:48 - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3c02d020]]
+2025-01-06 12:11:48 - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3c02d020]
+2025-01-06 12:11:48 - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3c02d020]
+2025-01-06 12:11:48 - Stopped.
+2025-01-06 12:11:48 - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:48 - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:48 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:11:48 - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-06 12:11:48 - testdb - Shutdown initiated...
+2025-01-06 12:11:48 - testdb - Shutdown completed.
+2025-01-06 12:11:49 - Starting GameApplication using Java 20.0.2 with PID 10544 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:11:49 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:11:49 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:11:49 - Finished Spring Data repository scanning in 48 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:11:49 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:11:49 - Starting service [Tomcat]
+2025-01-06 12:11:49 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:11:49 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:11:49 - Root WebApplicationContext: initialization completed in 897 ms
+2025-01-06 12:11:50 - testdb - Starting...
+2025-01-06 12:11:50 - testdb - Added connection conn60: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:11:50 - testdb - Start completed.
+2025-01-06 12:11:50 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:11:50 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:11:50 - HHH000026: Second-level cache disabled
+2025-01-06 12:11:50 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:11:50 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:11:50 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:11:50 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:11:50 - Filter 'corsFilter' configured for use
+2025-01-06 12:11:50 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:11:51 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:11:51 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:11:51 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:11:51 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:11:51 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:11:51 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:11:51 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:11:51 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:11:51 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:11:51 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:11:51 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:11:51 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:11:51 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:11:51 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:11:51 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:11:51 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:11:51 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:11:51 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:11:51 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:11:51 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:11:51 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:11:51 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:11:51 - LiveReload server is running on port 35729
+2025-01-06 12:11:51 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:11:51 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:11:51 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:11:51 - Starting...
+2025-01-06 12:11:51 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5a25a935]
+2025-01-06 12:11:51 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5a25a935]
+2025-01-06 12:11:51 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5a25a935]]
+2025-01-06 12:11:51 - Started.
+2025-01-06 12:11:51 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:51 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:51 - Started GameApplication in 2.835 seconds (process running for 66.75)
+2025-01-06 12:11:51 - Condition evaluation unchanged
+2025-01-06 12:11:53 - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-06 12:11:53 - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:11:53 - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:11:53 - Stopping...
+2025-01-06 12:11:53 - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5a25a935]]
+2025-01-06 12:11:53 - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5a25a935]
+2025-01-06 12:11:53 - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5a25a935]
+2025-01-06 12:11:53 - Stopped.
+2025-01-06 12:11:53 - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:53 - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:53 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:11:53 - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-06 12:11:53 - testdb - Shutdown initiated...
+2025-01-06 12:11:53 - testdb - Shutdown completed.
+2025-01-06 12:11:53 - Starting GameApplication using Java 20.0.2 with PID 10544 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:11:53 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:11:53 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:11:53 - Finished Spring Data repository scanning in 31 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:11:53 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:11:53 - Starting service [Tomcat]
+2025-01-06 12:11:53 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:11:54 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:11:54 - Root WebApplicationContext: initialization completed in 549 ms
+2025-01-06 12:11:54 - testdb - Starting...
+2025-01-06 12:11:54 - testdb - Added connection conn70: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:11:54 - testdb - Start completed.
+2025-01-06 12:11:54 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:11:54 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:11:54 - HHH000026: Second-level cache disabled
+2025-01-06 12:11:54 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:11:54 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:11:54 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:11:54 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:11:54 - Filter 'corsFilter' configured for use
+2025-01-06 12:11:54 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:11:54 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:11:54 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:11:54 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:11:54 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:11:55 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:11:55 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:11:55 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:11:55 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:11:55 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:11:55 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:11:55 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:11:55 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:11:55 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:11:55 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:11:55 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:11:55 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:11:55 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:11:55 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:11:55 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:11:55 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:11:55 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:11:55 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:11:55 - LiveReload server is running on port 35729
+2025-01-06 12:11:55 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:11:55 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:11:55 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:11:55 - Starting...
+2025-01-06 12:11:55 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7b7d95c2]
+2025-01-06 12:11:55 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7b7d95c2]
+2025-01-06 12:11:55 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7b7d95c2]]
+2025-01-06 12:11:55 - Started.
+2025-01-06 12:11:55 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:55 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:55 - Started GameApplication in 1.95 seconds (process running for 70.319)
+2025-01-06 12:11:55 - Condition evaluation unchanged
+2025-01-06 12:11:56 - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-06 12:11:56 - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:11:56 - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:11:56 - Stopping...
+2025-01-06 12:11:56 - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7b7d95c2]]
+2025-01-06 12:11:56 - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7b7d95c2]
+2025-01-06 12:11:56 - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7b7d95c2]
+2025-01-06 12:11:56 - Stopped.
+2025-01-06 12:11:56 - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:56 - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:56 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:11:56 - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-06 12:11:56 - testdb - Shutdown initiated...
+2025-01-06 12:11:56 - testdb - Shutdown completed.
+2025-01-06 12:11:57 - Starting GameApplication using Java 20.0.2 with PID 10544 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:11:57 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:11:57 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:11:57 - Finished Spring Data repository scanning in 38 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:11:57 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:11:57 - Starting service [Tomcat]
+2025-01-06 12:11:57 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:11:57 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:11:57 - Root WebApplicationContext: initialization completed in 590 ms
+2025-01-06 12:11:57 - testdb - Starting...
+2025-01-06 12:11:57 - testdb - Added connection conn80: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:11:57 - testdb - Start completed.
+2025-01-06 12:11:57 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:11:57 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:11:57 - HHH000026: Second-level cache disabled
+2025-01-06 12:11:57 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:11:57 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:11:58 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:11:58 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:11:58 - Filter 'corsFilter' configured for use
+2025-01-06 12:11:58 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:11:58 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:11:58 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:11:58 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:11:58 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:11:58 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:11:58 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:11:58 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:11:58 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:11:58 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:11:58 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:11:58 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:11:58 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:11:58 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:11:58 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:11:58 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:11:58 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:11:58 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:11:58 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:11:58 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:11:58 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:11:58 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:11:58 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:11:59 - LiveReload server is running on port 35729
+2025-01-06 12:11:59 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:11:59 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:11:59 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:11:59 - Starting...
+2025-01-06 12:11:59 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5e99165f]
+2025-01-06 12:11:59 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5e99165f]
+2025-01-06 12:11:59 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5e99165f]]
+2025-01-06 12:11:59 - Started.
+2025-01-06 12:11:59 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:59 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:11:59 - Started GameApplication in 2.058 seconds (process running for 74.008)
+2025-01-06 12:11:59 - Condition evaluation unchanged
+2025-01-06 12:12:00 - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-06 12:12:00 - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:12:00 - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:12:00 - Stopping...
+2025-01-06 12:12:00 - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5e99165f]]
+2025-01-06 12:12:00 - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5e99165f]
+2025-01-06 12:12:00 - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5e99165f]
+2025-01-06 12:12:00 - Stopped.
+2025-01-06 12:12:00 - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:00 - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:00 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:12:00 - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-06 12:12:00 - testdb - Shutdown initiated...
+2025-01-06 12:12:00 - testdb - Shutdown completed.
+2025-01-06 12:12:00 - Starting GameApplication using Java 20.0.2 with PID 10544 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:12:00 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:12:01 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:12:01 - Finished Spring Data repository scanning in 36 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:12:01 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:12:01 - Starting service [Tomcat]
+2025-01-06 12:12:01 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:12:01 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:12:01 - Root WebApplicationContext: initialization completed in 672 ms
+2025-01-06 12:12:01 - testdb - Starting...
+2025-01-06 12:12:01 - testdb - Added connection conn90: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:12:01 - testdb - Start completed.
+2025-01-06 12:12:01 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:12:01 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:12:01 - HHH000026: Second-level cache disabled
+2025-01-06 12:12:01 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:12:01 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:12:02 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:12:02 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:12:02 - Filter 'corsFilter' configured for use
+2025-01-06 12:12:10 - Starting GameApplication using Java 20.0.2 with PID 23584 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:12:10 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:12:10 - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-01-06 12:12:10 - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-01-06 12:12:12 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:12:12 - Finished Spring Data repository scanning in 162 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:12:14 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:12:14 - Starting service [Tomcat]
+2025-01-06 12:12:14 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:12:14 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:12:14 - Root WebApplicationContext: initialization completed in 4116 ms
+2025-01-06 12:12:15 - testdb - Starting...
+2025-01-06 12:12:15 - testdb - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:12:15 - testdb - Start completed.
+2025-01-06 12:12:15 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:12:15 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:12:15 - HHH000412: Hibernate ORM core version 6.5.2.Final
+2025-01-06 12:12:15 - HHH000026: Second-level cache disabled
+2025-01-06 12:12:16 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:12:18 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:12:18 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:12:18 - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-01-06 12:12:19 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:12:19 - Filter 'corsFilter' configured for use
+2025-01-06 12:12:19 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:12:20 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:12:20 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:12:21 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:12:21 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:12:21 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:12:21 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:12:21 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:12:21 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:12:21 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:12:21 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:12:21 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:12:21 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:12:21 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:12:21 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:12:21 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:12:21 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:12:21 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:12:21 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:12:21 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:12:21 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:12:21 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:12:22 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:12:22 - LiveReload server is running on port 35729
+2025-01-06 12:12:22 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:12:22 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:12:22 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:12:22 - Starting...
+2025-01-06 12:12:22 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@414e8fe1]
+2025-01-06 12:12:22 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@414e8fe1]
+2025-01-06 12:12:22 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@414e8fe1]]
+2025-01-06 12:12:22 - Started.
+2025-01-06 12:12:22 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:22 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:22 - Started GameApplication in 12.951 seconds (process running for 13.665)
+2025-01-06 12:12:32 - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-06 12:12:32 - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:12:32 - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:12:32 - Stopping...
+2025-01-06 12:12:32 - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@414e8fe1]]
+2025-01-06 12:12:32 - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@414e8fe1]
+2025-01-06 12:12:32 - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@414e8fe1]
+2025-01-06 12:12:32 - Stopped.
+2025-01-06 12:12:32 - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:32 - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:32 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:12:32 - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-06 12:12:32 - testdb - Shutdown initiated...
+2025-01-06 12:12:32 - testdb - Shutdown completed.
+2025-01-06 12:12:33 - Starting GameApplication using Java 20.0.2 with PID 23584 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:12:33 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:12:33 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:12:33 - Finished Spring Data repository scanning in 109 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:12:34 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:12:34 - Starting service [Tomcat]
+2025-01-06 12:12:34 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:12:34 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:12:34 - Root WebApplicationContext: initialization completed in 1344 ms
+2025-01-06 12:12:34 - testdb - Starting...
+2025-01-06 12:12:34 - testdb - Added connection conn10: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:12:34 - testdb - Start completed.
+2025-01-06 12:12:34 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:12:34 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:12:34 - HHH000026: Second-level cache disabled
+2025-01-06 12:12:34 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:12:34 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:12:35 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:12:35 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:12:35 - Filter 'corsFilter' configured for use
+2025-01-06 12:12:35 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:12:36 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:12:36 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:12:36 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:12:36 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:12:36 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:12:36 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:12:36 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:12:36 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:12:36 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:12:36 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:12:36 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:12:36 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:12:36 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:12:36 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:12:36 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:12:36 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:12:36 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:12:36 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:12:36 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:12:36 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:12:36 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:12:36 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:12:37 - LiveReload server is running on port 35729
+2025-01-06 12:12:37 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:12:37 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:12:37 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:12:37 - Starting...
+2025-01-06 12:12:37 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@654ce2c8]
+2025-01-06 12:12:37 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@654ce2c8]
+2025-01-06 12:12:37 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@654ce2c8]]
+2025-01-06 12:12:37 - Started.
+2025-01-06 12:12:37 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:37 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:37 - Started GameApplication in 4.412 seconds (process running for 28.074)
+2025-01-06 12:12:37 - Condition evaluation unchanged
+2025-01-06 12:12:38 - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-06 12:12:38 - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:12:38 - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:12:38 - Stopping...
+2025-01-06 12:12:38 - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@654ce2c8]]
+2025-01-06 12:12:38 - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@654ce2c8]
+2025-01-06 12:12:38 - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@654ce2c8]
+2025-01-06 12:12:38 - Stopped.
+2025-01-06 12:12:38 - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:38 - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:38 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:12:38 - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-06 12:12:38 - testdb - Shutdown initiated...
+2025-01-06 12:12:38 - testdb - Shutdown completed.
+2025-01-06 12:12:39 - Starting GameApplication using Java 20.0.2 with PID 23584 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:12:39 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:12:40 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:12:40 - Finished Spring Data repository scanning in 91 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:12:40 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:12:40 - Starting service [Tomcat]
+2025-01-06 12:12:40 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:12:40 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:12:40 - Root WebApplicationContext: initialization completed in 1324 ms
+2025-01-06 12:12:40 - testdb - Starting...
+2025-01-06 12:12:40 - testdb - Added connection conn20: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:12:40 - testdb - Start completed.
+2025-01-06 12:12:40 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:12:40 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:12:40 - HHH000026: Second-level cache disabled
+2025-01-06 12:12:40 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:12:41 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:12:41 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:12:41 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:12:41 - Filter 'corsFilter' configured for use
+2025-01-06 12:12:41 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:12:41 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:12:42 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:12:42 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:12:42 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:12:42 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:12:42 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:12:42 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:12:42 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:12:42 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:12:42 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:12:42 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:12:42 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:12:42 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:12:42 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:12:42 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:12:42 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:12:42 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:12:42 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:12:42 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:12:42 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:12:42 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:12:42 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:12:42 - LiveReload server is running on port 35729
+2025-01-06 12:12:42 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:12:42 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:12:42 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:12:42 - Starting...
+2025-01-06 12:12:42 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4962fcbf]
+2025-01-06 12:12:42 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4962fcbf]
+2025-01-06 12:12:42 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4962fcbf]]
+2025-01-06 12:12:42 - Started.
+2025-01-06 12:12:42 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:42 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:42 - Started GameApplication in 3.447 seconds (process running for 33.282)
+2025-01-06 12:12:42 - Condition evaluation unchanged
+2025-01-06 12:12:44 - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-06 12:12:44 - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:12:44 - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:12:44 - Stopping...
+2025-01-06 12:12:44 - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4962fcbf]]
+2025-01-06 12:12:44 - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4962fcbf]
+2025-01-06 12:12:44 - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4962fcbf]
+2025-01-06 12:12:44 - Stopped.
+2025-01-06 12:12:44 - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:44 - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:44 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:12:44 - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-06 12:12:44 - testdb - Shutdown initiated...
+2025-01-06 12:12:44 - testdb - Shutdown completed.
+2025-01-06 12:12:44 - Starting GameApplication using Java 20.0.2 with PID 23584 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:12:44 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:12:44 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:12:44 - Finished Spring Data repository scanning in 66 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:12:45 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:12:45 - Starting service [Tomcat]
+2025-01-06 12:12:45 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:12:45 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:12:45 - Root WebApplicationContext: initialization completed in 1022 ms
+2025-01-06 12:12:45 - testdb - Starting...
+2025-01-06 12:12:45 - testdb - Added connection conn30: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:12:45 - testdb - Start completed.
+2025-01-06 12:12:45 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:12:45 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:12:45 - HHH000026: Second-level cache disabled
+2025-01-06 12:12:45 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:12:45 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:12:45 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:12:45 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:12:45 - Filter 'corsFilter' configured for use
+2025-01-06 12:12:45 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:12:46 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:12:46 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:12:46 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:12:46 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:12:46 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:12:46 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:12:46 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:12:46 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:12:46 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:12:46 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:12:46 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:12:46 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:12:46 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:12:46 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:12:46 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:12:46 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:12:46 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:12:46 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:12:46 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:12:46 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:12:46 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:12:46 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:12:47 - LiveReload server is running on port 35729
+2025-01-06 12:12:47 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:12:47 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:12:47 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:12:47 - Starting...
+2025-01-06 12:12:47 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@24ddf9cf]
+2025-01-06 12:12:47 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@24ddf9cf]
+2025-01-06 12:12:47 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@24ddf9cf]]
+2025-01-06 12:12:47 - Started.
+2025-01-06 12:12:47 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:47 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:47 - Started GameApplication in 2.863 seconds (process running for 37.783)
+2025-01-06 12:12:47 - Condition evaluation unchanged
+2025-01-06 12:12:48 - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-06 12:12:48 - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:12:48 - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:12:48 - Stopping...
+2025-01-06 12:12:48 - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@24ddf9cf]]
+2025-01-06 12:12:48 - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@24ddf9cf]
+2025-01-06 12:12:48 - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@24ddf9cf]
+2025-01-06 12:12:48 - Stopped.
+2025-01-06 12:12:48 - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:48 - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:48 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:12:48 - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-06 12:12:48 - testdb - Shutdown initiated...
+2025-01-06 12:12:48 - testdb - Shutdown completed.
+2025-01-06 12:12:48 - Starting GameApplication using Java 20.0.2 with PID 23584 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:12:48 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:12:49 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:12:49 - Finished Spring Data repository scanning in 51 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:12:49 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:12:49 - Starting service [Tomcat]
+2025-01-06 12:12:49 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:12:49 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:12:49 - Root WebApplicationContext: initialization completed in 965 ms
+2025-01-06 12:12:49 - testdb - Starting...
+2025-01-06 12:12:49 - testdb - Added connection conn40: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:12:49 - testdb - Start completed.
+2025-01-06 12:12:49 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:12:49 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:12:49 - HHH000026: Second-level cache disabled
+2025-01-06 12:12:49 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:12:50 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:12:50 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:12:50 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:12:50 - Filter 'corsFilter' configured for use
+2025-01-06 12:12:50 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:12:51 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:12:51 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:12:51 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:12:51 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:12:51 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:12:51 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:12:51 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:12:51 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:12:51 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:12:51 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:12:51 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:12:51 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:12:51 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:12:51 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:12:51 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:12:51 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:12:51 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:12:51 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:12:51 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:12:51 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:12:51 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:12:51 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:12:51 - LiveReload server is running on port 35729
+2025-01-06 12:12:51 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:12:51 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:12:51 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:12:51 - Starting...
+2025-01-06 12:12:51 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@25c463d5]
+2025-01-06 12:12:51 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@25c463d5]
+2025-01-06 12:12:51 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@25c463d5]]
+2025-01-06 12:12:51 - Started.
+2025-01-06 12:12:51 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:51 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:51 - Started GameApplication in 3.165 seconds (process running for 42.559)
+2025-01-06 12:12:51 - Condition evaluation unchanged
+2025-01-06 12:12:53 - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-06 12:12:53 - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:12:53 - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:12:53 - Stopping...
+2025-01-06 12:12:53 - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@25c463d5]]
+2025-01-06 12:12:53 - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@25c463d5]
+2025-01-06 12:12:53 - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@25c463d5]
+2025-01-06 12:12:53 - Stopped.
+2025-01-06 12:12:53 - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:53 - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:53 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:12:53 - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-06 12:12:53 - testdb - Shutdown initiated...
+2025-01-06 12:12:53 - testdb - Shutdown completed.
+2025-01-06 12:12:53 - Starting GameApplication using Java 20.0.2 with PID 23584 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:12:53 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:12:53 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:12:53 - Finished Spring Data repository scanning in 49 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:12:54 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:12:54 - Starting service [Tomcat]
+2025-01-06 12:12:54 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:12:54 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:12:54 - Root WebApplicationContext: initialization completed in 665 ms
+2025-01-06 12:12:54 - testdb - Starting...
+2025-01-06 12:12:54 - testdb - Added connection conn50: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:12:54 - testdb - Start completed.
+2025-01-06 12:12:54 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:12:54 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:12:54 - HHH000026: Second-level cache disabled
+2025-01-06 12:12:54 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:12:54 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:12:54 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:12:55 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:12:55 - Filter 'corsFilter' configured for use
+2025-01-06 12:12:55 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:12:55 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:12:55 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:12:55 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:12:55 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:12:55 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:12:55 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:12:55 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:12:55 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:12:55 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:12:55 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:12:55 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:12:55 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:12:55 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:12:55 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:12:55 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:12:55 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:12:55 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:12:55 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:12:55 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:12:55 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:12:56 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:12:56 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:12:56 - LiveReload server is running on port 35729
+2025-01-06 12:12:56 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:12:56 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:12:56 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:12:56 - Starting...
+2025-01-06 12:12:56 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5d0b11f9]
+2025-01-06 12:12:56 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5d0b11f9]
+2025-01-06 12:12:56 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5d0b11f9]]
+2025-01-06 12:12:56 - Started.
+2025-01-06 12:12:56 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:56 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:56 - Started GameApplication in 2.912 seconds (process running for 47.096)
+2025-01-06 12:12:56 - Condition evaluation unchanged
+2025-01-06 12:12:57 - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-06 12:12:57 - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:12:57 - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:12:57 - Stopping...
+2025-01-06 12:12:57 - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5d0b11f9]]
+2025-01-06 12:12:57 - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5d0b11f9]
+2025-01-06 12:12:57 - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5d0b11f9]
+2025-01-06 12:12:57 - Stopped.
+2025-01-06 12:12:57 - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:57 - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:12:57 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:12:57 - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-06 12:12:57 - testdb - Shutdown initiated...
+2025-01-06 12:12:57 - testdb - Shutdown completed.
+2025-01-06 12:12:58 - Starting GameApplication using Java 20.0.2 with PID 23584 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:12:58 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:12:58 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:12:58 - Finished Spring Data repository scanning in 46 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:12:58 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:12:58 - Starting service [Tomcat]
+2025-01-06 12:12:58 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:12:58 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:12:58 - Root WebApplicationContext: initialization completed in 910 ms
+2025-01-06 12:12:59 - testdb - Starting...
+2025-01-06 12:12:59 - testdb - Added connection conn60: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:12:59 - testdb - Start completed.
+2025-01-06 12:12:59 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:12:59 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:12:59 - HHH000026: Second-level cache disabled
+2025-01-06 12:12:59 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:12:59 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:12:59 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:12:59 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:12:59 - Filter 'corsFilter' configured for use
+2025-01-06 12:12:59 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:13:00 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:13:00 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:13:00 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:13:00 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:13:00 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:13:00 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:13:00 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:13:00 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:13:00 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:13:00 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:13:00 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:13:00 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:13:00 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:13:00 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:13:00 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:13:00 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:13:00 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:13:00 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:13:00 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:13:00 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:13:00 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:13:00 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:13:00 - LiveReload server is running on port 35729
+2025-01-06 12:13:00 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:13:00 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:13:00 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:13:00 - Starting...
+2025-01-06 12:13:00 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6e5f26e7]
+2025-01-06 12:13:00 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6e5f26e7]
+2025-01-06 12:13:00 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6e5f26e7]]
+2025-01-06 12:13:00 - Started.
+2025-01-06 12:13:00 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:13:00 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:13:00 - Started GameApplication in 2.967 seconds (process running for 51.7)
+2025-01-06 12:13:00 - Condition evaluation unchanged
+2025-01-06 12:13:02 - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-06 12:13:02 - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:13:02 - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:13:02 - Stopping...
+2025-01-06 12:13:02 - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6e5f26e7]]
+2025-01-06 12:13:02 - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6e5f26e7]
+2025-01-06 12:13:02 - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6e5f26e7]
+2025-01-06 12:13:02 - Stopped.
+2025-01-06 12:13:02 - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:13:02 - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:13:02 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:13:02 - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-06 12:13:02 - testdb - Shutdown initiated...
+2025-01-06 12:13:02 - testdb - Shutdown completed.
+2025-01-06 12:13:02 - Starting GameApplication using Java 20.0.2 with PID 23584 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:13:02 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:13:03 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:13:03 - Finished Spring Data repository scanning in 42 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:13:03 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:13:03 - Starting service [Tomcat]
+2025-01-06 12:13:03 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:13:03 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:13:03 - Root WebApplicationContext: initialization completed in 759 ms
+2025-01-06 12:13:03 - testdb - Starting...
+2025-01-06 12:13:03 - testdb - Added connection conn70: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:13:03 - testdb - Start completed.
+2025-01-06 12:13:03 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:13:03 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:13:03 - HHH000026: Second-level cache disabled
+2025-01-06 12:13:03 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:13:03 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:13:03 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:13:04 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:13:04 - Filter 'corsFilter' configured for use
+2025-01-06 12:13:04 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:13:04 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:13:04 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:13:04 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:13:04 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:13:04 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:13:04 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:13:04 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:13:04 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:13:04 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:13:04 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:13:04 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:13:04 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:13:04 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:13:04 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:13:04 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:13:04 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:13:04 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:13:04 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:13:04 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:13:04 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:13:05 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:13:05 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:13:05 - LiveReload server is running on port 35729
+2025-01-06 12:13:05 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:13:05 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:13:05 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:13:05 - Starting...
+2025-01-06 12:13:05 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4ffe8600]
+2025-01-06 12:13:05 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4ffe8600]
+2025-01-06 12:13:05 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4ffe8600]]
+2025-01-06 12:13:05 - Started.
+2025-01-06 12:13:05 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:13:05 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:13:05 - Started GameApplication in 2.768 seconds (process running for 56.106)
+2025-01-06 12:13:05 - Condition evaluation unchanged
+2025-01-06 12:13:06 - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-06 12:13:06 - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:13:06 - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:13:06 - Stopping...
+2025-01-06 12:13:06 - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4ffe8600]]
+2025-01-06 12:13:06 - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4ffe8600]
+2025-01-06 12:13:06 - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4ffe8600]
+2025-01-06 12:13:06 - Stopped.
+2025-01-06 12:13:06 - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:13:06 - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:13:06 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:13:06 - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-06 12:13:06 - testdb - Shutdown initiated...
+2025-01-06 12:13:06 - testdb - Shutdown completed.
+2025-01-06 12:13:07 - Starting GameApplication using Java 20.0.2 with PID 23584 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:13:07 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:13:07 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:13:07 - Finished Spring Data repository scanning in 50 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:13:07 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:13:07 - Starting service [Tomcat]
+2025-01-06 12:13:07 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:13:07 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:13:07 - Root WebApplicationContext: initialization completed in 761 ms
+2025-01-06 12:13:07 - testdb - Starting...
+2025-01-06 12:13:07 - testdb - Added connection conn80: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:13:07 - testdb - Start completed.
+2025-01-06 12:13:07 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:13:08 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:13:08 - HHH000026: Second-level cache disabled
+2025-01-06 12:13:08 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:13:08 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:13:08 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:13:08 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:13:08 - Filter 'corsFilter' configured for use
+2025-01-06 12:13:08 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:13:09 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:13:09 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:13:09 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:13:09 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:13:09 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:13:09 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:13:09 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:13:09 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:13:09 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:13:09 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:13:09 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:13:09 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:13:09 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:13:09 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:13:09 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:13:09 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:13:09 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:13:09 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:13:09 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:13:09 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:13:09 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:13:09 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:13:09 - LiveReload server is running on port 35729
+2025-01-06 12:13:09 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:13:09 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:13:09 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:13:09 - Starting...
+2025-01-06 12:13:09 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@ea91c80]
+2025-01-06 12:13:09 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@ea91c80]
+2025-01-06 12:13:09 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@ea91c80]]
+2025-01-06 12:13:09 - Started.
+2025-01-06 12:13:09 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:13:09 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:13:09 - Started GameApplication in 2.716 seconds (process running for 60.517)
+2025-01-06 12:13:09 - Condition evaluation unchanged
+2025-01-06 12:13:32 - Starting GameApplication using Java 20.0.2 with PID 10720 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:13:32 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:13:32 - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-01-06 12:13:32 - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-01-06 12:13:34 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:13:34 - Finished Spring Data repository scanning in 166 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:13:36 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:13:36 - Starting service [Tomcat]
+2025-01-06 12:13:36 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:13:36 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:13:36 - Root WebApplicationContext: initialization completed in 4825 ms
+2025-01-06 12:13:37 - testdb - Starting...
+2025-01-06 12:13:37 - testdb - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:13:37 - testdb - Start completed.
+2025-01-06 12:13:37 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:13:37 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:13:38 - HHH000412: Hibernate ORM core version 6.5.2.Final
+2025-01-06 12:13:38 - HHH000026: Second-level cache disabled
+2025-01-06 12:13:38 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:13:40 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:13:40 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:13:41 - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-01-06 12:13:41 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:13:41 - Filter 'corsFilter' configured for use
+2025-01-06 12:13:42 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:13:43 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:13:43 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:13:43 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:13:44 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:13:44 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:13:44 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:13:44 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:13:44 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:13:44 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:13:44 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:13:44 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:13:44 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:13:44 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:13:44 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:13:44 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:13:44 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:13:44 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:13:44 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:13:44 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:13:44 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:13:44 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:13:44 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:13:45 - LiveReload server is running on port 35729
+2025-01-06 12:13:45 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:13:45 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:13:45 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:13:45 - Starting...
+2025-01-06 12:13:45 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6c556d17]
+2025-01-06 12:13:45 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6c556d17]
+2025-01-06 12:13:45 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6c556d17]]
+2025-01-06 12:13:45 - Started.
+2025-01-06 12:13:45 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:13:45 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:13:45 - Started GameApplication in 14.551 seconds (process running for 15.261)
+2025-01-06 12:13:54 - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-06 12:13:54 - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:13:54 - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:13:54 - Stopping...
+2025-01-06 12:13:54 - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6c556d17]]
+2025-01-06 12:13:54 - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6c556d17]
+2025-01-06 12:13:54 - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6c556d17]
+2025-01-06 12:13:54 - Stopped.
+2025-01-06 12:13:54 - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:13:54 - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:13:54 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:13:54 - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-06 12:13:54 - testdb - Shutdown initiated...
+2025-01-06 12:13:54 - testdb - Shutdown completed.
+2025-01-06 12:13:54 - Starting GameApplication using Java 20.0.2 with PID 10720 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:13:54 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:13:55 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:13:56 - Finished Spring Data repository scanning in 92 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:13:56 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:13:56 - Starting service [Tomcat]
+2025-01-06 12:13:56 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:13:56 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:13:56 - Root WebApplicationContext: initialization completed in 1557 ms
+2025-01-06 12:13:56 - testdb - Starting...
+2025-01-06 12:13:56 - testdb - Added connection conn10: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:13:56 - testdb - Start completed.
+2025-01-06 12:13:56 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:13:56 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:13:56 - HHH000026: Second-level cache disabled
+2025-01-06 12:13:56 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:13:57 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:13:57 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:13:57 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:13:57 - Filter 'corsFilter' configured for use
+2025-01-06 12:13:57 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:13:58 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:13:58 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:13:58 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:13:58 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:13:58 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:13:58 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:13:58 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:13:58 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:13:58 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:13:58 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:13:58 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:13:58 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:13:58 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:13:58 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:13:58 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:13:58 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:13:58 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:13:58 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:13:58 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:13:58 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:13:58 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:13:58 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:13:59 - LiveReload server is running on port 35729
+2025-01-06 12:13:59 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:13:59 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:13:59 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:13:59 - Starting...
+2025-01-06 12:13:59 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7bd585e6]
+2025-01-06 12:13:59 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7bd585e6]
+2025-01-06 12:13:59 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7bd585e6]]
+2025-01-06 12:13:59 - Started.
+2025-01-06 12:13:59 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:13:59 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:13:59 - Started GameApplication in 4.508 seconds (process running for 28.711)
+2025-01-06 12:13:59 - Condition evaluation unchanged
+2025-01-06 12:14:00 - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-06 12:14:00 - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:14:00 - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:14:00 - Stopping...
+2025-01-06 12:14:00 - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7bd585e6]]
+2025-01-06 12:14:00 - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7bd585e6]
+2025-01-06 12:14:00 - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7bd585e6]
+2025-01-06 12:14:00 - Stopped.
+2025-01-06 12:14:00 - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:14:00 - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:14:00 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:14:00 - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-06 12:14:00 - testdb - Shutdown initiated...
+2025-01-06 12:14:00 - testdb - Shutdown completed.
+2025-01-06 12:14:01 - Starting GameApplication using Java 20.0.2 with PID 10720 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:14:01 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:14:01 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:14:01 - Finished Spring Data repository scanning in 86 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:14:02 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:14:02 - Starting service [Tomcat]
+2025-01-06 12:14:02 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:14:02 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:14:02 - Root WebApplicationContext: initialization completed in 1235 ms
+2025-01-06 12:14:02 - testdb - Starting...
+2025-01-06 12:14:02 - testdb - Added connection conn20: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:14:02 - testdb - Start completed.
+2025-01-06 12:14:02 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:14:02 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:14:02 - HHH000026: Second-level cache disabled
+2025-01-06 12:14:02 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:14:02 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:14:02 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:14:02 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:14:02 - Filter 'corsFilter' configured for use
+2025-01-06 12:14:02 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:14:03 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:14:03 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'
+2025-01-06 12:14:03 - 75 mappings in 'requestMappingHandlerMapping'
+2025-01-06 12:14:03 - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-01-06 12:14:03 - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-06 12:14:04 - 
+	e.u.d.l.y.a.AuthController:
+	
+2025-01-06 12:14:04 - 
+	e.u.d.l.y.b.BazaRestController:
+	
+2025-01-06 12:14:04 - 
+	e.u.d.l.y.c.CartaRestController:
+	
+2025-01-06 12:14:04 - 
+	e.u.d.l.y.c.ChatRestController:
+	
+2025-01-06 12:14:04 - 
+	e.u.d.l.y.d.DevelopersController:
+	
+2025-01-06 12:14:04 - 
+	e.u.d.l.y.j.JugadorRestController:
+	
+2025-01-06 12:14:04 - 
+	e.u.d.l.y.m.ManoRestController:
+	
+2025-01-06 12:14:04 - 
+	e.u.d.l.y.p.PartidaRestController:
+	
+2025-01-06 12:14:04 - 
+	e.u.d.l.y.r.RondaRestController:
+	
+2025-01-06 12:14:04 - 
+	e.u.d.l.y.t.TrucoRestController:
+	
+2025-01-06 12:14:04 - 
+	e.u.d.l.y.u.UserRestController:
+	
+2025-01-06 12:14:04 - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	
+2025-01-06 12:14:04 - 
+	o.s.w.a.OpenApiWebMvcResource:
+	
+2025-01-06 12:14:04 - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	
+2025-01-06 12:14:04 - 
+	o.s.w.u.SwaggerConfigResource:
+	
+2025-01-06 12:14:04 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-01-06 12:14:04 - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-01-06 12:14:04 - LiveReload server is running on port 35729
+2025-01-06 12:14:04 - Tomcat started on port 8080 (http) with context path '/'
+2025-01-06 12:14:04 - clientOutboundChannel added SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:14:04 - clientInboundChannel added WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:14:04 - Starting...
+2025-01-06 12:14:04 - clientInboundChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@735db5e6]
+2025-01-06 12:14:04 - brokerChannel added SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@735db5e6]
+2025-01-06 12:14:04 - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@735db5e6]]
+2025-01-06 12:14:04 - Started.
+2025-01-06 12:14:04 - clientInboundChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:14:04 - brokerChannel added UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:14:04 - Started GameApplication in 3.452 seconds (process running for 33.8)
+2025-01-06 12:14:04 - Condition evaluation unchanged
+2025-01-06 12:14:05 - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-06 12:14:05 - clientOutboundChannel removed SubProtocolWebSocketHandler[StompSubProtocolHandler[v10.stomp, v11.stomp, v12.stomp]]
+2025-01-06 12:14:05 - clientInboundChannel removed WebSocketAnnotationMethodMessageHandler[prefixes=[/app/]]
+2025-01-06 12:14:05 - Stopping...
+2025-01-06 12:14:05 - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@735db5e6]]
+2025-01-06 12:14:05 - clientInboundChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@735db5e6]
+2025-01-06 12:14:05 - brokerChannel removed SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@735db5e6]
+2025-01-06 12:14:05 - Stopped.
+2025-01-06 12:14:05 - clientInboundChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:14:05 - brokerChannel removed UserDestinationMessageHandler[DefaultUserDestinationResolver[prefix=/user/]]
+2025-01-06 12:14:05 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:14:05 - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-06 12:14:05 - testdb - Shutdown initiated...
+2025-01-06 12:14:05 - testdb - Shutdown completed.
+2025-01-06 12:14:06 - Starting GameApplication using Java 20.0.2 with PID 10720 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-06 12:14:06 - No active profile set, falling back to 1 default profile: "default"
+2025-01-06 12:14:06 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-06 12:14:06 - Finished Spring Data repository scanning in 57 ms. Found 10 JPA repository interfaces.
+2025-01-06 12:14:07 - Tomcat initialized with port 8080 (http)
+2025-01-06 12:14:07 - Starting service [Tomcat]
+2025-01-06 12:14:07 - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-06 12:14:07 - Initializing Spring embedded WebApplicationContext
+2025-01-06 12:14:07 - Root WebApplicationContext: initialization completed in 1062 ms
+2025-01-06 12:14:07 - testdb - Starting...
+2025-01-06 12:14:07 - testdb - Added connection conn30: url=jdbc:h2:mem:testdb user=SA
+2025-01-06 12:14:07 - testdb - Start completed.
+2025-01-06 12:14:07 - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-06 12:14:07 - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-06 12:14:07 - HHH000026: Second-level cache disabled
+2025-01-06 12:14:07 - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-06 12:14:07 - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-06 12:14:07 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-06 12:14:07 - Filter 'webMvcObservationFilter' configured for use
+2025-01-06 12:14:07 - Filter 'corsFilter' configured for use
+2025-01-06 12:14:07 - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-06 12:14:08 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-06 12:14:08 - Patterns [/ws/**] in 'stompWebSocketHandlerMapping'

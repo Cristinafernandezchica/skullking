@@ -35,9 +35,13 @@ import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.UserService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class PartidaService {
+
+    private static final Logger logger = LoggerFactory.getLogger(PartidaService.class);
 
     PartidaRepository pr;
     RondaService rondaService;
@@ -121,38 +125,46 @@ public class PartidaService {
 
     // Inciamos la partida
     @Transactional
-    public void iniciarPartida(Integer partidaId){
+    public void iniciarPartida(Integer partidaId) {
+        logger.info("Iniciando la partida con ID: {}", partidaId);
+
         Partida partida = getPartidaById(partidaId);
         if (partida == null) {
+            logger.error("No se encontró la partida con ID: {}", partidaId);
             throw new ResourceNotFoundException("Partida", "id", partidaId);
         }
 
         List<Jugador> jugadoresPartida = jugadorService.findJugadoresByPartidaId(partidaId);
-        if(jugadoresPartida.size() < 3) {
+        if (jugadoresPartida.size() < 3) {
+            logger.warn("Intento de iniciar partida con menos de 3 jugadores. ID: {}", partidaId);
             throw new MinJugadoresPartidaException("Tiene que haber un mínimo de 3 jugadores en la sala para empezar la partida");
         }
 
         partida.setEstado(PartidaEstado.JUGANDO);
         update(partida, partidaId);
+
+        logger.info("La partida con ID {} ha cambiado su estado a JUGANDO", partidaId);
+
         Ronda ronda = rondaService.iniciarRonda(partida);
         messagingTemplate.convertAndSend("/topic/nuevaRonda/partida/" + partidaId, rondaService.rondaActual(partidaId));
+
         manoService.iniciarManos(partida.getId(), ronda, jugadoresPartida);
         Baza baza = bazaService.iniciarBaza(ronda, jugadoresPartida);
         messagingTemplate.convertAndSend("/topic/nuevaBaza/partida/" + partidaId, bazaService.findBazaActualByRondaId(ronda.getId()));
 
-        // Actualizamos turno actual
         partida.setTurnoActual(primerTurno(baza.getTurnos()));
         update(partida, partida.getId());
 
-        // Crear el mensaje de notificación
+        logger.info("Turno inicial asignado en la partida con ID: {}", partidaId);
+
         Map<String, Object> message = new HashMap<>();
-        message.put("status", "JUGANDO"); // Estado de la partida
-        message.put("partidaId", partidaId); // ID de la partida
+        message.put("status", "JUGANDO");
+        message.put("partidaId", partidaId);
         message.put("message", "Partida iniciada");
 
-        // Enviar el mensaje a través de WebSocket
         messagingTemplate.convertAndSend("/topic/partida/" + partidaId, message);
 
+        logger.info("Notificación enviada para la partida con ID: {}", partidaId);
     }
 
     // Finalizamos la partida

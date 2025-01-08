@@ -42,6 +42,8 @@ public class User extends BaseEntity {
 	@JoinColumn(name = "authority")
 	Authorities authority;
 
+	private Boolean conectado;
+
 	// Propiedades para las estadísticas de los usuarios
 	@Transient
     private Integer numPartidasJugadas = 0;

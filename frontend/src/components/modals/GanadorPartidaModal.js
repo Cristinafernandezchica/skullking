@@ -2,14 +2,14 @@ import React, { useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import '../formGenerator/css/ganadorBazaModal.css';
 
-export default function GanadorBazaModal({ isVisible, ganador, onClose }) {
+export default function GanadorPartidaModal({ isVisible, ganador, onClose }) {
 
     useEffect(() => {
         let autoCloseTimer;
         if (isVisible) {
             autoCloseTimer = setTimeout(() => {
                 onClose();
-            }, 5000); // Cerrar automáticamente después de 5 segundos
+            }, 10000); // Cerrar automáticamente después de 5 segundos
         }
 
         return () => clearTimeout(autoCloseTimer);

@@ -288,7 +288,6 @@ export default function Jugando() {
           const data = JSON.parse(messageOutput.body);
   
           if (data.status === "FINALIZADA") {
-            // Saltar el modal y cuando se pulse salir se cambie a 
             setGanadorPartida(data.ganadores)
             setGanadorPartidaModal(true);
             /*
@@ -548,10 +547,11 @@ export default function Jugando() {
           BazaActual.paloBaza = "noHayPalo";
           cambiarPaloBaza(BazaActual);
           console.log(BazaActual);
+        } else {
+          BazaActual.paloBaza = truco.carta.tipoCarta;
+          cambiarPaloBaza(BazaActual);
+          console.log(BazaActual);
         }
-        BazaActual.paloBaza = truco.carta.tipoCarta;
-        cambiarPaloBaza(BazaActual);
-        console.log(BazaActual);
       }
     }
   }, [truco]);
@@ -690,7 +690,7 @@ export default function Jugando() {
       <GanadorPartidaModal
         isVisible={ganadorPartidaModal}
         ganador={ganadorPartida}
-        onClose={() => setGanadorPartidaModal(false)}
+        onClose={() => {setGanadorPartidaModal(false); navigate('/play')}}
       />
 
       <ChatModal

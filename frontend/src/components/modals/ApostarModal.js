@@ -25,11 +25,12 @@ export default function ApuestaModal({ isVisible, onCancel, onConfirm }) {
         }
         try {
             await onConfirm(apuesta);
-            setApuesta('');
-            setErrorMessage('');
+            setApuesta(0);
+            // setErrorMessage('');
         } catch (error) {
             setErrorMessage(error.message);
         }
+        
     };
 
     return (

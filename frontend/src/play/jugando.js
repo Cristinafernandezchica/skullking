@@ -37,9 +37,6 @@ export default function Jugando() {
   const [truco, setTruco] = useState(null);
   const [BazaActual, setBazaActual] = useState(null)
   const [ListaDeTrucos, setListaDeTrucos] = useState([])
-  const [seCambiaPalo, setSeCambiaPalo] = useState(true)
-  // const [buscarUnaVezListaDeTrucos, setBuscarUnaVezListaDeTrucos] = useState(true)
-  // const [idBaza, setIdBaza] = useState(null);
 
   // para las cartas del resto de jugadores
   const [manosOtrosJugadores, setManosOtrosJugadores] = useState({});
@@ -492,53 +489,6 @@ export default function Jugando() {
     }
   };
 
-  const cambiarPaloBaza = async (baza) => {
-    try {
-      const response = await fetch(`/api/v1/bazas/${baza.id}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(baza),
-      });
-
-      if (!response.ok) {
-        console.log("Algo falla");
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await response.json();
-      setBazaActual(data);
-      console.log("La baza con el palo dominante", data);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (
-      BazaActual !== null &&
-      BazaActual.paloBaza === "sinDeterminar" &&
-      truco !== null &&
-      truco.carta !== null
-    ) {
-      if (truco.carta.tipoCarta !== "banderaBlanca") {
-        if (
-          truco.carta.tipoCarta === "pirata" ||
-          truco.carta.tipoCarta === "skullKing" ||
-          truco.carta.tipoCarta === "sirena"
-        ) {
-          BazaActual.paloBaza = "noHayPalo";
-          cambiarPaloBaza(BazaActual);
-          console.log(BazaActual);
-        }
-        BazaActual.paloBaza = truco.carta.tipoCarta;
-        cambiarPaloBaza(BazaActual);
-        console.log(BazaActual);
-      }
-    }
-  }, [truco]);
 
   const handleEleccion = (eleccion) => {
     setEleccion(eleccion);

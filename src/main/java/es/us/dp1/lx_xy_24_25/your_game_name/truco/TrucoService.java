@@ -16,13 +16,14 @@ import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
-import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
+import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.CalculoGanadorContext;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.CartasPaloState;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.PersonajesState;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.trucoState.TriunfosState;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.PaloBaza;
 import es.us.dp1.lx_xy_24_25.your_game_name.bazaCartaManoDTO.BazaCartaManoDTO;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 
@@ -158,9 +159,16 @@ public class TrucoService {
 		messagingTemplate.convertAndSend("/topic/nuevasManos/partida/" + partida.getId(), manoService.findAllManosByRondaId(ronda.getId()));
 
 		Integer numJugadores = jugadorService.findJugadoresByPartidaId(partida.getId()).size();
-		Integer bazaId = trucoIniciado.getBaza().getId();
-		Integer numTrucosBaza = findTrucosByBazaId(bazaId).size();
+		Baza baza = trucoIniciado.getBaza();
+		Integer numTrucosBaza = findTrucosByBazaId(baza.getId()).size();
 
+		Baza bazaParaCambio = bazaService.findById(baza.getId());
+		// Cambiamos el palo de la baza
+		if(bazaParaCambio.getPaloBaza() == PaloBaza.sinDeterminar){
+			cambiarPaloBaza(baza, trucoIniciado);
+			// messagingTemplate.convertAndSend("/topic/nuevaBaza/partida/" + partida.getId(), bazaService.findBazaActualByRondaId(ronda.getId()));
+
+		}
 
 		// Si no es el último truco de la Baza, se actualiza el turno
 		if(numJugadores > numTrucosBaza){
@@ -174,14 +182,38 @@ public class TrucoService {
 		// Si es el último truco de la Baza, se calcula el ganador de la baza
 		
 		else if(numJugadores == numTrucosBaza){
-			Jugador ganadorBaza = calculoGanador(bazaId);
+			Jugador ganadorBaza = calculoGanador(baza.getId());
 			messagingTemplate.convertAndSend("/topic/ganadorBaza/partida/" + partida.getId(), ganadorBaza);
 			messagingTemplate.convertAndSend("/topic/listaTrucos/partida/" + partida.getId(), new ArrayList<>());
-			partidaService.siguienteEstado(partida.getId(), bazaId);
+			partidaService.siguienteEstado(partida.getId(), baza.getId());
 		}
 		
 
 		return trucoIniciado;
+	}
+
+	@Transactional
+	public Baza cambiarPaloBaza(Baza baza, Truco truco){
+		PaloBaza paloBaza = PaloBaza.sinDeterminar;
+		if(truco.getCarta().getTipoCarta() != TipoCarta.banderaBlanca){
+			if(truco.getCarta().getTipoCarta() == TipoCarta.pirata || 
+			truco.getCarta().getTipoCarta() == TipoCarta.skullking || 
+			truco.getCarta().getTipoCarta() == TipoCarta.sirena){
+				paloBaza = PaloBaza.noHayPalo;
+			} else{
+				if(truco.getCarta().getTipoCarta() == TipoCarta.amarillo){
+					paloBaza = PaloBaza.amarillo;
+				} else if(truco.getCarta().getTipoCarta() == TipoCarta.morada){
+					paloBaza = PaloBaza.morada;
+				} else if(truco.getCarta().getTipoCarta() == TipoCarta.triunfo){
+					paloBaza = PaloBaza.triunfo; // Preguntar si esto es así, o se trata como la bandera blanca, o como carta especial
+				} else if(truco.getCarta().getTipoCarta() == TipoCarta.verde){
+					paloBaza = PaloBaza.verde;
+				}
+			}
+		}
+		baza.setPaloBaza(paloBaza);
+		return bazaService.saveBaza(baza);
 	}
 
 
@@ -227,45 +259,6 @@ public class TrucoService {
             ));
     }
 	
-	@Transactional
-    public void crearTrucosBaza(Integer idBaza) {
-        // Determinamos Baza, Ronda, Partida y Jugadores a los que pertenecen los Trucos
-        Baza baza = bazaService.findById(idBaza);        
-
-        Integer idPartida = baza.getRonda().getPartida().getId();
-        List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(idPartida);
-		//List<Jugador> jugadores = jugadorService.findJugadoresOrdenadosByPartidaId(idPartida);
-
-        // Crear y guardar cada instancia de Truco de dicha Baza
-        for (int i = 0; i < jugadores.size(); i++) {
-            Jugador jugador = jugadores.get(i);
-			Mano mano = manoService.findLastManoByJugadorId(jugador.getId());
-            Integer turno = i+1; 
-            Carta carta = null;
-
-            Truco truco = new Truco();
-			truco.setBaza(baza);
-			truco.setCarta(carta);
-			truco.setMano(mano);
-			truco.setJugador(jugador);
-			truco.setTurno(turno);
-            trucoRepository.save(truco);
-        }
-	}
-
-    // Inicial Truco
-
-    // Next Truco
-    
-	// La he creado de nuevo por si no funciona tener la anterior
-	// Crear trucos con asociación de turnos correcta
-	// Caluclar primer turno (Comprobar si se pueden meter directamente en la entidad Baza)
-	/*
-	@Transactional
-	public Integer primerTurno(List<Integer> turnos){
-		return turnos.get(0);
-	}
-	*/
 
 	@Transactional
 	public Integer siguienteTurno(List<Integer> turnos, Integer turnoActual){
@@ -273,37 +266,5 @@ public class TrucoService {
 		Integer indexSiguienteTurno = indexTurnoActual + 1;
 		return turnos.get(indexSiguienteTurno);
 	}
-
-	// Calcular turnos
-	/*
-	@Transactional
-    public List<Integer> calcularTurnosNuevaBaza(int partidaId, Baza bazaAnterior) {
-        List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partidaId);
-
-        // Si es la primera baza, el orden es el orden de unión de los jugadores
-        if (bazaAnterior == null) {
-			List<Integer> turnosJugadores = jugadores.stream().map(Jugador::getId).collect(Collectors.toList());
-            return turnosJugadores;
-        }
-
-        // Identificar al ganador de la baza anterior
-        Integer ganadorId = bazaAnterior.getGanador().getId();
-
-        // Reorganizar turnos: ganador primero, seguido por el resto
-        List<Integer> ordenAnterior = jugadores.stream().map(Jugador::getId).collect(Collectors.toList());
-        List<Integer> turnosNuevaBaza = ordenAnterior.stream()
-            .dropWhile(id -> !id.equals(ganadorId))  // Los jugadores a partir del ganador
-            .collect(Collectors.toList());
-
-        // Añadir los jugadores que estaban antes del ganador al final de la lista
-        turnosNuevaBaza.addAll(
-            ordenAnterior.stream().takeWhile(id -> !id.equals(ganadorId)).collect(Collectors.toList())
-        );
-
-        return turnosNuevaBaza;
-    }
-	
-	*/
-
 
 }

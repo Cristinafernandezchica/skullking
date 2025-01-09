@@ -186,7 +186,7 @@ public class PartidaService {
 
         Partida partida = getPartidaById(partidaId);
         if (partida == null) {
-            logger.error("Partida con ID {} no encontrada. No se puede finalizar.", partidaId);
+            // logger.error("Partida con ID {} no encontrada. No se puede finalizar.", partidaId);
             throw new ResourceNotFoundException("Partida", "id", partidaId);
         }
 

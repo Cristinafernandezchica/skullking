@@ -41,8 +41,10 @@ export default function UserPartidas() {
 
     function handlePartidasPorPagina(event) {
         const value = event.target.value;
-        setPartidasPorPagina(value);
-        setPaginaActual(1);
+        if (value !== "0") {
+            setPartidasPorPagina(value);
+            setPaginaActual(1);
+        }
     }
 
     function handleClear() {

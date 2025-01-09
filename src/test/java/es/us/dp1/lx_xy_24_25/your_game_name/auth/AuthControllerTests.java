@@ -85,8 +85,8 @@ class AuthControllerTests {
 		signupRequest = new SignupRequest();
 		signupRequest.setUsername("username");
 		signupRequest.setPassword("password");
-		signupRequest.setFirstName("Test");
-		signupRequest.setLastName("Test");
+		signupRequest.setImagenPerfil("https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg");
+		signupRequest.setDescripcionPerfil("A jugar!");
 		signupRequest.setAuthority("OWNER");
 
 		userDetails = new UserDetailsImpl(1, loginRequest.getUsername(), loginRequest.getPassword(),

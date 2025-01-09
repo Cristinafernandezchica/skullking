@@ -42,28 +42,17 @@ public class User extends BaseEntity {
 	@JoinColumn(name = "authority")
 	Authorities authority;
 
+	private Boolean conectado;
+
 	// Propiedades para las estadísticas de los usuarios
-	@Transient
-    private Integer numPartidasJugadas = 0;
+	@Column(name = "num_partidas_jugadas", nullable = true)
+	private Integer numPartidasJugadas = 0;
 
-    @Transient
-    private Integer numPartidasGanadas = 0;
+	@Column(name = "num_partidas_ganadas", nullable = true)
+	private Integer numPartidasGanadas = 0;
 
-    @Transient
-    private Integer numPuntosGanados = 0;
-
-    // Optional utility methods for dynamic initialization
-    public Integer getNumPartidasJugadas() {
-        return numPartidasJugadas != null ? numPartidasJugadas : 0;
-    }
-
-    public Integer getNumPartidasGanadas() {
-        return numPartidasGanadas != null ? numPartidasGanadas : 0;
-    }
-
-    public Integer getNumPuntosGanados() {
-        return numPuntosGanados != null ? numPuntosGanados : 0;
-    }
+	@Column(name = "num_puntos_ganados", nullable = true)
+	private Integer numPuntosGanados = 0;
 
 	public Boolean hasAuthority(String auth) {
 		return authority.getAuthority().equals(auth);

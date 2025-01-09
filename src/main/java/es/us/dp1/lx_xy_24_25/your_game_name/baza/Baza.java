@@ -6,6 +6,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.model.BaseEntity;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -33,15 +34,15 @@ public class Baza extends BaseEntity{
     @Max(10)
     private Integer numBaza;
 
-    @ManyToOne(optional = true)
+    @ManyToOne(optional = true, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "jugador_id")
 	private Jugador ganador;
 
-    @ManyToOne(optional = true)
+    @ManyToOne(optional = true, cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "carta_id")
     private Carta cartaGanadora;
 
-    @ManyToOne(optional = true)
+    @ManyToOne(optional = true, cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "ronda_id")
 	private Ronda ronda;
 

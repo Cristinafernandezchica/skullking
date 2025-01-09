@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import tokenService from '../services/token.service';
 import Login from '../auth/login';
+import { Spinner } from 'reactstrap';
 
 const PrivateRoute = ({ children }) => {
     const jwt = tokenService.getLocalAccessToken();
@@ -24,7 +25,12 @@ const PrivateRoute = ({ children }) => {
     } else return <Login message={message} navigation={false} />;
 
     if (isLoading === true) {
-        return <div>Cargando...</div>;
+        return (
+            <div className="loading-container">
+                <Spinner color="primary" />
+                <p>Cargando...</p>
+            </div>
+        );
     } else return isValid === true ? children : <Login message={message} navigation={true} />
 };
 

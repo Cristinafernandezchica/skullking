@@ -19,12 +19,6 @@ public class SignupRequest {
 	@NotBlank
 	private String password;
 	
-	//Both
-	@NotBlank
-	private String firstName;
-	
-	@NotBlank
-	private String lastName;
 
 	private String descripcionPerfil;
 

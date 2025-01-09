@@ -3,10 +3,13 @@ import { Link } from "react-router-dom";
 import "../../static/css/auth/authButton.css";
 import "../../static/css/auth/authPage.css";
 import tokenService from "../../services/token.service";
+import { usuarioConectadoODesconectado } from "../../components/appNavBarModular/AppNavBarModular";
 
 export function sendLogoutRequest() {
   const jwt = window.localStorage.getItem("jwt");
+  const usuarioActual = tokenService.getUser();
   if (jwt || typeof jwt === "undefined") {
+    usuarioConectadoODesconectado(jwt,usuarioActual.id,false);
     tokenService.removeUser();
     window.location.href = "/";
   } else {

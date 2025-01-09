@@ -5,21 +5,21 @@ INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_pe
 
 -- Ten player users, named player1 with passwor 0wn3r
 INSERT INTO authorities(id,authority) VALUES (2,'PLAYER');
-INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil) VALUES (4,'player1','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg');
-INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil) VALUES (5,'player2','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://media1.tenor.com/m/1XciugIj1V0AAAAd/cute-penguin.gif');
-INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil) VALUES (6,'player3','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://media1.tenor.com/m/DM7SdBiQKhEAAAAd/cat-underwater.gif');
-INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil) VALUES (7,'player4','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg');
-INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil) VALUES (8,'player5','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg');
-INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil) VALUES (9,'player6','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg');
-INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil) VALUES (10,'player7','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg');
-INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil) VALUES (11,'player8','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg');
-INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil) VALUES (12,'player9','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg');
-INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil) VALUES (13,'player10','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg');
-INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil) VALUES (14,'YTR7670','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg');
-INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil) VALUES (15,'RFM6490','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg');
-INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil) VALUES (16,'NMY0786','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg');
-INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil) VALUES (17,'PXT3852','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg');
-INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil) VALUES (18,'DGL2523','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg');
+INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil,conectado,num_partidas_jugadas,num_partidas_ganadas,num_puntos_ganados) VALUES (4,'player1','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg',false,0,0,0);
+INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil,conectado,num_partidas_jugadas,num_partidas_ganadas,num_puntos_ganados) VALUES (5,'player2','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://media1.tenor.com/m/1XciugIj1V0AAAAd/cute-penguin.gif',false,0,0,0);
+INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil,conectado,num_partidas_jugadas,num_partidas_ganadas,num_puntos_ganados) VALUES (6,'player3','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://media1.tenor.com/m/DM7SdBiQKhEAAAAd/cat-underwater.gif',false,0,0,0);
+INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil,conectado,num_partidas_jugadas,num_partidas_ganadas,num_puntos_ganados) VALUES (7,'player4','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg',false,0,0,0);
+INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil,conectado,num_partidas_jugadas,num_partidas_ganadas,num_puntos_ganados) VALUES (8,'player5','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg',false,0,0,0);
+INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil,conectado,num_partidas_jugadas,num_partidas_ganadas,num_puntos_ganados) VALUES (9,'player6','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg',false,0,0,0);
+INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil,conectado,num_partidas_jugadas,num_partidas_ganadas,num_puntos_ganados) VALUES (10,'player7','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg',false,0,0,0);
+INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil,conectado,num_partidas_jugadas,num_partidas_ganadas,num_puntos_ganados) VALUES (11,'player8','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg',false,0,0,0);
+INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil,conectado,num_partidas_jugadas,num_partidas_ganadas,num_puntos_ganados) VALUES (12,'player9','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg',false,0,0,0);
+INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil,conectado,num_partidas_jugadas,num_partidas_ganadas,num_puntos_ganados) VALUES (13,'player10','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg',false,0,0,0);
+INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil,conectado,num_partidas_jugadas,num_partidas_ganadas,num_puntos_ganados) VALUES (14,'YTR7670','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg',false,0,0,0);
+INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil,conectado,num_partidas_jugadas,num_partidas_ganadas,num_puntos_ganados) VALUES (15,'RFM6490','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg',false,0,0,0);
+INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil,conectado,num_partidas_jugadas,num_partidas_ganadas,num_puntos_ganados) VALUES (16,'NMY0786','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg',false,0,0,0);
+INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil,conectado,num_partidas_jugadas,num_partidas_ganadas,num_puntos_ganados) VALUES (17,'PXT3852','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg',false,0,0,0);
+INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil,conectado,num_partidas_jugadas,num_partidas_ganadas,num_puntos_ganados) VALUES (18,'DGL2523','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg',false,0,0,0);
 
 
 INSERT INTO Partida(id, nombre, inicio, fin, estado, owner_partida, turno_actual) VALUES (2, 'Partida Ejemplo2', '2024-11-07 18:00:00', '2024-11-05 21:00:00', 'TERMINADA', 14, null);
@@ -32,6 +32,9 @@ INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (1,15,3,
 INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (2,15,3,6,0);
 INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (4,30,4,7,0);
 INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (5,10,2,14,0);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (6,20,4,5,0);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (7,25,4,14,0);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (8,5,2,7,0);
 
 
 -- moradas
@@ -135,6 +138,9 @@ INSERT INTO Carta(id,  numero, tipo_carta, imagen_frontal, imagen_trasera) VALUE
 INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (1, 1, 1, 1);
 INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (500, 2, 1, 0);
 INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (3, 3, 0, 0);
+INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (4, 4, 0, 0);
+INSERT INTO Mano(id, jugador_id, apuesta, resultado) VALUES (5, 8, 0, 0);
+
 
 -- Asignar cartas a la mano 1
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (1, 1);  -- Mano 1 contiene Carta 1
@@ -149,7 +155,23 @@ INSERT INTO carta_mano(mano_id, carta_id) VALUES (500, 65);  -- Mano 2 contiene 
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (3, 1);  -- Mano 3 contiene Carta 1
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (3, 4);  -- Mano 3 contiene Carta 4
 
-INSERT INTO chat(id,jugador_id,mensaje) VALUES (1,2,'hola como están');
+
+-- Asignar cartas a la mano 4
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (4, 2);  -- Mano 4 contiene Carta 2
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (4, 4);  -- Mano 4 contiene Carta 4
+
+
+-- Asignar cartas a la mano 5
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (5, 3);  -- Mano 5 contiene Carta 3
+INSERT INTO carta_mano(mano_id, carta_id) VALUES (5, 1);  -- Mano 5 contiene Carta 1
+
+
+INSERT INTO chat(id,jugador_id,mensaje) VALUES (1,2,'hola, que tal');
+INSERT INTO chat(id,jugador_id,mensaje) VALUES (2,4,'JAJAJAJAJAJA');
+
 -- Pruebas para Baza
 -- INSERT INTO Baza(id, numBaza, tipo_carta, jugador_id, carta_id, ronda_id, turnos) VALUES (1,2,'triunfo',1,1,1,[]);
 -- INSERT INTO Baza(id, numBaza, tipo_carta, jugador_id, carta_id, ronda_id, turnos) VALUES (2,3,'pirata',3,8,2,[]);
+
+INSERT INTO amistad(id,DESTINATARIO_ID,REMITENTE_ID,ESTADO_AMISTAD) VALUES (1,6,5,'ACEPTADA');
+INSERT INTO amistad(id,DESTINATARIO_ID,REMITENTE_ID,ESTADO_AMISTAD) VALUES (2,6,4,'PENDIENTE');

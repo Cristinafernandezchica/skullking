@@ -134,44 +134,44 @@ export default function Jugando() {
   // Quedarse con esta, la de Candela no me ha funcionado por el momento
   const fetchManosJugadores = async () => {
     try {
-        const nuevasManos = {};
-        let nuevaMano = null;
+      const nuevasManos = {};
+      let nuevaMano = null;
 
-        // Ejecutar todas las peticiones en paralelo
-        const fetchPromises = jugadores.map(async (jugador) => {
-            try {
-                const response = await fetch(`/api/v1/manos/${jugador.id}`, {
-                    headers: {
-                        Authorization: `Bearer ${jwt}`,
-                        "Content-Type": "application/json",
-                    },
-                });
+      // Ejecutar todas las peticiones en paralelo
+      const fetchPromises = jugadores.map(async (jugador) => {
+        try {
+          const response = await fetch(`/api/v1/manos/${jugador.id}`, {
+            headers: {
+              Authorization: `Bearer ${jwt}`,
+              "Content-Type": "application/json",
+            },
+          });
 
-                if (!response.ok) {
-                    throw new Error(`Error al obtener la mano del jugador ${jugador.id}`);
-                }
+          if (!response.ok) {
+            throw new Error(`Error al obtener la mano del jugador ${jugador.id}`);
+          }
 
-                const data = await response.json();
+          const data = await response.json();
 
-                if (jugador.id !== tu.id) {
-                    nuevasManos[jugador.id] = data;
-                } else {
-                    nuevaMano = data;
-                    await fetchCartasDisabled(nuevaMano.id, BazaActual.paloBaza);
-                }
-            } catch (error) {
-                console.error(`Error procesando el jugador ${jugador.id}:`, error);
-            }
-        });
+          if (jugador.id !== tu.id) {
+            nuevasManos[jugador.id] = data;
+          } else {
+            nuevaMano = data;
+            await fetchCartasDisabled(nuevaMano.id, BazaActual.paloBaza);
+          }
+        } catch (error) {
+          console.error(`Error procesando el jugador ${jugador.id}:`, error);
+        }
+      });
 
-        await Promise.all(fetchPromises);
+      await Promise.all(fetchPromises);
 
-        setManosOtrosJugadores(nuevasManos);
-        setMano(nuevaMano);
+      setManosOtrosJugadores(nuevasManos);
+      setMano(nuevaMano);
     } catch (error) {
-        console.error("Error general al obtener las manos:", error);
-        setMessage(error.message);
-        setVisible(true);
+      console.error("Error general al obtener las manos:", error);
+      setMessage(error.message);
+      setVisible(true);
     }
   };
 
@@ -186,102 +186,102 @@ export default function Jugando() {
 
   useEffect(() => {
     // Segundo useEffect: Conexión al WebSocket
-      const socket = new SockJS("http://localhost:8080/ws");
-      const stompClient = Stomp.over(() => socket);
+    const socket = new SockJS("http://localhost:8080/ws");
+    const stompClient = Stomp.over(() => socket);
 
-      stompClient.connect({}, (frame) => {
-        console.log("Connected: " + frame);
+    stompClient.connect({}, (frame) => {
+      console.log("Connected: " + frame);
 
-        // Para trucos
-        stompClient.subscribe(
-          `/topic/baza/truco/partida/${idPartida}`,
-          (messageOutput) => {
-            const data = JSON.parse(messageOutput.body);
-            console.log("Mensaje recibido: ", data); // Verifica que el mensaje se reciba correctamente
+      // Para trucos
+      stompClient.subscribe(
+        `/topic/baza/truco/partida/${idPartida}`,
+        (messageOutput) => {
+          const data = JSON.parse(messageOutput.body);
+          console.log("Mensaje recibido: ", data); // Verifica que el mensaje se reciba correctamente
 
-            setListaDeTrucos(data); // Actualizamos la lista de trucos con los datos recibidos
-          }
-        );
+          setListaDeTrucos(data); // Actualizamos la lista de trucos con los datos recibidos
+        }
+      );
 
-        // Para ronda
-        stompClient.subscribe(
-          `/topic/nuevaRonda/partida/${idPartida}`,
-          (messageOutput) => {
-            const data = JSON.parse(messageOutput.body);
-            console.log("Nueva ronda: ", data);
+      // Para ronda
+      stompClient.subscribe(
+        `/topic/nuevaRonda/partida/${idPartida}`,
+        (messageOutput) => {
+          const data = JSON.parse(messageOutput.body);
+          console.log("Nueva ronda: ", data);
 
-            const timerNuevaRonda = setTimeout(() => {
-              setRonda(data);
-            }, 5000);
-  
-              return () => clearTimeout(timerNuevaRonda);
-          }
-        );
+          const timerNuevaRonda = setTimeout(() => {
+            setRonda(data);
+          }, 5000);
 
-        // Para baza
-        stompClient.subscribe(
-          `/topic/nuevaBaza/partida/${idPartida}`,
-          (messageOutput) => {
-            const data = JSON.parse(messageOutput.body);
-            console.log("Nueva baza: ", data);
+          return () => clearTimeout(timerNuevaRonda);
+        }
+      );
 
-            const timerNuevaBaza = setTimeout(() => {
-              setBazaActual(data); // Actualizamos la baza actual con los datos recibidos
-              console.log("vaciar lista trucos");
-              setListaDeTrucos([]); // Vaciamos la lista de trucos
-              console.log("lista trucos vacia: ", ListaDeTrucos);
+      // Para baza
+      stompClient.subscribe(
+        `/topic/nuevaBaza/partida/${idPartida}`,
+        (messageOutput) => {
+          const data = JSON.parse(messageOutput.body);
+          console.log("Nueva baza: ", data);
 
-            }, 5000);
+          const timerNuevaBaza = setTimeout(() => {
+            setBazaActual(data); // Actualizamos la baza actual con los datos recibidos
+            console.log("vaciar lista trucos");
+            setListaDeTrucos([]); // Vaciamos la lista de trucos
+            console.log("lista trucos vacia: ", ListaDeTrucos);
 
-            return () => clearTimeout(timerNuevaBaza);
-          }
-        );
+          }, 5000);
 
-        // Para ganador Baza
-        stompClient.subscribe(
-          `/topic/ganadorBaza/partida/${idPartida}`,
-          (messageOutput) => {
-            const data = JSON.parse(messageOutput.body);
-            console.log("Ganador baza: ", data);
+          return () => clearTimeout(timerNuevaBaza);
+        }
+      );
 
-            setGanadorBaza(data); // Actualizamos el ganador de la baza
-            setGanadorBazaModal(true); // Abrimos el modal de visualización del ganador
-          }
-        );
+      // Para ganador Baza
+      stompClient.subscribe(
+        `/topic/ganadorBaza/partida/${idPartida}`,
+        (messageOutput) => {
+          const data = JSON.parse(messageOutput.body);
+          console.log("Ganador baza: ", data);
 
-        // Para turno
-        stompClient.subscribe(
-          `/topic/turnoActual/${idPartida}`,
-          (messageOutput) => {
-            const data = JSON.parse(messageOutput.body);
-            console.log("Nuevo turno: ", data);
+          setGanadorBaza(data); // Actualizamos el ganador de la baza
+          setGanadorBazaModal(true); // Abrimos el modal de visualización del ganador
+        }
+      );
 
-            setTurnoAct(data); // Actualizamos el turno actual con los datos recibidos
-          }
-        );
+      // Para turno
+      stompClient.subscribe(
+        `/topic/turnoActual/${idPartida}`,
+        (messageOutput) => {
+          const data = JSON.parse(messageOutput.body);
+          console.log("Nuevo turno: ", data);
 
-        // Para manos
-        stompClient.subscribe(
-          `/topic/nuevasManos/partida/${idPartida}`,
-          (messageOutput) => {
-            const data = JSON.parse(messageOutput.body);
-            console.log("Nuevas manos: ", data);
+          setTurnoAct(data); // Actualizamos el turno actual con los datos recibidos
+        }
+      );
 
-            for (const d of data) {
-              if (d.jugador.id === tu.id) {
-                console.log("mi mano con if: ", d)
-                setMano(d);
-              } else if (d.jugador.id !== tu.id) {
-                let nuevasManosOtros = [];
-                nuevasManosOtros.push(d);
-                setManosOtrosJugadores(nuevasManosOtros);
-                console.log("manos otros jugadores con if: ", manosOtrosJugadores);
-                // setManosOtrosJugadores({ ...manosOtrosJugadores, [d.jugador.id]: d });
-                // console.log("manos otros jugadores: ", manosOtrosJugadores);
-              }
+      // Para manos
+      stompClient.subscribe(
+        `/topic/nuevasManos/partida/${idPartida}`,
+        (messageOutput) => {
+          const data = JSON.parse(messageOutput.body);
+          console.log("Nuevas manos: ", data);
+
+          for (const d of data) {
+            if (d.jugador.id === tu.id) {
+              console.log("mi mano con if: ", d)
+              setMano(d);
+            } else if (d.jugador.id !== tu.id) {
+              let nuevasManosOtros = [];
+              nuevasManosOtros.push(d);
+              setManosOtrosJugadores(nuevasManosOtros);
+              console.log("manos otros jugadores con if: ", manosOtrosJugadores);
+              // setManosOtrosJugadores({ ...manosOtrosJugadores, [d.jugador.id]: d });
+              // console.log("manos otros jugadores: ", manosOtrosJugadores);
             }
           }
-        );
+        }
+      );
 
         // Para finalizar partida
         stompClient.subscribe(`/topic/partida/${idPartida}`, (messageOutput) => {
@@ -299,33 +299,33 @@ export default function Jugando() {
         
       });
 
-      // Cleanup: Desconectar el WebSocket cuando el componente se desmonte
-      return () => {
-        stompClient.disconnect(() => {
-          console.log("Disconnected");
-        });
-      };
+    // Cleanup: Desconectar el WebSocket cuando el componente se desmonte
+    return () => {
+      stompClient.disconnect(() => {
+        console.log("Disconnected");
+      });
+    };
   }, [tu]); // Solo se ejecuta una vez
 
-    const fetchJugadores = async () => {
-      try {
-        const response = await fetch(`/api/v1/jugadores/${idPartida}`, {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-            "Content-Type": "application/json",
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setJugadores(data);
-      } catch (error) {
-        console.error("Error encontrando jugadores:", error);
-        setMessage(error.message);
-        setVisible(true);
+  const fetchJugadores = async () => {
+    try {
+      const response = await fetch(`/api/v1/jugadores/${idPartida}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
-    };
+      const data = await response.json();
+      setJugadores(data);
+    } catch (error) {
+      console.error("Error encontrando jugadores:", error);
+      setMessage(error.message);
+      setVisible(true);
+    }
+  };
 
   // Para abrir el modal de apuesta
   useEffect(() => {
@@ -572,114 +572,114 @@ export default function Jugando() {
     <>
       <div className="validation-errors">
         <Alert color="primary" className="slide-down-alert" isOpen={alertVisible}>
-            {alertaRondaBaza}
+          {alertaRondaBaza}
         </Alert>
       </div>
-    <div className="tablero">
-      <div className="lista-jugadores">
-        {jugadores !== null &&
-          jugadores.map((jugador) => (
-            <div key={jugador.id} className="jugador-info">
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <img src={jugador.usuario.imagenPerfil} alt="Perfil" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "10px" }} />
-                <h3>{jugador.usuario.username}</h3>
-              </div>
-              <p>Apuesta: {jugador.apuestaActual}</p>
-              <p>Puntos: {jugador.puntos}</p>
-              {/*mano !== null && <p>Bazas ganadas: {mano.resultado}</p>
+      <div className="tablero">
+        <div className="lista-jugadores">
+          {jugadores !== null &&
+            jugadores.map((jugador) => (
+              <div key={jugador.id} className="jugador-info">
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <img src={jugador.usuario.imagenPerfil} alt="Perfil" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "10px" }} />
+                  <h3>{jugador.usuario.username}</h3>
+                </div>
+                <p>Apuesta: {jugador.apuestaActual}</p>
+                <p>Puntos: {jugador.puntos}</p>
+                {/*mano !== null && <p>Bazas ganadas: {mano.resultado}</p>
                 Para poder ver la cantidad de bazas que ha ganado cada jugador
                 habría que añadir una propiedad a jugador para que sea más sencillo
                 como hicimos con la apuesta, si no no sé exactamente cómo hacerlo*/}
-            </div>
-          ))}
-      </div>
-
-      <div className="cartas-otros-jugadores">
-        {Object.keys(manosOtrosJugadores).map((jugadorId) => (
-          <div key={jugadorId} className="carta-otros-jugadores">
-            {manosOtrosJugadores[jugadorId].cartas.map((carta) => (
-              <img
-                key={carta.id}
-                src={carta.imagenTrasera}
-                alt={`Carta ${carta.tipoCarta}`}
-                className="imagen-carta-otras"
-              />
-            ))}
-          </div>
-        ))}
-      </div>
-
-      <div className="cartas-trucos">
-        {ListaDeTrucos !== null &&
-          ListaDeTrucos.map((truco) => (
-            <div key={truco.id} className="carta truco">
-              <img
-                src={truco.carta.imagenFrontal}
-                alt={`Carta ${truco.carta.tipoCarta}`}
-                className="imagen-carta-trucos"
-              />
-              <div className="nombre-jugador">
-                <p>{truco.jugador.usuario.username}</p>
               </div>
+            ))}
+        </div>
+
+        <div className="cartas-otros-jugadores">
+          {Object.keys(manosOtrosJugadores).map((jugadorId) => (
+            <div key={jugadorId} className="carta-otros-jugadores">
+              {manosOtrosJugadores[jugadorId].cartas.map((carta) => (
+                <img
+                  key={carta.id}
+                  src={carta.imagenTrasera}
+                  alt={`Carta ${carta.tipoCarta}`}
+                  className="imagen-carta-otras"
+                />
+              ))}
             </div>
           ))}
-      </div>
+        </div>
 
-      <div className="cartas">
-        {mano !== null &&
-          mano.cartas.map((carta) => (
-            <div key={carta.id} className="carta">
-              <button
-                className="boton-agrandable"
-                disabled={
-                  visualizandoCartas ||
-                  turnoAct !== tu.id /*||
+        <div className="cartas-trucos">
+          {ListaDeTrucos !== null &&
+            ListaDeTrucos.map((truco) => (
+              <div key={truco.id} className="carta truco">
+                <img
+                  src={truco.carta.imagenFrontal}
+                  alt={`Carta ${truco.carta.tipoCarta}`}
+                  className="imagen-carta-trucos"
+                />
+                <div className="nombre-jugador">
+                  <p>{truco.jugador.usuario.username}</p>
+                </div>
+              </div>
+            ))}
+        </div>
+
+        <div className="cartas">
+          {mano !== null &&
+            mano.cartas.map((carta) => (
+              <div key={carta.id} className="carta">
+                <button
+                  className="boton-agrandable"
+                  disabled={
+                    visualizandoCartas ||
+                    turnoAct !== tu.id /*||
                   cartasDisabled.some(
                     (disabledCarta) => disabledCarta.id === carta.id
                   )*/
-                }
-                onClick={() => {
-                  if (carta.tipoCarta === "tigresa") {
-                    setModalTigresaOpen(true);
-                  } else {
-                    jugarTruco(carta);
                   }
+                  onClick={() => {
+                    if (carta.tipoCarta === "tigresa") {
+                      setModalTigresaOpen(true);
+                    } else {
+                      jugarTruco(carta);
+                    }
 
-                  //truco.carta=carta;
-                  //mano.cartas= mano.cartas.filter((cartaAEliminar) =>carta.id !== cartaAEliminar.id)
-                  //setTruco(truco);
-                  //console.log("Modificado",truco);
-                  //quitarCarta(mano);
-                }}
-              >
-                <img
-                  src={carta.imagenFrontal}
-                  alt={`Carta ${carta.tipoCarta}`}
-                  className="imagen-carta"
-                />
-              </button>
-            </div>
-          ))}
-      </div>
+                    //truco.carta=carta;
+                    //mano.cartas= mano.cartas.filter((cartaAEliminar) =>carta.id !== cartaAEliminar.id)
+                    //setTruco(truco);
+                    //console.log("Modificado",truco);
+                    //quitarCarta(mano);
+                  }}
+                >
+                  <img
+                    src={carta.imagenFrontal}
+                    alt={`Carta ${carta.tipoCarta}`}
+                    className="imagen-carta"
+                  />
+                </button>
+              </div>
+            ))}
+        </div>
 
-      <button
-        className="boton-flotante-chat"
-        onClick={() => setChatModalVisible(true)}
-      >
-        💬
-      </button>
+        <button
+          className="boton-flotante-chat"
+          onClick={() => setChatModalVisible(true)}
+        >
+          💬
+        </button>
 
-      <ApuestaModal
-        isVisible={apuestaModalOpen}
-        onCancel={toggleApuestaModal}
-        onConfirm={apostar}
-      />
+        <ApuestaModal
+          isVisible={apuestaModalOpen}
+          onCancel={toggleApuestaModal}
+          onConfirm={apostar}
+        />
 
-      <ElegirTigresaModal
-        isVisible={modalTigresaOpen}
-        onCancel={() => setModalTigresaOpen(false)}
-        onConfirm={handleEleccion}
-      />
+        <ElegirTigresaModal
+          isVisible={modalTigresaOpen}
+          onCancel={() => setModalTigresaOpen(false)}
+          onConfirm={handleEleccion}
+        />
 
       <GanadorBazaModal
         isVisible={ganadorBazaModal}
@@ -693,14 +693,14 @@ export default function Jugando() {
         onClose={() => {setGanadorPartidaModal(false); navigate('/play')}}
       />
 
-      <ChatModal
-        isVisible={chatModalVisible}
-        onCancel={toggleChatModal}
-        partida={idPartida}
-        jugadorQueEscribe={tu}
-      />
+        <ChatModal
+          isVisible={chatModalVisible}
+          onCancel={toggleChatModal}
+          partida={idPartida}
+          jugadorQueEscribe={tu}
+        />
 
-    </div>
-  </>
+      </div>
+    </>
   );
 }

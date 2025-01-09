@@ -234,20 +234,17 @@ export default function Jugando() {
         (messageOutput) => {
           const data = JSON.parse(messageOutput.body);
           console.log("Nuevas manos: ", data);
-
+          const nuevasManosOtros = {};
           for (const d of data) {
             if (d.jugador.id === tu.id) {
-              console.log("mi mano con if: ", d)
+              console.log("mi mano con if: ", d);
               setMano(d);
-            } else if (d.jugador.id !== tu.id) {
-              let nuevasManosOtros = [];
-              nuevasManosOtros.push(d);
-              setManosOtrosJugadores(nuevasManosOtros);
-              console.log("manos otros jugadores con if: ", manosOtrosJugadores);
-              // setManosOtrosJugadores({ ...manosOtrosJugadores, [d.jugador.id]: d });
-              // console.log("manos otros jugadores: ", manosOtrosJugadores);
+            } else {
+              nuevasManosOtros[d.jugador.id] = d;
             }
           }
+          setManosOtrosJugadores(nuevasManosOtros);
+          console.log("manos otros jugadores actualizadas: ", nuevasManosOtros);
         }
       );
 

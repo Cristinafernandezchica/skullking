@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 @Service
 public class PartidaService {
 
-    // private static final Logger logger = LoggerFactory.getLogger(PartidaService.class);
+    private static final Logger logger = LoggerFactory.getLogger(PartidaService.class);
 
     PartidaRepository partidaRepository;
     RondaService rondaService;
@@ -143,24 +143,24 @@ public class PartidaService {
     // Inciamos la partida
     @Transactional
     public void iniciarPartida(Integer partidaId) {
-        // logger.info("Iniciando la partida con ID: {}", partidaId);
+        logger.info("Iniciando la partida con ID: {}", partidaId);
 
         Partida partida = getPartidaById(partidaId);
         if (partida == null) {
-            // logger.error("No se encontró la partida con ID: {}", partidaId);
+            logger.error("No se encontró la partida con ID: {}", partidaId);
             throw new ResourceNotFoundException("Partida", "id", partidaId);
         }
 
         List<Jugador> jugadoresPartida = jugadorService.findJugadoresByPartidaId(partidaId);
         if (jugadoresPartida.size() < 3) {
-            // logger.warn("Intento de iniciar partida con menos de 3 jugadores. ID: {}", partidaId);
+            logger.warn("Intento de iniciar partida con menos de 3 jugadores. ID: {}", partidaId);
             throw new MinJugadoresPartidaException("Tiene que haber un mínimo de 3 jugadores en la sala para empezar la partida");
         }
 
         partida.setEstado(PartidaEstado.JUGANDO);
         update(partida, partidaId);
 
-        // logger.info("La partida con ID {} ha cambiado su estado a JUGANDO", partidaId);
+        logger.info("La partida con ID {} ha cambiado su estado a JUGANDO", partidaId);
 
         Ronda ronda = rondaService.iniciarRonda(partida);
         manoService.iniciarManos(partida.getId(), ronda, jugadoresPartida);
@@ -169,20 +169,20 @@ public class PartidaService {
         partida.setTurnoActual(primerTurno(baza.getTurnos()));
         update(partida, partida.getId());
 
-        // logger.info("Turno inicial asignado en la partida con ID: {}", partidaId);
+        logger.info("Turno inicial asignado en la partida con ID: {}", partidaId);
 
         Map<String, Object> message = new HashMap<>();
         message.put("status", "JUGANDO"); // Estado de la partida
 
         messagingTemplate.convertAndSend("/topic/partida/" + partidaId, message);
 
-        // logger.info("Notificación enviada para la partida con ID: {}", partidaId);
+        logger.info("Notificación enviada para la partida con ID: {}", partidaId);
     }
 
     // Finalizamos la partida
     @Transactional
     public void finalizarPartida(Integer partidaId) {
-        // logger.info("Intentando finalizar la partida con ID: {}", partidaId);
+        logger.info("Intentando finalizar la partida con ID: {}", partidaId);
 
         Partida partida = getPartidaById(partidaId);
         if (partida == null) {
@@ -192,7 +192,7 @@ public class PartidaService {
 
         partida.setEstado(PartidaEstado.TERMINADA);
         partida.setFin(LocalDateTime.now());
-        // logger.info("La partida con ID {} ha sido marcada como TERMINADA.", partidaId);
+        logger.info("La partida con ID {} ha sido marcada como TERMINADA.", partidaId);
 
         Integer puntosGanador = null;
         List<Jugador> jugadoresPartida = jugadorService.findJugadoresByPartidaId(partidaId);
@@ -209,10 +209,10 @@ public class PartidaService {
             usuarioJugador.setNumPartidasJugadas(usuarioJugador.getNumPartidasJugadas() + 1);
             userService.saveUser(usuarioJugador);
 
-            /*logger.info("Estadísticas actualizadas para el jugador {}: Puntos totales: {}, Partidas jugadas: {}",
+            logger.info("Estadísticas actualizadas para el jugador {}: Puntos totales: {}, Partidas jugadas: {}",
                     usuarioJugador.getUsername(),
                     usuarioJugador.getNumPuntosGanados(),
-                    usuarioJugador.getNumPartidasJugadas());*/
+                    usuarioJugador.getNumPartidasJugadas());
 
             if (puntosGanador == null || jugador.getPuntos() > puntosGanador) {
                 puntosGanador = jugador.getPuntos();
@@ -231,20 +231,20 @@ public class PartidaService {
             }
             u.setNumPartidasGanadas(u.getNumPartidasGanadas() + 1);
             userService.saveUser(u);
-            /*logger.info("El usuario {} ha ganado la partida y ahora tiene {} partidas ganadas.",
+            logger.info("El usuario {} ha ganado la partida y ahora tiene {} partidas ganadas.",
                     u.getUsername(),
-                    u.getNumPartidasGanadas());*/
+                    u.getNumPartidasGanadas());
         }
 
         update(partida, partidaId);
-        // logger.info("La partida con ID {} ha sido finalizada y actualizada en la base de datos.", partidaId);
+        logger.info("La partida con ID {} ha sido finalizada y actualizada en la base de datos.", partidaId);
 
         Map<String, Object> message = new HashMap<>();
         message.put("status", "FINALIZADA"); // Estado de la partida
 
         // Enviar el mensaje a través de WebSocket
         messagingTemplate.convertAndSend("/topic/partida/" + partidaId, message);
-        // logger.info("Se envió notificación de finalización de partida con ID {} a través de WebSocket.", partidaId);
+        logger.info("Se envió notificación de finalización de partida con ID {} a través de WebSocket.", partidaId);
     }
     // Para Excepción: Si ya tiene una partida creada en juego o esperando, no podrá crear otra partida
     public Boolean usuarioPartidaEnJuegoEsperando(Integer ownerId){

@@ -166,7 +166,7 @@ INSERT INTO carta_mano(mano_id, carta_id) VALUES (5, 3);  -- Mano 5 contiene Car
 INSERT INTO carta_mano(mano_id, carta_id) VALUES (5, 1);  -- Mano 5 contiene Carta 1
 
 
-INSERT INTO chat(id,jugador_id,mensaje) VALUES (1,2,'hola como están');
+INSERT INTO chat(id,jugador_id,mensaje) VALUES (1,2,'hola, que tal');
 INSERT INTO chat(id,jugador_id,mensaje) VALUES (2,4,'JAJAJAJAJAJA');
 
 -- Pruebas para Baza

@@ -137,6 +137,10 @@ public class PartidaService {
         partidaRepository.delete(partida);
     }
 
+    public List<Partida> findPartidasByOwnerId(Integer ownerId) {
+        return partidaRepository.findByOwnerPartida(ownerId);
+    }
+    
 
     // Lógica de juego
 

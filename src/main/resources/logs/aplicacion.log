@@ -5622,3 +5622,1136 @@ Database is already closed (to disable automatic closing at VM shutdown, add ";D
 2025-01-08 20:45:46 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@296feac6]]
 2025-01-08 20:45:46 [INFO] - Started.
 2025-01-08 20:45:46 [INFO] - Started GameApplication in 16.547 seconds (process running for 17.339)
+2025-01-09 01:09:42 [INFO] - HV000001: Hibernate Validator 8.0.1.Final
+2025-01-09 01:09:42 [INFO] - Starting GameApplication using Java 20.0.2 with PID 26748 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:09:42 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:09:42 [INFO] - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-01-09 01:09:42 [INFO] - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-01-09 01:09:44 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:09:44 [INFO] - Finished Spring Data repository scanning in 149 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:09:46 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:09:46 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:09:46 [INFO] - Starting service [Tomcat]
+2025-01-09 01:09:46 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:09:46 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:09:46 [INFO] - Root WebApplicationContext: initialization completed in 4243 ms
+2025-01-09 01:09:46 [INFO] - testdb - Starting...
+2025-01-09 01:09:47 [INFO] - testdb - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:09:47 [INFO] - testdb - Start completed.
+2025-01-09 01:09:47 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:09:47 [INFO] - HHH000412: Hibernate ORM core version 6.5.2.Final
+2025-01-09 01:09:47 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:09:48 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:09:51 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:09:51 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:09:51 [INFO] - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-01-09 01:09:53 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:09:55 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:09:55 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:09:57 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:09:57 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:09:57 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:09:57 [INFO] - Starting...
+2025-01-09 01:09:57 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@496bdd48]]
+2025-01-09 01:09:57 [INFO] - Started.
+2025-01-09 01:09:57 [INFO] - Started GameApplication in 15.888 seconds (process running for 16.544)
+2025-01-09 01:10:38 [INFO] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-01-09 01:10:38 [INFO] - Initializing Servlet 'dispatcherServlet'
+2025-01-09 01:10:38 [INFO] - Completed initialization in 10 ms
+2025-01-09 01:10:38 [ERROR] - JWT token is expired: JWT expired at 2025-01-03T19:43:18Z. Current time: 2025-01-09T01:10:38Z, a difference of 451640483 milliseconds.  Allowed clock skew: 0 milliseconds.
+2025-01-09 01:10:38 [ERROR] - JWT token is expired: JWT expired at 2025-01-03T19:43:18Z. Current time: 2025-01-09T01:10:38Z, a difference of 451640484 milliseconds.  Allowed clock skew: 0 milliseconds.
+2025-01-09 01:10:38 [ERROR] - JWT token is expired: JWT expired at 2025-01-03T19:43:18Z. Current time: 2025-01-09T01:10:38Z, a difference of 451640484 milliseconds.  Allowed clock skew: 0 milliseconds.
+2025-01-09 01:10:38 [ERROR] - JWT token is expired: JWT expired at 2025-01-03T19:43:18Z. Current time: 2025-01-09T01:10:38Z, a difference of 451640777 milliseconds.  Allowed clock skew: 0 milliseconds.
+2025-01-09 01:10:38 [WARN] - Resolved [es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException: User no encontrado con username: 'anonymousUser']
+2025-01-09 01:10:39 [ERROR] - JWT token is expired: JWT expired at 2025-01-03T19:43:18Z. Current time: 2025-01-09T01:10:39Z, a difference of 451641119 milliseconds.  Allowed clock skew: 0 milliseconds.
+2025-01-09 01:10:39 [WARN] - Resolved [es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException: User no encontrado con username: 'anonymousUser']
+2025-01-09 01:10:40 [ERROR] - JWT token is expired: JWT expired at 2025-01-03T19:43:18Z. Current time: 2025-01-09T01:10:40Z, a difference of 451642237 milliseconds.  Allowed clock skew: 0 milliseconds.
+2025-01-09 01:10:40 [ERROR] - JWT token is expired: JWT expired at 2025-01-03T19:43:18Z. Current time: 2025-01-09T01:10:40Z, a difference of 451642477 milliseconds.  Allowed clock skew: 0 milliseconds.
+2025-01-09 01:10:40 [ERROR] - JWT token is expired: JWT expired at 2025-01-03T19:43:18Z. Current time: 2025-01-09T01:10:40Z, a difference of 451642568 milliseconds.  Allowed clock skew: 0 milliseconds.
+2025-01-09 01:10:40 [ERROR] - JWT token is expired: JWT expired at 2025-01-03T19:43:18Z. Current time: 2025-01-09T01:10:40Z, a difference of 451642808 milliseconds.  Allowed clock skew: 0 milliseconds.
+2025-01-09 01:10:40 [ERROR] - JWT token is expired: JWT expired at 2025-01-03T19:43:18Z. Current time: 2025-01-09T01:10:40Z, a difference of 451642891 milliseconds.  Allowed clock skew: 0 milliseconds.
+2025-01-09 01:10:41 [ERROR] - JWT token is expired: JWT expired at 2025-01-03T19:43:18Z. Current time: 2025-01-09T01:10:41Z, a difference of 451643135 milliseconds.  Allowed clock skew: 0 milliseconds.
+2025-01-09 01:10:57 [INFO] - WebSocketSession[2 current WS(2)-HttpStream(0)-HttpPoll(0), 4 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(2)-CONNECTED(2)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 16, active threads = 0, queued tasks = 0, completed tasks = 18], outboundChannel[pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 4], sockJsScheduler[pool size = 8, active threads = 1, queued tasks = 3, completed tasks = 4]
+2025-01-09 01:13:32 [INFO] - HV000001: Hibernate Validator 8.0.1.Final
+2025-01-09 01:13:32 [INFO] - Starting GameApplication using Java 20.0.2 with PID 20340 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:13:32 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:13:32 [INFO] - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-01-09 01:13:32 [INFO] - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-01-09 01:13:34 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:13:34 [INFO] - Finished Spring Data repository scanning in 136 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:13:35 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:13:35 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:13:35 [INFO] - Starting service [Tomcat]
+2025-01-09 01:13:35 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:13:35 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:13:35 [INFO] - Root WebApplicationContext: initialization completed in 3320 ms
+2025-01-09 01:13:36 [INFO] - testdb - Starting...
+2025-01-09 01:13:36 [INFO] - testdb - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:13:36 [INFO] - testdb - Start completed.
+2025-01-09 01:13:36 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:13:36 [INFO] - HHH000412: Hibernate ORM core version 6.5.2.Final
+2025-01-09 01:13:37 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:13:37 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:13:40 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:13:40 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:13:40 [INFO] - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-01-09 01:13:42 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:13:44 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:13:45 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:13:46 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:13:46 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:13:46 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:13:46 [INFO] - Starting...
+2025-01-09 01:13:46 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@87607aa]]
+2025-01-09 01:13:46 [INFO] - Started.
+2025-01-09 01:13:46 [INFO] - Started GameApplication in 14.676 seconds (process running for 15.276)
+2025-01-09 01:14:38 [INFO] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-01-09 01:14:38 [INFO] - Initializing Servlet 'dispatcherServlet'
+2025-01-09 01:14:38 [INFO] - Completed initialization in 13 ms
+2025-01-09 01:14:46 [INFO] - WebSocketSession[2 current WS(2)-HttpStream(0)-HttpPoll(0), 2 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(1)-CONNECTED(1)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 6, active threads = 0, queued tasks = 0, completed tasks = 6], outboundChannel[pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1], sockJsScheduler[pool size = 7, active threads = 1, queued tasks = 3, completed tasks = 2]
+2025-01-09 01:15:06 [WARN] - Resolved [es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException: no se encontro ningun jugador cuyo usuarioId sea4]
+2025-01-09 01:15:06 [WARN] - Resolved [es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException: no se encontro ningun jugador cuyo usuarioId sea4]
+2025-01-09 01:15:12 [ERROR] - Invalid JWT signature: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
+2025-01-09 01:16:15 [ERROR] - Invalid JWT signature: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
+2025-01-09 01:16:15 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:16:15 [INFO] - Stopping...
+2025-01-09 01:16:15 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@87607aa]]
+2025-01-09 01:16:15 [INFO] - Stopped.
+2025-01-09 01:16:15 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:20 [WARN] - The executor associated with thread pool [http-nio-8080] has not fully shutdown. Some application threads may still be running.
+2025-01-09 01:16:20 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:16:20 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:16:20 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:16:20 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:16:23 [INFO] - Starting GameApplication using Java 20.0.2 with PID 20340 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:16:23 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:16:24 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:16:24 [INFO] - Finished Spring Data repository scanning in 96 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:16:25 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:16:25 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:25 [INFO] - Starting service [Tomcat]
+2025-01-09 01:16:25 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:16:25 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:16:25 [INFO] - Root WebApplicationContext: initialization completed in 1952 ms
+2025-01-09 01:16:25 [INFO] - testdb - Starting...
+2025-01-09 01:16:25 [INFO] - testdb - Added connection conn10: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:16:25 [INFO] - testdb - Start completed.
+2025-01-09 01:16:25 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:16:25 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:16:25 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:16:26 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:16:27 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:16:28 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:16:29 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:16:29 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:16:30 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:16:30 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:30 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:16:30 [INFO] - Starting...
+2025-01-09 01:16:30 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6110d414]]
+2025-01-09 01:16:30 [INFO] - Started.
+2025-01-09 01:16:30 [INFO] - Started GameApplication in 7.429 seconds (process running for 179.373)
+2025-01-09 01:16:30 [INFO] - Condition evaluation unchanged
+2025-01-09 01:16:32 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:16:32 [INFO] - Stopping...
+2025-01-09 01:16:32 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6110d414]]
+2025-01-09 01:16:32 [INFO] - Stopped.
+2025-01-09 01:16:32 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:32 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:16:32 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:16:32 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:16:32 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:16:32 [INFO] - Starting GameApplication using Java 20.0.2 with PID 20340 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:16:32 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:16:32 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:16:33 [INFO] - Finished Spring Data repository scanning in 81 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:16:33 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:16:33 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:33 [INFO] - Starting service [Tomcat]
+2025-01-09 01:16:33 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:16:33 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:16:33 [INFO] - Root WebApplicationContext: initialization completed in 1138 ms
+2025-01-09 01:16:33 [INFO] - testdb - Starting...
+2025-01-09 01:16:33 [INFO] - testdb - Added connection conn20: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:16:33 [INFO] - testdb - Start completed.
+2025-01-09 01:16:33 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:16:33 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:16:33 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:16:34 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:16:34 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:16:34 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:16:35 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:16:35 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:16:36 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:16:36 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:36 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:16:36 [INFO] - Starting...
+2025-01-09 01:16:36 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@287e02d2]]
+2025-01-09 01:16:36 [INFO] - Started.
+2025-01-09 01:16:36 [INFO] - Started GameApplication in 4.155 seconds (process running for 185.111)
+2025-01-09 01:16:36 [INFO] - Condition evaluation unchanged
+2025-01-09 01:16:37 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:16:37 [INFO] - Stopping...
+2025-01-09 01:16:37 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@287e02d2]]
+2025-01-09 01:16:37 [INFO] - Stopped.
+2025-01-09 01:16:37 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:37 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:16:37 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:16:37 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:16:37 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:16:38 [INFO] - Starting GameApplication using Java 20.0.2 with PID 20340 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:16:38 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:16:38 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:16:38 [INFO] - Finished Spring Data repository scanning in 48 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:16:38 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:16:38 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:38 [INFO] - Starting service [Tomcat]
+2025-01-09 01:16:38 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:16:38 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:16:38 [INFO] - Root WebApplicationContext: initialization completed in 854 ms
+2025-01-09 01:16:39 [INFO] - testdb - Starting...
+2025-01-09 01:16:39 [INFO] - testdb - Added connection conn30: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:16:39 [INFO] - testdb - Start completed.
+2025-01-09 01:16:39 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:16:39 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:16:39 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:16:39 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:16:40 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:16:40 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:16:41 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:16:41 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:16:42 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:16:42 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:42 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:16:42 [INFO] - Starting...
+2025-01-09 01:16:42 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@66baa774]]
+2025-01-09 01:16:42 [INFO] - Started.
+2025-01-09 01:16:42 [INFO] - Started GameApplication in 4.047 seconds (process running for 190.778)
+2025-01-09 01:16:42 [INFO] - Condition evaluation unchanged
+2025-01-09 01:16:43 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:16:43 [INFO] - Stopping...
+2025-01-09 01:16:43 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@66baa774]]
+2025-01-09 01:16:43 [INFO] - Stopped.
+2025-01-09 01:16:43 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:43 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:16:43 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:16:43 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:16:43 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:16:43 [INFO] - Starting GameApplication using Java 20.0.2 with PID 20340 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:16:43 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:16:44 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:16:44 [INFO] - Finished Spring Data repository scanning in 45 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:16:44 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:16:44 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:44 [INFO] - Starting service [Tomcat]
+2025-01-09 01:16:44 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:16:44 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:16:44 [INFO] - Root WebApplicationContext: initialization completed in 752 ms
+2025-01-09 01:16:44 [INFO] - testdb - Starting...
+2025-01-09 01:16:44 [INFO] - testdb - Added connection conn40: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:16:44 [INFO] - testdb - Start completed.
+2025-01-09 01:16:44 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:16:44 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:16:44 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:16:45 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:16:45 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:16:45 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:16:46 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:16:46 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:16:47 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:16:47 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:47 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:16:47 [INFO] - Starting...
+2025-01-09 01:16:47 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4898858f]]
+2025-01-09 01:16:47 [INFO] - Started.
+2025-01-09 01:16:47 [INFO] - Started GameApplication in 3.739 seconds (process running for 196.194)
+2025-01-09 01:16:47 [INFO] - Condition evaluation unchanged
+2025-01-09 01:16:49 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:16:49 [INFO] - Stopping...
+2025-01-09 01:16:49 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4898858f]]
+2025-01-09 01:16:49 [INFO] - Stopped.
+2025-01-09 01:16:49 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:49 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:16:49 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:16:49 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:16:49 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:16:49 [INFO] - Starting GameApplication using Java 20.0.2 with PID 20340 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:16:49 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:16:50 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:16:50 [INFO] - Finished Spring Data repository scanning in 42 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:16:50 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:16:50 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:50 [INFO] - Starting service [Tomcat]
+2025-01-09 01:16:50 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:16:50 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:16:50 [INFO] - Root WebApplicationContext: initialization completed in 751 ms
+2025-01-09 01:16:50 [INFO] - testdb - Starting...
+2025-01-09 01:16:50 [INFO] - testdb - Added connection conn50: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:16:50 [INFO] - testdb - Start completed.
+2025-01-09 01:16:50 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:16:50 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:16:50 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:16:51 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:16:51 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:16:52 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:16:52 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:16:53 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:16:53 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:16:53 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:53 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:16:53 [INFO] - Starting...
+2025-01-09 01:16:53 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@71f91470]]
+2025-01-09 01:16:53 [INFO] - Started.
+2025-01-09 01:16:53 [INFO] - Started GameApplication in 3.918 seconds (process running for 202.206)
+2025-01-09 01:16:53 [INFO] - Condition evaluation unchanged
+2025-01-09 01:16:55 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:16:55 [INFO] - Stopping...
+2025-01-09 01:16:55 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@71f91470]]
+2025-01-09 01:16:55 [INFO] - Stopped.
+2025-01-09 01:16:55 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:55 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:16:55 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:16:55 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:16:55 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:16:55 [INFO] - Starting GameApplication using Java 20.0.2 with PID 20340 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:16:55 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:16:56 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:16:56 [INFO] - Finished Spring Data repository scanning in 35 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:16:56 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:16:56 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:56 [INFO] - Starting service [Tomcat]
+2025-01-09 01:16:56 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:16:56 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:16:56 [INFO] - Root WebApplicationContext: initialization completed in 589 ms
+2025-01-09 01:16:56 [INFO] - testdb - Starting...
+2025-01-09 01:16:56 [INFO] - testdb - Added connection conn60: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:16:56 [INFO] - testdb - Start completed.
+2025-01-09 01:16:56 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:16:56 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:16:56 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:16:57 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:16:57 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:16:57 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:16:58 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:16:58 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:16:59 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:16:59 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:16:59 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:16:59 [INFO] - Starting...
+2025-01-09 01:16:59 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@411dc6c5]]
+2025-01-09 01:16:59 [INFO] - Started.
+2025-01-09 01:16:59 [INFO] - Started GameApplication in 3.516 seconds (process running for 207.833)
+2025-01-09 01:16:59 [INFO] - Condition evaluation unchanged
+2025-01-09 01:17:00 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:17:00 [INFO] - Stopping...
+2025-01-09 01:17:00 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@411dc6c5]]
+2025-01-09 01:17:00 [INFO] - Stopped.
+2025-01-09 01:17:00 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:00 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:17:00 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:17:00 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:17:00 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:17:00 [INFO] - Starting GameApplication using Java 20.0.2 with PID 20340 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:17:00 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:17:01 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:17:01 [INFO] - Finished Spring Data repository scanning in 47 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:17:01 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:17:01 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:01 [INFO] - Starting service [Tomcat]
+2025-01-09 01:17:01 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:17:01 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:17:01 [INFO] - Root WebApplicationContext: initialization completed in 952 ms
+2025-01-09 01:17:01 [INFO] - testdb - Starting...
+2025-01-09 01:17:01 [INFO] - testdb - Added connection conn70: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:17:01 [INFO] - testdb - Start completed.
+2025-01-09 01:17:01 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:17:02 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:17:02 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:17:02 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:17:03 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:17:03 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:17:04 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:17:04 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:17:04 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:17:04 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:04 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:17:04 [INFO] - Starting...
+2025-01-09 01:17:04 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@30c74c03]]
+2025-01-09 01:17:04 [INFO] - Started.
+2025-01-09 01:17:04 [INFO] - Started GameApplication in 4.149 seconds (process running for 213.717)
+2025-01-09 01:17:04 [INFO] - Condition evaluation unchanged
+2025-01-09 01:17:06 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:17:06 [INFO] - Stopping...
+2025-01-09 01:17:06 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@30c74c03]]
+2025-01-09 01:17:06 [INFO] - Stopped.
+2025-01-09 01:17:06 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:06 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:17:06 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:17:06 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:17:06 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:17:06 [INFO] - Starting GameApplication using Java 20.0.2 with PID 20340 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:17:06 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:17:07 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:17:07 [INFO] - Finished Spring Data repository scanning in 81 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:17:07 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:17:07 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:07 [INFO] - Starting service [Tomcat]
+2025-01-09 01:17:07 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:17:07 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:17:07 [INFO] - Root WebApplicationContext: initialization completed in 1190 ms
+2025-01-09 01:17:08 [INFO] - testdb - Starting...
+2025-01-09 01:17:08 [INFO] - testdb - Added connection conn80: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:17:08 [INFO] - testdb - Start completed.
+2025-01-09 01:17:08 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:17:08 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:17:08 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:17:09 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:17:09 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:17:09 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:17:10 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:17:11 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:17:12 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:17:12 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:12 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:17:12 [INFO] - Starting...
+2025-01-09 01:17:12 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@17f1b836]]
+2025-01-09 01:17:12 [INFO] - Started.
+2025-01-09 01:17:12 [INFO] - Started GameApplication in 5.779 seconds (process running for 221.253)
+2025-01-09 01:17:12 [INFO] - Condition evaluation unchanged
+2025-01-09 01:17:14 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:17:14 [INFO] - Stopping...
+2025-01-09 01:17:14 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@17f1b836]]
+2025-01-09 01:17:14 [INFO] - Stopped.
+2025-01-09 01:17:14 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:14 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:17:14 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:17:14 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:17:14 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:17:14 [INFO] - Starting GameApplication using Java 20.0.2 with PID 20340 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:17:14 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:17:15 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:17:15 [INFO] - Finished Spring Data repository scanning in 62 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:17:15 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:17:15 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:15 [INFO] - Starting service [Tomcat]
+2025-01-09 01:17:15 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:17:15 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:17:15 [INFO] - Root WebApplicationContext: initialization completed in 1018 ms
+2025-01-09 01:17:15 [INFO] - testdb - Starting...
+2025-01-09 01:17:15 [INFO] - testdb - Added connection conn90: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:17:15 [INFO] - testdb - Start completed.
+2025-01-09 01:17:15 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:17:15 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:17:15 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:17:16 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:17:17 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:17:17 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:17:18 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:17:18 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:17:19 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:17:19 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:19 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:17:19 [INFO] - Starting...
+2025-01-09 01:17:19 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4c439029]]
+2025-01-09 01:17:19 [INFO] - Started.
+2025-01-09 01:17:19 [INFO] - Started GameApplication in 4.823 seconds (process running for 227.975)
+2025-01-09 01:17:19 [INFO] - Condition evaluation unchanged
+2025-01-09 01:17:20 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:17:20 [INFO] - Stopping...
+2025-01-09 01:17:20 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4c439029]]
+2025-01-09 01:17:20 [INFO] - Stopped.
+2025-01-09 01:17:20 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:20 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:17:20 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:17:20 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:17:20 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:17:20 [INFO] - Starting GameApplication using Java 20.0.2 with PID 20340 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:17:20 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:17:21 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:17:21 [INFO] - Finished Spring Data repository scanning in 56 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:17:21 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:17:21 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:21 [INFO] - Starting service [Tomcat]
+2025-01-09 01:17:21 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:17:21 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:17:21 [INFO] - Root WebApplicationContext: initialization completed in 921 ms
+2025-01-09 01:17:21 [INFO] - testdb - Starting...
+2025-01-09 01:17:21 [INFO] - testdb - Added connection conn100: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:17:22 [INFO] - testdb - Start completed.
+2025-01-09 01:17:22 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:17:22 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:17:22 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:17:22 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:17:23 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:17:23 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:17:24 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:17:24 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:17:25 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:17:25 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:25 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:17:25 [INFO] - Starting...
+2025-01-09 01:17:25 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@36ecbde9]]
+2025-01-09 01:17:25 [INFO] - Started.
+2025-01-09 01:17:25 [INFO] - Started GameApplication in 4.343 seconds (process running for 233.98)
+2025-01-09 01:17:25 [INFO] - Condition evaluation unchanged
+2025-01-09 01:17:26 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:17:26 [INFO] - Stopping...
+2025-01-09 01:17:26 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@36ecbde9]]
+2025-01-09 01:17:26 [INFO] - Stopped.
+2025-01-09 01:17:26 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:26 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:17:26 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:17:26 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:17:26 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:17:27 [INFO] - Starting GameApplication using Java 20.0.2 with PID 20340 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:17:27 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:17:28 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:17:28 [INFO] - Finished Spring Data repository scanning in 72 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:17:28 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:17:28 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:28 [INFO] - Starting service [Tomcat]
+2025-01-09 01:17:28 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:17:28 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:17:28 [INFO] - Root WebApplicationContext: initialization completed in 1308 ms
+2025-01-09 01:17:28 [INFO] - testdb - Starting...
+2025-01-09 01:17:28 [INFO] - testdb - Added connection conn110: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:17:28 [INFO] - testdb - Start completed.
+2025-01-09 01:17:28 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:17:28 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:17:28 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:17:29 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:17:29 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:17:30 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:17:31 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:17:31 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:17:32 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:17:32 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:32 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:17:32 [INFO] - Starting...
+2025-01-09 01:17:32 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@27dec013]]
+2025-01-09 01:17:32 [INFO] - Started.
+2025-01-09 01:17:32 [INFO] - Started GameApplication in 5.323 seconds (process running for 241.174)
+2025-01-09 01:17:32 [INFO] - Condition evaluation unchanged
+2025-01-09 01:17:33 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:17:34 [INFO] - Stopping...
+2025-01-09 01:17:34 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@27dec013]]
+2025-01-09 01:17:34 [INFO] - Stopped.
+2025-01-09 01:17:34 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:34 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:17:34 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:17:34 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:17:34 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:17:34 [INFO] - Starting GameApplication using Java 20.0.2 with PID 20340 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:17:34 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:17:35 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:17:35 [INFO] - Finished Spring Data repository scanning in 57 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:17:35 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:17:35 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:17:35 [INFO] - Starting service [Tomcat]
+2025-01-09 01:17:35 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:17:35 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:17:35 [INFO] - Root WebApplicationContext: initialization completed in 1200 ms
+2025-01-09 01:17:35 [INFO] - testdb - Starting...
+2025-01-09 01:17:35 [INFO] - testdb - Added connection conn120: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:17:35 [INFO] - testdb - Start completed.
+2025-01-09 01:17:35 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:17:36 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:17:36 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:17:36 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:17:36 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:17:37 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:18:14 [INFO] - HV000001: Hibernate Validator 8.0.1.Final
+2025-01-09 01:18:14 [INFO] - Starting GameApplication using Java 20.0.2 with PID 23412 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:18:14 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:18:14 [INFO] - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-01-09 01:18:14 [INFO] - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-01-09 01:18:16 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:18:17 [INFO] - Finished Spring Data repository scanning in 192 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:18:18 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:18:18 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:18:18 [INFO] - Starting service [Tomcat]
+2025-01-09 01:18:18 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:18:19 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:18:19 [INFO] - Root WebApplicationContext: initialization completed in 4216 ms
+2025-01-09 01:18:19 [INFO] - testdb - Starting...
+2025-01-09 01:18:19 [INFO] - testdb - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:18:19 [INFO] - testdb - Start completed.
+2025-01-09 01:18:19 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:18:20 [INFO] - HHH000412: Hibernate ORM core version 6.5.2.Final
+2025-01-09 01:18:20 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:18:21 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:18:23 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:18:24 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:18:24 [INFO] - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-01-09 01:18:26 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:18:27 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:18:28 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:18:30 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:18:30 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:18:30 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:18:30 [INFO] - Starting...
+2025-01-09 01:18:30 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@204a91f8]]
+2025-01-09 01:18:30 [INFO] - Started.
+2025-01-09 01:18:30 [INFO] - Started GameApplication in 16.104 seconds (process running for 16.722)
+2025-01-09 01:19:19 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:19:19 [INFO] - Stopping...
+2025-01-09 01:19:19 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@204a91f8]]
+2025-01-09 01:19:19 [INFO] - Stopped.
+2025-01-09 01:19:19 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:19 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:19:19 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:19:19 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:19:19 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:19:19 [INFO] - Starting GameApplication using Java 20.0.2 with PID 23412 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:19:19 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:19:20 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:19:20 [INFO] - Finished Spring Data repository scanning in 53 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:19:20 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:19:20 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:20 [INFO] - Starting service [Tomcat]
+2025-01-09 01:19:20 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:19:20 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:19:20 [INFO] - Root WebApplicationContext: initialization completed in 1199 ms
+2025-01-09 01:19:21 [INFO] - testdb - Starting...
+2025-01-09 01:19:21 [INFO] - testdb - Added connection conn10: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:19:21 [INFO] - testdb - Start completed.
+2025-01-09 01:19:21 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:19:21 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:19:21 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:19:21 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:19:21 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:19:22 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:19:23 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:19:23 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:19:24 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:19:24 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:24 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:19:24 [INFO] - Starting...
+2025-01-09 01:19:24 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3f01037e]]
+2025-01-09 01:19:24 [INFO] - Started.
+2025-01-09 01:19:24 [INFO] - Started GameApplication in 4.509 seconds (process running for 70.67)
+2025-01-09 01:19:24 [INFO] - Condition evaluation unchanged
+2025-01-09 01:19:25 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:19:25 [INFO] - Stopping...
+2025-01-09 01:19:25 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3f01037e]]
+2025-01-09 01:19:25 [INFO] - Stopped.
+2025-01-09 01:19:25 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:25 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:19:25 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:19:25 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:19:25 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:19:25 [INFO] - Starting GameApplication using Java 20.0.2 with PID 23412 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:19:25 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:19:26 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:19:26 [INFO] - Finished Spring Data repository scanning in 75 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:19:26 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:19:26 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:26 [INFO] - Starting service [Tomcat]
+2025-01-09 01:19:26 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:19:27 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:19:27 [INFO] - Root WebApplicationContext: initialization completed in 1145 ms
+2025-01-09 01:19:27 [INFO] - testdb - Starting...
+2025-01-09 01:19:27 [INFO] - testdb - Added connection conn20: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:19:27 [INFO] - testdb - Start completed.
+2025-01-09 01:19:27 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:19:27 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:19:27 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:19:28 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:19:28 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:19:29 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:19:29 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:19:30 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:19:30 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:19:30 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:30 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:19:30 [INFO] - Starting...
+2025-01-09 01:19:30 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7678b466]]
+2025-01-09 01:19:30 [INFO] - Started.
+2025-01-09 01:19:30 [INFO] - Started GameApplication in 4.865 seconds (process running for 77.154)
+2025-01-09 01:19:30 [INFO] - Condition evaluation unchanged
+2025-01-09 01:19:32 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:19:32 [INFO] - Stopping...
+2025-01-09 01:19:32 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7678b466]]
+2025-01-09 01:19:32 [INFO] - Stopped.
+2025-01-09 01:19:32 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:32 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:19:32 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:19:32 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:19:32 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:19:32 [INFO] - Starting GameApplication using Java 20.0.2 with PID 23412 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:19:32 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:19:33 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:19:33 [INFO] - Finished Spring Data repository scanning in 91 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:19:33 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:19:33 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:33 [INFO] - Starting service [Tomcat]
+2025-01-09 01:19:33 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:19:33 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:19:33 [INFO] - Root WebApplicationContext: initialization completed in 1180 ms
+2025-01-09 01:19:33 [INFO] - testdb - Starting...
+2025-01-09 01:19:33 [INFO] - testdb - Added connection conn30: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:19:33 [INFO] - testdb - Start completed.
+2025-01-09 01:19:33 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:19:33 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:19:33 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:19:34 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:19:34 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:19:35 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:19:36 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:19:36 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:19:36 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:19:36 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:37 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:19:37 [INFO] - Starting...
+2025-01-09 01:19:37 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@564dd1ba]]
+2025-01-09 01:19:37 [INFO] - Started.
+2025-01-09 01:19:37 [INFO] - Started GameApplication in 4.696 seconds (process running for 83.485)
+2025-01-09 01:19:37 [INFO] - Condition evaluation unchanged
+2025-01-09 01:19:38 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:19:38 [INFO] - Stopping...
+2025-01-09 01:19:38 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@564dd1ba]]
+2025-01-09 01:19:38 [INFO] - Stopped.
+2025-01-09 01:19:38 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:38 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:19:38 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:19:38 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:19:38 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:19:38 [INFO] - Starting GameApplication using Java 20.0.2 with PID 23412 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:19:38 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:19:39 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:19:39 [INFO] - Finished Spring Data repository scanning in 35 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:19:39 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:19:39 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:39 [INFO] - Starting service [Tomcat]
+2025-01-09 01:19:39 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:19:39 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:19:39 [INFO] - Root WebApplicationContext: initialization completed in 677 ms
+2025-01-09 01:19:39 [INFO] - testdb - Starting...
+2025-01-09 01:19:39 [INFO] - testdb - Added connection conn40: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:19:39 [INFO] - testdb - Start completed.
+2025-01-09 01:19:39 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:19:39 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:19:39 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:19:40 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:19:40 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:19:40 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:19:41 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:19:41 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:19:42 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:19:42 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:42 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:19:42 [INFO] - Starting...
+2025-01-09 01:19:42 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@14a1ad24]]
+2025-01-09 01:19:42 [INFO] - Started.
+2025-01-09 01:19:42 [INFO] - Started GameApplication in 3.767 seconds (process running for 88.884)
+2025-01-09 01:19:42 [INFO] - Condition evaluation unchanged
+2025-01-09 01:19:44 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:19:44 [INFO] - Stopping...
+2025-01-09 01:19:44 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@14a1ad24]]
+2025-01-09 01:19:44 [INFO] - Stopped.
+2025-01-09 01:19:44 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:44 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:19:44 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:19:44 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:19:44 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:19:44 [INFO] - Starting GameApplication using Java 20.0.2 with PID 23412 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:19:44 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:19:45 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:19:45 [INFO] - Finished Spring Data repository scanning in 39 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:19:45 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:19:45 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:45 [INFO] - Starting service [Tomcat]
+2025-01-09 01:19:45 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:19:45 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:19:45 [INFO] - Root WebApplicationContext: initialization completed in 700 ms
+2025-01-09 01:19:45 [INFO] - testdb - Starting...
+2025-01-09 01:19:45 [INFO] - testdb - Added connection conn50: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:19:45 [INFO] - testdb - Start completed.
+2025-01-09 01:19:45 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:19:45 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:19:45 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:19:46 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:19:46 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:19:46 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:19:47 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:19:47 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:19:48 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:19:48 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:48 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:19:48 [INFO] - Starting...
+2025-01-09 01:19:48 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@48777cd4]]
+2025-01-09 01:19:48 [INFO] - Started.
+2025-01-09 01:19:48 [INFO] - Started GameApplication in 3.58 seconds (process running for 94.577)
+2025-01-09 01:19:48 [INFO] - Condition evaluation unchanged
+2025-01-09 01:19:50 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:19:50 [INFO] - Stopping...
+2025-01-09 01:19:50 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@48777cd4]]
+2025-01-09 01:19:50 [INFO] - Stopped.
+2025-01-09 01:19:50 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:50 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:19:50 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:19:50 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:19:50 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:19:50 [INFO] - Starting GameApplication using Java 20.0.2 with PID 23412 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:19:50 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:19:50 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:19:50 [INFO] - Finished Spring Data repository scanning in 41 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:19:50 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:19:50 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:50 [INFO] - Starting service [Tomcat]
+2025-01-09 01:19:50 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:19:50 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:19:50 [INFO] - Root WebApplicationContext: initialization completed in 615 ms
+2025-01-09 01:19:50 [INFO] - testdb - Starting...
+2025-01-09 01:19:50 [INFO] - testdb - Added connection conn60: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:19:50 [INFO] - testdb - Start completed.
+2025-01-09 01:19:50 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:19:51 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:19:51 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:19:51 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:19:51 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:19:52 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:19:53 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:19:53 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:19:53 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:19:53 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:53 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:19:53 [INFO] - Starting...
+2025-01-09 01:19:53 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@12c27de4]]
+2025-01-09 01:19:53 [INFO] - Started.
+2025-01-09 01:19:53 [INFO] - Started GameApplication in 3.514 seconds (process running for 100.174)
+2025-01-09 01:19:53 [INFO] - Condition evaluation unchanged
+2025-01-09 01:19:55 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:19:55 [INFO] - Stopping...
+2025-01-09 01:19:55 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@12c27de4]]
+2025-01-09 01:19:55 [INFO] - Stopped.
+2025-01-09 01:19:55 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:55 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:19:55 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:19:55 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:19:55 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:19:55 [INFO] - Starting GameApplication using Java 20.0.2 with PID 23412 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:19:55 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:19:56 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:19:56 [INFO] - Finished Spring Data repository scanning in 39 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:19:56 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:19:56 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:56 [INFO] - Starting service [Tomcat]
+2025-01-09 01:19:56 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:19:56 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:19:56 [INFO] - Root WebApplicationContext: initialization completed in 780 ms
+2025-01-09 01:19:56 [INFO] - testdb - Starting...
+2025-01-09 01:19:56 [INFO] - testdb - Added connection conn70: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:19:56 [INFO] - testdb - Start completed.
+2025-01-09 01:19:56 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:19:56 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:19:56 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:19:57 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:19:57 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:19:58 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:19:59 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:19:59 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:19:59 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:19:59 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:19:59 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:19:59 [INFO] - Starting...
+2025-01-09 01:19:59 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@279faacf]]
+2025-01-09 01:19:59 [INFO] - Started.
+2025-01-09 01:19:59 [INFO] - Started GameApplication in 4.097 seconds (process running for 106.375)
+2025-01-09 01:19:59 [INFO] - Condition evaluation unchanged
+2025-01-09 01:20:01 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:20:01 [INFO] - Stopping...
+2025-01-09 01:20:01 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@279faacf]]
+2025-01-09 01:20:01 [INFO] - Stopped.
+2025-01-09 01:20:01 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:01 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:20:01 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:20:01 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:20:01 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:20:02 [INFO] - Starting GameApplication using Java 20.0.2 with PID 23412 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:20:02 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:20:02 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:20:02 [INFO] - Finished Spring Data repository scanning in 32 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:20:02 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:20:02 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:02 [INFO] - Starting service [Tomcat]
+2025-01-09 01:20:02 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:20:02 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:20:02 [INFO] - Root WebApplicationContext: initialization completed in 581 ms
+2025-01-09 01:20:02 [INFO] - testdb - Starting...
+2025-01-09 01:20:02 [INFO] - testdb - Added connection conn80: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:20:02 [INFO] - testdb - Start completed.
+2025-01-09 01:20:02 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:20:02 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:20:02 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:20:03 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:20:03 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:20:04 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:20:04 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:20:05 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:20:05 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:20:05 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:05 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:20:05 [INFO] - Starting...
+2025-01-09 01:20:05 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6caec4b9]]
+2025-01-09 01:20:05 [INFO] - Started.
+2025-01-09 01:20:05 [INFO] - Started GameApplication in 3.385 seconds (process running for 111.847)
+2025-01-09 01:20:05 [INFO] - Condition evaluation unchanged
+2025-01-09 01:20:06 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:20:06 [INFO] - Stopping...
+2025-01-09 01:20:06 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6caec4b9]]
+2025-01-09 01:20:06 [INFO] - Stopped.
+2025-01-09 01:20:06 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:06 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:20:06 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:20:06 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:20:06 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:20:07 [INFO] - Starting GameApplication using Java 20.0.2 with PID 23412 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:20:07 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:20:07 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:20:07 [INFO] - Finished Spring Data repository scanning in 40 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:20:07 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:20:07 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:07 [INFO] - Starting service [Tomcat]
+2025-01-09 01:20:07 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:20:07 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:20:07 [INFO] - Root WebApplicationContext: initialization completed in 713 ms
+2025-01-09 01:20:07 [INFO] - testdb - Starting...
+2025-01-09 01:20:07 [INFO] - testdb - Added connection conn90: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:20:07 [INFO] - testdb - Start completed.
+2025-01-09 01:20:07 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:20:08 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:20:08 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:20:08 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:20:09 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:20:09 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:20:10 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:20:10 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:20:10 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:20:10 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:10 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:20:10 [INFO] - Starting...
+2025-01-09 01:20:10 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5f196986]]
+2025-01-09 01:20:10 [INFO] - Started.
+2025-01-09 01:20:10 [INFO] - Started GameApplication in 3.918 seconds (process running for 117.426)
+2025-01-09 01:20:10 [INFO] - Condition evaluation unchanged
+2025-01-09 01:20:12 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:20:12 [INFO] - Stopping...
+2025-01-09 01:20:12 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5f196986]]
+2025-01-09 01:20:12 [INFO] - Stopped.
+2025-01-09 01:20:12 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:12 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:20:12 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:20:12 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:20:12 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:20:12 [INFO] - Starting GameApplication using Java 20.0.2 with PID 23412 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:20:12 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:20:13 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:20:13 [INFO] - Finished Spring Data repository scanning in 38 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:20:13 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:20:13 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:13 [INFO] - Starting service [Tomcat]
+2025-01-09 01:20:13 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:20:13 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:20:13 [INFO] - Root WebApplicationContext: initialization completed in 872 ms
+2025-01-09 01:20:13 [INFO] - testdb - Starting...
+2025-01-09 01:20:13 [INFO] - testdb - Added connection conn100: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:20:13 [INFO] - testdb - Start completed.
+2025-01-09 01:20:13 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:20:13 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:20:13 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:20:14 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:20:14 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:20:15 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:20:16 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:20:16 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:20:17 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:20:17 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:17 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:20:17 [INFO] - Starting...
+2025-01-09 01:20:17 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@67a3efd3]]
+2025-01-09 01:20:17 [INFO] - Started.
+2025-01-09 01:20:17 [INFO] - Started GameApplication in 4.235 seconds (process running for 123.523)
+2025-01-09 01:20:17 [INFO] - Condition evaluation unchanged
+2025-01-09 01:20:18 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:20:18 [INFO] - Stopping...
+2025-01-09 01:20:18 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@67a3efd3]]
+2025-01-09 01:20:18 [INFO] - Stopped.
+2025-01-09 01:20:18 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:18 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:20:18 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:20:18 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:20:18 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:20:18 [INFO] - Starting GameApplication using Java 20.0.2 with PID 23412 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:20:18 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:20:19 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:20:19 [INFO] - Finished Spring Data repository scanning in 62 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:20:20 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:20:20 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:20 [INFO] - Starting service [Tomcat]
+2025-01-09 01:20:20 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:20:20 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:20:20 [INFO] - Root WebApplicationContext: initialization completed in 1156 ms
+2025-01-09 01:20:20 [INFO] - testdb - Starting...
+2025-01-09 01:20:20 [INFO] - testdb - Added connection conn110: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:20:20 [INFO] - testdb - Start completed.
+2025-01-09 01:20:20 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:20:20 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:20:20 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:20:21 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:20:21 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:20:22 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:20:23 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:20:23 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:20:24 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:20:24 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:24 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:20:24 [INFO] - Starting...
+2025-01-09 01:20:24 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@cc3f172]]
+2025-01-09 01:20:24 [INFO] - Started.
+2025-01-09 01:20:24 [INFO] - Started GameApplication in 5.441 seconds (process running for 130.852)
+2025-01-09 01:20:24 [INFO] - Condition evaluation unchanged
+2025-01-09 01:20:24 [INFO] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-01-09 01:20:24 [INFO] - Initializing Servlet 'dispatcherServlet'
+2025-01-09 01:20:24 [INFO] - Completed initialization in 4 ms
+2025-01-09 01:20:25 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:20:25 [INFO] - Stopping...
+2025-01-09 01:20:25 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@cc3f172]]
+2025-01-09 01:20:25 [INFO] - Stopped.
+2025-01-09 01:20:25 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:26 [WARN] - Resolved [org.springframework.web.context.request.async.AsyncRequestNotUsableException: ServletOutputStream failed to flush: java.nio.channels.ClosedChannelException]
+2025-01-09 01:20:26 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:20:26 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:20:26 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:20:26 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:20:27 [INFO] - Starting GameApplication using Java 20.0.2 with PID 23412 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:20:27 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:20:28 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:20:28 [INFO] - Finished Spring Data repository scanning in 86 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:20:28 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:20:28 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:28 [INFO] - Starting service [Tomcat]
+2025-01-09 01:20:28 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:20:28 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:20:28 [INFO] - Root WebApplicationContext: initialization completed in 1349 ms
+2025-01-09 01:20:28 [INFO] - testdb - Starting...
+2025-01-09 01:20:28 [INFO] - testdb - Added connection conn120: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:20:28 [INFO] - testdb - Start completed.
+2025-01-09 01:20:28 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:20:28 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:20:28 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:20:29 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:20:30 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:20:30 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:20:31 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:20:31 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:20:32 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:20:32 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:32 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:20:32 [INFO] - Starting...
+2025-01-09 01:20:32 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5f58adac]]
+2025-01-09 01:20:32 [INFO] - Started.
+2025-01-09 01:20:32 [INFO] - Started GameApplication in 5.391 seconds (process running for 138.954)
+2025-01-09 01:20:32 [INFO] - Condition evaluation unchanged
+2025-01-09 01:20:33 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:20:33 [INFO] - Stopping...
+2025-01-09 01:20:33 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5f58adac]]
+2025-01-09 01:20:33 [INFO] - Stopped.
+2025-01-09 01:20:33 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:33 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:20:33 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:20:33 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:20:33 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:20:34 [INFO] - Starting GameApplication using Java 20.0.2 with PID 23412 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:20:34 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:20:34 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:20:34 [INFO] - Finished Spring Data repository scanning in 37 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:20:34 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:20:34 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:34 [INFO] - Starting service [Tomcat]
+2025-01-09 01:20:34 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:20:34 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:20:34 [INFO] - Root WebApplicationContext: initialization completed in 589 ms
+2025-01-09 01:20:34 [INFO] - testdb - Starting...
+2025-01-09 01:20:34 [INFO] - testdb - Added connection conn130: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:20:34 [INFO] - testdb - Start completed.
+2025-01-09 01:20:34 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:20:34 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:20:34 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:20:35 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:20:35 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:20:36 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:20:36 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:20:37 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:20:37 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:20:37 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:37 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:20:37 [INFO] - Starting...
+2025-01-09 01:20:37 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7c18c8f3]]
+2025-01-09 01:20:37 [INFO] - Started.
+2025-01-09 01:20:37 [INFO] - Started GameApplication in 3.286 seconds (process running for 143.851)
+2025-01-09 01:20:37 [INFO] - Condition evaluation unchanged
+2025-01-09 01:20:38 [INFO] - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-01-09 01:20:38 [INFO] - Stopping...
+2025-01-09 01:20:38 [INFO] - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7c18c8f3]]
+2025-01-09 01:20:38 [INFO] - Stopped.
+2025-01-09 01:20:38 [INFO] - Stopping ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:38 [INFO] - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:20:38 [WARN] - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
+Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-01-09 01:20:38 [INFO] - testdb - Shutdown initiated...
+2025-01-09 01:20:38 [INFO] - testdb - Shutdown completed.
+2025-01-09 01:20:39 [INFO] - Starting GameApplication using Java 20.0.2 with PID 23412 (C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5\target\classes started by marta in C:\Users\marta\OneDrive\Escritorio\DP1\DP1-2024-2025--l7-5)
+2025-01-09 01:20:39 [INFO] - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 01:20:39 [INFO] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 01:20:39 [INFO] - Finished Spring Data repository scanning in 32 ms. Found 11 JPA repository interfaces.
+2025-01-09 01:20:39 [INFO] - Tomcat initialized with port 8080 (http)
+2025-01-09 01:20:39 [INFO] - Initializing ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:39 [INFO] - Starting service [Tomcat]
+2025-01-09 01:20:39 [INFO] - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2025-01-09 01:20:39 [INFO] - Initializing Spring embedded WebApplicationContext
+2025-01-09 01:20:39 [INFO] - Root WebApplicationContext: initialization completed in 635 ms
+2025-01-09 01:20:39 [INFO] - testdb - Starting...
+2025-01-09 01:20:39 [INFO] - testdb - Added connection conn140: url=jdbc:h2:mem:testdb user=SA
+2025-01-09 01:20:39 [INFO] - testdb - Start completed.
+2025-01-09 01:20:39 [INFO] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-01-09 01:20:39 [INFO] - HHH000026: Second-level cache disabled
+2025-01-09 01:20:39 [INFO] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 01:20:40 [INFO] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 01:20:40 [INFO] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 01:20:41 [INFO] - Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-01-09 01:20:41 [WARN] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 01:20:42 [INFO] - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 01:20:42 [INFO] - LiveReload server is running on port 35729
+2025-01-09 01:20:42 [INFO] - Starting ProtocolHandler ["http-nio-8080"]
+2025-01-09 01:20:42 [INFO] - Tomcat started on port 8080 (http) with context path '/'
+2025-01-09 01:20:42 [INFO] - Starting...
+2025-01-09 01:20:42 [INFO] - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@9dcf8c3]]
+2025-01-09 01:20:42 [INFO] - Started.
+2025-01-09 01:20:42 [INFO] - Started GameApplication in 3.6 seconds (process running for 149.097)
+2025-01-09 01:20:42 [INFO] - Condition evaluation unchanged

@@ -11,12 +11,12 @@ export default function UserPartidas() {
     const [message, setMessage] = useState(null);
     const [visible, setVisible] = useState(false);
     const [partidas, setPartidas] = useState([]);
-    const [partidasTotales, setPartidasTotales] = useState([]);
     const [jugadores, setJugadores] = useState({});
     const [filtered, setFiltered] = useState([]);
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState("");
     const [alerts, setAlerts] = useState([]);
+    const [owner, setOwner] = useState([]);
     const [paginaActual, setPaginaActual] = useState(1);
     const [partidasPorPagina, setPartidasPorPagina] = useState("");
 
@@ -41,10 +41,8 @@ export default function UserPartidas() {
 
     function handlePartidasPorPagina(event) {
         const value = event.target.value;
-        if (value !== "0") {
-            setPartidasPorPagina(value);
-            setPaginaActual(1);
-        }
+        setPartidasPorPagina(value);
+        setPaginaActual(1);
     }
 
     function handleClear() {
@@ -74,45 +72,52 @@ export default function UserPartidas() {
     }
 
     useEffect(() => {
+        const fetchOwner = async (id) => {
+            try {
+                const response = await fetch(`/api/v1/users/${id}`, {
+                    headers: {
+                        "Authorization": `Bearer ${jwt}`
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                const ownerData = await response.json();
+                setOwner(prev => ({ ...prev, [id]: ownerData }));
+            } catch (error) {
+                console.error("Error buscando datos del creador:", error);
+            }
+        };
 
         const fetchPartidas = async () => {
             try {
                 const response = await fetch("/api/v1/partidas", {
                     headers: {
-                        "Authorization": `Bearer ${jwt}` 
+                        "Authorization": `Bearer ${jwt}`
                     }
                 });
                 if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Network response was not ok: ${errorText}`);
+                    throw new Error("Network response was not ok");
                 }
                 const data = await response.json();
                 data.sort((a, b) => new Date(b.inicio) - new Date(a.inicio)); // Ordenar por fecha de inicio del mas reciente al que menos
-                setPartidasTotales(data);
-                let partidasUsuario = [];
+                data.filter((partida) => partida.jugadores
+                    .map((jugador) => jugador.usuario.id).includes(user.id));
+                setPartidas(data);
 
                 data.forEach(async (partida) => {
+                    await fetchOwner(partida.ownerPartida);
 
                     const jugadoresResponse = await fetch(`/api/v1/partidas/${partida.id}/jugadores`, {
                         headers: {
-                            "Authorization": `Bearer ${jwt}` 
+                            "Authorization": `Bearer ${jwt}`
                         }
                     });
-                    if (jugadoresResponse.ok ) {
+                    if (jugadoresResponse.ok) {
                         const jugadoresData = await jugadoresResponse.json();
-                        for(let jugador of jugadoresData){
-                            if(jugador.usuario.id === user.id){
-                                setJugadores(prev => ({ ...prev, [partida.id]: jugadoresData }));
-                                partidasUsuario.push(partida);
-                                
-                            }
-                        }
-                        
+                        setJugadores(prev => ({ ...prev, [partida.id]: jugadoresData }));
                     }
                 });
-
-                setPartidas(partidasUsuario);
-
             } catch (error) {
                 console.error("Error buscando partidas:", error);
                 setMessage(error.message);
@@ -122,7 +127,6 @@ export default function UserPartidas() {
 
         fetchPartidas();
     }, []);
-
 
     // Calcular el índice de la última partida de la página actual
     const indiceUltimaPartida = paginaActual * (partidasPorPagina ? parseInt(partidasPorPagina) : partidas.length);
@@ -153,7 +157,7 @@ export default function UserPartidas() {
         const jugadoresList = jugadores[partida.id]?.map((jugador) => (
             <div key={jugador.id}>{jugador.usuario.username}</div>
         )) || <div>Cargando jugadores...</div>;
-        const ownerName = partida.ownerPartida === user.id ? "Sí" :"No" ;        
+        const ownerName = owner[partida.ownerPartida]?.username || "Cargando creador...";
         return (
             <tr key={partida.id}>
                 <td>{partida.nombre}</td>
@@ -204,7 +208,7 @@ export default function UserPartidas() {
                             <th>Nombre</th>
                             <th>Estado</th>
                             <th>Jugadores</th>
-                            <th>Ha creado la partida</th>
+                            <th>Creador</th>
                             <th>Fecha de creación</th>
                         </tr>
                     </thead>

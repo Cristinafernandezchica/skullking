@@ -157,7 +157,9 @@ export default function Jugando() {
             nuevasManos[jugador.id] = data;
           } else {
             nuevaMano = data;
-            await fetchCartasDisabled(nuevaMano.id, BazaActual.paloBaza);
+            if (BazaActual && BazaActual.paloBaza) {
+              await fetchCartasDisabled(nuevaMano.id, BazaActual.paloBaza);
+            }
           }
         } catch (error) {
           console.error(`Error procesando el jugador ${jugador.id}:`, error);

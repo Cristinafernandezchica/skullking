@@ -21,7 +21,8 @@ import logo from "./static/images/gamelogo_sin_fondo.png";
 import "./styles.css";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
-import { fetchListaDeSolicitudes, fetchUserDetails,fetchListaDeAmigosConectados,aceptarORechazarSolicitud, usuarioConectadoODesconectado} from "./components/appNavBarModular/AppNavBarModular";
+import { fetchListaDeSolicitudes, fetchUserDetails,fetchListaDeAmigosConectados,aceptarORechazarSolicitud,
+     usuarioConectadoODesconectado, fetchListaDeInvitaciones} from "./components/appNavBarModular/AppNavBarModular";
 
 function AppNavbar() {
     const [roles, setRoles] = useState([]);
@@ -33,10 +34,12 @@ function AppNavbar() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [nuevasSolitudes, setNuevasSolitudes] = useState([]);
     const [amigosConectados, setAmigosConectados] = useState([]);
+    const [invitaciones, setInvitaciones] = useState([]);
 
     const toggleDropdown = async () => {
         setDropdownOpen(!dropdownOpen);
         fetchListaDeAmigosConectados(usuarioActual.id,setAmigosConectados,jwt);
+        fetchListaDeInvitaciones(usuarioActual.id,setInvitaciones,jwt)
     }
     const toggleNavbar = () => setCollapsed(!collapsed);
 
@@ -234,6 +237,15 @@ function AppNavbar() {
         </div>
     </DropdownItem>
 ))}
+
+<p><b>Invitaciones</b></p>
+
+{invitaciones.map((invitacion) => (
+    <DropdownItem 
+        key={invitacion.id} 
+        tag="div" 
+        className="d-flex justify-content-between align-items-center"
+    ><span>{invitacion.remitente.username} te invita a su partida</span></DropdownItem>))}
 
                         </DropdownMenu>
                     </Dropdown>

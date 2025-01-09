@@ -124,3 +124,69 @@ export async function usuarioConectadoODesconectado(jwt,usuario,conectado) {
                 console.error("Error al conectar con el servidor:", error);
             }
         }
+
+        export async function fetchListaDeInvitaciones(usuarioActual, setInvitaciones, jwt) {
+            try {
+                const response = await fetch(`/api/v1/invitaciones/misInvitaciones/${usuarioActual}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${jwt}`,
+                    },
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setInvitaciones(data);
+                    console.log("Lista de invitaciones obtenida:", data);
+                    return data;
+                } else {
+                    console.error("Error al obtener los detalles de las invitaciones.");
+                }
+            } catch (error) {
+                console.error("Error al conectar con el servidor:", error);
+            }
+        }
+
+        export async function invitarAPartida(usuarioActual,amigo, partidaId ,espectador, jwt) {
+            let linkPartida=""
+            if(espectador ) {
+                linkPartida = `/tablero/${partidaId}`
+            }
+            else{
+                linkPartida = `/salaEspera/${partidaId}`
+            }
+            const Invitacion ={remitente: usuarioActual, destinatario: amigo,link:linkPartida, espectador}
+            try {
+                const response = await fetch(`/api/v1/invitaciones`, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(Invitacion),
+                });
+                if (!response.ok) {
+                    console.log("Algo falla");
+                    throw new Error("Network response was not ok");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        export async function aceptarInvitacion(jwt,invitacionId) {
+            try {
+                const response = await fetch(`/api/v1/invitaciones/${invitacionId}`, {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                        "Content-Type": "application/json",
+                    },
+                });
+                if (!response.ok) {
+                    console.log("Algo falla");
+                    throw new Error("Network response was not ok");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }

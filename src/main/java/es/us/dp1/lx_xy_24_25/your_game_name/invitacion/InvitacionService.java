@@ -10,6 +10,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.InvitacionException;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.UserService;
 import jakarta.validation.Valid;
@@ -62,4 +63,15 @@ public class InvitacionService {
         return InvitacionRepository.getAllMyInvitaciones(destinatarioId);
     }
 
+    @Transactional
+    public Invitacion enviarInvitacion(Invitacion invitacion) {
+    Invitacion yaExiste = InvitacionRepository.getOneInvitacion(invitacion.getDestinatario().getId(), invitacion.getRemitente().getId());
+    if(yaExiste != null){
+        throw new InvitacionException("Ya existe una invitacion");
+    }
+    if(invitacion.getDestinatario().equals(invitacion.getRemitente())){
+        throw new InvitacionException("No puedes enviar una invitacion a ti mismo");
+    }
+    return InvitacionRepository.save(invitacion);
+    }
 }

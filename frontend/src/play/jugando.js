@@ -52,8 +52,8 @@ export default function Jugando() {
   const [chatModalVisible, setChatModalVisible] = useState(false);
   const toggleChatModal = () => setChatModalVisible(!chatModalVisible);
 
-  // Mano disabled
-  const [cartasDisabled, setCartasDisabled] = useState([]);
+  // Cartas mano disabled
+  const [cartasDisabled, setCartasDisabled] = useState({});
 
   // Mostrar ganador baza
   const [ganadorBazaModal, setGanadorBazaModal] = useState(false);
@@ -89,35 +89,6 @@ export default function Jugando() {
     fetchPartida(idPartida);
   }, []);
 
-  const fetchCartasDisabled = async (idMano, paloActual) => {
-    try {
-      const response = await fetch(
-        `/api/v1/manos/${idMano}/manoDisabled?tipoCarta=${paloActual}`,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const responseData = await response.text();
-      console.log("Response text:", responseData);
-
-      const data = JSON.parse(responseData);
-      setCartasDisabled(data);
-      console.log("Cartas disabled:", data);
-    } catch (error) {
-      console.error("Error encontrando partidas:", error);
-      setMessage(error.message);
-      setVisible(true);
-    }
-  };
-
-  // Quedarse con esta, la de Candela no me ha funcionado por el momento
   const fetchManosJugadores = async () => {
     try {
       const nuevasManos = {};
@@ -143,7 +114,6 @@ export default function Jugando() {
             nuevasManos[jugador.id] = data;
           } else {
             nuevaMano = data;
-            await fetchCartasDisabled(nuevaMano.id, BazaActual.paloBaza);
           }
         } catch (error) {
           console.error(`Error procesando el jugador ${jugador.id}:`, error);
@@ -216,6 +186,7 @@ export default function Jugando() {
             console.log("vaciar lista trucos");
             setListaDeTrucos([]); // Vaciamos la lista de trucos
             console.log("lista trucos vacia: ", ListaDeTrucos);
+            setCartasDisabled({});
 
           }, 5000);
 
@@ -277,6 +248,13 @@ export default function Jugando() {
           console.log("La partida ha finalizado, redirigiendo...");
           navigate('/play');
         }
+      });
+
+      stompClient.subscribe(`/topic/cartasDisabled/partida/${idPartida}`, (messageOutput) => {
+        const data = JSON.parse(messageOutput.body);
+
+        setCartasDisabled(data);
+        console.log("Cartas Disabled: ", data);
       });
 
     });
@@ -498,10 +476,6 @@ export default function Jugando() {
     console.log("pase", nuevaTigresa);
   };
 
-  const cierreModalGanadorBaza = () => {
-    setGanadorBazaModal(false);
-  };
-
   return (
     <>
       <div className="validation-errors">
@@ -567,10 +541,8 @@ export default function Jugando() {
                   className="boton-agrandable"
                   disabled={
                     visualizandoCartas ||
-                    turnoAct !== tu.id /*||
-                  cartasDisabled.some(
-                    (disabledCarta) => disabledCarta.id === carta.id
-                  )*/
+                    turnoAct !== tu.id  ||
+                    (cartasDisabled[mano.id]?.some((disabledCarta) => disabledCarta.id === carta.id) ?? false)
                   }
                   onClick={() => {
                     if (carta.tipoCarta === "tigresa") {

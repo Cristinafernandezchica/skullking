@@ -29,6 +29,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -142,7 +143,6 @@ public class TrucoService {
 
 		// Envía la lista actualizada de trucos al canal WebSocket
 		messagingTemplate.convertAndSend("/topic/baza/truco/partida/" + partida.getId(), findTrucosByBazaId(trucoIniciado.getBaza().getId()));
-		// messagingTemplate.convertAndSend("/topic/nuevaBaza/partida/" + partida.getId(), bazaService.findBazaActualByRondaId(trucoIniciado.getBaza().getRonda().getId()));
 
 		Mano manoSinCartaJugada = trucoIniciado.getMano();
 		List<Carta> nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
@@ -163,11 +163,30 @@ public class TrucoService {
 		Integer numTrucosBaza = findTrucosByBazaId(baza.getId()).size();
 
 		Baza bazaParaCambio = bazaService.findById(baza.getId());
-		// Cambiamos el palo de la baza
+		// Cambiamos el palo de la baza y calculamos las cartas deshabilitadas
 		if(bazaParaCambio.getPaloBaza() == PaloBaza.sinDeterminar){
-			cambiarPaloBaza(baza, trucoIniciado);
-			// messagingTemplate.convertAndSend("/topic/nuevaBaza/partida/" + partida.getId(), bazaService.findBazaActualByRondaId(ronda.getId()));
-
+			Baza bazaConPaloCambiado = cambiarPaloBaza(baza, trucoIniciado);
+			TipoCarta tipoCarta;
+			switch (bazaConPaloCambiado.getPaloBaza()) {
+				case amarillo:
+					tipoCarta = TipoCarta.amarillo;
+					break;
+				case morada:
+					tipoCarta = TipoCarta.morada;
+					break;
+				case verde:
+					tipoCarta = TipoCarta.verde;
+					break;
+				case triunfo:
+					tipoCarta = TipoCarta.triunfo;
+					break;
+				default:
+					tipoCarta = TipoCarta.sinDeterminar;
+					break;
+			}
+			
+			Map<Integer, List<Carta>> cartasDisabled = cartasDisabledBaza(ronda.getId(), tipoCarta);
+			messagingTemplate.convertAndSend("/topic/cartasDisabled/partida/" + partida.getId(), cartasDisabled);
 		}
 
 		// Si no es el último truco de la Baza, se actualiza el turno
@@ -212,8 +231,23 @@ public class TrucoService {
 				}
 			}
 		}
+
+		// messagingTemplate.convertAndSend("/topic/palobaza/partida/", paloBaza);
 		baza.setPaloBaza(paloBaza);
 		return bazaService.saveBaza(baza);
+	}
+
+	@Transactional
+	public Map<Integer, List<Carta>> cartasDisabledBaza(Integer rondaId, TipoCarta paloBaza){
+		List<Integer> idsManos = manoService.findAllManosByRondaId(rondaId).stream().map(Mano::getId).toList(); 
+		Map<Integer, List<Carta>> cartasDisabledPorJugador = new HashMap<>();
+    
+    	for (Integer idMano : idsManos) {
+        	List<Carta> cartasDisabled = manoService.cartasDisabled(idMano, paloBaza);
+        	cartasDisabledPorJugador.put(idMano, cartasDisabled);
+    	}
+    
+    	return cartasDisabledPorJugador;
 	}
 
 

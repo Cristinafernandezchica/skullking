@@ -43,9 +43,6 @@ export default function Jugando() {
   const [truco, setTruco] = useState(null);
   const [BazaActual, setBazaActual] = useState(null)
   const [ListaDeTrucos, setListaDeTrucos] = useState([])
-  const [seCambiaPalo, setSeCambiaPalo] = useState(true)
-  // const [buscarUnaVezListaDeTrucos, setBuscarUnaVezListaDeTrucos] = useState(true)
-  // const [idBaza, setIdBaza] = useState(null);
 
   // para las cartas del resto de jugadores
   const [manosOtrosJugadores, setManosOtrosJugadores] = useState({});
@@ -62,8 +59,8 @@ export default function Jugando() {
   const [chatModalVisible, setChatModalVisible] = useState(false);
   const toggleChatModal = () => setChatModalVisible(!chatModalVisible);
 
-  // Mano disabled
-  const [cartasDisabled, setCartasDisabled] = useState([]);
+  // Cartas mano disabled
+  const [cartasDisabled, setCartasDisabled] = useState({});
 
   // Mostrar ganador baza
   const [ganadorBazaModal, setGanadorBazaModal] = useState(false);
@@ -103,35 +100,6 @@ export default function Jugando() {
     fetchPartida(idPartida);
   }, []);
 
-  const fetchCartasDisabled = async (idMano, paloActual) => {
-    try {
-      const response = await fetch(
-        `/api/v1/manos/${idMano}/manoDisabled?tipoCarta=${paloActual}`,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const responseData = await response.text();
-      console.log("Response text:", responseData);
-
-      const data = JSON.parse(responseData);
-      setCartasDisabled(data);
-      console.log("Cartas disabled:", data);
-    } catch (error) {
-      console.error("Error encontrando partidas:", error);
-      setMessage(error.message);
-      setVisible(true);
-    }
-  };
-
-  // Quedarse con esta, la de Candela no me ha funcionado por el momento
   const fetchManosJugadores = async () => {
     try {
       const nuevasManos = {};
@@ -157,9 +125,6 @@ export default function Jugando() {
             nuevasManos[jugador.id] = data;
           } else {
             nuevaMano = data;
-            if (BazaActual && BazaActual.paloBaza) {
-              await fetchCartasDisabled(nuevaMano.id, BazaActual.paloBaza);
-            }
           }
         } catch (error) {
           console.error(`Error procesando el jugador ${jugador.id}:`, error);
@@ -232,6 +197,7 @@ export default function Jugando() {
             console.log("vaciar lista trucos");
             setListaDeTrucos([]); // Vaciamos la lista de trucos
             console.log("lista trucos vacia: ", ListaDeTrucos);
+            setCartasDisabled({});
 
           }, 5000);
 
@@ -285,21 +251,28 @@ export default function Jugando() {
         }
       );
 
-        // Para finalizar partida
-        stompClient.subscribe(`/topic/partida/${idPartida}`, (messageOutput) => {
-          const data = JSON.parse(messageOutput.body);
-  
-          if (data.status === "FINALIZADA") {
-            setGanadorPartida(data.ganadores)
+      // Para finalizar partida
+      stompClient.subscribe(`/topic/partida/${idPartida}`, (messageOutput) => {
+        const data = JSON.parse(messageOutput.body);
+
+        if (data.status === "FINALIZADA") {
+          setGanadorPartida(data.ganadores)
             setGanadorPartidaModal(true);
             /*
             console.log("La partida ha finalizado, redirigiendo...");
             navigate('/play');
             */
-          }
-        });
-        
+        }
       });
+
+      stompClient.subscribe(`/topic/cartasDisabled/partida/${idPartida}`, (messageOutput) => {
+        const data = JSON.parse(messageOutput.body);
+
+        setCartasDisabled(data);
+        console.log("Cartas Disabled: ", data);
+      });
+
+    });
 
     // Cleanup: Desconectar el WebSocket cuando el componente se desmonte
     return () => {
@@ -509,54 +482,6 @@ export default function Jugando() {
     }
   };
 
-  const cambiarPaloBaza = async (baza) => {
-    try {
-      const response = await fetch(`/api/v1/bazas/${baza.id}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(baza),
-      });
-
-      if (!response.ok) {
-        console.log("Algo falla");
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await response.json();
-      setBazaActual(data);
-      console.log("La baza con el palo dominante", data);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (
-      BazaActual !== null &&
-      BazaActual.paloBaza === "sinDeterminar" &&
-      truco !== null &&
-      truco.carta !== null
-    ) {
-      if (truco.carta.tipoCarta !== "banderaBlanca") {
-        if (
-          truco.carta.tipoCarta === "pirata" ||
-          truco.carta.tipoCarta === "skullKing" ||
-          truco.carta.tipoCarta === "sirena"
-        ) {
-          BazaActual.paloBaza = "noHayPalo";
-          cambiarPaloBaza(BazaActual);
-          console.log(BazaActual);
-        } else {
-          BazaActual.paloBaza = truco.carta.tipoCarta;
-          cambiarPaloBaza(BazaActual);
-          console.log(BazaActual);
-        }
-      }
-    }
-  }, [truco]);
 
   const handleEleccion = (eleccion) => {
     setEleccion(eleccion);
@@ -564,10 +489,6 @@ export default function Jugando() {
     console.log("hasta aqui llego");
     jugarTruco({ tipoCarta: "tigresa" }, eleccion); // Pasar la elección al jugarTruco
     console.log("pase", nuevaTigresa);
-  };
-
-  const cierreModalGanadorBaza = () => {
-    setGanadorBazaModal(false);
   };
 
   return (
@@ -635,10 +556,8 @@ export default function Jugando() {
                   className="boton-agrandable"
                   disabled={
                     visualizandoCartas ||
-                    turnoAct !== tu.id /*||
-                  cartasDisabled.some(
-                    (disabledCarta) => disabledCarta.id === carta.id
-                  )*/
+                    turnoAct !== tu.id  ||
+                    (cartasDisabled[mano.id]?.some((disabledCarta) => disabledCarta.id === carta.id) ?? false)
                   }
                   onClick={() => {
                     if (carta.tipoCarta === "tigresa") {

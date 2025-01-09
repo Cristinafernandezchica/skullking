@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -99,6 +98,17 @@ public class PartidaRestController {
         return rondaService.getRondasByPartidaId(id);
     }
     */
+
+    @GetMapping(params = "ownerId")
+    public ResponseEntity<List<Partida>> findPartidasByOwnerId(@RequestParam("ownerId") Integer ownerId) {
+        List<Partida> partidas = partidaService.findPartidasByOwnerId(ownerId);
+        if (partidas.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(partidas, HttpStatus.OK);
+    }
+
+
 
     @GetMapping("/{id}/jugadorGanador")
     public ResponseEntity<Jugador> ganadorPartida (@PathVariable("id") Integer id){

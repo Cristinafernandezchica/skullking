@@ -22,9 +22,9 @@ INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_pe
 INSERT INTO appusers(id,username,password,authority,descripcion_perfil,imagen_perfil,conectado,num_partidas_jugadas,num_partidas_ganadas,num_puntos_ganados) VALUES (18,'DGL2523','$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e',2,'A Jugar!','https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg',false,0,0,0);
 
 
-INSERT INTO Partida(id, nombre, inicio, fin, estado, owner_partida, turno_actual) VALUES (2, 'Partida Ejemplo2', '2024-11-07 18:00:00', '2024-11-05 21:00:00', 'TERMINADA', 14, null);
-INSERT INTO Partida(id, nombre, inicio, fin, estado, owner_partida, turno_actual) VALUES (3, 'Partida Ejemplo', '2024-11-05 13:00:00', '2024-11-05 15:00:00', 'ESPERANDO', 6, 2);
-INSERT INTO Partida(id, nombre, inicio, fin, estado, owner_partida, turno_actual) VALUES (4, 'Partida Random', '2024-11-07 12:00:00', '2024-11-05 14:00:00', 'TERMINADA', 5, null);
+INSERT INTO Partida(id, nombre, inicio, fin, estado, owner_partida, turno_actual, ganadores) VALUES (2, 'Partida Ejemplo2', '2024-11-07 18:00:00', '2024-11-05 21:00:00', 'TERMINADA', 14, null, null);
+INSERT INTO Partida(id, nombre, inicio, fin, estado, owner_partida, turno_actual, ganadores) VALUES (3, 'Partida Ejemplo', '2024-11-05 13:00:00', '2024-11-05 15:00:00', 'ESPERANDO', 6, 2, null);
+INSERT INTO Partida(id, nombre, inicio, fin, estado, owner_partida, turno_actual, ganadores) VALUES (4, 'Partida Random', '2024-11-07 12:00:00', '2024-11-05 14:00:00', 'TERMINADA', 5, null, null);
 
 
 INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (3,30,3,8,0);

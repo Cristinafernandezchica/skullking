@@ -6,6 +6,7 @@ import useFetchState from '../util/useFetchState';
 import getIdFromUrl from '../util/getIdFromUrl';
 import ApuestaModal from '../components/modals/ApostarModal';
 import ElegirTigresaModal from '../components/modals/ElegirTigresaModal';
+import GanadorPartidaModal from '../components/modals/GanadorPartidaModal';
 import GanadorBazaModal from '../components/modals/GanadorBazaModal';
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
@@ -28,9 +29,14 @@ export default function Jugando() {
     setMessage,
     setVisible
   );
+
+  // Modal Tigresa
   const [modalTigresaOpen, setModalTigresaOpen] = useState(false);
   const [eleccion, setEleccion] = useState('');
   const [nuevaTigresa, setNuevaTigresa] = useState();
+
+
+  // Datos de partida
   const [tu, setTu] = useFetchState(null, `/api/v1/jugadores/${user.id}/usuario`, jwt, setMessage, setVisible);
   const [mano, setMano] = useState(null);
   const [ronda, setRonda] = useState(null);
@@ -40,6 +46,7 @@ export default function Jugando() {
 
   // para las cartas del resto de jugadores
   const [manosOtrosJugadores, setManosOtrosJugadores] = useState({});
+
   // Para lógica de apuesta
   const [apuestaModalOpen, setApuestaModalOpen] = useState(false);
   const toggleApuestaModal = () => setApuestaModalOpen(!apuestaModalOpen);
@@ -58,6 +65,10 @@ export default function Jugando() {
   // Mostrar ganador baza
   const [ganadorBazaModal, setGanadorBazaModal] = useState(false);
   const [ganadorBaza, setGanadorBaza] = useState("");
+
+  // Mostrar ganador partida
+  const [ganadorPartidaModal, setGanadorPartidaModal] = useState(false);
+  const [ganadorPartida, setGanadorPartida] = useState([]);
 
   // Mostrar alerta nueva Ronda/Baza
   const [alertaRondaBaza, setAlertaRondaBaza] = useState('');
@@ -245,8 +256,12 @@ export default function Jugando() {
         const data = JSON.parse(messageOutput.body);
 
         if (data.status === "FINALIZADA") {
-          console.log("La partida ha finalizado, redirigiendo...");
-          navigate('/play');
+          setGanadorPartida(data.ganadores)
+            setGanadorPartidaModal(true);
+            /*
+            console.log("La partida ha finalizado, redirigiendo...");
+            navigate('/play');
+            */
         }
       });
 
@@ -587,11 +602,17 @@ export default function Jugando() {
           onConfirm={handleEleccion}
         />
 
-        <GanadorBazaModal
-          isVisible={ganadorBazaModal}
-          ganador={ganadorBaza}
-          onClose={() => setGanadorBazaModal(false)}
-        />
+      <GanadorBazaModal
+        isVisible={ganadorBazaModal}
+        ganador={ganadorBaza}
+        onClose={() => setGanadorBazaModal(false)}
+      />
+
+      <GanadorPartidaModal
+        isVisible={ganadorPartidaModal}
+        ganador={ganadorPartida}
+        onClose={() => {setGanadorPartidaModal(false); navigate('/play')}}
+      />
 
         <ChatModal
           isVisible={chatModalVisible}

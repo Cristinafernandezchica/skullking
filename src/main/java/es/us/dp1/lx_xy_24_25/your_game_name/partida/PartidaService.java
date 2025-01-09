@@ -229,6 +229,9 @@ public class PartidaService {
                 .map(Jugador::getUsuario)
                 .collect(Collectors.toList());
 
+        partida.setGanadores(ganadores.stream().map(u-> u.getUsername()).collect(Collectors.toList()));
+
+
         for (User u : ganadores) {
             if (u.getNumPartidasGanadas() == null) {
                 u.setNumPartidasGanadas(0);
@@ -297,8 +300,6 @@ public class PartidaService {
         Integer nextBaza = baza.getNumBaza() + 1;
         Ronda ronda = baza.getRonda();
         messagingTemplate.convertAndSend("/topic/listaTrucos/partida/" + partidaId, new ArrayList<>());
-        manoService.actualizarResultadoMano(baza);
-        // Si es la última Baza de la ronda, finalizamos la ronda y actualizamos el resultado de las manos
         manoService.actualizarResultadoMano(baza);
         messagingTemplate.convertAndSend("/topic/nuevasManos/partida/" + partida.getId(), manoService.findAllManosByRondaId(ronda.getId()));
         if(nextBaza > ronda.getNumBazas()){

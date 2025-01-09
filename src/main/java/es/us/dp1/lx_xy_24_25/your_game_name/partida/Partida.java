@@ -4,8 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.model.BaseEntity;
+import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,4 +41,6 @@ public class Partida extends BaseEntity{
     private Integer ownerPartida;
 
     private Integer turnoActual;
+
+    private List<String> ganadores;
 }

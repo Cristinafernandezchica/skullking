@@ -248,6 +248,7 @@ public class PartidaService {
 
         Map<String, Object> message = new HashMap<>();
         message.put("status", "FINALIZADA"); // Estado de la partida
+        message.put("ganadores", ganadores); // Ganadores de la partida
 
         // Enviar el mensaje a través de WebSocket
         messagingTemplate.convertAndSend("/topic/partida/" + partidaId, message);

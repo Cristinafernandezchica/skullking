@@ -253,7 +253,7 @@ export default function Jugando() {
         const data = JSON.parse(messageOutput.body);
 
         if (data.status === "FINALIZADA") {
-          setGanadorPartida(data.ganadores)
+            setGanadorPartida(data.ganadores);
             setGanadorPartidaModal(true);
             /*
             console.log("La partida ha finalizado, redirigiendo...");

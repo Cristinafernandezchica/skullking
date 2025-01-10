@@ -12,7 +12,7 @@ export default function ApuestaModal({ isVisible, onCancel, onConfirm }) {
             autoApuestaTimer = setTimeout(() => {
                 setApuesta(0);
                 handleConfirmClick();
-            }, 10000); // 30 (30000) segundos para realizar la apuesta
+            }, 30000); // 30 (30000) segundos para realizar la apuesta
         }
 
         return () => clearTimeout(autoApuestaTimer);

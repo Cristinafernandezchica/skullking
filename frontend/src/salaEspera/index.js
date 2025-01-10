@@ -77,6 +77,17 @@ export default function SalaEspera() {
         if (data.status === "JUGANDO") {
           console.log("La partida ha comenzado, redirigiendo...");
           navigate(`/tablero/${id}`);
+        } else if (data.status === "ACTUALIZADO") {
+          console.log("Actualización recibida:", data);
+          setJugadores(data.jugadores);
+  
+          // Actualizar el ownerPartida si cambió
+          if (data.ownerPartida) {
+            setPartida((prevPartida) => ({
+              ...prevPartida,
+              ownerPartida: data.ownerPartida,
+            }));
+          }
         }
       });
     });
@@ -119,6 +130,105 @@ export default function SalaEspera() {
     }
   };
 
+  const salirDeSala = async () => {
+    try {
+      if (!partida) return;
+  
+      // Jugador actual
+      const jugadorActual = jugadores.find((j) => j.usuario.id === user.id);
+  
+      if (!jugadorActual) {
+        showError("No se encontró al jugador en la partida.");
+        return;
+      }
+  
+      // Si el jugador es el dueño de la partida
+      if (partida.ownerPartida === user.id) {
+        if (jugadores.length === 1) {
+          // El dueño es el único jugador, elimina el jugador y la partida
+          await eliminarJugador(jugadorActual.id);
+          await eliminarPartida(partida.id);
+          navigate("/");
+        } else {
+          // Hay más jugadores, actualizar el ownerPartida
+          const nuevoOwner = jugadores.find((j) => j.id !== jugadorActual.id);
+          await actualizarOwnerPartida(partida.id, nuevoOwner.usuario.id);
+          await eliminarJugador(jugadorActual.id);
+          navigate("/");
+        }
+      } else {
+        // No es el dueño, solo eliminar al jugador
+        await eliminarJugador(jugadorActual.id);
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Error al salir de la sala:", error);
+      showError("Error al intentar salir de la sala de espera.");
+    }
+  };
+  
+  const eliminarJugador = async (jugadorId) => {
+    try {
+      const response = await fetch(`/api/v1/jugadores/${jugadorId}/websocket`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error al eliminar el jugador.");
+      }
+      console.log("Jugador eliminado:", jugadorId);
+    } catch (error) {
+      console.error("Error al eliminar jugador:", error);
+      throw error;
+    }
+  };
+  
+  const eliminarPartida = async (partidaId) => {
+    try {
+      const response = await fetch(`/api/v1/partidas/${partidaId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error al eliminar la partida.");
+      }
+      console.log("Partida eliminada:", partidaId);
+    } catch (error) {
+      console.error("Error al eliminar partida:", error);
+      throw error;
+    }
+  };
+  
+  const actualizarOwnerPartida = async (partidaId, nuevoOwnerId) => {
+    try {
+      const response = await fetch(`/api/v1/partidas/${partidaId}/actualizar-owner`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ownerPartida: nuevoOwnerId }),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error al actualizar el owner de la partida.");
+      }
+      console.log("Owner actualizado a:", nuevoOwnerId);
+    } catch (error) {
+      console.error("Error al actualizar el owner de la partida:", error);
+      throw error;
+    }
+  };  
+
   return (
     <>
       <div className="validation-errors">
@@ -136,6 +246,13 @@ export default function SalaEspera() {
             <div style={{ marginBottom: 20 }}>
               <Button outline color="success" onClick={iniciarPartida}>
                 Iniciar Partida
+              </Button>
+            </div>
+          )}
+          {partida && (
+            <div style={{ marginBottom: 20 }}>
+              <Button outline color="danger" onClick={salirDeSala}>
+                Salir de la Sala
               </Button>
             </div>
           )}

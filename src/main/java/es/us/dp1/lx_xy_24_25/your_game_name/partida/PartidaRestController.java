@@ -2,6 +2,8 @@ package es.us.dp1.lx_xy_24_25.your_game_name.partida;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +82,21 @@ public class PartidaRestController {
         RestPreconditions.checkNotNull(partidaService.getPartidaById(id), "Partida", "ID", id);
         partidaService.delete(id);
         return new ResponseEntity<>(new MessageResponse("Partida eliminada"), HttpStatus.NO_CONTENT); 
+    }
+
+    @PutMapping("/{id}/actualizar-owner")
+    public ResponseEntity<MessageResponse> actualizarOwner(@PathVariable Integer id, @RequestBody Map<String, Integer> body) {
+        try {
+            Integer nuevoOwnerId = body.get("ownerPartida");
+            partidaService.actualizarOwner(id, nuevoOwnerId);
+            return new ResponseEntity<>(new MessageResponse("Owner actualizado con éxito."), HttpStatus.OK); 
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(new MessageResponse("Partida no encontrada."), HttpStatus.NOT_FOUND);             
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(new MessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST); 
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageResponse("Error al actualizar el owner."), HttpStatus.INTERNAL_SERVER_ERROR); 
+        }
     }
 
     // Relación de uno a muchos con la clase Jugador, mirar los nombres de los métodos

@@ -37,6 +37,46 @@ export default function UserListAdmin() {
 
   const totalPaginas = Math.ceil(users.length / usuariosPorPagina);
 
+  //Función para editar un usuario
+  async function handleEditarUsuario(user) {
+    try {
+      const jugadoresResponse = await fetch(`/api/v1/jugadores/${user.id}/usuarios`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+  
+      if (!jugadoresResponse.ok) {
+        if (jugadoresResponse.status === 404) {
+          console.log(`Usuario ${user.username} no tiene jugadores.`);
+          navigate(`/users/${user.id}`); // Redirigir a la edición
+          return;
+        }
+        throw new Error("Error al verificar los jugadores asociados.");
+      }
+  
+      const jugadores = await jugadoresResponse.json();
+  
+      // Verificar el estado de las partidas asociadas a los jugadores
+      for (const jugador of jugadores) {
+        const partidaEstado = jugador.partida.estado;
+        if (partidaEstado === "JUGANDO" || partidaEstado === "ESPERANDO") {
+          setAlert({
+            message: `No se puede editar al usuario ${user.username} porque está en una partida "${partidaEstado}".`,
+            type: "error",
+          });
+          return;
+        }
+      }
+  
+      // Si no hay problemas, redirigir a la edición
+      navigate(`/users/${user.id}`);
+    } catch (error) {
+      setAlert({ message: error.message, type: "error" });
+    }
+  }
+
+
   // Función para eliminar un usuario
   async function eliminarUsuario(user) {
     try {
@@ -63,12 +103,24 @@ export default function UserListAdmin() {
         return;
       }
 
-      for (const jugador of jugadores) {
-        const partidaEstado = jugador.partida.estado;
 
-        if (partidaEstado === "JUGANDO" || partidaEstado === "ESPERANDO") {
+
+      for (const jugador of jugadores) {
+        const tieneJugadorRestrigidoEsperando = jugadores.some(player =>
+          ["ESPERANDO"].includes(player.partida.estado.trim().toUpperCase()));
+        const tieneJugadorRestrigidoJugando= jugadores.some(player =>
+          ["JUGANDO"].includes(player.partida.estado.trim().toUpperCase()));
+
+        if(tieneJugadorRestrigidoEsperando){
           setAlert({
-            message: `No se puede eliminar al usuario ${user.username} porque está en una partida "${partidaEstado}".`,
+            message: `No se puede eliminar al usuario ${user.username} porque está en una partida en espera.`,
+            type: "error",
+          });
+          return;
+        }
+        if(tieneJugadorRestrigidoJugando){
+          setAlert({
+            message: `No se puede eliminar al usuario ${user.username} porque está en una partida en curso.`,
             type: "error",
           });
           return;
@@ -245,8 +297,7 @@ export default function UserListAdmin() {
               size="sm"
               color="primary"
               aria-label={"edit-" + user.id}
-              tag={Link}
-              to={"/users/" + user.id}
+              onClick={() => handleEditarUsuario(user)}
             >
               Editar
             </Button>
@@ -291,15 +342,17 @@ export default function UserListAdmin() {
       </div>
       <div className="d-flex justify-content-between align-items-center mt-3">
         <Button
+          className="mx-2"
           disabled={paginaActual === 1}
           onClick={() => setPaginaActual(paginaActual - 1)}
         >
           Página anterior
         </Button>
-        <span>
+        <span className="mx-2">
           Página {paginaActual} de {totalPaginas}
         </span>
         <Button
+          className="mx-2"
           disabled={paginaActual === totalPaginas}
           onClick={() => setPaginaActual(paginaActual + 1)}
         >

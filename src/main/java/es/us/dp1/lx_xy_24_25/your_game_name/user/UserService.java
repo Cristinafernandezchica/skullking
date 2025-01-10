@@ -125,7 +125,7 @@ public class UserService {
 		List<Jugador> jugadores = jugadorRepository.findJugadoresByUsuarioId(id);
 		if (!jugadores.isEmpty()) {
 			for (Jugador jugador : jugadores) {
-				jugadorService.deleteJugador(jugador.getId());
+				jugadorService.deleteJugador(jugador.getId(), false);
 			}
 		}
 

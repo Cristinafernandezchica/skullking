@@ -186,7 +186,7 @@ public class JugadorServiceTest {
     void shouldDeleteJugador() {
         doNothing().when(jugadorRepository).deleteById(jugador.getId());
 
-        jugadorService.deleteJugador(jugador.getId());
+        jugadorService.deleteJugador(jugador.getId(), false);
 
         verify(jugadorRepository, times(1)).deleteById(jugador.getId());
     }

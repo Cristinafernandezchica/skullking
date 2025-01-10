@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -127,7 +128,7 @@ public class PartidaService {
         List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(id);
         if (!jugadores.isEmpty()) {
             for (Jugador jugador : jugadores) {
-                jugadorService.deleteJugador(jugador.getId());
+                jugadorService.deleteJugador(jugador.getId(),false);
             }
         }
         
@@ -141,10 +142,29 @@ public class PartidaService {
         return partidaRepository.findByOwnerPartida(ownerId);
     }
     
+    // Hacer test
+    public void actualizarOwner(Integer partidaId, Integer nuevoOwnerId) {
+        Partida partida = getPartidaById(partidaId);
+
+        if (nuevoOwnerId == null || nuevoOwnerId <= 0) {
+            throw new IllegalArgumentException("El nuevo ownerPartida debe ser un ID válido.");
+        }
+
+        partida.setOwnerPartida(nuevoOwnerId);
+        partidaRepository.save(partida);
+
+        Map<String, Object> message = new HashMap<>();
+        message.put("status", "ACTUALIZADO");
+        message.put("ownerPartida", nuevoOwnerId);
+        message.put("jugadores", jugadorService.findJugadoresByPartidaId(partidaId));
+
+        messagingTemplate.convertAndSend("/topic/partida/" + partidaId, message);
+    }
+
 
     // Lógica de juego
 
-    // Inciamos la partida
+    // Iniciamos la partida
     @Transactional
     public void iniciarPartida(Integer partidaId) {
         logger.info("Iniciando la partida con ID: {}", partidaId);

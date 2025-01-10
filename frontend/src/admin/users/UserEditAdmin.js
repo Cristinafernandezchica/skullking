@@ -186,14 +186,10 @@ export default function UserEditAdmin() {
             </Input>
           </div>
           <div className="custom-button-row">
-            <Button type="submit" color="primary" className="auth-button">
+            <button type="submit" className="auth-button">
               Guardar
-            </Button>
-            <Link
-              to="/users"
-              className="auth-button"
-              style={{ textDecoration: "none" }}
-            >
+            </button>
+            <Link to="/users" className="auth-button" style={{textDecoration: "none"}}>
               Cancelar
             </Link>
           </div>

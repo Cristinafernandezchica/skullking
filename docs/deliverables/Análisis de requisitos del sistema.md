@@ -127,25 +127,29 @@ A continuación se definen todas las historias de usuario a implementar:
 | "Como administrador quiero ver el listado de usuarios registrados para llevar un control sobre la cantidad de usuarios en el sistema."| 
 |-----|
 |![Listado de usuarios](../mockups/Listado_usuarios.png)|
-|Se despliega una lista de todos los usuarios registrados en el sistema.|
+|Se despliega una lista de todos los usuarios registrados en el sistema ordenados por su autoridad y por nombre paginados en seis usuarios por página.|
 
 ### HGA2-(ISSUE#197): Borrar un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/197]())
 | "Como administrador quiero poder borrar usuarios para llevar un control adecuado de los usuarios del sistema."|
 |-----|
 |![Borrar usuario](../mockups/Eliminar_usuario.png)|
-|Al presionar el botón "Borrar" en la visualización de los usuarios se mostrará una advertencia en el navegador en la cuál debes confirmar la acción realizada y se eliminará el usuario.|
+|Al presionar el botón "Borrar" en la visualización de los usuarios se mostrará una alerta la cuál te muestra que se ha eliminado el usuario, las partidas de las que era dueño y sus jugadores correctamente.|
+|Caso negativo: Si el usuario a eliminar se encuentra en una partida en curso o en esperando no será posible eliminarlo y se mostrará en cada caso una alerta con su respectivo error.|
+|![Borrar usuario esperando](../mockups/Eliminar_usuario_esperando.png)|
 
 ### HGA3-(ISSUE#54): Editar un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/54]())
-| "Como administrador quiero poder editar el perfil de un usuario para reestablecimiento de credenciales manualmente."|
+| "Como administrador quiero poder editar el perfil de cualquier usuario registrado en el sistema."|
 |-----|
-|![Edición jugador](../mockups/Cambio_de_credenciales.png)|
+|![Edición usuario](../mockups/Cambio_de_credenciales.png)|
 |Al presionar el botón "Editar" en la visualización de los usuarios se mostrará un formulario en el que se podrá modificar los datos del usuario especifico.|
+|Caso negativo: Si el usuario a editar se encuentra en una partida en curso o en esperando no será posible editarlo y se mostrará en cada caso una alerta con su respectivo error.|
+|![Borrar usuario esperando](../mockups/Cambio_de_credenciales_esperando.png)|
 
 ### HGA4-(ISSUE#53): Crear un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/53]())
 | "Como administrador quiero poder crear un usuario para llevar una administración del sistema"|
 |-----|
-|![Creación jugador](../mockups/Listado_usuarios.png)|
-|Pulsando el botón "Añadir usuario", el administrador deberá rellenar los datos correspondientes y confirmar la creación.|
+|![Creación jugador](../mockups/Crear_usuarios.png)|
+|Pulsando el botón "Añadir usuario" en la visualización de usuarios, el administrador podrá ver un formulario para rellenar los datos correspondientes al nuevo usuario y confirmar la creación.|
 
 ### HJA1-(ISSUE#44): Ver listado de partidas ordenadas y por filtros ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/44]())
 | "Como administrador quiero poder ver el listado de partidas, incluyendo nombre de la partida, estado, jugadores participantes, jugador creador y la fecha de creación para llevar un control sobre las partidas creadas."| 
@@ -240,11 +244,17 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Lobby](../mockups/iniciar_partida.png)|
 |Una vez el jugador se encuentre en la sala de espera de la partida, el jugador podrá ver los jugadores que hay en la partida. Estos se van actualizando conforme se van uniendo.|
 
-### HJJ14-(ISSUE#155): Volver a partida en curso ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/155]())
+### HJJ14-(ISSUE#155): Volver a partida esperando o en curso ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/155]())
 | "Como jugador quiero poder volver a la partida empezada anteriormente."| 
 |-----|
 |![Lobby](../mockups/volverAPartida.png)|
 |Una vez el jugador se encuentre en una partida en espera o empezada, puede presionar el botón "Volver a partida".|
+
+### HJJ15-(ISSUE#223): Salir de una sala de espera ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/223]())
+| "Como jugador quiero poder salir de la sala de espera de una partida antes de que comience."| 
+|-----|
+|![Lobby](../mockups/iniciar_partida.png)|
+|Una vez el jugador se encuentre en la sala de espera de una partida, el jugador podrá salir de la sala de espera para poder crear su propia partida o unirse a otra partida distinta.|
 
 
 ## Diagrama conceptual del sistema
@@ -385,7 +395,16 @@ No pueden existir dos partidas en curso o en espera con el mismo nombre.
 Tras el reparto de cartas se deberá apostar dentro del tiempo establecido (20 segundos), en otro caso, la apuesta se establecerá a 0.
 
 ### R43 - Borrar su propio usuario
-Una vez te encuentras en la sala de espera de una partida o en una partida en curso no podrás borrar tu propia cuenta hasta que no termines la partida iniciada.
+Una vez te encuentras en la sala de espera de una partida o en una partida en curso no podrás borrar tu propia cuenta hasta que no termines la partida.
 
 ### R44 - Editar su propio usuario
-Una vez te encuentras en la sala de espera de una partida o en una partida en curso no podrás editar ninguna información de tu propia cuenta hasta que no termines la partida iniciada.
+Una vez te encuentras en la sala de espera de una partida o en una partida en curso no podrás editar ninguna información de tu propia cuenta hasta que no termines la partida.
+
+### R45 - Borrar un usuario siendo administrador
+Si el usuario a eliminar tiene un jugador en la sala de espera de una partida o en una partida en curso no podrá borrar el usuario hasta que no termine la partida.
+
+### R46 - Editar un usuario siendo administrador
+Si el usuario a editar tiene un jugador en la sala de espera de una partida o en una partida en curso no podrá editar el usuario hasta que no termine la partida.
+
+### R47 - Salir de una sala de espera siendo el dueño
+Si el jugador que quiere salir de una sala de espera es el creador de la partida, al salir de la sala de espera el dueño de la partida será el siguiente jugador que entró en la sala.

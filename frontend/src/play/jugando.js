@@ -526,7 +526,7 @@ useEffect(() => {
                   <img src={jugador.usuario.imagenPerfil} alt="Perfil" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "10px" }} />
                   <h3>{jugador.usuario.username}</h3>
                 </div>
-                <p>Apuesta: {jugador.apuestaActual}</p>
+                <p>Apuesta: {jugador.apuestaActual !== -1 && jugador.apuestaActual}</p>
                 <p>Puntos: {jugador.puntos}</p>
                 {/*mano !== null && <p>Bazas ganadas: {mano.resultado}</p>
                 Para poder ver la cantidad de bazas que ha ganado cada jugador

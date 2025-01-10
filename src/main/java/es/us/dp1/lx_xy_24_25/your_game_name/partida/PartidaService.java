@@ -25,9 +25,10 @@ import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
-import es.us.dp1.lx_xy_24_25.your_game_name.mano.exceptions.ApuestaNoValidaException;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.ApuestaNoValidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MinJugadoresPartidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MismoNombrePartidaNoTerminadaException;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.NoPuedeApostarException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
@@ -137,6 +138,10 @@ public class PartidaService {
         partidaRepository.delete(partida);
     }
 
+    public List<Partida> findPartidasByOwnerId(Integer ownerId) {
+        return partidaRepository.findByOwnerPartida(ownerId);
+    }
+    
 
     // Lógica de juego
 
@@ -225,6 +230,9 @@ public class PartidaService {
                 .map(Jugador::getUsuario)
                 .collect(Collectors.toList());
 
+        partida.setGanadores(ganadores.stream().map(u-> u.getUsername()).collect(Collectors.toList()));
+
+
         for (User u : ganadores) {
             if (u.getNumPartidasGanadas() == null) {
                 u.setNumPartidasGanadas(0);
@@ -294,8 +302,6 @@ public class PartidaService {
         Ronda ronda = baza.getRonda();
         messagingTemplate.convertAndSend("/topic/listaTrucos/partida/" + partidaId, new ArrayList<>());
         manoService.actualizarResultadoMano(baza);
-        // Si es la última Baza de la ronda, finalizamos la ronda y actualizamos el resultado de las manos
-        manoService.actualizarResultadoMano(baza);
         messagingTemplate.convertAndSend("/topic/nuevasManos/partida/" + partida.getId(), manoService.findAllManosByRondaId(ronda.getId()));
         if(nextBaza > ronda.getNumBazas()){
             rondaService.finalizarRonda(ronda.getId());
@@ -307,12 +313,13 @@ public class PartidaService {
                 finalizarPartida(ronda.getPartida().getId());
             // Si no, pasamos de ronda, iniciamos sus manos e iniciamos la primera baza
             } else{
-                Integer numJugadores = jugadorService.findJugadoresByPartidaId(partidaId).size(); 
+                Integer numJugadores = jugadores.size(); 
                 Integer numBazas = manoService.getNumCartasARepartir(nextRonda, numJugadores);
                 Ronda newRonda = rondaService.nextRonda(ronda.getId(), numBazas);
                 messagingTemplate.convertAndSend("/topic/nuevaRonda/partida/" + partidaId, rondaService.rondaActual(partidaId));
                 manoService.iniciarManos(ronda.getPartida().getId(), newRonda, jugadores);
                 messagingTemplate.convertAndSend("/topic/nuevasManos/partida/" + partidaId, manoService.findAllManosByRondaId(newRonda.getId()));
+                apuestasJugadoresNegativas(jugadores);
                 Baza primeraBaza = bazaService.iniciarBaza(newRonda, jugadores);
                 // Renovar baza
                 messagingTemplate.convertAndSend("/topic/nuevaBaza/partida/" + partidaId, bazaService.findBazaActualByRondaId(newRonda.getId()));
@@ -370,6 +377,7 @@ public class PartidaService {
         Mano mano = manoService.findLastManoByJugadorId(jugadorId);
         Jugador jugador = jugadorService.findById(jugadorId);
         Partida partida = jugador.getPartida();
+        messagingTemplate.convertAndSend("/topic/turnoActual/" + partida.getId(), partida.getTurnoActual());
         if (mano == null) {
             throw new ResourceNotFoundException("Mano", "id", jugadorId);
         }
@@ -378,12 +386,36 @@ public class PartidaService {
             throw new ApuestaNoValidaException("La apuesta no puede ser mayor a " + mano.getCartas().size());
         }
 
+        Map<Integer, Integer> apuestasJugadores = apuestasJugadores(partida.getId());
+        Integer apuestaJugador = apuestasJugadores.get(jugadorId);
+        if(apuestaJugador != -1) {
+            throw new NoPuedeApostarException("Ya has apostado en esta ronda");
+        }
+
         mano.setApuesta(ap);
         jugador.setApuestaActual(ap);
         manoService.saveMano(mano);
         jugadorService.updateJugador(jugador, jugadorId);
         messagingTemplate.convertAndSend("/topic/apuesta/partida/" + partida.getId(), jugadorService.findJugadoresByPartidaId(partida.getId()));
+       
+    }
 
+    @Transactional
+    public void apuestasJugadoresNegativas(List<Jugador> jugadores){
+        for(Jugador j : jugadores){
+            j.setApuestaActual(-1);
+            jugadorService.updateJugador(j, j.getId());
+        }
+    }
+
+    @Transactional
+    public Map<Integer, Integer> apuestasJugadores(Integer partidaId) {
+        List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partidaId);
+        Map<Integer, Integer> apuestas = new HashMap<>();
+        for (Jugador j : jugadores) {
+            apuestas.put(j.getId(), j.getApuestaActual());
+        }
+        return apuestas;
     }
 
 }

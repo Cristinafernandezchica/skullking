@@ -83,5 +83,11 @@ public class TrucoRestController {
 		return new ResponseEntity<>(new MessageResponse("Truco deleted!"), HttpStatus.OK);
 	}
 
+	@GetMapping(value = "/trucosBaza/{bazaId}")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<Truco>> findTrucosByBazaId(@PathVariable("bazaId") int bazaId) {
+		List<Truco> res = (List<Truco>) this.trucoService.findTrucosByBazaId(bazaId);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
 
 }

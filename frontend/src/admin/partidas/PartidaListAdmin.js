@@ -163,6 +163,7 @@ export default function PartidaListAdmin() {
                 <td>{partida.estado}</td>
                 <td>{jugadoresList}</td>
                 <td>{ownerName}</td>
+                <td>{partida.ganadores}</td>
                 <td>{formatearFecha(partida.inicio)}</td>
             </tr>
         );
@@ -208,6 +209,7 @@ export default function PartidaListAdmin() {
                             <th>Estado</th>
                             <th>Jugadores</th>
                             <th>Creador</th>
+                            <th>Ganadores</th>
                             <th>Fecha de creación</th>
                         </tr>
                     </thead>

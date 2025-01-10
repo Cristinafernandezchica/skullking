@@ -6,6 +6,7 @@ import useFetchState from '../util/useFetchState';
 import getIdFromUrl from '../util/getIdFromUrl';
 import ApuestaModal from '../components/modals/ApostarModal';
 import ElegirTigresaModal from '../components/modals/ElegirTigresaModal';
+import GanadorPartidaModal from '../components/modals/GanadorPartidaModal';
 import GanadorBazaModal from '../components/modals/GanadorBazaModal';
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
@@ -28,21 +29,24 @@ export default function Jugando() {
     setMessage,
     setVisible
   );
+
+  // Modal Tigresa
   const [modalTigresaOpen, setModalTigresaOpen] = useState(false);
   const [eleccion, setEleccion] = useState('');
   const [nuevaTigresa, setNuevaTigresa] = useState();
+
+
+  // Datos de partida
   const [tu, setTu] = useFetchState(null, `/api/v1/jugadores/${user.id}/usuario`, jwt, setMessage, setVisible);
   const [mano, setMano] = useState(null);
   const [ronda, setRonda] = useState(null);
   const [truco, setTruco] = useState(null);
   const [BazaActual, setBazaActual] = useState(null)
   const [ListaDeTrucos, setListaDeTrucos] = useState([])
-  const [seCambiaPalo, setSeCambiaPalo] = useState(true)
-  // const [buscarUnaVezListaDeTrucos, setBuscarUnaVezListaDeTrucos] = useState(true)
-  // const [idBaza, setIdBaza] = useState(null);
 
   // para las cartas del resto de jugadores
   const [manosOtrosJugadores, setManosOtrosJugadores] = useState({});
+
   // Para lógica de apuesta
   const [apuestaModalOpen, setApuestaModalOpen] = useState(false);
   const toggleApuestaModal = () => setApuestaModalOpen(!apuestaModalOpen);
@@ -55,12 +59,16 @@ export default function Jugando() {
   const [chatModalVisible, setChatModalVisible] = useState(false);
   const toggleChatModal = () => setChatModalVisible(!chatModalVisible);
 
-  // Mano disabled
-  const [cartasDisabled, setCartasDisabled] = useState([]);
+  // Cartas mano disabled
+  const [cartasDisabled, setCartasDisabled] = useState({});
 
   // Mostrar ganador baza
   const [ganadorBazaModal, setGanadorBazaModal] = useState(false);
   const [ganadorBaza, setGanadorBaza] = useState("");
+
+  // Mostrar ganador partida
+  const [ganadorPartidaModal, setGanadorPartidaModal] = useState(false);
+  const [ganadorPartida, setGanadorPartida] = useState([]);
 
   // Mostrar alerta nueva Ronda/Baza
   const [alertaRondaBaza, setAlertaRondaBaza] = useState('');
@@ -87,40 +95,32 @@ export default function Jugando() {
     }
   };
 
-  // Carga inicial partida
-  useEffect(() => {
-    fetchPartida(idPartida);
-  }, []);
-
-  const fetchCartasDisabled = async (idMano, paloActual) => {
+  const fetchListaTrucos = async () => {
     try {
-      const response = await fetch(
-        `/api/v1/manos/${idMano}/manoDisabled?tipoCarta=${paloActual}`,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`/api/v1/trucos/trucosBaza/${BazaActual.id}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          "Content-Type": "application/json",
+        },
+      });
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
-      const responseData = await response.text();
-      console.log("Response text:", responseData);
-
-      const data = JSON.parse(responseData);
-      setCartasDisabled(data);
-      console.log("Cartas disabled:", data);
+      const data = await response.json();
+      console.log("Obteniendo lista trucos:", data);
+      setListaDeTrucos(data);
     } catch (error) {
-      console.error("Error encontrando partidas:", error);
+      console.error("Error fetching lista trucos:", error);
       setMessage(error.message);
       setVisible(true);
     }
   };
 
-  // Quedarse con esta, la de Candela no me ha funcionado por el momento
+  // Carga inicial partida
+  useEffect(() => {
+    fetchPartida(idPartida);
+  }, []);
+
   const fetchManosJugadores = async () => {
     try {
       const nuevasManos = {};
@@ -146,7 +146,6 @@ export default function Jugando() {
             nuevasManos[jugador.id] = data;
           } else {
             nuevaMano = data;
-            await fetchCartasDisabled(nuevaMano.id, BazaActual.paloBaza);
           }
         } catch (error) {
           console.error(`Error procesando el jugador ${jugador.id}:`, error);
@@ -219,6 +218,7 @@ export default function Jugando() {
             console.log("vaciar lista trucos");
             setListaDeTrucos([]); // Vaciamos la lista de trucos
             console.log("lista trucos vacia: ", ListaDeTrucos);
+            setCartasDisabled({});
 
           }, 5000);
 
@@ -255,20 +255,17 @@ export default function Jugando() {
         (messageOutput) => {
           const data = JSON.parse(messageOutput.body);
           console.log("Nuevas manos: ", data);
-
+          const nuevasManosOtros = {};
           for (const d of data) {
             if (d.jugador.id === tu.id) {
-              console.log("mi mano con if: ", d)
+              console.log("mi mano con if: ", d);
               setMano(d);
-            } else if (d.jugador.id !== tu.id) {
-              let nuevasManosOtros = [];
-              nuevasManosOtros.push(d);
-              setManosOtrosJugadores(nuevasManosOtros);
-              console.log("manos otros jugadores con if: ", manosOtrosJugadores);
-              // setManosOtrosJugadores({ ...manosOtrosJugadores, [d.jugador.id]: d });
-              // console.log("manos otros jugadores: ", manosOtrosJugadores);
+            } else {
+              nuevasManosOtros[d.jugador.id] = d;
             }
           }
+          setManosOtrosJugadores(nuevasManosOtros);
+          console.log("manos otros jugadores actualizadas: ", nuevasManosOtros);
         }
       );
 
@@ -277,9 +274,20 @@ export default function Jugando() {
         const data = JSON.parse(messageOutput.body);
 
         if (data.status === "FINALIZADA") {
-          console.log("La partida ha finalizado, redirigiendo...");
-          navigate('/play');
+          setGanadorPartida(data.ganadores)
+            setGanadorPartidaModal(true);
+            /*
+            console.log("La partida ha finalizado, redirigiendo...");
+            navigate('/play');
+            */
         }
+      });
+
+      stompClient.subscribe(`/topic/cartasDisabled/partida/${idPartida}`, (messageOutput) => {
+        const data = JSON.parse(messageOutput.body);
+
+        setCartasDisabled(data);
+        console.log("Cartas Disabled: ", data);
       });
 
     });
@@ -291,7 +299,7 @@ export default function Jugando() {
       });
     };
   }, [tu]); // Solo se ejecuta una vez
-
+  
   const fetchJugadores = async () => {
     try {
       const response = await fetch(`/api/v1/jugadores/${idPartida}`, {
@@ -312,28 +320,29 @@ export default function Jugando() {
     }
   };
 
-  // Para abrir el modal de apuesta
-  useEffect(() => {
-    const timerAbrirApuestas = setTimeout(() => {
-      setApuestaModalOpen(true);
-    }, 5000); // Cambiar a 30 (30000)
+// Para abrir el modal de apuesta
+useEffect(() => {
+  const timerAbrirApuestas = setTimeout(() => {
+    setApuestaModalOpen(true);
+  }, 5000); // Cambiar a 30 (30000)
 
-    return () => clearTimeout(timerAbrirApuestas);
-  }, [ronda]);
+  return () => clearTimeout(timerAbrirApuestas);
+}, [ronda]);
 
-  // Para actualizar la visualización de la apuesta en todos los jugadores
-  useEffect(() => {
-    const timerCerrarApuestas = setTimeout(() => {
-      setVisualizandoCartas(false);
-      fetchJugadores();
-    }, 16000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
+// Para actualizar la visualización de la apuesta en todos los jugadores
+useEffect(() => {
+  const timerCerrarApuestas = setTimeout(() => {
+    setVisualizandoCartas(false);
+    fetchJugadores();
+  }, 16000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
 
-    return () => clearTimeout(timerCerrarApuestas);
-  }, [ronda]);
+  return () => clearTimeout(timerCerrarApuestas);
+}, [ronda]);
 
 
   useEffect(() => {
     if (ronda && BazaActual) {
+      fetchListaTrucos();
       setGanadorBazaModal(false);
       const nuevaAlerta = `Ronda: ${ronda.numRonda}  ||  Baza: ${BazaActual.numBaza}`;
       setAlertaRondaBaza(nuevaAlerta);
@@ -492,53 +501,6 @@ export default function Jugando() {
     }
   };
 
-  const cambiarPaloBaza = async (baza) => {
-    try {
-      const response = await fetch(`/api/v1/bazas/${baza.id}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(baza),
-      });
-
-      if (!response.ok) {
-        console.log("Algo falla");
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await response.json();
-      setBazaActual(data);
-      console.log("La baza con el palo dominante", data);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (
-      BazaActual !== null &&
-      BazaActual.paloBaza === "sinDeterminar" &&
-      truco !== null &&
-      truco.carta !== null
-    ) {
-      if (truco.carta.tipoCarta !== "banderaBlanca") {
-        if (
-          truco.carta.tipoCarta === "pirata" ||
-          truco.carta.tipoCarta === "skullKing" ||
-          truco.carta.tipoCarta === "sirena"
-        ) {
-          BazaActual.paloBaza = "noHayPalo";
-          cambiarPaloBaza(BazaActual);
-          console.log(BazaActual);
-        }
-        BazaActual.paloBaza = truco.carta.tipoCarta;
-        cambiarPaloBaza(BazaActual);
-        console.log(BazaActual);
-      }
-    }
-  }, [truco]);
 
   const handleEleccion = (eleccion) => {
     setEleccion(eleccion);
@@ -546,10 +508,6 @@ export default function Jugando() {
     console.log("hasta aqui llego");
     jugarTruco({ tipoCarta: "tigresa" }, eleccion); // Pasar la elección al jugarTruco
     console.log("pase", nuevaTigresa);
-  };
-
-  const cierreModalGanadorBaza = () => {
-    setGanadorBazaModal(false);
   };
 
   return (
@@ -568,7 +526,7 @@ export default function Jugando() {
                   <img src={jugador.usuario.imagenPerfil} alt="Perfil" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "10px" }} />
                   <h3>{jugador.usuario.username}</h3>
                 </div>
-                <p>Apuesta: {jugador.apuestaActual}</p>
+                <p>Apuesta: {jugador.apuestaActual !== -1 && jugador.apuestaActual}</p>
                 <p>Puntos: {jugador.puntos}</p>
                 {/*mano !== null && <p>Bazas ganadas: {mano.resultado}</p>
                 Para poder ver la cantidad de bazas que ha ganado cada jugador
@@ -617,10 +575,8 @@ export default function Jugando() {
                   className="boton-agrandable"
                   disabled={
                     visualizandoCartas ||
-                    turnoAct !== tu.id /*||
-                  cartasDisabled.some(
-                    (disabledCarta) => disabledCarta.id === carta.id
-                  )*/
+                    turnoAct !== tu.id  ||
+                    (cartasDisabled[mano.id]?.some((disabledCarta) => disabledCarta.id === carta.id) ?? false)
                   }
                   onClick={() => {
                     if (carta.tipoCarta === "tigresa") {
@@ -665,11 +621,17 @@ export default function Jugando() {
           onConfirm={handleEleccion}
         />
 
-        <GanadorBazaModal
-          isVisible={ganadorBazaModal}
-          ganador={ganadorBaza}
-          onClose={() => setGanadorBazaModal(false)}
-        />
+      <GanadorBazaModal
+        isVisible={ganadorBazaModal}
+        ganador={ganadorBaza}
+        onClose={() => setGanadorBazaModal(false)}
+      />
+
+      <GanadorPartidaModal
+        isVisible={ganadorPartidaModal}
+        ganador={ganadorPartida}
+        onClose={() => {setGanadorPartidaModal(false); navigate('/play')}}
+      />
 
         <ChatModal
           isVisible={chatModalVisible}

@@ -20,7 +20,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
-import es.us.dp1.lx_xy_24_25.your_game_name.mano.exceptions.ApuestaNoValidaException;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.ApuestaNoValidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
@@ -32,17 +32,13 @@ private final Integer ID_TIGRESA_BANDERA_BLANCA = 71;
 private final Integer ID_TIGRESA_PIRATA = 72;
 
 private ManoRepository manoRepository;
-private CartaService cs;
-//private JugadorService jugadorService;
-private JugadorRepository jugadorRepository;
+private CartaService cartaService;
 
 
     @Autowired
-    public ManoService(ManoRepository manoRepository, CartaService cs, JugadorRepository jugadorRepository) {
+    public ManoService(ManoRepository manoRepository, CartaService cartaService) {
         this.manoRepository = manoRepository;
-        this.cs = cs;
-        //this.jugadorService = jugadorService;
-        this.jugadorRepository = jugadorRepository;
+        this.cartaService = cartaService;
     }
 
 
@@ -93,7 +89,7 @@ private JugadorRepository jugadorRepository;
     // para iniciar las manos de los jugadores
     @Transactional
     public void iniciarManos(Integer partidaId, Ronda ronda, List<Jugador> jugadores){
-        List<Carta> listaCartas =(List<Carta>) cs.findAll();
+        List<Carta> listaCartas =(List<Carta>) cartaService.findAll();
         // para que no se cojan las cartas comodines
         listaCartas = listaCartas.stream().filter(c -> !( c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA))).collect(Collectors.toList());
         Collections.shuffle(listaCartas);   // Barajar cartas
@@ -127,37 +123,34 @@ private JugadorRepository jugadorRepository;
     }
 
 
-    public List<Carta> cartasDisabled(Integer idMano, TipoCarta tipoCarta) {
+    public List<Carta> cartasDisabled(Integer idMano, TipoCarta paloBaza) {
         Mano manoActual = manoRepository.findById(idMano).orElse(null);
         if (manoActual == null) {
             return new ArrayList<>(); // o lanza una excepción si prefieres
         }
         
         List<Carta> cartas = manoActual.getCartas();
-        Boolean hasPaloBaza = cartas.stream().anyMatch(c -> c.getTipoCarta().equals(tipoCarta));
+        Boolean hasPaloBaza = cartas.stream().anyMatch(c -> c.getTipoCarta().equals(paloBaza));
         Boolean hasEspecial = cartas.stream().anyMatch(Carta::esCartaEspecial);
         List<Carta> result = new ArrayList<>();
         
         for (Carta c : cartas) {
-            if(!(tipoCarta.equals(TipoCarta.sinDeterminar))){
+            if(!(paloBaza.equals(TipoCarta.sinDeterminar))){
                 if (hasEspecial && hasPaloBaza) {
                     // Caso 3: Mano con alguna especial y alguna del palobaza
-                    if (!(c.getTipoCarta().equals(tipoCarta) || c.esCartaEspecial())) {
+                    if (!(c.getTipoCarta().equals(paloBaza) || c.esCartaEspecial())) {
                         result.add(c);
                     }
-                } else if (hasEspecial && !hasPaloBaza) {
-                    // Caso 2: Mano con alguna especial sin palobaza
-                    if (!c.esCartaEspecial()) {
-                        result.add(c);
-                    }
+                
                 } else if (hasPaloBaza && !hasEspecial) {
                     // Caso 4: Mano con alguna del palobaza y ninguna especial
-                    if (!c.getTipoCarta().equals(tipoCarta)) {
+                    if (!c.getTipoCarta().equals(paloBaza)) {
                         result.add(c);
                     }
                 }
             }
             // Caso 1: Mano sin especiales ni palobaza - `result` permanece vacío (todas las cartas habilitadas).
+            // Caso 2: mano con especial también puede jugar todas las carttas
         }
         
         return result;

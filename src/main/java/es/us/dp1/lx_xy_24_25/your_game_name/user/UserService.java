@@ -25,14 +25,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.amistad.AmistadRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaRepository;
+import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,13 +45,20 @@ public class UserService {
 	private UserRepository userRepository;	
 	private JugadorRepository jugadorRepository;	
 	private JugadorService jugadorService;
+    private AmistadRepository amistadRepository;
+    private PartidaRepository partidaRepository;
+    private RondaRepository rondaRepository;
 
 	//private final ConcurrentHashMap<Integer, UserStats> userStatsMap = new ConcurrentHashMap<>();
 
 	@Autowired
-	public UserService(UserRepository userRepository, JugadorRepository jugadorRepository) {
+	public UserService(UserRepository userRepository, JugadorRepository jugadorRepository, JugadorService jugadorService,
+    AmistadRepository amistadRepository, RondaRepository rondaRepository) {
 		this.userRepository = userRepository;
 		this.jugadorRepository = jugadorRepository;
+        this.jugadorService = jugadorService;
+        this.amistadRepository = amistadRepository;
+        this.rondaRepository = rondaRepository;
 	}
 
     @Transactional
@@ -117,6 +128,10 @@ public class UserService {
 				jugadorService.deleteJugador(jugador.getId());
 			}
 		}
+
+        // Eliminar relaciones de amistad donde el usuario sea remitente o destinatario
+        amistadRepository.deleteByRemitenteOrDestinatario(user);
+
 		// Finalmente, eliminar al usuario
 		userRepository.delete(user);
 	}

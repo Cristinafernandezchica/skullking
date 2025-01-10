@@ -35,7 +35,6 @@ export default function Jugando() {
   const [eleccion, setEleccion] = useState('');
   const [nuevaTigresa, setNuevaTigresa] = useState();
 
-
   // Datos de partida
   const [tu, setTu] = useFetchState(null, `/api/v1/jugadores/${user.id}/usuario`, jwt, setMessage, setVisible);
   const [mano, setMano] = useState(null);
@@ -73,6 +72,9 @@ export default function Jugando() {
   // Mostrar alerta nueva Ronda/Baza
   const [alertaRondaBaza, setAlertaRondaBaza] = useState('');
   const [alertVisible, setAlertVisible] = useState(false);
+
+  // Para resultados Mano jugadores
+  const [resultadosMano, setResultadosMano] = useState({});
 
   const fetchPartida = async (idPartida) => {
     try {
@@ -288,6 +290,13 @@ export default function Jugando() {
 
         setCartasDisabled(data);
         console.log("Cartas Disabled: ", data);
+      });
+
+      stompClient.subscribe(`/topic/resultadosMano/partida/${idPartida}`, (messageOutput) => {
+        const data = JSON.parse(messageOutput.body);
+
+        setResultadosMano(data);
+        console.log("Resultados Mano: ", data);
       });
 
     });
@@ -528,6 +537,7 @@ useEffect(() => {
                 </div>
                 <p>Apuesta: {jugador.apuestaActual !== -1 && jugador.apuestaActual}</p>
                 <p>Puntos: {jugador.puntos}</p>
+                {jugador !== null && <p>Bazas ganadas: {resultadosMano[jugador.id]}</p>}
                 {/*mano !== null && <p>Bazas ganadas: {mano.resultado}</p>
                 Para poder ver la cantidad de bazas que ha ganado cada jugador
                 habría que añadir una propiedad a jugador para que sea más sencillo

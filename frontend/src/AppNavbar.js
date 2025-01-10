@@ -172,81 +172,118 @@ function AppNavbar() {
                         <DropdownToggle nav caret style={{ color: "white" }}>
                             Notificaciones
                         </DropdownToggle>
-                        <DropdownMenu>
-                            <p><b>Solicitudes</b></p>
-                            {nuevasSolitudes.map((usuario) => (
-                                <DropdownItem
-                                    key={usuario.id}
-                                    tag="div"
-                                    className="d-flex justify-content-between align-items-center"
-                                >
-                                    <div style={{ display: "flex", alignItems: "center" }}>
-                                        {usuario.imagenPerfil && (
-                                            <img
-                                                src={usuario.imagenPerfil}
-                                                alt="Perfil"
-                                                style={{
-                                                    width: "30px",
-                                                    height: "30px",
-                                                    borderRadius: "50%",
-                                                    marginRight: "10px"
-                                                }}
-                                            />
-                                        )}
-                                        <span>{usuario.username}</span>
-                                    </div>
-                                    <div>
-                                        <Button
-                                            className="btn btn-success btn-sm mx-1"
-                                            onClick={async () => await aceptarORechazarSolicitud(usuarioActual.id, usuario.id, true, jwt)}
-                                        >
-                                            ✓
-                                        </Button>
-                                        <Button
-                                            className="btn btn-danger btn-sm"
-                                            onClick={() => aceptarORechazarSolicitud(usuarioActual.id, usuario.id, false, jwt)}
-                                        >
-                                            ✕
-                                        </Button>
-                                    </div>
-                                </DropdownItem>
-                            ))}
+                        <DropdownMenu style={{ maxHeight: "300px", overflowY: "auto" }}>
+    {/* Solicitudes */}
+    {nuevasSolitudes.length > 0 && (
+        <>
+            <p><b>Solicitudes</b></p>
+            {nuevasSolitudes.map((usuario) => (
+                <DropdownItem
+                    key={usuario.id}
+                    tag="div"
+                    className="d-flex justify-content-between align-items-center"
+                >
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                        {usuario.imagenPerfil && (
+                            <img
+                                src={usuario.imagenPerfil}
+                                alt="Perfil"
+                                style={{
+                                    width: "30px",
+                                    height: "30px",
+                                    borderRadius: "50%",
+                                    marginRight: "10px"
+                                }}
+                            />
+                        )}
+                        <span>{usuario.username}</span>
+                    </div>
+                    <div>
+                        <Button
+                            className="btn btn-success btn-sm mx-1"
+                            onClick={async () => await aceptarORechazarSolicitud(usuarioActual.id, usuario.id, true, jwt)}
+                        >
+                            ✓
+                        </Button>
+                        <Button
+                            className="btn btn-danger btn-sm"
+                            onClick={() => aceptarORechazarSolicitud(usuarioActual.id, usuario.id, false, jwt)}
+                        >
+                            ✕
+                        </Button>
+                    </div>
+                </DropdownItem>
+            ))}
+        </>
+    )}
 
-                            <p><b>Amigos conectados</b></p>
+    {/* Amigos Conectados */}
+    {amigosConectados.length > 0 && (
+        <>
+            <p><b>Amigos conectados</b></p>
+            {amigosConectados.map((usuario) => (
+                <DropdownItem 
+                    key={usuario.id} 
+                    tag="div" 
+                    className="d-flex justify-content-between align-items-center"
+                >
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                        {usuario.imagenPerfil && (
+                            <img 
+                                src={usuario.imagenPerfil} 
+                                alt="Perfil" 
+                                style={{ 
+                                    width: "30px", 
+                                    height: "30px", 
+                                    borderRadius: "50%", 
+                                    marginRight: "10px" 
+                                }} 
+                            />
+                        )}
+                        <span>{usuario.username}</span>
+                    </div>
+                </DropdownItem>
+            ))}
+        </>
+    )}
 
-{amigosConectados.map((usuario) => (
-    <DropdownItem 
-        key={usuario.id} 
-        tag="div" 
-        className="d-flex justify-content-between align-items-center"
-    >
-        <div style={{ display: "flex", alignItems: "center" }}>
-            {usuario.imagenPerfil && (
-                <img 
-                    src={usuario.imagenPerfil} 
-                    alt="Perfil" 
-                    style={{ 
-                        width: "30px", 
-                        height: "30px", 
-                        borderRadius: "50%", 
-                        marginRight: "10px" 
-                    }} 
-                />
-            )}
-            <span>{usuario.username}</span>
-        </div>
-    </DropdownItem>
-))}
-<p><b>Invitaciones</b></p>
+    {/* Invitaciones */}
+    {invitaciones.length > 0 && (
+        <>
+            <p><b>Invitaciones</b></p>
+            {invitaciones.map((invitacion) => (
+                <DropdownItem 
+                    key={invitacion.id} 
+                    tag="div" 
+                    className="d-flex justify-content-between align-items-center"
+                >
+                    {invitacion.espectador ? (
+                        <>
+                            <span>Espectar a {invitacion.remitente.username}</span>
+                            <Button 
+                                className="btn btn-secondary btn-sm ms-2" 
+                                onClick={() => {/* Acción para espectar la partida */}}
+                            >
+                                👁️
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button 
+                                className="btn btn-primary btn-sm me-2" 
+                                onClick={() => {/* Acción para unirse a la partida */}}
+                            >
+                                🎮
+                            </Button>
+                            <span>Únete a la partida de {invitacion.remitente.username}</span>
+                        </>
+                    )}
+                </DropdownItem>
+            ))}
+        </>
+    )}
+</DropdownMenu>
 
-{invitaciones.map((invitacion) => (
-    <DropdownItem 
-        key={invitacion.id} 
-        tag="div" 
-        className="d-flex justify-content-between align-items-center"
-    ><span>{invitacion.remitente.username} te invita a su partida</span></DropdownItem>))}
-
-                        </DropdownMenu>
                     </Dropdown>
                     <NavItem>
                         <NavLink style={{ color: "white" }} id="instructions" tag={Link} to="/instructions">

@@ -336,7 +336,7 @@ export default function Perfil() {
                 </div>
             </div>
 
-            <div className="amigos-lista">
+            <div className="amigos-lista" style={{ maxHeight: '300px', overflowY: 'auto' }}>
                 <h3>Lista de Amigos</h3>
                 <ul style={{ padding: 0, listStyleType: "none" }}>
                     {listaDeAmigos.map((amigo) => (

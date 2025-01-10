@@ -104,12 +104,4 @@ public class BazaRestController {
         return new ResponseEntity<>(bazaService.findBazaActualByRondaId(rondaId), HttpStatus.OK);
     }
     
-    
-
-    // Para crear los trucos pertenecientes a una baza concreta
-    @PostMapping("/{bazaId}/trucos")
-    public ResponseEntity<MessageResponse> crearTrucosDeBaza(@PathVariable("bazaId") int idBaza) {
-        trucoService.crearTrucosBaza(idBaza);
-        return new ResponseEntity<>(new MessageResponse("Trucos creados"), HttpStatus.CREATED);
-    }
 }

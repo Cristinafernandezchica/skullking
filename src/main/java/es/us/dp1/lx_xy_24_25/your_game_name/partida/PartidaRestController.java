@@ -2,6 +2,8 @@ package es.us.dp1.lx_xy_24_25.your_game_name.partida;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -83,6 +84,21 @@ public class PartidaRestController {
         return new ResponseEntity<>(new MessageResponse("Partida eliminada"), HttpStatus.NO_CONTENT); 
     }
 
+    @PutMapping("/{id}/actualizar-owner")
+    public ResponseEntity<MessageResponse> actualizarOwner(@PathVariable Integer id, @RequestBody Map<String, Integer> body) {
+        try {
+            Integer nuevoOwnerId = body.get("ownerPartida");
+            partidaService.actualizarOwner(id, nuevoOwnerId);
+            return new ResponseEntity<>(new MessageResponse("Owner actualizado con éxito."), HttpStatus.OK); 
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(new MessageResponse("Partida no encontrada."), HttpStatus.NOT_FOUND);             
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(new MessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST); 
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageResponse("Error al actualizar el owner."), HttpStatus.INTERNAL_SERVER_ERROR); 
+        }
+    }
+
     // Relación de uno a muchos con la clase Jugador, mirar los nombres de los métodos
     // TENER EN CUENTA  -->  Habrá que hacer un DTO seguramente
     // Te devulve el jugador con la contraseña incluida, para frontend solo queremos el username
@@ -99,6 +115,17 @@ public class PartidaRestController {
         return rondaService.getRondasByPartidaId(id);
     }
     */
+
+    @GetMapping(params = "ownerId")
+    public ResponseEntity<List<Partida>> findPartidasByOwnerId(@RequestParam("ownerId") Integer ownerId) {
+        List<Partida> partidas = partidaService.findPartidasByOwnerId(ownerId);
+        if (partidas.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(partidas, HttpStatus.OK);
+    }
+
+
 
     @GetMapping("/{id}/jugadorGanador")
     public ResponseEntity<Jugador> ganadorPartida (@PathVariable("id") Integer id){

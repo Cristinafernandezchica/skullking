@@ -111,8 +111,6 @@ export default function Perfil() {
                             ["ESPERANDO", "JUGANDO"].includes(player.partida.estado.trim().toUpperCase())
                         );
                         setHasRestrictedPlayer(restricted);
-                    } else {
-                        console.error("Error al obtener los jugadores asociados.");
                     }
 
                     // Obtener último jugador asociado al usuario
@@ -126,11 +124,7 @@ export default function Perfil() {
                     if (lastPlayerResponse.ok) {
                         const lastPlayerData = await lastPlayerResponse.json();
                         setLastPlayer(lastPlayerData);
-                    } else {
-                        console.error("Error al obtener el último jugador asociado.");
                     }
-                } else {
-                    console.error("Error al obtener los datos del usuario.");
                 }
             } catch (error) {
                 console.error("Error al conectar con el servidor:", error);
@@ -144,55 +138,74 @@ export default function Perfil() {
     const eliminarCuenta = async () => {
         if (window.confirm("¿Estás seguro de que quieres eliminar tu cuenta? Esta acción es irreversible.")) {
             try {
-                // Obtener jugadores asociados al usuario actual
+                // Eliminar jugadores asociados
                 const jugadoresResponse = await fetch(`/api/v1/jugadores/${user.id}/usuarios`, {
                     headers: {
-                        "Content-Type": "application/json",
                         Authorization: `Bearer ${jwt}`,
                     },
                 });
-    
-                if (!jugadoresResponse.ok) {
-                    if (jugadoresResponse.status === 404) {
-                        console.warn("No tiene jugadores asociados.");
-                        await eliminarUsuarioDirectamente(user.id);
-                        return;
-                    }
-                    throw new Error("Error al verificar jugadores asociados.");
-                }
-    
-                const jugadores = await jugadoresResponse.json();
-    
-                // Verificar si todos los jugadores están en partidas TERMINADAS
-                for (const jugador of jugadores) {
-                    const partidaEstado = jugador.partida.estado.trim().toUpperCase();
-    
-                    if (["JUGANDO", "ESPERANDO"].includes(partidaEstado)) {
-                        alert(`No se puede eliminar la cuenta porque el jugador está en una partida en estado "${partidaEstado}".`);
-                        return;
-                    }
-    
-                    // Si el jugador es owner de una partida, eliminar la partida y sus dependencias
-                    if (jugador.partida.ownerPartida === jugador.id) {
-                        await fetch(`/api/v1/partidas/${jugador.partida.id}`, {
+
+                if (jugadoresResponse.ok) {
+                    const jugadores = await jugadoresResponse.json();
+
+                    for (const jugador of jugadores) {
+                        const partidaEstado = jugador.partida.estado;
+
+                        if (["JUGANDO", "ESPERANDO"].includes(partidaEstado)) {
+                            alert(`No se puede eliminar la cuenta porque el jugador está en una partida en estado "${partidaEstado}".`);
+                            return;
+                        }
+
+                        // Eliminar el jugador
+                        await fetch(`/api/v1/jugadores/${jugador.id}`, {
                             method: "DELETE",
                             headers: {
-                                "Content-Type": "application/json",
                                 Authorization: `Bearer ${jwt}`,
                             },
                         });
                     }
-    
-                    // Eliminar el jugador
-                    await fetch(`/api/v1/jugadores/${jugador.id}`, {
-                        method: "DELETE",
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${jwt}`,
-                        },
-                    });
                 }
-    
+
+                // Eliminar partidas asociadas al usuario
+                const partidasResponse = await fetch(`/api/v1/partidas?ownerId=${user.id}`, {
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                    },
+                });
+
+                if (partidasResponse.ok) {
+                    const partidas = await partidasResponse.json();
+
+                    for (const partida of partidas) {
+                        console.log(`Eliminando jugadores de la partida ${partida.id}`);
+                        const partidaJugadoresResponse = await fetch(`/api/v1/jugadores/${partida.id}`, {
+                            headers: {
+                                Authorization: `Bearer ${jwt}`,
+                            },
+                        });
+
+                        if (partidaJugadoresResponse.ok) {
+                            const partidaJugadores = await partidaJugadoresResponse.json();
+                            for (const jugador of partidaJugadores) {
+                                await fetch(`/api/v1/jugadores/${jugador.id}`, {
+                                    method: "DELETE",
+                                    headers: {
+                                        Authorization: `Bearer ${jwt}`,
+                                    },
+                                });
+                            }
+                        }
+
+                        console.log(`Eliminando partida ${partida.id}`);
+                        await fetch(`/api/v1/partidas/${partida.id}`, {
+                            method: "DELETE",
+                            headers: {
+                                Authorization: `Bearer ${jwt}`,
+                            },
+                        });
+                    }
+                }
+
                 // Eliminar el usuario directamente
                 await eliminarUsuarioDirectamente(user.id);
             } catch (error) {
@@ -207,15 +220,14 @@ export default function Perfil() {
             const response = await fetch(`/api/v1/users/${userId}`, {
                 method: "DELETE",
                 headers: {
-                    "Content-Type": "application/json",
                     Authorization: `Bearer ${jwt}`,
                 },
             });
-    
+
             if (!response.ok) {
                 throw new Error("Error al eliminar el usuario.");
             }
-    
+
             alert("Cuenta eliminada con éxito.");
             tokenService.removeUser();
             navigate("/");

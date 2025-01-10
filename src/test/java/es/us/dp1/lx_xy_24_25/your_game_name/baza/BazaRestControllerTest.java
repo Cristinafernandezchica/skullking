@@ -220,14 +220,4 @@ public class BazaRestControllerTest {
                 .andExpect(jsonPath("$.id").value(baza.getId()));
     }
 
-    // Test para crear trucos de una baza
-    @Test
-    void shouldCrearTrucosDeBaza() throws Exception {
-        doNothing().when(trucoService).crearTrucosBaza(1);
-
-        mockMvc.perform(post("/api/v1/bazas/{bazaId}/trucos", 1))
-                .andExpect(status().isCreated());
-    }
-
-
 }

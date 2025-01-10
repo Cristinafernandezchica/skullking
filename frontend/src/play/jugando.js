@@ -95,6 +95,27 @@ export default function Jugando() {
     }
   };
 
+  const fetchListaTrucos = async () => {
+    try {
+      const response = await fetch(`/api/v1/trucos/trucosBaza/${BazaActual.id}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      console.log("Obteniendo lista trucos:", data);
+      setListaDeTrucos(data);
+    } catch (error) {
+      console.error("Error fetching lista trucos:", error);
+      setMessage(error.message);
+      setVisible(true);
+    }
+  };
+
   // Carga inicial partida
   useEffect(() => {
     fetchPartida(idPartida);
@@ -278,7 +299,7 @@ export default function Jugando() {
       });
     };
   }, [tu]); // Solo se ejecuta una vez
-
+  
   const fetchJugadores = async () => {
     try {
       const response = await fetch(`/api/v1/jugadores/${idPartida}`, {
@@ -299,28 +320,29 @@ export default function Jugando() {
     }
   };
 
-  // Para abrir el modal de apuesta
-  useEffect(() => {
-    const timerAbrirApuestas = setTimeout(() => {
-      setApuestaModalOpen(true);
-    }, 5000); // Cambiar a 30 (30000)
+// Para abrir el modal de apuesta
+useEffect(() => {
+  const timerAbrirApuestas = setTimeout(() => {
+    setApuestaModalOpen(true);
+  }, 5000); // Cambiar a 30 (30000)
 
-    return () => clearTimeout(timerAbrirApuestas);
-  }, [ronda]);
+  return () => clearTimeout(timerAbrirApuestas);
+}, [ronda]);
 
-  // Para actualizar la visualización de la apuesta en todos los jugadores
-  useEffect(() => {
-    const timerCerrarApuestas = setTimeout(() => {
-      setVisualizandoCartas(false);
-      fetchJugadores();
-    }, 16000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
+// Para actualizar la visualización de la apuesta en todos los jugadores
+useEffect(() => {
+  const timerCerrarApuestas = setTimeout(() => {
+    setVisualizandoCartas(false);
+    fetchJugadores();
+  }, 16000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
 
-    return () => clearTimeout(timerCerrarApuestas);
-  }, [ronda]);
+  return () => clearTimeout(timerCerrarApuestas);
+}, [ronda]);
 
 
   useEffect(() => {
     if (ronda && BazaActual) {
+      fetchListaTrucos();
       setGanadorBazaModal(false);
       const nuevaAlerta = `Ronda: ${ronda.numRonda}  ||  Baza: ${BazaActual.numBaza}`;
       setAlertaRondaBaza(nuevaAlerta);

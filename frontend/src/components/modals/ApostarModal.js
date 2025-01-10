@@ -26,9 +26,16 @@ export default function ApuestaModal({ isVisible, onCancel, onConfirm }) {
         try {
             await onConfirm(apuesta);
             setApuesta(0);
-            // setErrorMessage('');
+            setErrorMessage('');
         } catch (error) {
             setErrorMessage(error.message);
+        } finally {
+            let timerCerrarTrasError;
+            timerCerrarTrasError = setTimeout(() => {
+                onCancel();
+            }, 3000);
+
+            return () => clearTimeout(timerCerrarTrasError);
         }
         
     };

@@ -351,9 +351,10 @@ useEffect(() => {
 useEffect(() => {
   const timerCerrarApuestas = setTimeout(() => {
     if(tu && tu.espectador!==true){
-    setVisualizandoCartas(false);
-    fetchJugadores();}
-  }, 60000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
+      setVisualizandoCartas(false);
+      fetchJugadores();
+    }
+  }, 20000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
 
     return () => clearTimeout(timerCerrarApuestas);
   }, [ronda]);
@@ -369,6 +370,7 @@ useEffect(() => {
     if (apuestaTiempoRestante === 0) {
       setApuestaModalOpen(false); // Cierra el modal cuando el contador llega a 0
       setBarraVisible(false);
+      setTurnoAct(partida.turnoActual);
     }
 
     return () => clearInterval(intervalo); // Limpia el intervalo para evitar fugas de memoria

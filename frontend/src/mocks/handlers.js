@@ -19,9 +19,9 @@ const user1 = {
     descripcionPerfil: "A Jugar!",
     imagenPerfil: "https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg",
     conectado: false,
-    numPartidasJugadas: 0,
-    numPartidasGanadas: 0,
-    numPuntosGanados: 0,
+    numPartidasJugadas: 10,
+    numPartidasGanadas: 5,
+    numPuntosGanados: 100,
     authority: authorityPlayer,
 };
 
@@ -32,9 +32,9 @@ const user2 = {
     descripcionPerfil: "A Jugar!",
     imagenPerfil: "https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg",
     conectado: false,
-    numPartidasJugadas: 0,
-    numPartidasGanadas: 0,
-    numPuntosGanados: 0,
+    numPartidasJugadas: 8,
+    numPartidasGanadas: 6,
+    numPuntosGanados: 120,
     authority: authorityPlayer,
 };
 
@@ -81,17 +81,33 @@ const jugador3 = {
     puntos: 30,
     partida: partida2,
     usuario: user1,
-    apuesta_actual: 0,
+    apuestaActual: 0,
 };
 
+// Usuarios ordenados por puntos (simulando la respuesta del backend)
+const usersSortedByPoints = [user2, user1]; // user2 tiene más puntos que user1
+
+// Usuarios ordenados por porcentaje de victorias (simulando la respuesta del backend)
+const usersSortedByWinPercentage = [user2, user1]; // user2 tiene mejor porcentaje de victorias que user1
+
 export const handlers = [
-    // Endpoint para obtener todos los usuarios (con posible filtro por authority)
+    // Endpoint para obtener todos los usuarios
     rest.get('/api/v1/users', (req, res, ctx) => {
         const users = [user1, user2];
         return res(ctx.status(200), ctx.json(users));
     }),
 
-    // Endpoint para obtener todas las partidas (con posible filtro por nombre y estado)
+    // Endpoint para obtener usuarios ordenados por puntos totales
+    rest.get('/api/v1/users/sorted-by-points', (req, res, ctx) => {
+        return res(ctx.status(200), ctx.json(usersSortedByPoints));
+    }),
+
+    // Endpoint para obtener usuarios ordenados por porcentaje de victorias
+    rest.get('/api/v1/users/sorted-by-win-percentage', (req, res, ctx) => {
+        return res(ctx.status(200), ctx.json(usersSortedByWinPercentage));
+    }),
+
+    // Endpoint para obtener todas las partidas
     rest.get('/api/v1/partidas', (req, res, ctx) => {
         const partidas = [partida1, partida2];
         return res(ctx.status(200), ctx.json(partidas));

@@ -38,9 +38,16 @@ public class InvitacionRestController {
         return new ResponseEntity<>(invitacionService.getTodasMisInvitaciones(destinatarioId), HttpStatus.OK);
     }
 
+    @GetMapping("misUnaInvitaciones/{destinatarioId}/{remitente}")
+    public ResponseEntity<Invitacion> getUnaInvitaciones(@PathVariable("destinatarioId")Integer destinatarioId,
+    @PathVariable("remitente")Integer remitente) {
+        return new ResponseEntity<>(invitacionService.getOne(destinatarioId,remitente), HttpStatus.OK);
+    }
+
     @PostMapping()
     public ResponseEntity<Invitacion> enviarInvitacion(@RequestBody @Valid Invitacion invitacion) {
-        return new ResponseEntity<>(invitacionService.enviarInvitacion(invitacion), HttpStatus.OK);
+        Invitacion invitacionRealizada= invitacionService.enviarInvitacion(invitacion);
+        return new ResponseEntity<>(invitacionRealizada, HttpStatus.OK);
     }
 
     @DeleteMapping("/{invitacionId}")

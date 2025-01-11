@@ -62,6 +62,11 @@ public class InvitacionService {
     public List<Invitacion> getTodasMisInvitaciones(Integer destinatarioId){
         return InvitacionRepository.getAllMyInvitaciones(destinatarioId);
     }
+    
+    @Transactional(readOnly = true)
+    public Invitacion getOne(Integer remitenteId, Integer destinatarioId){
+        return InvitacionRepository.getOneInvitacion(destinatarioId, remitenteId);
+    }
 
     @Transactional
     public Invitacion enviarInvitacion(Invitacion invitacion) {

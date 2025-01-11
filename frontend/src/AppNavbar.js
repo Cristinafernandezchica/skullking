@@ -12,9 +12,10 @@ import {
     DropdownToggle,
     DropdownMenu,
     DropdownItem,
-    Button
+    Button,
+    Alert
 } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import tokenService from "./services/token.service";
 import jwt_decode from "jwt-decode";
 import logo from "./static/images/gamelogo_sin_fondo.png";
@@ -22,10 +23,12 @@ import "./styles.css";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
 import { fetchListaDeSolicitudes, fetchUserDetails,fetchListaDeAmigosConectados,aceptarORechazarSolicitud,
-    usuarioConectadoODesconectado, fetchListaDeInvitaciones} from "./components/appNavBarModular/AppNavBarModular";
+    usuarioConectadoODesconectado, fetchListaDeInvitaciones,
+    unirseAPartida,aceptarInvitacion} from "./components/appNavBarModular/AppNavBarModular";
 
 function AppNavbar() {
     const [roles, setRoles] = useState([]);
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [profileImage, setProfileImage] = useState(null);
     const [collapsed, setCollapsed] = useState(true);
@@ -35,21 +38,41 @@ function AppNavbar() {
     const [nuevasSolitudes, setNuevasSolitudes] = useState([]);
     const [amigosConectados, setAmigosConectados] = useState([]);
     const [invitaciones, setInvitaciones] = useState([]);
+    const [errors, setErrors] = useState([]);
 
     const toggleDropdown = async () => {
         setDropdownOpen(!dropdownOpen);
         fetchListaDeAmigosConectados(usuarioActual.id,setAmigosConectados,jwt);
         fetchListaDeInvitaciones(usuarioActual.id,setInvitaciones,jwt);
+        fetchListaDeSolicitudes(usuarioActual.id, setNuevasSolitudes, jwt);
     }
     const toggleNavbar = () => setCollapsed(!collapsed);
+
+    const showError = (error) => { 
+        setErrors([error]); 
+        setTimeout(() => { 
+          setErrors([]); 
+        }, 5000); // La alerta desaparece después de 5000 milisegundos (5 segundos) 
+      };
+
+      async function invitacionAceptada(invitacion){
+        unirseAPartida(usuarioActual,invitacion.partida,setErrors,showError,jwt);
+        aceptarInvitacion(jwt,invitacion.id);
+        if(errors.length===0){
+            if(invitacion.espectador===true){
+                navigate(`/tablero/${invitacion.partida.id}`);
+            }
+            else if(invitacion.espectador===false){
+                navigate(`/salaEspera/${invitacion.partida.id}`);
+            }
+        }
+      }
 
     useEffect(() => {
         if (jwt) {
             const decodedToken = jwt_decode(jwt);
             setRoles(decodedToken.authorities);
             setUsername(decodedToken.sub);
-            fetchListaDeSolicitudes(usuarioActual.id, setNuevasSolitudes, jwt);
-            // Fetch detalles del usuario para obtener la imagen de perfil
             fetchUserDetails(jwt, setProfileImage);
             roles.forEach((role) => {
                 if (role === "PLAYER") {
@@ -262,7 +285,7 @@ function AppNavbar() {
                             <span>Espectar a {invitacion.remitente.username}</span>
                             <Button 
                                 className="btn btn-secondary btn-sm ms-2" 
-                                onClick={() => {/* Acción para espectar la partida */}}
+                                onClick={() => { invitacionAceptada(invitacion)}}
                             >
                                 👁️
                             </Button>
@@ -271,7 +294,7 @@ function AppNavbar() {
                         <>
                             <Button 
                                 className="btn btn-primary btn-sm me-2" 
-                                onClick={() => {/* Acción para unirse a la partida */}}
+                                onClick={() => {invitacionAceptada(invitacion)}}
                             >
                                 🎮
                             </Button>
@@ -341,6 +364,11 @@ function AppNavbar() {
 
     return (
         <div>
+             <div className="validation-messages">
+                {errors.length > 0 && errors.map((error, index) => (
+                    <Alert key={index} color="danger">{error}</Alert>
+                ))}</div>
+
             <Navbar expand="md" dark color="dark">
                 <NavbarBrand href="/">
                     <img alt="logo" src={logo} className="animated-logo" />

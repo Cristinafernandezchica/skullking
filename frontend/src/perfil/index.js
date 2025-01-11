@@ -3,8 +3,7 @@ import { Button, Spinner, Alert } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import tokenService from "../services/token.service";
 import "./Perfil.css";
-import useFetchState from "../util/useFetchState";
-import { aceptarORechazarSolicitud, fetchListaDeAmigos } from "../components/appNavBarModular/AppNavBarModular";
+import { aceptarORechazarSolicitud, fetchListaDeAmigos, invitarAPartida } from "../components/appNavBarModular/AppNavBarModular";
 
 
 export default function Perfil() {
@@ -348,60 +347,84 @@ export default function Perfil() {
                 </div>
             </div>
 
-            <div className="amigos-lista" style={{ maxHeight: '300px', overflowY: 'auto' }}>
-                <h3>Lista de Amigos</h3>
-                <ul style={{ padding: 0, listStyleType: "none" }}>
-                    {listaDeAmigos.map((amigo) => (
-                        <li 
-                            key={amigo.id} 
-                            className="amigo-item" 
+<div className="amigos-lista" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+    <h3>Lista de Amigos</h3>
+    <ul style={{ padding: 0, listStyleType: "none" }}>
+        {listaDeAmigos.map((amigo) => (
+            <li 
+                key={amigo.id} 
+                className="amigo-item" 
+                style={{ 
+                    display: "flex", 
+                    alignItems: "center", 
+                    justifyContent: "space-between", 
+                    marginBottom: "10px" 
+                }}
+            >
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    {amigo.imagenPerfil && (
+                        <img 
+                            src={amigo.imagenPerfil} 
+                            alt="Perfil" 
                             style={{ 
-                                display: "flex", 
-                                alignItems: "center", 
-                                justifyContent: "space-between", 
-                                marginBottom: "10px" 
+                                width: "40px", 
+                                height: "40px", 
+                                borderRadius: "50%", 
+                                marginRight: "10px" 
+                            }} 
+                        />
+                    )}
+                    <span style={{ fontSize: "18px", fontWeight: "bold", textAlign: "left" }}>
+                        {amigo.username}
+                    </span>
+                    {amigo.conectado && (
+                        <span 
+                            className="status-circle" 
+                            style={{ 
+                                backgroundColor: "green", 
+                                width: "10px", 
+                                height: "10px", 
+                                borderRadius: "50%", 
+                                marginLeft: "10px" 
                             }}
+                        />
+                    )}
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    {/* Botón para eliminar amigo */}
+                    <button 
+                        className="unfriend-button" 
+                        onClick={() => handleEliminarAmigo(amigo.id)}
+                        title="Eliminar amigo"
+                    >
+                        🚫
+                    </button>
+
+                    {/* Botón de acción según el estado de la partida */}
+                    {lastPlayer != null && lastPlayer.partida.estado === "ESPERANDO" && (
+                        <button 
+                            className="partida-button" 
+                            title="Volver a la sala de espera"
+                            onClick={() => invitarAPartida(usuarioActual,amigo,lastPlayer.partida,false,jwt)}
                         >
-                            <div style={{ display: "flex", alignItems: "center" }}>
-                                {amigo.imagenPerfil && (
-                                    <img 
-                                        src={amigo.imagenPerfil} 
-                                        alt="Perfil" 
-                                        style={{ 
-                                            width: "40px", 
-                                            height: "40px", 
-                                            borderRadius: "50%", 
-                                            marginRight: "10px" 
-                                        }} 
-                                    />
-                                )}
-                                <span style={{ fontSize: "18px", fontWeight: "bold", textAlign: "left" }}>
-                                    {amigo.username}
-                                </span>
-                                {amigo.conectado && (
-                                    <span 
-                                        className="status-circle" 
-                                        style={{ 
-                                            backgroundColor: "green", 
-                                            width: "10px", 
-                                            height: "10px", 
-                                            borderRadius: "50%", 
-                                            marginLeft: "10px" 
-                                        }}
-                                    />
-                                )}
-                            </div>
-                            <button 
-                                className="unfriend-button" 
-                                onClick={() => handleEliminarAmigo(amigo.id)}
-                                title="Eliminar amigo"
-                            >
-                                🚫
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+                            🎮
+                        </button>
+                    )}
+                    {lastPlayer != null && lastPlayer.partida.estado === "JUGANDO" && (
+                        <button 
+                            className="partida-button" 
+                            title="Volver al tablero"
+                            onClick={() => invitarAPartida(usuarioActual,amigo,lastPlayer.partida,true,jwt)}
+                        >
+                            👁️
+                        </button>
+                    )}
+                </div>
+            </li>
+        ))}
+    </ul>
+</div>
         </div>
     );
 }

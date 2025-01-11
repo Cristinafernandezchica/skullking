@@ -146,15 +146,8 @@ export async function usuarioConectadoODesconectado(jwt,usuario,conectado) {
             }
         }
 
-        export async function invitarAPartida(usuarioActual,amigo, partidaId ,espectador, jwt) {
-            let linkPartida=""
-            if(espectador ) {
-                linkPartida = `/tablero/${partidaId}`
-            }
-            else{
-                linkPartida = `/salaEspera/${partidaId}`
-            }
-            const Invitacion ={remitente: usuarioActual, destinatario: amigo,link:linkPartida, espectador}
+        export async function invitarAPartida(usuarioActual,amigo, partidaActual ,serEspectador, jwt) {
+            const Invitacion ={remitente: usuarioActual, destinatario: amigo ,partida:partidaActual, espectador:serEspectador}
             try {
                 const response = await fetch(`/api/v1/invitaciones`, {
                     method: "POST",
@@ -185,6 +178,31 @@ export async function usuarioConectadoODesconectado(jwt,usuario,conectado) {
                 if (!response.ok) {
                     console.log("Algo falla");
                     throw new Error("Network response was not ok");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+
+        export async function unirseAPartida(usuarioActual,partida,setErrors,showError,jwt){
+            try {
+                const response = await fetch(`/api/v1/jugadores`, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        puntos: 0,
+                        partida: partida,
+                        usuario: usuarioActual
+                      }),
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    setErrors(errorData);
+                    showError(errorData.message || errorData);
                 }
             } catch (error) {
                 console.error("Error:", error);

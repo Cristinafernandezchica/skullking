@@ -49,6 +49,8 @@ export default function Jugando() {
 
   // Para lógica de apuesta
   const [apuestaModalOpen, setApuestaModalOpen] = useState(false);
+
+
   const toggleApuestaModal = () => setApuestaModalOpen(!apuestaModalOpen);
   const [visualizandoCartas, setVisualizandoCartas] = useState(true);
 
@@ -141,7 +143,6 @@ export default function Jugando() {
           }
 
           const data = await response.json();
-
           if (jugador.id !== tu.id) {
             nuevasManos[jugador.id] = data;
           } else {
@@ -263,9 +264,8 @@ export default function Jugando() {
             } else {
               nuevasManosOtros[d.jugador.id] = d;
             }
-          }
           setManosOtrosJugadores(nuevasManosOtros);
-          console.log("manos otros jugadores actualizadas: ", nuevasManosOtros);
+          console.log("manos otros jugadores actualizadas: ", nuevasManosOtros);}
         }
       );
 
@@ -322,19 +322,22 @@ export default function Jugando() {
 
 // Para abrir el modal de apuesta
 useEffect(() => {
+
   const timerAbrirApuestas = setTimeout(() => {
-    setApuestaModalOpen(true);
+  if(tu && tu.espectador===false){
+    setApuestaModalOpen(true);}
   }, 5000); // Cambiar a 30 (30000)
 
   return () => clearTimeout(timerAbrirApuestas);
-}, [ronda]);
+}, [ronda,tu]);
 
 // Para actualizar la visualización de la apuesta en todos los jugadores
 useEffect(() => {
   const timerCerrarApuestas = setTimeout(() => {
+    if(tu && tu.espectador!==true){
     setVisualizandoCartas(false);
-    fetchJugadores();
-  }, 16000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
+    fetchJugadores();}
+  }, 60000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
 
   return () => clearTimeout(timerCerrarApuestas);
 }, [ronda]);
@@ -583,14 +586,14 @@ useEffect(() => {
                       setModalTigresaOpen(true);
                     } else {
                       jugarTruco(carta);
-                    }
+                    }}
 
                     //truco.carta=carta;
                     //mano.cartas= mano.cartas.filter((cartaAEliminar) =>carta.id !== cartaAEliminar.id)
                     //setTruco(truco);
                     //console.log("Modificado",truco);
                     //quitarCarta(mano);
-                  }}
+                  }
                 >
                   <img
                     src={carta.imagenFrontal}

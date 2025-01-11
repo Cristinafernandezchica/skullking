@@ -372,7 +372,6 @@ export default function Jugando() {
     if (apuestaTiempoRestante === 0) {
       setApuestaModalOpen(false); // Cierra el modal cuando el contador llega a 0
       setBarraVisible(false);
-      setTurnoAct(partida.turnoActual);
     }
 
     return () => clearInterval(intervalo); // Limpia el intervalo para evitar fugas de memoria
@@ -550,8 +549,9 @@ export default function Jugando() {
   const toggleApuesta = () => {
     setApuestaModalOpen(!apuestaModalOpen);
     setTurnoAct(partida.turnoActual);
-    console.log("partida.turnoActual", partida.turnoActual);
   };
+
+  console.log("turnoAct: ", turnoAct);
 
   return (
     <>

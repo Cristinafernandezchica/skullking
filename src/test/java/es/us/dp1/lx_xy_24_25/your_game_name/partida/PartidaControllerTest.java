@@ -218,3 +218,82 @@ public class PartidaControllerTest {
 
 
 }
+/*
+ // COMENTO TEST APUESTA PORQUE SE HA MOVIDO A Partida
+    /*
+    @Test
+    void shouldApuesta_ValidInput() {
+        // Configurar mocks
+        doNothing().when(manoService).apuesta(10, 1);
+
+        // Llamar al método del controlador
+        ResponseEntity<Void> response = new ManoRestController(manoService, trucoService).apuesta(10, 1);
+
+        // Verificar
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(manoService).apuesta(10, 1);
+    }
+
+    @Test
+    void shouldApuesta_NullApuesta() {
+        // Llamar al método con apuesta nula y capturar excepción
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> new ManoRestController(manoService, trucoService).apuesta(null, 1)
+        );
+
+        // Verificar el mensaje de excepción
+        assertEquals("Apuesta no puede ser nula", exception.getMessage());
+        verify(manoService, Mockito.never()).apuesta(Mockito.anyInt(), Mockito.anyInt());
+    }
+
+    @Test
+    void shouldApuesta_NegativeApuesta() {
+        // Simular un error al llamar al servicio con una apuesta negativa
+        doThrow(new IllegalArgumentException("Apuesta debe ser un número positivo"))
+            .when(manoService).apuesta(-5, 1);
+
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> new ManoRestController(manoService, trucoService).apuesta(-5, 1)
+        );
+
+        // Verificar el mensaje de excepción
+        assertEquals("Apuesta debe ser un número positivo", exception.getMessage());
+        verify(manoService).apuesta(-5, 1);
+    }
+
+    @Test
+    void shouldApuesta_JugadorNotFound() {
+        // Simular el caso donde el jugador no existe
+        doThrow(new NoSuchElementException("Jugador no encontrado"))
+            .when(manoService).apuesta(10, 99);
+
+        NoSuchElementException exception = assertThrows(
+            NoSuchElementException.class,
+            () -> new ManoRestController(manoService, trucoService).apuesta(10, 99)
+        );
+
+        // Verificar el mensaje de excepción
+        assertEquals("Jugador no encontrado", exception.getMessage());
+        verify(manoService).apuesta(10, 99);
+    }
+
+    @Test
+    void shouldApuesta_ServiceError() {
+        // Simular un error genérico del servicio
+        doThrow(new RuntimeException("Error interno del servicio"))
+            .when(manoService).apuesta(10, 1);
+
+        RuntimeException exception = assertThrows(
+            RuntimeException.class,
+            () -> new ManoRestController(manoService, trucoService).apuesta(10, 1)
+        );
+
+        // Verificar el mensaje de excepción
+        assertEquals("Error interno del servicio", exception.getMessage());
+        verify(manoService).apuesta(10, 1);
+    }
+    
+ */

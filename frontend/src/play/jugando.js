@@ -49,6 +49,8 @@ export default function Jugando() {
 
   // Para lógica de apuesta
   const [apuestaModalOpen, setApuestaModalOpen] = useState(false);
+
+
   const toggleApuestaModal = () => setApuestaModalOpen(!apuestaModalOpen);
   const [visualizandoCartas, setVisualizandoCartas] = useState(true);
   const [apuestaTiempoRestante, setApuestaTiempoRestante] = useState(15);
@@ -146,7 +148,6 @@ export default function Jugando() {
           }
 
           const data = await response.json();
-
           if (jugador.id !== tu.id) {
             nuevasManos[jugador.id] = data;
           } else {
@@ -266,9 +267,8 @@ export default function Jugando() {
             } else {
               nuevasManosOtros[d.jugador.id] = d;
             }
-          }
           setManosOtrosJugadores(nuevasManosOtros);
-          console.log("manos otros jugadores actualizadas: ", nuevasManosOtros);
+          console.log("manos otros jugadores actualizadas: ", nuevasManosOtros);}
         }
       );
 
@@ -333,23 +333,27 @@ export default function Jugando() {
     }
   };
 
-  // Para abrir el modal de apuesta
-  useEffect(() => {
-    const timerAbrirApuestas = setTimeout(() => {
-      setApuestaModalOpen(true);
-      setApuestaTiempoRestante(15); // Reiniciar barra cuenta atrás
-      setBarraVisible(true);
-    }, 5000); // Cambiar a 30 (30000)
+// Para abrir el modal de apuesta
+useEffect(() => {
 
-    return () => clearTimeout(timerAbrirApuestas);
-  }, [ronda]);
+  const timerAbrirApuestas = setTimeout(() => {
+  if(tu && tu.espectador===false){
+    setApuestaModalOpen(true);
+    setApuestaTiempoRestante(15); // Reiniciar barra cuenta atrás
+    setBarraVisible(true);
+  }
+  }, 5000); // Cambiar a 30 (30000)
 
-  // Para actualizar la visualización de la apuesta en todos los jugadores
-  useEffect(() => {
-    const timerCerrarApuestas = setTimeout(() => {
-      setVisualizandoCartas(false);
-      fetchJugadores();
-    }, 16000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
+  return () => clearTimeout(timerAbrirApuestas);
+}, [ronda,tu]);
+
+// Para actualizar la visualización de la apuesta en todos los jugadores
+useEffect(() => {
+  const timerCerrarApuestas = setTimeout(() => {
+    if(tu && tu.espectador!==true){
+    setVisualizandoCartas(false);
+    fetchJugadores();}
+  }, 60000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
 
     return () => clearTimeout(timerCerrarApuestas);
   }, [ronda]);
@@ -401,7 +405,6 @@ export default function Jugando() {
           },
         }
       );
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Error desconocido");
@@ -615,8 +618,14 @@ export default function Jugando() {
                       setModalTigresaOpen(true);
                     } else {
                       jugarTruco(carta);
-                    }
-                  }}
+                    }}
+
+                    //truco.carta=carta;
+                    //mano.cartas= mano.cartas.filter((cartaAEliminar) =>carta.id !== cartaAEliminar.id)
+                    //setTruco(truco);
+                    //console.log("Modificado",truco);
+                    //quitarCarta(mano);
+                  }
                 >
                   <img
                     src={carta.imagenFrontal}

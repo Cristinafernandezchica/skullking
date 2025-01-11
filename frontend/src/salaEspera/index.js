@@ -100,6 +100,13 @@ export default function SalaEspera() {
     };
   }, [id]); // Solo se ejecuta cuando cambia el ID de la partida
 
+
+  useEffect(()=> {
+    if(partida && partida.estado==="JUGANDO"){
+      navigate(`/tablero/${id}`);
+    }
+  },[partida])
+
   const jugadoresList = jugadores.map((jugador) => (
     <tr key={jugador.id}>
       <td>{jugador.usuario.username}</td>

@@ -144,8 +144,10 @@ public class AmistadService {
     amistadAAceptar.setEstadoAmistad(EstadoAmistad.RECHAZADA);}
     else if(aceptar==true){
         amistadAAceptar.setEstadoAmistad(EstadoAmistad.ACEPTADA);}
-        messagingTemplate.convertAndSend("/topic/amistad/" + destinatarioId, getAllMySolicitudes(destinatarioId));
-    return amistadRepository.save(amistadAAceptar);
+
+    Amistad result= amistadRepository.save(amistadAAceptar);
+    messagingTemplate.convertAndSend("/topic/amistad/" + remitenteId, getAllMyFriends(remitenteId));
+    return result;
     }
 
 }

@@ -27,14 +27,14 @@ INSERT INTO Partida(id, nombre, inicio, fin, estado, owner_partida, turno_actual
 INSERT INTO Partida(id, nombre, inicio, fin, estado, owner_partida, turno_actual, ganadores) VALUES (4, 'Partida Random', '2024-11-07 12:00:00', '2024-11-05 14:00:00', 'TERMINADA', 5, null, null);
 
 
-INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (3,30,3,8,0);
-INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (1,15,3,5,0);
-INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (2,15,3,6,0);
-INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (4,30,4,7,0);
-INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (5,10,2,14,0);
-INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (6,20,4,5,0);
-INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (7,25,4,14,0);
-INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual) VALUES (8,5,2,7,0);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual,espectador) VALUES (3,30,3,8,0,false);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual,espectador) VALUES (1,15,3,5,0,false);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual,espectador) VALUES (2,15,3,6,0,false);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual,espectador) VALUES (4,30,4,7,0,false);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual,espectador) VALUES (5,10,2,14,0,false);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual,espectador) VALUES (6,20,4,5,0,false);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual,espectador) VALUES (7,25,4,14,0,false);
+INSERT INTO Jugador(id,puntos,partida_id,user_id,apuesta_actual,espectador) VALUES (8,5,2,7,0,false);
 
 
 -- moradas

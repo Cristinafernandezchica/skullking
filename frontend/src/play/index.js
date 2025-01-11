@@ -152,6 +152,7 @@ const unirseAPartida = async (partidaId) => {
         puntos: 0,
         partida: { id: partidaId },
         usuario: user
+        
       }),
     });
 

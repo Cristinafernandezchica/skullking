@@ -66,7 +66,7 @@ public class CartaRestController {
 	public ResponseEntity<MessageResponse> delete(@PathVariable("id") int id) {
 		RestPreconditions.checkNotNull(cartaService.findById(id), "Carta", "ID", id);
 		cartaService.deleteCarta(id);
-		return new ResponseEntity<>(new MessageResponse("Carta deleted!"), HttpStatus.OK);
+		return new ResponseEntity<>(new MessageResponse("Carta eliminada!"), HttpStatus.OK);
 	}
 
     // Para que se puedan ver las cartas

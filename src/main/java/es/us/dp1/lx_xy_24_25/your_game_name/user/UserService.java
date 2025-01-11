@@ -30,10 +30,6 @@ import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaRepository;
-import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,19 +42,16 @@ public class UserService {
 	private JugadorRepository jugadorRepository;	
 	private JugadorService jugadorService;
     private AmistadRepository amistadRepository;
-    private PartidaRepository partidaRepository;
-    private RondaRepository rondaRepository;
 
 	//private final ConcurrentHashMap<Integer, UserStats> userStatsMap = new ConcurrentHashMap<>();
 
 	@Autowired
-	public UserService(UserRepository userRepository, JugadorRepository jugadorRepository, JugadorService jugadorService,
-    AmistadRepository amistadRepository, RondaRepository rondaRepository) {
+	public UserService(UserRepository userRepository, JugadorRepository jugadorRepository, 
+    JugadorService jugadorService, AmistadRepository amistadRepository) {
 		this.userRepository = userRepository;
 		this.jugadorRepository = jugadorRepository;
         this.jugadorService = jugadorService;
         this.amistadRepository = amistadRepository;
-        this.rondaRepository = rondaRepository;
 	}
 
     @Transactional

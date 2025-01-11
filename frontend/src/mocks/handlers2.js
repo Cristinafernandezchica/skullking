@@ -163,7 +163,7 @@ export const handlers = [
         return res(
             ctx.status(200),
             ctx.json({
-                message: "Entity deleted"
+                message: "Entidad eliminada"
             }),
         )
     }),

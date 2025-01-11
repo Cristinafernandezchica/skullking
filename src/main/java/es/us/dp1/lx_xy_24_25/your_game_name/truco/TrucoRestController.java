@@ -80,7 +80,7 @@ public class TrucoRestController {
 	public ResponseEntity<MessageResponse> deleteTruco(@PathVariable("trucoId") int id) {
 		RestPreconditions.checkNotNull(trucoService.findTrucoById(id), "Truco", "ID", id);
 		trucoService.deleteTruco(id);
-		return new ResponseEntity<>(new MessageResponse("Truco deleted!"), HttpStatus.OK);
+		return new ResponseEntity<>(new MessageResponse("Truco eliminado!"), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/trucosBaza/{bazaId}")

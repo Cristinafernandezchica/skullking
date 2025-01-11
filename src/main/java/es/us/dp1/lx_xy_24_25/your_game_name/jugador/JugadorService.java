@@ -62,6 +62,10 @@ public class JugadorService {
         Partida partida = jugador.getPartida();
         List<Jugador> jugadoresPartida = findJugadoresByPartidaId(partida.getId());
 
+        if(partida.getEstado()== PartidaEstado.JUGANDO){
+            jugador.setEspectador(true);
+        }
+
         if(jugadoresPartida.size() == MAX_JUGADORES){
             throw new MaximoJugadoresPartidaException("La partida está completa.");
         } else if(jugador.getUsuario().getId() == partida.getOwnerPartida() || jugadorEnPartida(jugadoresPartida, jugador)){
@@ -120,7 +124,7 @@ public class JugadorService {
     // Get jugadores por id de partida
     @Transactional
     public List<Jugador> findJugadoresByPartidaId(Integer partidaId) {
-        return jugadorRepository.findJugadoresByPartidaId(partidaId);
+        return jugadorRepository.findJugadoresByPartidaId(partidaId).stream().filter(x->x.getEspectador()!=true).toList();
     }
 
     // Delete jugador por id

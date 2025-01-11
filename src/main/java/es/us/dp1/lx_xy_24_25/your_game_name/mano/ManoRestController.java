@@ -31,47 +31,48 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/v1/manos")
 @SecurityRequirement(name = "bearerAuth")
 public class ManoRestController {
-    
-     private final ManoService manoService;
-     private final TrucoService trucoService;
 
+    private final ManoService manoService;
+    private final TrucoService trucoService;
 
     @Autowired
     public ManoRestController(ManoService manoService, TrucoService trucoService) {
         this.manoService = manoService;
         this.trucoService = trucoService;
     }
-    //get todos los Manoes
+
+    // get todos los Manos
     @GetMapping
     public ResponseEntity<List<Mano>> findAll() {
         List<Mano> res;
         res = (List<Mano>) manoService.findAll();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
-    
-    //update Mano
+
+    // update Mano
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Mano> update(@PathVariable Integer id, @RequestBody @Valid Mano Mano) {
         RestPreconditions.checkNotNull(manoService.findManoById(id), "Mano", "ID", id);
-		return new ResponseEntity<>(this.manoService.updateMano(Mano, id), HttpStatus.OK);
+        return new ResponseEntity<>(this.manoService.updateMano(Mano, id), HttpStatus.OK);
     }
 
     // crear un nuevo Mano
     @PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Mano> create(@RequestBody @Valid Mano Mano) {
-		Mano savedMano = manoService.saveMano(Mano);
-		return new ResponseEntity<>(savedMano, HttpStatus.CREATED);
-	}
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Mano> create(@RequestBody @Valid Mano Mano) {
+        Mano savedMano = manoService.saveMano(Mano);
+        return new ResponseEntity<>(savedMano, HttpStatus.CREATED);
+    }
+
     // borrar un Mano por id
     @DeleteMapping(value = "/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<MessageResponse> delete(@PathVariable("id") int id) {
-		RestPreconditions.checkNotNull(manoService.findManoById(id), "Mano", "ID", id);
-		manoService.deleteMano(id);
-		return new ResponseEntity<>(new MessageResponse("Mano deleted!"), HttpStatus.OK);
-	}
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<MessageResponse> delete(@PathVariable("id") int id) {
+        RestPreconditions.checkNotNull(manoService.findManoById(id), "Mano", "ID", id);
+        manoService.deleteMano(id);
+        return new ResponseEntity<>(new MessageResponse("Mano deleted!"), HttpStatus.OK);
+    }
 
     @GetMapping("/{jugadorId}")
     public ResponseEntity<Mano> findLastManoByJugadorId(@PathVariable("jugadorId") Integer jugadorId) {
@@ -79,20 +80,18 @@ public class ManoRestController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-
-    // PETICIÓN PARA OBTENER LOS TRUCOS DE UNA MANO CONCRETA
     @GetMapping(value = "{manoId}/trucos")
-	public ResponseEntity<List<Truco>> findTrucosByManoId(@PathVariable("manoId") int id) {
-		return new ResponseEntity<>(trucoService.findTrucosByManoId(id), HttpStatus.OK);
-	}
+    public ResponseEntity<List<Truco>> findTrucosByManoId(@PathVariable("manoId") int id) {
+        return new ResponseEntity<>(trucoService.findTrucosByManoId(id), HttpStatus.OK);
+    }
 
     @GetMapping(value = "/{manoId}/manoDisabled")
-	public ResponseEntity<List<Carta>> cartasDisabled(@PathVariable("manoId") int id, @RequestParam TipoCarta tipoCarta) {
+    public ResponseEntity<List<Carta>> cartasDisabled(@PathVariable("manoId") int id,
+            @RequestParam TipoCarta tipoCarta) {
         List<Carta> res = manoService.cartasDisabled(id, tipoCarta);
-		return new ResponseEntity<>(res!=null? res: new ArrayList<>(), HttpStatus.OK);
-	}
+        return new ResponseEntity<>(res != null ? res : new ArrayList<>(), HttpStatus.OK);
+    }
 
-    // Pruebas para webSocket
     @GetMapping(value = "/rondas/{rondaId}")
     public ResponseEntity<List<Mano>> findManoByRondaId(@PathVariable("rondaId") Integer rondaId) {
         List<Mano> res = manoService.findAllManosByRondaId(rondaId);

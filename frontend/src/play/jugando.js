@@ -354,9 +354,8 @@ export default function Jugando() {
       if (tu && tu.espectador !== true) {
         setVisualizandoCartas(false);
         fetchJugadores();
-        setTurnoAct(partida.turnoActual);
       }
-    }, 20000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
+    }, 25000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
 
     return () => clearTimeout(timerCerrarApuestas);
   }, [ronda]);
@@ -415,7 +414,6 @@ export default function Jugando() {
 
       console.log("Apuesta realizada con éxito");
       toggleApuestaModal();
-      setTurnoAct(partida.turnoActual);
     } catch (error) {
       console.error("Error:", error);
       throw error;
@@ -502,8 +500,6 @@ export default function Jugando() {
     console.log("Carta a jugar:", cartaFinal);
     await iniciarTruco(tu.id, cartaFinal);
     console.log("Truco a jugar:", cartaFinal);
-    setTurnoAct(partida.turnoActual);
-
   };
 
   const iniciarTruco = async (jugadorId, cartaAJugar) => {
@@ -548,10 +544,8 @@ export default function Jugando() {
 
   const toggleApuesta = () => {
     setApuestaModalOpen(!apuestaModalOpen);
-    setTurnoAct(partida.turnoActual);
+    setTurnoAct(turnoAct);
   };
-
-  console.log("turnoAct: ", turnoAct);
 
   return (
     <>

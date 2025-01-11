@@ -419,7 +419,7 @@ public class PartidaService {
         jugador.setApuestaActual(ap);
         manoService.saveMano(mano);
         jugadorService.updateJugador(jugador, jugadorId);
-        messagingTemplate.convertAndSend("/topic/apuesta/partida/" + partida.getId(), jugadorService.findJugadoresByPartidaId(partida.getId()));
+        // messagingTemplate.convertAndSend("/topic/apuesta/partida/" + partida.getId(), jugadorService.findJugadoresByPartidaId(partida.getId()));
        
     }
 

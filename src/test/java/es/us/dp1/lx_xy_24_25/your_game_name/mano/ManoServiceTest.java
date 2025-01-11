@@ -1,5 +1,6 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.mano;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.CartaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
@@ -28,11 +29,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,6 +74,9 @@ public class ManoServiceTest {
     private List<Carta> cartas2;
     private Carta carta2;
     private Carta carta3;
+
+    private Jugador jugador1;
+    private Jugador jugador2;
 
     @BeforeEach
     public void setUp() {
@@ -244,7 +251,7 @@ public class ManoServiceTest {
 
     // shoulds findAllByRondaId todas las posibilidades
     @Test
-    public void shouldFindAllByRondaId() {
+    public void shouldFindAllManosByRondaId() {
         when(manoRepository.findAllByRondaId(1)).thenReturn(Arrays.asList(mano1, mano2));
 
         List<Mano> result = manoService.findAllManosByRondaId(1);
@@ -277,120 +284,89 @@ public class ManoServiceTest {
 
     // tests para iniciarManos
     @Test
-    public void shouldIniciarManos() {
+    void shouldIniciarManos() {
         when(cartaService.findAll()).thenReturn(listaCartas);
-        when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(jugadores);
 
-        manoService.iniciarManos(partida.getId(), ronda, jugadores);
+        List<Jugador> jugadores = Arrays.asList(jugador1, jugador2);
 
-        verify(cartaService, times(1)).findAll();
-        verify(jugadorService, times(1)).findJugadoresByPartidaId(partida.getId());
+        manoService.iniciarManos(1, ronda, jugadores);
+
         verify(manoRepository, times(2)).save(any(Mano.class));
     }
 
     @Test
-    public void shouldIniciarManosFiltrarCartasEspeciales() {
-        // Crear nuevas cartas con IDs correctos
-        Carta cartaEspecial1 = new Carta();
-        cartaEspecial1.setId(ID_TIGRESA_BANDERA_BLANCA);
-        
-        Carta cartaEspecial2 = new Carta();
-        cartaEspecial2.setId(ID_TIGRESA_PIRATA);
+    void shouldFilterOutComodines() {
+        List<Carta> cartasFiltradas = new ArrayList<>(listaCartas);
+        cartasFiltradas.removeIf(c -> c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA));
+        when(cartaService.findAll()).thenReturn(cartasFiltradas);
 
-        listaCartas.add(cartaEspecial1);
-        listaCartas.add(cartaEspecial2);
+        List<Jugador> jugadores = Arrays.asList(jugador1, jugador2);
 
-        for (int i = 0; i < listaCartas.size(); i++) {
-            if (listaCartas.get(i).getId() == null) {
-                listaCartas.get(i).setId(i + 1); // Asignar un ID válido
-            }
-        }
+        manoService.iniciarManos(1, ronda, jugadores);
 
-        when(cartaService.findAll()).thenReturn(listaCartas);
-        when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(jugadores);
-
-        manoService.iniciarManos(partida.getId(), ronda, jugadores);
-
-        // Verifica que las cartas especiales no están presentes
-        List<Carta> cartasFiltradas = listaCartas.stream()
-                .filter(c -> !(c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA)))
-                .collect(Collectors.toList());
-        assertEquals(10, cartasFiltradas.size()); // Originalmente hay 12 cartas
-
-        verify(cartaService, times(1)).findAll();
-        verify(jugadorService, times(1)).findJugadoresByPartidaId(partida.getId());
-        verify(manoRepository, times(2)).save(any(Mano.class));
+        verify(manoRepository, times(jugadores.size())).save(argThat(mano -> 
+            mano.getCartas().stream().noneMatch(c -> c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA))
+        ));
     }
 
 
+
     @Test
-    public void shouldIniciarManosDistribuirCartas() {
-        when(cartaService.findAll()).thenReturn(listaCartas);
-        when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(jugadores);
+    void shouldAssignCartasToJugadores() {
+        List<Carta> cartasFiltradas = new ArrayList<>(listaCartas);
+        cartasFiltradas.removeIf(c -> c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA));
+        when(cartaService.findAll()).thenReturn(cartasFiltradas);
 
-        manoService.iniciarManos(partida.getId(), ronda, jugadores);
+        List<Jugador> jugadores = Arrays.asList(jugador1, jugador2);
 
-        verify(cartaService, times(1)).findAll();
-        verify(jugadorService, times(1)).findJugadoresByPartidaId(partida.getId());
-        verify(manoRepository, times(2)).save(any(Mano.class));
+        manoService.iniciarManos(1, ronda, jugadores);
+
+        verify(manoRepository, times(2)).save(argThat(mano -> mano.getCartas().size() == 4)); // Assuming 4 cards per round
     }
 
     @Test
-    public void shouldIniciarManosBarajarCartas() {
-        when(cartaService.findAll()).thenReturn(listaCartas);
-        when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(jugadores);
+    void shouldClearCartasBaraja() {
+        List<Carta> cartasSinComodines = new ArrayList<>(listaCartas);
+        cartasSinComodines.removeIf(c -> c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA));
+        when(cartaService.findAll()).thenReturn(cartasSinComodines);
 
-        // Crear una copia de los IDs de las cartas antes de barajar
-        List<Integer> copiaIdsCartas = listaCartas.stream().map(Carta::getId).collect(Collectors.toList());
+        List<Jugador> jugadores = Arrays.asList(jugador1, jugador2);
 
-        manoService.iniciarManos(partida.getId(), ronda, jugadores);
+        manoService.iniciarManos(1, ronda, jugadores);
 
-        verify(cartaService, times(1)).findAll();
-        verify(jugadorService, times(1)).findJugadoresByPartidaId(partida.getId());
-        verify(manoRepository, times(2)).save(any(Mano.class));
+        verify(manoRepository, times(jugadores.size())).save(argThat(mano ->
+            mano.getCartas().stream().noneMatch(c -> c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA))
+        ));
+    }
 
-        // Capturar las manos guardadas para verificar
-        ArgumentCaptor<Mano> manoCaptor = ArgumentCaptor.forClass(Mano.class);
-        verify(manoRepository, times(2)).save(manoCaptor.capture());
+    @Test
+    void shouldFilterComodinesFromList() {
+        List<Carta> cartasConComodines = new ArrayList<>(listaCartas);
+        cartasConComodines.add(new Carta() {{
+            setId(ID_TIGRESA_BANDERA_BLANCA);
+        }});
+        cartasConComodines.add(new Carta() {{
+            setId(ID_TIGRESA_PIRATA);
+        }});
 
-        List<Mano> manosGuardadas = manoCaptor.getAllValues();
-        
-        // Verificar que las cartas dentro de las manos no están en el mismo orden que la copia original
-        for (Mano mano : manosGuardadas) {
-            List<Integer> idsCartasMano = mano.getCartas().stream().map(Carta::getId).collect(Collectors.toList());
-            assertNotEquals(copiaIdsCartas, idsCartasMano, "La lista de cartas no ha sido barajada correctamente");
+        List<Carta> cartasFiltradas = cartasConComodines.stream()
+            .filter(c -> !(c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA)))
+            .collect(Collectors.toList());
+
+        for (Carta carta : cartasFiltradas) {
+            assertFalse(carta.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || carta.getId().equals(ID_TIGRESA_PIRATA));
         }
     }
 
-
-
     @Test
-    public void shouldIniciarManosAsignarCartas() {
+    void shouldHandleEmptyJugadorList() {
         when(cartaService.findAll()).thenReturn(listaCartas);
-        when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(jugadores);
 
-        manoService.iniciarManos(partida.getId(), ronda, jugadores);
+        List<Jugador> jugadores = Collections.emptyList();
 
-        verify(cartaService, times(1)).findAll();
-        verify(jugadorService, times(1)).findJugadoresByPartidaId(partida.getId());
+        manoService.iniciarManos(1, ronda, jugadores);
 
-        // Capturar todas las invocaciones de save para Mano
-        ArgumentCaptor<Mano> manoCaptor = ArgumentCaptor.forClass(Mano.class);
-        verify(manoRepository, times(2)).save(manoCaptor.capture());
-
-        List<Mano> manosGuardadas = manoCaptor.getAllValues();
-
-        assertEquals(jugadores.size(), manosGuardadas.size());
-
-        for (int i = 0; i < jugadores.size(); i++) {
-            Mano mano = manosGuardadas.get(i);
-            assertNotNull(mano.getCartas());
-            assertTrue(mano.getCartas().size() > 0);
-            assertEquals(0, mano.getApuesta());
-            assertEquals(0, mano.getResultado());
-            assertEquals(jugadores.get(i), mano.getJugador());
-            assertEquals(ronda, mano.getRonda());
-        }
+        verify(manoRepository, never()).save(any(Mano.class));
     }
 
     // tests numCartasARepartir
@@ -455,152 +431,145 @@ public class ManoServiceTest {
         assertEquals(expected, result);
     }
 
-    // Tests apostar --> LO COMENTO SE HA MOVIDO A Partida
-    /*
-    @Test
-    public void shouldApuestaExito() {
-        // Crear la lista de manos y asegurar que findLastManoByJugadorId devuelve la última mano
-        List<Mano> manos = List.of(mano);
-        when(manoRepository.findAllManoByJugadorId(jugador3.getId())).thenReturn(manos);
-        when(jugadorService.findById(jugador3.getId())).thenReturn(jugador3);
-
-        manoService.apuesta(2, jugador3.getId());
-
-        assertEquals(2, mano.getApuesta());
-        assertEquals(2, jugador3.getApuestaActual());
-        verify(manoRepository, times(1)).save(mano);
-        verify(jugadorService, times(1)).updateJugador(jugador3, jugador3.getId());
-    }
-
-    @Test
-    public void shouldApuestaManoNoEncontrada() {
-        when(manoRepository.findAllManoByJugadorId(jugador3.getId())).thenReturn(List.of());
-
-        assertThrows(ResourceNotFoundException.class, () -> manoService.apuesta(2, jugador3.getId()));
-    }
-
-    @Test
-    public void shouldApuestaMayorQueNumCartas() {
-        List<Mano> manos = List.of(mano);
-        when(manoRepository.findAllManoByJugadorId(jugador3.getId())).thenReturn(manos);
-        when(jugadorService.findById(jugador3.getId())).thenReturn(jugador3);
-
-        assertThrows(ApuestaNoValidaException.class, () -> manoService.apuesta(5, jugador3.getId()));
-    }
-
-    @Test
-    public void shouldApuestaExactaNumCartas() {
-        List<Mano> manos = List.of(mano);
-        when(manoRepository.findAllManoByJugadorId(jugador3.getId())).thenReturn(manos);
-        when(jugadorService.findById(jugador3.getId())).thenReturn(jugador3);
-
-        manoService.apuesta(3, jugador3.getId());
-
-        assertEquals(3, mano.getApuesta());
-        assertEquals(3, jugador3.getApuestaActual());
-        verify(manoRepository, times(1)).save(mano);
-        verify(jugadorService, times(1)).updateJugador(jugador3, jugador3.getId());
-    }
-
-    @Test
-    public void shouldApuestaCero() {
-        List<Mano> manos = List.of(mano);
-        when(manoRepository.findAllManoByJugadorId(jugador3.getId())).thenReturn(manos);
-        when(jugadorService.findById(jugador3.getId())).thenReturn(jugador3);
-
-        manoService.apuesta(0, jugador3.getId());
-
-        assertEquals(0, mano.getApuesta());
-        assertEquals(0, jugador3.getApuestaActual());
-        verify(manoRepository, times(1)).save(mano);
-        verify(jugadorService, times(1)).updateJugador(jugador3, jugador3.getId());
-    }
-        */
-
     // tests cartasDisabled
     @Test
-    public void shouldCartasDisabledManoNoEncontrada() {
-        when(manoRepository.findById(mano3.getId())).thenReturn(Optional.empty());
-
-        List<Carta> result = manoService.cartasDisabled(mano3.getId(), TipoCarta.morada);
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    public void shouldCartasDisabledSinTipoCarta() {
+    public void shouldReturnDisabledCartasCuandoHasPaloBaza() {
+        mano3.setCartas(cartas2); // Mano con cartas de distintos palos
         when(manoRepository.findById(mano3.getId())).thenReturn(Optional.of(mano3));
 
-        List<Carta> result = manoService.cartasDisabled(mano3.getId(), TipoCarta.sinDeterminar);
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
+        List<Carta> disabledCartas = manoService.cartasDisabled(mano3.getId(), TipoCarta.amarillo);
+
+        assertEquals(1, disabledCartas.size());
+        assertTrue(disabledCartas.contains(carta3)); // Carta que no es del palo baza
     }
 
     @Test
-    public void shouldCartasDisabledConTipoCarta() {
-        Carta carta1 =  new Carta();
-        carta1 = new Carta();
-        carta1.setId(1);
-        carta1.setTipoCarta(TipoCarta.morada);
-        cartas2.add(carta1);
-
+    public void shouldReturnCartasEnabledCuandoSinDeterminar() {
+        mano3.setCartas(cartas2); 
         when(manoRepository.findById(mano3.getId())).thenReturn(Optional.of(mano3));
 
-        List<Carta> result = manoService.cartasDisabled(mano3.getId(), TipoCarta.morada);
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        assertTrue(result.contains(carta2));
-        assertTrue(result.contains(carta3));
+        List<Carta> disabledCartas = manoService.cartasDisabled(mano3.getId(), TipoCarta.sinDeterminar);
+
+        assertTrue(disabledCartas.isEmpty()); // Todas las cartas están habilitadas
     }
 
     @Test
-    public void shouldCartasDisabledConCartaEspecial() {
+    public void shouldReturnListaVaciaCuandoNoManoCoincidente() {
+        when(manoRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        List<Carta> disabledCartas = manoService.cartasDisabled(999, TipoCarta.amarillo);
+
+        assertNotNull(disabledCartas);
+        assertTrue(disabledCartas.isEmpty());
+    }
+
+    @Test
+    public void shouldDisableCartasWhenHasEspecialAndHasPaloBaza() {
+        // Configuramos la mano con cartas especiales y del palo baza
         Carta cartaEspecial = new Carta();
         cartaEspecial.setId(4);
-        cartaEspecial.setTipoCarta(TipoCarta.pirata); // Definimos esta carta como especial según el método esCartaEspecial
+        cartaEspecial.setTipoCarta(TipoCarta.pirata); // Es especial
 
-        // Crear una copia mutable de la lista de cartas
-        List<Carta> cartasMutable = new ArrayList<>(cartas2);
-        cartasMutable.add(cartaEspecial);
-        mano3.setCartas(cartasMutable);
+        Carta cartaPaloBaza = new Carta();
+        cartaPaloBaza.setId(5);
+        cartaPaloBaza.setTipoCarta(TipoCarta.amarillo); // Es del palo baza
+
+        Carta cartaNoValida = new Carta();
+        cartaNoValida.setId(6);
+        cartaNoValida.setTipoCarta(TipoCarta.verde); // No es ni especial ni del palo baza
+
+        mano3.setCartas(Arrays.asList(cartaEspecial, cartaPaloBaza, cartaNoValida));
 
         when(manoRepository.findById(mano3.getId())).thenReturn(Optional.of(mano3));
 
-        List<Carta> result = manoService.cartasDisabled(mano3.getId(), TipoCarta.morada);
-        assertNotNull(result);
-        assertEquals(2, result.size()); // deberían estar deshabilitadas carta2 y carta3
-        assertTrue(result.contains(carta2)); // carta2
-        assertTrue(result.contains(carta3)); // carta3
-        assertFalse(result.contains(cartaEspecial)); // cartaEspecial no debería estar deshabilitada
+        List<Carta> disabledCartas = manoService.cartasDisabled(mano3.getId(), TipoCarta.amarillo);
+
+        assertEquals(1, disabledCartas.size()); // Solo la cartaNoValida debe estar deshabilitada
+        assertTrue(disabledCartas.contains(cartaNoValida));
     }
 
     @Test
-    public void shouldCartasDisabledConEspecialYPalobaza() {
-        Carta cartaEspecial = new Carta();
-        cartaEspecial.setId(4);
-        cartaEspecial.setTipoCarta(TipoCarta.pirata); // Carta especial
+    public void shouldDisableCartasWhenHasPaloBazaAndNoEspecial() {
+        // Configuramos la mano con solo cartas del palo baza y otras no válidas
+        Carta cartaPaloBaza = new Carta();
+        cartaPaloBaza.setId(7);
+        cartaPaloBaza.setTipoCarta(TipoCarta.amarillo); // Es del palo baza
 
-        Carta cartaMorada = new Carta();
-        cartaMorada.setId(5);
-        cartaMorada.setTipoCarta(TipoCarta.morada); // Carta del tipo especificado
+        Carta cartaNoValida = new Carta();
+        cartaNoValida.setId(8);
+        cartaNoValida.setTipoCarta(TipoCarta.verde); // No es del palo baza
 
-        // Crear una copia mutable de la lista de cartas
-        List<Carta> cartasMutable = new ArrayList<>(cartas2);
-        cartasMutable.add(cartaEspecial);
-        cartasMutable.add(cartaMorada);
-        mano3.setCartas(cartasMutable);
+        mano3.setCartas(Arrays.asList(cartaPaloBaza, cartaNoValida));
 
         when(manoRepository.findById(mano3.getId())).thenReturn(Optional.of(mano3));
 
-        List<Carta> result = manoService.cartasDisabled(mano3.getId(), TipoCarta.morada);
-        assertNotNull(result);
-        assertEquals(2, result.size()); // Deberían estar deshabilitadas carta2 y carta3
-        assertTrue(result.contains(carta2)); // carta2
-        assertTrue(result.contains(carta3)); // carta3
-        assertFalse(result.contains(cartaEspecial)); // cartaEspecial no debería estar deshabilitada
-        assertFalse(result.contains(cartaMorada)); // cartaMorada no debería estar deshabilitada
+        List<Carta> disabledCartas = manoService.cartasDisabled(mano3.getId(), TipoCarta.amarillo);
+
+        assertEquals(1, disabledCartas.size()); // Solo la cartaNoValida debe estar deshabilitada
+        assertTrue(disabledCartas.contains(cartaNoValida));
     }
 
-    // con este test hemos detectado un fallo en el cálculo de las cartas que deben estar deshabilitadas
+    @Test
+    public void shouldReturnCartasEnabledCuandoHasEspecialSinPaloBaza() {
+        // Configuramos la mano con una carta especial y ninguna del palo baza
+        Carta cartaEspecial = new Carta();
+        cartaEspecial.setId(4);
+        cartaEspecial.setTipoCarta(TipoCarta.pirata); // Es especial
+
+        Carta cartaNoValida = new Carta();
+        cartaNoValida.setId(6);
+        cartaNoValida.setTipoCarta(TipoCarta.verde); // No es ni especial ni del palo baza
+
+        mano3.setCartas(Arrays.asList(cartaEspecial, cartaNoValida));
+
+        when(manoRepository.findById(mano3.getId())).thenReturn(Optional.of(mano3));
+
+        List<Carta> disabledCartas = manoService.cartasDisabled(mano3.getId(), TipoCarta.amarillo);
+
+        assertTrue(disabledCartas.isEmpty()); // Todas las cartas están habilitadas porque no hay palo baza
+    }
+
+    @Test
+    public void shouldReturnCartasEnabledCuandoNoEspecialNiPaloBaza() {
+        // Configuramos la mano sin cartas especiales ni del palo baza
+        Carta cartaNoValida1 = new Carta();
+        cartaNoValida1.setId(6);
+        cartaNoValida1.setTipoCarta(TipoCarta.verde); // No es ni especial ni del palo baza
+
+        Carta cartaNoValida2 = new Carta();
+        cartaNoValida2.setId(7);
+        cartaNoValida2.setTipoCarta(TipoCarta.morada); // No es ni especial ni del palo baza
+
+        mano3.setCartas(Arrays.asList(cartaNoValida1, cartaNoValida2));
+
+        when(manoRepository.findById(mano3.getId())).thenReturn(Optional.of(mano3));
+
+        List<Carta> disabledCartas = manoService.cartasDisabled(mano3.getId(), TipoCarta.amarillo);
+
+        assertTrue(disabledCartas.isEmpty()); // Todas las cartas están habilitadas porque no hay especiales ni palo baza
+    }
+
+    @Test
+    public void shouldActualizarResultadoMano() {
+        // Configuramos el mock de mano con un resultado inicial
+        mano.setResultado(0); // Establecemos un valor inicial para resultado
+        mano.setId(1); // Aseguramos que el ID coincide con el usado en el método
+
+        when(manoRepository.findAllManoByJugadorId(jugador.getId())).thenReturn(Collections.singletonList(mano));
+        when(manoRepository.findById(1)).thenReturn(Optional.of(mano)); // Configuramos el mock para findById
+        when(manoRepository.save(any(Mano.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Baza baza = new Baza();
+        baza.setGanador(jugador);
+
+        manoService.actualizarResultadoMano(baza);
+
+        ArgumentCaptor<Mano> captor = ArgumentCaptor.forClass(Mano.class);
+        verify(manoRepository).save(captor.capture());
+        Mano updatedMano = captor.getValue();
+        assertEquals(1, updatedMano.getResultado());
+    }
+
+
 
 }

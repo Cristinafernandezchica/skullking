@@ -1,94 +1,121 @@
-import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
+import { server } from '../../mocks/server';
+import UserStatisticsDashboard from './UserDashboard';
 import { rest } from 'msw';
-import { setupServer } from 'msw/node';
-import UserStatisticsDashboard from './UserDashboard'; // Asegúrate de importar el componente correcto
 
-// Mock para los endpoints de la API
-const server = setupServer(
-  rest.get('/api/v1/users/sorted-by-points', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json([
-        { id: 1, username: 'user1', numPuntosGanados: 100, numPartidasJugadas: 10, numPartidasGanadas: 5 },
-        { id: 2, username: 'user2', numPuntosGanados: 80, numPartidasJugadas: 20, numPartidasGanadas: 10 },
-      ])
-    );
-  }),
-  rest.get('/api/v1/users/sorted-by-win-percentage', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json([
-        { id: 2, username: 'user2', numPuntosGanados: 80, numPartidasJugadas: 20, numPartidasGanadas: 10, winPercentage: 50 },
-        { id: 1, username: 'user1', numPuntosGanados: 100, numPartidasJugadas: 10, numPartidasGanadas: 5, winPercentage: 50 },
-      ])
-    );
-  })
-);
-
-// Configuración del servidor de pruebas
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-describe('UserStatisticsDashboard Component Tests', () => {
-  test('renders correctly and displays top user by points (positive test)', async () => {
-    render(<UserStatisticsDashboard />);
+describe('UserStatisticsDashboard Component', () => {
+    test('Muestra una lista con todos los usuarios', async () => {
+        render(<UserStatisticsDashboard />);
 
-    // Verificar que se está mostrando la vista por puntos (por defecto)
-    const topUserHeading = await waitFor(() =>
-      screen.findByText(/usuario con más puntos/i)
-    );
-    expect(topUserHeading).toBeInTheDocument();
+        // Esperar a que el primer usuario se renderice
+        await waitFor(() => {
+            expect(screen.getByText('user1')).toBeInTheDocument();
+        });
 
-    const topUserValue = await waitFor(() =>
-      screen.findByText(/user1 - 100 puntos ganados/i)
-    );
-    expect(topUserValue).toBeInTheDocument();
+        // Esperar a que el segundo usuario se renderice
+        await waitFor(() => {
+            expect(screen.getByText('user2')).toBeInTheDocument();
+        });
+    });
 
-    // Verificar que la tabla contiene los datos correctos
-    const rows = await screen.findAllByRole('row');
-    expect(rows).toHaveLength(3); // 1 header + 2 users
-  });
+    test('Ordena los usuarios por puntos correctamente', async () => {
+        render(<UserStatisticsDashboard />);
+    
+        // Simular clic en el botón para ordenar por puntos
+        const sortByPointsButton = screen.getByRole('button', { name: /ordenar por puntos/i });
+        sortByPointsButton.click();
+    
+        // Esperar a que los usuarios estén ordenados correctamente en la tabla
+        await waitFor(() => {
+            const rows = screen.getAllByRole('row').slice(1); // Excluir la fila del encabezado
+            const actualData = rows.map(row => {
+                const cells = within(row).getAllByRole('cell');
+                return {
+                    username: cells[0].textContent,
+                    points: parseInt(cells[1].textContent, 10),
+                };
+            });
+    
+            // Validar que los usuarios están ordenados de mayor a menor por puntos
+            expect(actualData).toEqual([
+                { username: 'user2', points: 120 },
+                { username: 'user1', points: 100 },
+            ]);
+        });
+    });
 
-  test('handles API failure gracefully (negative test)', async () => {
-    // Simular un error en el endpoint de la API
-    server.use(
-      rest.get('/api/v1/users/sorted-by-points', (req, res, ctx) => {
-        return res(ctx.status(500)); // Error interno del servidor
-      })
-    );
+    test('Ordena los usuarios por porcentaje de victorias correctamente', async () => {
+        render(<UserStatisticsDashboard />);
+    
+        // Simular clic en el botón para ordenar por porcentaje de victorias
+        const sortByWinPercentageButton = screen.getByRole('button', { name: /ordenar por porcentaje de victorias/i });
+        sortByWinPercentageButton.click();
+    
+        // Esperar a que los usuarios estén ordenados correctamente en la tabla
+        await waitFor(() => {
+            const rows = screen.getAllByRole('row').slice(1); // Excluir la fila del encabezado
+            const actualData = rows.map(row => {
+                const cells = within(row).getAllByRole('cell');
+                return {
+                    username: cells[0].textContent.trim(),
+                    winPercentage: parseFloat(parseFloat(cells[1].textContent.trim()).toFixed(2)), // Asegurar 2 decimales
+                };
+            });
+    
+            // Validar que los usuarios están ordenados de mayor a menor por porcentaje de victorias
+            expect(actualData).toEqual([
+                { username: 'user2', winPercentage: 75.00 },
+                { username: 'user1', winPercentage: 50.00 },
+            ]);
+        });
+    });    
+    
+    test('El usuario con más puntos se muestra en la parte superior', async () => {
+        render(<UserStatisticsDashboard />);
 
-    render(<UserStatisticsDashboard />);
+        const sortByPointsButton = screen.getByRole('button', { name: /ordenar por puntos/i });
+        sortByPointsButton.click();
 
-    // Verificar que se muestra un mensaje de error
-    const errorMessage = await waitFor(() =>
-      screen.findByText(/network response was not ok/i)
-    );
-    expect(errorMessage).toBeInTheDocument();
+        // Verificar que se está mostrando la vista por puntos (por defecto)
+        const topUserHeading = await waitFor(() =>
+            screen.findByText(/usuario con más puntos/i)
+        );
+        expect(topUserHeading).toBeInTheDocument();
 
-    // Verificar que la tabla no se renderizó correctamente
-    const rows = screen.queryAllByRole('row');
-    expect(rows).toHaveLength(0); // No se deben renderizar filas
-  });
+        const topUserValue = await waitFor(() =>
+            screen.findByText(/user2 - 120 puntos ganados/i)
+        );
+        expect(topUserValue).toBeInTheDocument();
 
-  test('displays sorted users by win percentage when button is clicked', async () => {
-    render(<UserStatisticsDashboard />);
+        // Verificar que la tabla contiene los datos correctos
+        const rows = await screen.findAllByRole('row');
+        expect(rows).toHaveLength(3); // 1 header + 2 users
+    });
 
-    // Esperar que la vista inicial por puntos esté visible
-    await waitFor(() => screen.findByText(/usuario con más puntos/i));
+    test('El usuario con mayor porcentaje de victorias se muestra en la parte superior', async () => {
+        render(<UserStatisticsDashboard />);
 
-    // Simular el cambio de orden por porcentaje de victorias
-    const sortButton = screen.getByText(/ordenar por porcentaje de victorias/i);
-    sortButton.click();
+        const sortByWinPercentageButton = screen.getByRole('button', { name: /ordenar por porcentaje de victorias/i });
+        sortByWinPercentageButton.click();
+        
+        // Verificar que se está mostrando la vista por puntos (por defecto)
+        const topUserHeading = await waitFor(() =>
+            screen.findByText(/usuario con mayor porcentaje de victorias/i)
+        );
+        expect(topUserHeading).toBeInTheDocument();
 
-    // Esperar que los usuarios se muestren por porcentaje de victorias
-    const topUserValue = await waitFor(() =>
-      screen.findByText(/user2 - 50% de victorias/i)
-    );
-    expect(topUserValue).toBeInTheDocument();
+        const topUserValue = await waitFor(() =>
+            screen.findByText(/user2 - 75.00 porcentaje de victorias/i)
+        );
+        expect(topUserValue).toBeInTheDocument();
 
-    const rows = await screen.findAllByRole('row');
-    expect(rows).toHaveLength(3); // 1 header + 2 users
-  });
+        // Verificar que la tabla contiene los datos correctos
+        const rows = await screen.findAllByRole('row');
+        expect(rows).toHaveLength(3); // 1 header + 2 users
+    });
+
 });

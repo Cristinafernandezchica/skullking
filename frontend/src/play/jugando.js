@@ -12,6 +12,7 @@ import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
 import ChatModal from '../components/modals/ChatModal';
 import { useNavigate } from "react-router-dom";
+import '../components/formGenerator/css/Temporizador.css';
 
 const jwt = tokenService.getLocalAccessToken();
 const user = tokenService.getUser();
@@ -35,7 +36,6 @@ export default function Jugando() {
   const [eleccion, setEleccion] = useState('');
   const [nuevaTigresa, setNuevaTigresa] = useState();
 
-
   // Datos de partida
   const [tu, setTu] = useFetchState(null, `/api/v1/jugadores/${user.id}/usuario`, jwt, setMessage, setVisible);
   const [mano, setMano] = useState(null);
@@ -53,6 +53,8 @@ export default function Jugando() {
 
   const toggleApuestaModal = () => setApuestaModalOpen(!apuestaModalOpen);
   const [visualizandoCartas, setVisualizandoCartas] = useState(true);
+  const [apuestaTiempoRestante, setApuestaTiempoRestante] = useState(15);
+  const [barraVisible, setBarraVisible] = useState(false);
 
   // Para turno
   const [turnoAct, setTurnoAct] = useState(null);
@@ -75,6 +77,9 @@ export default function Jugando() {
   // Mostrar alerta nueva Ronda/Baza
   const [alertaRondaBaza, setAlertaRondaBaza] = useState('');
   const [alertVisible, setAlertVisible] = useState(false);
+
+  // Para resultados Mano jugadores
+  const [resultadosMano, setResultadosMano] = useState({});
 
   const fetchPartida = async (idPartida) => {
     try {
@@ -163,8 +168,6 @@ export default function Jugando() {
       setVisible(true);
     }
   };
-
-
 
   // Carga inicial manos
   useEffect(() => {
@@ -264,8 +267,9 @@ export default function Jugando() {
             } else {
               nuevasManosOtros[d.jugador.id] = d;
             }
-          setManosOtrosJugadores(nuevasManosOtros);
-          console.log("manos otros jugadores actualizadas: ", nuevasManosOtros);}
+            setManosOtrosJugadores(nuevasManosOtros);
+            console.log("manos otros jugadores actualizadas: ", nuevasManosOtros);
+          }
         }
       );
 
@@ -275,11 +279,7 @@ export default function Jugando() {
 
         if (data.status === "FINALIZADA") {
           setGanadorPartida(data.ganadores)
-            setGanadorPartidaModal(true);
-            /*
-            console.log("La partida ha finalizado, redirigiendo...");
-            navigate('/play');
-            */
+          setGanadorPartidaModal(true);
         }
       });
 
@@ -288,6 +288,20 @@ export default function Jugando() {
 
         setCartasDisabled(data);
         console.log("Cartas Disabled: ", data);
+      });
+
+      stompClient.subscribe(`/topic/resultadosMano/partida/${idPartida}`, (messageOutput) => {
+        const data = JSON.parse(messageOutput.body);
+
+        setResultadosMano(data);
+        console.log("Resultados Mano: ", data);
+      });
+
+      stompClient.subscribe(`/topic/apuesta/partida/${idPartida}`, (messageOutput) => {
+        const data = JSON.parse(messageOutput.body);
+
+        setJugadores(data);
+        console.log("Jugadores apuestas: ", data);
       });
 
     });
@@ -299,7 +313,7 @@ export default function Jugando() {
       });
     };
   }, [tu]); // Solo se ejecuta una vez
-  
+
   const fetchJugadores = async () => {
     try {
       const response = await fetch(`/api/v1/jugadores/${idPartida}`, {
@@ -320,28 +334,49 @@ export default function Jugando() {
     }
   };
 
-// Para abrir el modal de apuesta
-useEffect(() => {
+  // Para abrir el modal de apuesta
+  useEffect(() => {
 
-  const timerAbrirApuestas = setTimeout(() => {
-  if(tu && tu.espectador===false){
-    setApuestaModalOpen(true);}
-  }, 5000); // Cambiar a 30 (30000)
+    const timerAbrirApuestas = setTimeout(() => {
+      if (tu && tu.espectador === false) {
+        setApuestaModalOpen(true);
+        setApuestaTiempoRestante(15); // Reiniciar barra cuenta atrás
+        setBarraVisible(true);
+      }
+    }, 5000); // Cambiar a 30 (30000)
 
-  return () => clearTimeout(timerAbrirApuestas);
-}, [ronda,tu]);
+    return () => clearTimeout(timerAbrirApuestas);
+  }, [ronda, tu]);
 
-// Para actualizar la visualización de la apuesta en todos los jugadores
-useEffect(() => {
-  const timerCerrarApuestas = setTimeout(() => {
-    if(tu && tu.espectador!==true){
-    setVisualizandoCartas(false);
-    fetchJugadores();}
-  }, 60000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
+  // Para actualizar la visualización de la apuesta en todos los jugadores
+  useEffect(() => {
+    const timerCerrarApuestas = setTimeout(() => {
+      if (tu && tu.espectador !== true) {
+        setVisualizandoCartas(false);
+        fetchJugadores();
+        setTurnoAct(partida.turnoActual);
+      }
+    }, 20000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
 
-  return () => clearTimeout(timerCerrarApuestas);
-}, [ronda]);
+    return () => clearTimeout(timerCerrarApuestas);
+  }, [ronda]);
 
+  useEffect(() => {
+    let intervalo;
+    if ((apuestaModalOpen && apuestaTiempoRestante > 0) || (barraVisible && apuestaTiempoRestante > 0)) {
+      intervalo = setInterval(() => {
+        setApuestaTiempoRestante((prev) => prev - 1);
+      }, 1000);
+    }
+
+    if (apuestaTiempoRestante === 0) {
+      setApuestaModalOpen(false); // Cierra el modal cuando el contador llega a 0
+      setBarraVisible(false);
+      setTurnoAct(partida.turnoActual);
+    }
+
+    return () => clearInterval(intervalo); // Limpia el intervalo para evitar fugas de memoria
+  }, [apuestaModalOpen, apuestaTiempoRestante]);
 
   useEffect(() => {
     if (ronda && BazaActual) {
@@ -379,7 +414,7 @@ useEffect(() => {
         throw new Error(errorData.message || "Error desconocido");
       }
 
-      //  console.log("Apuesta realizada con éxito");
+      console.log("Apuesta realizada con éxito");
       toggleApuestaModal();
       setTurnoAct(partida.turnoActual);
     } catch (error) {
@@ -413,7 +448,6 @@ useEffect(() => {
   // Carga inicial baza
   useEffect(() => {
     if (ronda !== null) {
-      console.log("bazaActual por listaTrucos");
       fetchBazaActual();
     }
   }, [tu]);
@@ -469,6 +503,7 @@ useEffect(() => {
     console.log("Carta a jugar:", cartaFinal);
     await iniciarTruco(tu.id, cartaFinal);
     console.log("Truco a jugar:", cartaFinal);
+    setTurnoAct(partida.turnoActual);
 
   };
 
@@ -512,6 +547,12 @@ useEffect(() => {
     console.log("pase", nuevaTigresa);
   };
 
+  const toggleApuesta = () => {
+    setApuestaModalOpen(!apuestaModalOpen);
+    setTurnoAct(partida.turnoActual);
+    console.log("partida.turnoActual", partida.turnoActual);
+  };
+
   return (
     <>
       <div className="validation-errors">
@@ -530,10 +571,7 @@ useEffect(() => {
                 </div>
                 <p>Apuesta: {jugador.apuestaActual !== -1 && jugador.apuestaActual}</p>
                 <p>Puntos: {jugador.puntos}</p>
-                {/*mano !== null && <p>Bazas ganadas: {mano.resultado}</p>
-                Para poder ver la cantidad de bazas que ha ganado cada jugador
-                habría que añadir una propiedad a jugador para que sea más sencillo
-                como hicimos con la apuesta, si no no sé exactamente cómo hacerlo*/}
+                {jugador !== null && <p>Bazas ganadas: {resultadosMano[jugador.id]}</p>}
               </div>
             ))}
         </div>
@@ -577,7 +615,7 @@ useEffect(() => {
                   className="boton-agrandable"
                   disabled={
                     visualizandoCartas ||
-                    turnoAct !== tu.id  ||
+                    turnoAct !== tu.id ||
                     (cartasDisabled[mano.id]?.some((disabledCarta) => disabledCarta.id === carta.id) ?? false)
                   }
                   onClick={() => {
@@ -585,7 +623,8 @@ useEffect(() => {
                       setModalTigresaOpen(true);
                     } else {
                       jugarTruco(carta);
-                    }}
+                    }
+                  }
 
                     //truco.carta=carta;
                     //mano.cartas= mano.cartas.filter((cartaAEliminar) =>carta.id !== cartaAEliminar.id)
@@ -604,6 +643,15 @@ useEffect(() => {
             ))}
         </div>
 
+        {barraVisible && (
+          <div className="barra-cuenta-regresiva-fija">
+            <div
+              className="barra-progreso"
+              style={{ width: `${(apuestaTiempoRestante / 15) * 100}%` }} // Asumiendo 15 segundos como total
+            ></div>
+          </div>
+        )}
+
         <button
           className="boton-flotante-chat"
           onClick={() => setChatModalVisible(true)}
@@ -613,8 +661,9 @@ useEffect(() => {
 
         <ApuestaModal
           isVisible={apuestaModalOpen}
-          onCancel={toggleApuestaModal}
+          onCancel={toggleApuesta}
           onConfirm={apostar}
+          tiempoRestante={apuestaTiempoRestante}
         />
 
         <ElegirTigresaModal
@@ -623,17 +672,17 @@ useEffect(() => {
           onConfirm={handleEleccion}
         />
 
-      <GanadorBazaModal
-        isVisible={ganadorBazaModal}
-        ganador={ganadorBaza}
-        onClose={() => setGanadorBazaModal(false)}
-      />
+        <GanadorBazaModal
+          isVisible={ganadorBazaModal}
+          ganador={ganadorBaza}
+          onClose={() => setGanadorBazaModal(false)}
+        />
 
-      <GanadorPartidaModal
-        isVisible={ganadorPartidaModal}
-        ganador={ganadorPartida}
-        onClose={() => {setGanadorPartidaModal(false); navigate('/play')}}
-      />
+        <GanadorPartidaModal
+          isVisible={ganadorPartidaModal}
+          ganador={ganadorPartida}
+          onClose={() => { setGanadorPartidaModal(false); navigate('/play') }}
+        />
 
         <ChatModal
           isVisible={chatModalVisible}

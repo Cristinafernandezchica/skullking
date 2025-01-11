@@ -89,6 +89,12 @@ public class BazaService {
         return bazaRepository.findByIdRondaAndIdJugador(rondaId, jugadorId);
     }
 
+    @Transactional(readOnly = true)
+    public Baza findBazaAnterior(Integer bazaId, Integer rondaId){
+        return bazaRepository.findBazaAnterior(bazaId, rondaId).get();
+    }
+    
+
     // Iniciar la primera baza de cada ronda
     @Transactional
     public Baza iniciarBaza(Ronda ronda, List<Jugador> jugadores) {

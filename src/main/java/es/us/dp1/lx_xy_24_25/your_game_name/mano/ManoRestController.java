@@ -71,7 +71,7 @@ public class ManoRestController {
     public ResponseEntity<MessageResponse> delete(@PathVariable("id") int id) {
         RestPreconditions.checkNotNull(manoService.findManoById(id), "Mano", "ID", id);
         manoService.deleteMano(id);
-        return new ResponseEntity<>(new MessageResponse("Mano deleted!"), HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponse("Mano eliminada!"), HttpStatus.OK);
     }
 
     @GetMapping("/{jugadorId}")

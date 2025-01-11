@@ -116,7 +116,6 @@ public class ManoServiceTest {
         mano2.setId(2);
         mano2.setApuesta(5);
 
-
         listaCartas = new ArrayList<>();
         for (int i = 1; i <= 10; i++) {
             Carta carta = new Carta();
@@ -143,13 +142,13 @@ public class ManoServiceTest {
 
         jugadores = Arrays.asList(jugador1, jugador2);
 
-        jugador3 = new Jugador(); 
+        jugador3 = new Jugador();
         jugador3.setId(1);
 
         mano = new Mano();
         mano.setId(1);
         mano.setJugador(jugador);
-        mano.setCartas(List.of(new Carta(), new Carta(), new Carta())); // Mano con 3 cartas
+        mano.setCartas(List.of(new Carta(), new Carta(), new Carta()));
 
         mano3 = new Mano();
         mano3.setId(1);
@@ -276,7 +275,8 @@ public class ManoServiceTest {
 
     @Test
     public void shouldFindAllByRondaIdThrowsDataAccessException() {
-        when(manoRepository.findAllByRondaId(1)).thenThrow(new DataAccessException("..."){});
+        when(manoRepository.findAllByRondaId(1)).thenThrow(new DataAccessException("...") {
+        });
 
         assertThrows(DataAccessException.class, () -> manoService.findAllManosByRondaId(1));
         verify(manoRepository, times(1)).findAllByRondaId(1);
@@ -297,61 +297,65 @@ public class ManoServiceTest {
     @Test
     void shouldFilterOutComodines() {
         List<Carta> cartasFiltradas = new ArrayList<>(listaCartas);
-        cartasFiltradas.removeIf(c -> c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA));
+        cartasFiltradas
+                .removeIf(c -> c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA));
         when(cartaService.findAll()).thenReturn(cartasFiltradas);
 
         List<Jugador> jugadores = Arrays.asList(jugador1, jugador2);
 
         manoService.iniciarManos(1, ronda, jugadores);
 
-        verify(manoRepository, times(jugadores.size())).save(argThat(mano -> 
-            mano.getCartas().stream().noneMatch(c -> c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA))
-        ));
+        verify(manoRepository, times(jugadores.size())).save(argThat(mano -> mano.getCartas().stream()
+                .noneMatch(c -> c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA))));
     }
-
-
 
     @Test
     void shouldAssignCartasToJugadores() {
         List<Carta> cartasFiltradas = new ArrayList<>(listaCartas);
-        cartasFiltradas.removeIf(c -> c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA));
+        cartasFiltradas
+                .removeIf(c -> c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA));
         when(cartaService.findAll()).thenReturn(cartasFiltradas);
 
         List<Jugador> jugadores = Arrays.asList(jugador1, jugador2);
 
         manoService.iniciarManos(1, ronda, jugadores);
 
-        verify(manoRepository, times(2)).save(argThat(mano -> mano.getCartas().size() == 4)); // Assuming 4 cards per round
+        verify(manoRepository, times(2)).save(argThat(mano -> mano.getCartas().size() == 4)); // Assuming 4 cards per
+                                                                                              // round
     }
 
     @Test
     void shouldClearCartasBaraja() {
         List<Carta> cartasSinComodines = new ArrayList<>(listaCartas);
-        cartasSinComodines.removeIf(c -> c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA));
+        cartasSinComodines
+                .removeIf(c -> c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA));
         when(cartaService.findAll()).thenReturn(cartasSinComodines);
 
         List<Jugador> jugadores = Arrays.asList(jugador1, jugador2);
 
         manoService.iniciarManos(1, ronda, jugadores);
 
-        verify(manoRepository, times(jugadores.size())).save(argThat(mano ->
-            mano.getCartas().stream().noneMatch(c -> c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA))
-        ));
+        verify(manoRepository, times(jugadores.size())).save(argThat(mano -> mano.getCartas().stream()
+                .noneMatch(c -> c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA))));
     }
 
     @Test
     void shouldFilterComodinesFromList() {
         List<Carta> cartasConComodines = new ArrayList<>(listaCartas);
-        cartasConComodines.add(new Carta() {{
-            setId(ID_TIGRESA_BANDERA_BLANCA);
-        }});
-        cartasConComodines.add(new Carta() {{
-            setId(ID_TIGRESA_PIRATA);
-        }});
+        cartasConComodines.add(new Carta() {
+            {
+                setId(ID_TIGRESA_BANDERA_BLANCA);
+            }
+        });
+        cartasConComodines.add(new Carta() {
+            {
+                setId(ID_TIGRESA_PIRATA);
+            }
+        });
 
         List<Carta> cartasFiltradas = cartasConComodines.stream()
-            .filter(c -> !(c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA)))
-            .collect(Collectors.toList());
+                .filter(c -> !(c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA)))
+                .collect(Collectors.toList());
 
         for (Carta carta : cartasFiltradas) {
             assertFalse(carta.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || carta.getId().equals(ID_TIGRESA_PIRATA));
@@ -374,7 +378,7 @@ public class ManoServiceTest {
     public void shouldGetNumCartasARepartirCasoBasico() {
         Integer numRonda = 5;
         Integer numJugadores = 7;
-        Integer expected = 5; // numCartasTotales / numJugadores >= numRonda
+        Integer expected = 5; 
         Integer result = manoService.getNumCartasARepartir(numRonda, numJugadores);
         assertEquals(expected, result);
     }
@@ -383,7 +387,7 @@ public class ManoServiceTest {
     public void shouldGetNumCartasARepartirRondasAltas() {
         Integer numRonda = 20;
         Integer numJugadores = 5;
-        Integer expected = 14; // numCartasTotales / numJugadores < numRonda
+        Integer expected = 14; 
         Integer result = manoService.getNumCartasARepartir(numRonda, numJugadores);
         assertEquals(expected, result);
     }
@@ -392,7 +396,7 @@ public class ManoServiceTest {
     public void shouldGetNumCartasARepartirMuchosJugadores() {
         Integer numRonda = 3;
         Integer numJugadores = 10;
-        Integer expected = 3; // numCartasTotales / numJugadores >= numRonda
+        Integer expected = 3; 
         Integer result = manoService.getNumCartasARepartir(numRonda, numJugadores);
         assertEquals(expected, result);
     }
@@ -401,7 +405,7 @@ public class ManoServiceTest {
     public void shouldGetNumCartasARepartirPocosJugadores() {
         Integer numRonda = 3;
         Integer numJugadores = 2;
-        Integer expected = 3; // numCartasTotales / numJugadores >= numRonda
+        Integer expected = 3;
         Integer result = manoService.getNumCartasARepartir(numRonda, numJugadores);
         assertEquals(expected, result);
     }
@@ -417,7 +421,7 @@ public class ManoServiceTest {
     public void shouldGetNumCartasARepartirCeroRonda() {
         Integer numRonda = 0;
         Integer numJugadores = 5;
-        Integer expected = 0; // numRonda es 0
+        Integer expected = 0; 
         Integer result = manoService.getNumCartasARepartir(numRonda, numJugadores);
         assertEquals(expected, result);
     }
@@ -426,7 +430,7 @@ public class ManoServiceTest {
     public void shouldGetNumCartasARepartirNumRondaMayor() {
         Integer numRonda = 40;
         Integer numJugadores = 2;
-        Integer expected = 35; // numCartasTotales / numJugadores < numRonda
+        Integer expected = 35; 
         Integer result = manoService.getNumCartasARepartir(numRonda, numJugadores);
         assertEquals(expected, result);
     }
@@ -434,23 +438,23 @@ public class ManoServiceTest {
     // tests cartasDisabled
     @Test
     public void shouldReturnDisabledCartasCuandoHasPaloBaza() {
-        mano3.setCartas(cartas2); // Mano con cartas de distintos palos
+        mano3.setCartas(cartas2); 
         when(manoRepository.findById(mano3.getId())).thenReturn(Optional.of(mano3));
 
         List<Carta> disabledCartas = manoService.cartasDisabled(mano3.getId(), TipoCarta.amarillo);
 
         assertEquals(1, disabledCartas.size());
-        assertTrue(disabledCartas.contains(carta3)); // Carta que no es del palo baza
+        assertTrue(disabledCartas.contains(carta3));
     }
 
     @Test
     public void shouldReturnCartasEnabledCuandoSinDeterminar() {
-        mano3.setCartas(cartas2); 
+        mano3.setCartas(cartas2);
         when(manoRepository.findById(mano3.getId())).thenReturn(Optional.of(mano3));
 
         List<Carta> disabledCartas = manoService.cartasDisabled(mano3.getId(), TipoCarta.sinDeterminar);
 
-        assertTrue(disabledCartas.isEmpty()); // Todas las cartas están habilitadas
+        assertTrue(disabledCartas.isEmpty());
     }
 
     @Test
@@ -465,18 +469,17 @@ public class ManoServiceTest {
 
     @Test
     public void shouldDisableCartasWhenHasEspecialAndHasPaloBaza() {
-        // Configuramos la mano con cartas especiales y del palo baza
         Carta cartaEspecial = new Carta();
         cartaEspecial.setId(4);
-        cartaEspecial.setTipoCarta(TipoCarta.pirata); // Es especial
+        cartaEspecial.setTipoCarta(TipoCarta.pirata);
 
         Carta cartaPaloBaza = new Carta();
         cartaPaloBaza.setId(5);
-        cartaPaloBaza.setTipoCarta(TipoCarta.amarillo); // Es del palo baza
+        cartaPaloBaza.setTipoCarta(TipoCarta.amarillo);
 
         Carta cartaNoValida = new Carta();
         cartaNoValida.setId(6);
-        cartaNoValida.setTipoCarta(TipoCarta.verde); // No es ni especial ni del palo baza
+        cartaNoValida.setTipoCarta(TipoCarta.verde);
 
         mano3.setCartas(Arrays.asList(cartaEspecial, cartaPaloBaza, cartaNoValida));
 
@@ -484,41 +487,38 @@ public class ManoServiceTest {
 
         List<Carta> disabledCartas = manoService.cartasDisabled(mano3.getId(), TipoCarta.amarillo);
 
-        assertEquals(1, disabledCartas.size()); // Solo la cartaNoValida debe estar deshabilitada
+        assertEquals(1, disabledCartas.size());
         assertTrue(disabledCartas.contains(cartaNoValida));
     }
 
     @Test
     public void shouldDisableCartasWhenHasPaloBazaAndNoEspecial() {
-        // Configuramos la mano con solo cartas del palo baza y otras no válidas
         Carta cartaPaloBaza = new Carta();
         cartaPaloBaza.setId(7);
-        cartaPaloBaza.setTipoCarta(TipoCarta.amarillo); // Es del palo baza
+        cartaPaloBaza.setTipoCarta(TipoCarta.amarillo);
 
         Carta cartaNoValida = new Carta();
         cartaNoValida.setId(8);
-        cartaNoValida.setTipoCarta(TipoCarta.verde); // No es del palo baza
-
+        cartaNoValida.setTipoCarta(TipoCarta.verde);
         mano3.setCartas(Arrays.asList(cartaPaloBaza, cartaNoValida));
 
         when(manoRepository.findById(mano3.getId())).thenReturn(Optional.of(mano3));
 
         List<Carta> disabledCartas = manoService.cartasDisabled(mano3.getId(), TipoCarta.amarillo);
 
-        assertEquals(1, disabledCartas.size()); // Solo la cartaNoValida debe estar deshabilitada
+        assertEquals(1, disabledCartas.size());
         assertTrue(disabledCartas.contains(cartaNoValida));
     }
 
     @Test
     public void shouldReturnCartasEnabledCuandoHasEspecialSinPaloBaza() {
-        // Configuramos la mano con una carta especial y ninguna del palo baza
         Carta cartaEspecial = new Carta();
         cartaEspecial.setId(4);
-        cartaEspecial.setTipoCarta(TipoCarta.pirata); // Es especial
+        cartaEspecial.setTipoCarta(TipoCarta.pirata);
 
         Carta cartaNoValida = new Carta();
         cartaNoValida.setId(6);
-        cartaNoValida.setTipoCarta(TipoCarta.verde); // No es ni especial ni del palo baza
+        cartaNoValida.setTipoCarta(TipoCarta.verde);
 
         mano3.setCartas(Arrays.asList(cartaEspecial, cartaNoValida));
 
@@ -526,19 +526,18 @@ public class ManoServiceTest {
 
         List<Carta> disabledCartas = manoService.cartasDisabled(mano3.getId(), TipoCarta.amarillo);
 
-        assertTrue(disabledCartas.isEmpty()); // Todas las cartas están habilitadas porque no hay palo baza
+        assertTrue(disabledCartas.isEmpty());
     }
 
     @Test
     public void shouldReturnCartasEnabledCuandoNoEspecialNiPaloBaza() {
-        // Configuramos la mano sin cartas especiales ni del palo baza
         Carta cartaNoValida1 = new Carta();
         cartaNoValida1.setId(6);
-        cartaNoValida1.setTipoCarta(TipoCarta.verde); // No es ni especial ni del palo baza
+        cartaNoValida1.setTipoCarta(TipoCarta.verde);
 
         Carta cartaNoValida2 = new Carta();
         cartaNoValida2.setId(7);
-        cartaNoValida2.setTipoCarta(TipoCarta.morada); // No es ni especial ni del palo baza
+        cartaNoValida2.setTipoCarta(TipoCarta.morada);
 
         mano3.setCartas(Arrays.asList(cartaNoValida1, cartaNoValida2));
 
@@ -546,17 +545,16 @@ public class ManoServiceTest {
 
         List<Carta> disabledCartas = manoService.cartasDisabled(mano3.getId(), TipoCarta.amarillo);
 
-        assertTrue(disabledCartas.isEmpty()); // Todas las cartas están habilitadas porque no hay especiales ni palo baza
+        assertTrue(disabledCartas.isEmpty()); 
     }
 
     @Test
     public void shouldActualizarResultadoMano() {
-        // Configuramos el mock de mano con un resultado inicial
-        mano.setResultado(0); // Establecemos un valor inicial para resultado
-        mano.setId(1); // Aseguramos que el ID coincide con el usado en el método
+        mano.setResultado(0);
+        mano.setId(1);
 
         when(manoRepository.findAllManoByJugadorId(jugador.getId())).thenReturn(Collections.singletonList(mano));
-        when(manoRepository.findById(1)).thenReturn(Optional.of(mano)); // Configuramos el mock para findById
+        when(manoRepository.findById(1)).thenReturn(Optional.of(mano));
         when(manoRepository.save(any(Mano.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Baza baza = new Baza();
@@ -569,7 +567,5 @@ public class ManoServiceTest {
         Mano updatedMano = captor.getValue();
         assertEquals(1, updatedMano.getResultado());
     }
-
-
 
 }

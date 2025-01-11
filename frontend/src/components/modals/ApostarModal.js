@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Input, FormGroup, Label, Alert } from 'reactstrap';
-import { useNavigate } from 'react-router-dom';
+import '../formGenerator/css/Temporizador.css';
 
-export default function ApuestaModal({ isVisible, onCancel, onConfirm }) {
+export default function ApuestaModal({ isVisible, onCancel, onConfirm, tiempoRestante }) {
     const [apuesta, setApuesta] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -12,7 +12,7 @@ export default function ApuestaModal({ isVisible, onCancel, onConfirm }) {
             autoApuestaTimer = setTimeout(() => {
                 setApuesta(0);
                 handleConfirmClick();
-            }, 10000); // 30 (30000) segundos para realizar la apuesta
+            }, 20000); // 30 (30000) segundos para realizar la apuesta
         }
 
         return () => clearTimeout(autoApuestaTimer);
@@ -38,7 +38,7 @@ export default function ApuestaModal({ isVisible, onCancel, onConfirm }) {
 
             return () => clearTimeout(timerCerrarTrasError);
         }
-        
+
     };
 
     return (
@@ -63,6 +63,15 @@ export default function ApuestaModal({ isVisible, onCancel, onConfirm }) {
                     <i className="fa fa-check" aria-hidden="true"></i> Confirmar
                 </Button>
             </ModalFooter>
+            {/* Barra de cuenta regresiva */}
+            {isVisible && (
+                <div className="barra-cuenta-regresiva-fija">
+                    <div
+                        className="barra-progreso"
+                        style={{ width: `${(tiempoRestante / 15) * 100}%` }} // Asumiendo 15 segundos como total
+                    ></div>
+                </div>
+            )}
         </Modal>
     );
 }

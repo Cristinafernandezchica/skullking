@@ -269,6 +269,7 @@ public class PartidaService {
 
         Map<String, Object> message = new HashMap<>();
         message.put("status", "FINALIZADA"); // Estado de la partida
+        message.put("ganadores", partida.getGanadores()); // Ganadores de la partida
 
         // Enviar el mensaje a través de WebSocket
         messagingTemplate.convertAndSend("/topic/partida/" + partidaId, message);
@@ -322,6 +323,7 @@ public class PartidaService {
         Ronda ronda = baza.getRonda();
         messagingTemplate.convertAndSend("/topic/listaTrucos/partida/" + partidaId, new ArrayList<>());
         manoService.actualizarResultadoMano(baza);
+        enviarResultadosMano(jugadores, partida.getId());
         messagingTemplate.convertAndSend("/topic/nuevasManos/partida/" + partida.getId(), manoService.findAllManosByRondaId(ronda.getId()));
         if(nextBaza > ronda.getNumBazas()){
             rondaService.finalizarRonda(ronda.getId());
@@ -333,13 +335,14 @@ public class PartidaService {
                 finalizarPartida(ronda.getPartida().getId());
             // Si no, pasamos de ronda, iniciamos sus manos e iniciamos la primera baza
             } else{
+                apuestasJugadoresNegativas(jugadores, partidaId);
                 Integer numJugadores = jugadores.size(); 
                 Integer numBazas = manoService.getNumCartasARepartir(nextRonda, numJugadores);
                 Ronda newRonda = rondaService.nextRonda(ronda.getId(), numBazas);
                 messagingTemplate.convertAndSend("/topic/nuevaRonda/partida/" + partidaId, rondaService.rondaActual(partidaId));
                 manoService.iniciarManos(ronda.getPartida().getId(), newRonda, jugadores);
                 messagingTemplate.convertAndSend("/topic/nuevasManos/partida/" + partidaId, manoService.findAllManosByRondaId(newRonda.getId()));
-                apuestasJugadoresNegativas(jugadores);
+                enviarResultadosMano(jugadores, partidaId);
                 Baza primeraBaza = bazaService.iniciarBaza(newRonda, jugadores);
                 // Renovar baza
                 messagingTemplate.convertAndSend("/topic/nuevaBaza/partida/" + partidaId, bazaService.findBazaActualByRondaId(newRonda.getId()));
@@ -421,11 +424,12 @@ public class PartidaService {
     }
 
     @Transactional
-    public void apuestasJugadoresNegativas(List<Jugador> jugadores){
+    public void apuestasJugadoresNegativas(List<Jugador> jugadores, Integer partidaId){
         for(Jugador j : jugadores){
             j.setApuestaActual(-1);
             jugadorService.updateJugador(j, j.getId());
         }
+        messagingTemplate.convertAndSend("/topic/apuesta/partida/" + partidaId, jugadorService.findJugadoresByPartidaId(partidaId));
     }
 
     @Transactional
@@ -436,6 +440,16 @@ public class PartidaService {
             apuestas.put(j.getId(), j.getApuestaActual());
         }
         return apuestas;
+    }
+
+    @Transactional
+    public void enviarResultadosMano(List<Jugador> jugadores, Integer partidaId){
+        Map<Integer, Integer> resultadosManos = new HashMap<Integer, Integer>();
+        for(Jugador j: jugadores){
+            Mano manoJugador = manoService.findLastManoByJugadorId(j.getId());
+            resultadosManos.put(j.getId(), manoJugador.getResultado());
+        }
+        messagingTemplate.convertAndSend("/topic/resultadosMano/partida/" + partidaId, resultadosManos);
     }
 
 }

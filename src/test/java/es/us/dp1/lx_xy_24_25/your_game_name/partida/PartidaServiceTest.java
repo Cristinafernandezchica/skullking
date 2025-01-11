@@ -470,3 +470,66 @@ public class PartidaServiceTest {
     
 
 }
+/*
+     // Tests apostar --> LO COMENTO SE HA MOVIDO A Partida
+    /*
+    @Test
+    public void shouldApuestaExito() {
+        // Crear la lista de manos y asegurar que findLastManoByJugadorId devuelve la última mano
+        List<Mano> manos = List.of(mano);
+        when(manoRepository.findAllManoByJugadorId(jugador3.getId())).thenReturn(manos);
+        when(jugadorService.findById(jugador3.getId())).thenReturn(jugador3);
+
+        manoService.apuesta(2, jugador3.getId());
+
+        assertEquals(2, mano.getApuesta());
+        assertEquals(2, jugador3.getApuestaActual());
+        verify(manoRepository, times(1)).save(mano);
+        verify(jugadorService, times(1)).updateJugador(jugador3, jugador3.getId());
+    }
+
+    @Test
+    public void shouldApuestaManoNoEncontrada() {
+        when(manoRepository.findAllManoByJugadorId(jugador3.getId())).thenReturn(List.of());
+
+        assertThrows(ResourceNotFoundException.class, () -> manoService.apuesta(2, jugador3.getId()));
+    }
+
+    @Test
+    public void shouldApuestaMayorQueNumCartas() {
+        List<Mano> manos = List.of(mano);
+        when(manoRepository.findAllManoByJugadorId(jugador3.getId())).thenReturn(manos);
+        when(jugadorService.findById(jugador3.getId())).thenReturn(jugador3);
+
+        assertThrows(ApuestaNoValidaException.class, () -> manoService.apuesta(5, jugador3.getId()));
+    }
+
+    @Test
+    public void shouldApuestaExactaNumCartas() {
+        List<Mano> manos = List.of(mano);
+        when(manoRepository.findAllManoByJugadorId(jugador3.getId())).thenReturn(manos);
+        when(jugadorService.findById(jugador3.getId())).thenReturn(jugador3);
+
+        manoService.apuesta(3, jugador3.getId());
+
+        assertEquals(3, mano.getApuesta());
+        assertEquals(3, jugador3.getApuestaActual());
+        verify(manoRepository, times(1)).save(mano);
+        verify(jugadorService, times(1)).updateJugador(jugador3, jugador3.getId());
+    }
+
+    @Test
+    public void shouldApuestaCero() {
+        List<Mano> manos = List.of(mano);
+        when(manoRepository.findAllManoByJugadorId(jugador3.getId())).thenReturn(manos);
+        when(jugadorService.findById(jugador3.getId())).thenReturn(jugador3);
+
+        manoService.apuesta(0, jugador3.getId());
+
+        assertEquals(0, mano.getApuesta());
+        assertEquals(0, jugador3.getApuestaActual());
+        verify(manoRepository, times(1)).save(mano);
+        verify(jugadorService, times(1)).updateJugador(jugador3, jugador3.getId());
+    }
+        
+ */

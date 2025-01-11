@@ -69,18 +69,6 @@ public class BazaService {
         return toUpdate;
     }
     // Buscar la baza que tenga menor id y no haya finalizado (no tenga un truco ganador)
-    /*
-    @Transactional(readOnly = true)
-    public Baza findBazaActualByRondaId(Integer rondaId){
-        List<Baza> Bazas =bazaRepository.findBazasByRondaId(rondaId);
-        Bazas= Bazas.stream().filter(x->x.getGanador()==null).toList();
-        Baza BazasOrdenadas = Bazas.stream()
-                        .sorted((j1, j2) -> j1.getId().compareTo(j2.getId())) // Orden ascendente
-                        .findFirst().orElse(null);
-                return BazasOrdenadas;
-    }
-    */
-
     @Transactional(readOnly = true)
     public Baza findBazaActualByRondaId(Integer rondaId){
         List<Baza> bazas =bazaRepository.findBazasByRondaId(rondaId);
@@ -102,12 +90,12 @@ public class BazaService {
     }
 
     // Si se usa este método se crea dependencia circular en Truco
-    /*
+    
     @Transactional(readOnly = true)
     public Baza findBazaAnterior(Integer bazaId, Integer rondaId){
         return bazaRepository.findBazaAnterior(bazaId, rondaId).get();
     }
-    */
+    
 
     // Iniciar la primera baza de cada ronda
     @Transactional
@@ -125,6 +113,7 @@ public class BazaService {
         return resBaza;
     }
 
+    // Reordenar esto, donde debe ir
     @Transactional
     public List<Integer> calcularTurnosNuevaBaza(int partidaId, Baza bazaAnterior, List<Jugador> jugadores) {
         // Si es la primera baza, el orden es el orden de unión de los jugadores

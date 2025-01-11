@@ -28,15 +28,12 @@ import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -291,7 +288,7 @@ public class BazaServiceTest {
         assertNull(nuevaBaza.getGanador());
         assertEquals(PaloBaza.sinDeterminar, nuevaBaza.getPaloBaza());
         assertEquals(1, nuevaBaza.getTurnos().size());
-        assertEquals(1, nuevaBaza.getTurnos().get(0)); // Verificar que el turno sea el esperado
+        assertEquals(1, nuevaBaza.getTurnos().get(0));
     }
 
     @Test
@@ -310,7 +307,6 @@ public class BazaServiceTest {
 
     @Test
     void shouldCalcularTurnosNuevaBazaPrimera() {
-        // Crear una lista con más de un jugador
         Jugador jugador1 = new Jugador();
         jugador1.setId(1);
         Jugador jugador2 = new Jugador();
@@ -327,14 +323,12 @@ public class BazaServiceTest {
 
     @Test
     void shouldCalcularTurnosNuevaBazaNoPrimera() {
-        // Crear una lista con más de un jugador
         Jugador jugador1 = new Jugador();
         jugador1.setId(1);
         Jugador jugador2 = new Jugador();
         jugador2.setId(2);
         List<Jugador> jugadores = Arrays.asList(jugador1, jugador2);
 
-        // Configurar la baza anterior con el segundo jugador como ganador
         Baza bazaAnterior = new Baza();
         bazaAnterior.setGanador(jugador2);
 
@@ -342,8 +336,8 @@ public class BazaServiceTest {
 
         assertNotNull(turnos);
         assertEquals(2, turnos.size());
-        assertEquals(jugador2.getId(), turnos.get(0)); // El ganador debería ser el primero en la nueva lista de turnos
-        assertEquals(jugador1.getId(), turnos.get(1)); // El jugador1 debería ser el siguiente
+        assertEquals(jugador2.getId(), turnos.get(0)); 
+        assertEquals(jugador1.getId(), turnos.get(1));
     }
 
     @Test
@@ -381,7 +375,7 @@ public class BazaServiceTest {
         Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
 
         assertNotNull(puntos);
-        assertEquals(30, puntos); // Skullking contra Pirata
+        assertEquals(30, puntos);
     }
 
     @Test
@@ -394,7 +388,7 @@ public class BazaServiceTest {
         Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
     
         assertNotNull(puntos);
-        assertEquals(0, puntos); // No hay bonificación para Skullking contra Sirena
+        assertEquals(0, puntos);
     }
     
     @Test
@@ -407,7 +401,7 @@ public class BazaServiceTest {
         Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
     
         assertNotNull(puntos);
-        assertEquals(20, puntos); // Pirata contra Sirena
+        assertEquals(20, puntos);
     }
     
     @Test
@@ -420,7 +414,7 @@ public class BazaServiceTest {
         Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
     
         assertNotNull(puntos);
-        assertEquals(30, puntos); // Skullking contra Pirata
+        assertEquals(30, puntos);
     }
     
     @Test
@@ -433,73 +427,70 @@ public class BazaServiceTest {
         Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
     
         assertNotNull(puntos);
-        assertEquals(40, puntos); // Sirena contra Skullking
+        assertEquals(40, puntos);
     }
 
     @Test
     void shouldCalculoPtosBonificacion_NoSkullking() {
         Carta cartaGanadora = new Carta();
-        cartaGanadora.setTipoCarta(TipoCarta.sirena); // Tipo de carta ganadora que no es skullking
+        cartaGanadora.setTipoCarta(TipoCarta.sirena);
         Carta carta = new Carta();
-        carta.setTipoCarta(TipoCarta.pirata); // Tipo de carta que no es skullking
+        carta.setTipoCarta(TipoCarta.pirata);
 
         Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
 
         assertNotNull(puntos);
-        assertEquals(0, puntos); // No hay bonificación para Sirena contra Pirata
+        assertEquals(0, puntos);
     }
 
     @Test
     void shouldCalculoPtosBonificacion_Catorce() {
         Carta cartaGanadora = mock(Carta.class);
-        Carta carta = mock(Carta.class); // Usar un mock en lugar de una instancia real
+        Carta carta = mock(Carta.class);
 
         when(cartaGanadora.getTipoCarta()).thenReturn(TipoCarta.pirata);
         when(carta.getTipoCarta()).thenReturn(TipoCarta.pirata);
-        // Configurar carta como catorce y triunfo
         when(carta.esCatorce()).thenReturn(true);
         when(carta.esTriunfo()).thenReturn(true);
 
         Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
 
         assertNotNull(puntos);
-        assertEquals(30, puntos); // 10 por catorce y 20 por triunfo
+        assertEquals(30, puntos);
     }
 
 
     @Test
     void shouldCalculoPtosBonificacion_CatorceSinTriunfo() {
         Carta cartaGanadora = mock(Carta.class);
-        Carta carta = mock(Carta.class); // Usar un mock en lugar de una instancia real
+        Carta carta = mock(Carta.class);
 
         when(cartaGanadora.getTipoCarta()).thenReturn(TipoCarta.pirata);
         when(carta.getTipoCarta()).thenReturn(TipoCarta.pirata);
-        // Configurar carta como catorce pero no triunfo
         when(carta.esCatorce()).thenReturn(true);
         when(carta.esTriunfo()).thenReturn(false);
 
         Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
 
         assertNotNull(puntos);
-        assertEquals(10, puntos); // Solo 10 por catorce
+        assertEquals(10, puntos);
     }
 
 
     @Test
     void shouldCalculoPtosBonificacion_SinBonificacion() {
         Carta cartaGanadora = mock(Carta.class);
-        Carta carta = mock(Carta.class); // Usar un mock en lugar de una instancia real
+        Carta carta = mock(Carta.class);
 
         when(cartaGanadora.getTipoCarta()).thenReturn(TipoCarta.pirata);
         when(carta.getTipoCarta()).thenReturn(TipoCarta.pirata);
-        // Configurar carta como no catorce y no triunfo
         when(carta.esCatorce()).thenReturn(false);
         when(carta.esTriunfo()).thenReturn(false);
 
         Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
 
         assertNotNull(puntos);
-        assertEquals(0, puntos); // Sin bonificaciones
+        assertEquals(0, puntos);
     }
 
 

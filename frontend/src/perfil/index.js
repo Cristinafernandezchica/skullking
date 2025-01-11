@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Button, Spinner, Alert } from "reactstrap";
+import { Button, Spinner, Alert, ModalFooter, ModalBody, ModalHeader, Modal } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import tokenService from "../services/token.service";
 import "./Perfil.css";
 import { aceptarORechazarSolicitud, fetchListaDeAmigos, invitarAPartida } from "../components/appNavBarModular/AppNavBarModular";
+import SockJS from "sockjs-client";
+import { Stomp } from "@stomp/stompjs";
 
 
 export default function Perfil() {
@@ -20,6 +22,8 @@ export default function Perfil() {
     const [visible, setVisible] = useState(false);
     const [successMessage, setSuccessMessage] = useState(null);
     const [listaDeAmigos, setListaDeAmigos] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [amigoAEliminar, setAmigoAEliminar] = useState(null);
     const navigate = useNavigate();
 
     const showError = (error) => { 
@@ -36,13 +40,58 @@ export default function Perfil() {
         }, 5000); // La alerta desaparece después de 5000 milisegundos (5 segundos)
     };
 
-    const handleEliminarAmigo = (amigoId) => {
-        if (window.confirm("¿Estás seguro de que quieres eliminar a este amigo?")) {
-            aceptarORechazarSolicitud(usuarioActual.id,amigoId,false,jwt);
-            fetchListaDeAmigos(usuarioActual,setListaDeAmigos,jwt);
-            // Aquí implementas la lógica para eliminar el amigo
-        }
+    const handleMostrarModal = (amigo) => {
+        setAmigoAEliminar(amigo);
+        setModalVisible(true);
     };
+
+    // Oculta el modal
+    const handleCerrarModal = () => {
+        setModalVisible(false);
+        setAmigoAEliminar(null);
+    };
+
+    // Confirmar eliminación del amigo
+    const handleConfirmarEliminar = () => {
+        if (amigoAEliminar) {
+            aceptarORechazarSolicitud(
+                usuarioActual.id,
+                amigoAEliminar.id,
+                false,
+                jwt
+            );
+            fetchListaDeAmigos(usuarioActual, setListaDeAmigos, jwt);
+        }
+        handleCerrarModal();
+    };
+
+    useEffect(() => {
+
+        // Segundo useEffect: Conexión al WebSocket
+        const socket = new SockJS("http://localhost:8080/ws");
+        const stompClient = Stomp.over(() => socket);
+
+        stompClient.connect({}, (frame) => {
+            console.log("Connected: " + frame);
+
+            stompClient.subscribe(
+                `/topic/amistad/${usuarioActual.id}`,
+                (messageOutput) => {
+                    const data = JSON.parse(messageOutput.body);
+                    console.log("Mensaje recibido: ", data); // Verifica que el mensaje se reciba correctamente
+                    setListaDeAmigos(data); // Actualizamos la lista de nuevas solitudes con los datos recibidos
+                }
+            );
+        });
+        // Cleanup: Desconectar el WebSocket cuando el componente se desmonte
+        return () => {
+
+            stompClient.disconnect(() => {
+                console.log("Disconnected");
+            });
+        };
+
+    }, []); // Solo se ejecuta cuando cambia de baza
 
     async function enviarSolicitud() {
         try {
@@ -347,84 +396,113 @@ export default function Perfil() {
                 </div>
             </div>
 
-<div className="amigos-lista" style={{ maxHeight: '300px', overflowY: 'auto' }}>
-    <h3>Lista de Amigos</h3>
-    <ul style={{ padding: 0, listStyleType: "none" }}>
-        {listaDeAmigos.map((amigo) => (
-            <li 
-                key={amigo.id} 
-                className="amigo-item" 
-                style={{ 
-                    display: "flex", 
-                    alignItems: "center", 
-                    justifyContent: "space-between", 
-                    marginBottom: "10px" 
-                }}
-            >
-                <div style={{ display: "flex", alignItems: "center" }}>
-                    {amigo.imagenPerfil && (
-                        <img 
-                            src={amigo.imagenPerfil} 
-                            alt="Perfil" 
-                            style={{ 
-                                width: "40px", 
-                                height: "40px", 
-                                borderRadius: "50%", 
-                                marginRight: "10px" 
-                            }} 
-                        />
-                    )}
-                    <span style={{ fontSize: "18px", fontWeight: "bold", textAlign: "left" }}>
-                        {amigo.username}
-                    </span>
-                    {amigo.conectado && (
-                        <span 
-                            className="status-circle" 
-                            style={{ 
-                                backgroundColor: "green", 
-                                width: "10px", 
-                                height: "10px", 
-                                borderRadius: "50%", 
-                                marginLeft: "10px" 
-                            }}
-                        />
-                    )}
-                </div>
+            <div className="amigos-lista" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                <h3>Lista de Amigos</h3>
+                <ul style={{ padding: 0, listStyleType: 'none' }}>
+                    {listaDeAmigos.map((amigo) => (
+                        <li key={amigo.id} className="amigo-item" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px',
+                            }}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                {amigo.imagenPerfil && (
+                                    <img src={amigo.imagenPerfil} alt="Perfil" className="amigo-imagen-perfil"
+                                    />
+                                )}
+                                <span
+                                    style={{
+                                        fontSize: '18px',
+                                        fontWeight: 'bold',
+                                        textAlign: 'left',
+                                    }}
+                                >
+                                    {amigo.username}
+                                </span>
+                                {amigo.conectado && (
+                                    <span
+                                        className="status-circle"
+                                        style={{
+                                            backgroundColor: 'green',
+                                            width: '10px',
+                                            height: '10px',
+                                            borderRadius: '50%',
+                                            marginLeft: '10px',
+                                        }}
+                                    />
+                                )}
+                            </div>
 
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    {/* Botón para eliminar amigo */}
-                    <button 
-                        className="unfriend-button" 
-                        onClick={() => handleEliminarAmigo(amigo.id)}
-                        title="Eliminar amigo"
-                    >
-                        🚫
-                    </button>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                {/* Botón para abrir el modal de eliminación */}
+                                <button
+                                    className="unfriend-button"
+                                    onClick={() => handleMostrarModal(amigo)}
+                                    title="Eliminar amigo"
+                                >
+                                    🚫
+                                </button>
 
-                    {/* Botón de acción según el estado de la partida */}
-                    {lastPlayer != null && lastPlayer.partida.estado === "ESPERANDO" && (
-                        <button 
-                            className="partida-button" 
-                            title="Volver a la sala de espera"
-                            onClick={() => invitarAPartida(usuarioActual,amigo,lastPlayer.partida,false,jwt)}
-                        >
-                            🎮
-                        </button>
-                    )}
-                    {lastPlayer != null && lastPlayer.partida.estado === "JUGANDO" && (
-                        <button 
-                            className="partida-button" 
-                            title="Volver al tablero"
-                            onClick={() => invitarAPartida(usuarioActual,amigo,lastPlayer.partida,true,jwt)}
-                        >
-                            👁️
-                        </button>
-                    )}
-                </div>
-            </li>
-        ))}
-    </ul>
-</div>
+                                {/* Botón de acción según el estado de la partida */}
+                                {lastPlayer != null &&
+                                    lastPlayer.partida.estado === 'ESPERANDO' && (
+                                        <button
+                                            className="partida-button"
+                                            title="Volver a la sala de espera"
+                                            onClick={() =>
+                                                invitarAPartida(
+                                                    usuarioActual,
+                                                    amigo,
+                                                    lastPlayer.partida,
+                                                    false,
+                                                    jwt,
+                                                    showSuccess("invitacion Enviada")
+                                                )
+                                            }
+                                        >
+                                            🎮
+                                        </button>
+                                    )}
+                                {lastPlayer != null &&
+                                    lastPlayer.partida.estado === 'JUGANDO' && (
+                                        <button
+                                            className="partida-button"
+                                            title="Volver al tablero"
+                                            onClick={() =>
+                                                invitarAPartida(
+                                                    usuarioActual,
+                                                    amigo,
+                                                    lastPlayer.partida,
+                                                    true,
+                                                    jwt,
+                                                    showSuccess("invitacion enviada")
+                                                )
+                                            }
+                                        >
+                                            👁️
+                                        </button>
+                                    )}
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            {/* Modal para confirmar eliminación */}
+            <Modal isOpen={modalVisible} toggle={handleCerrarModal}>
+                <ModalHeader toggle={handleCerrarModal}>
+                    Confirmar Eliminación
+                </ModalHeader>
+                <ModalBody>
+                    ¿Estás seguro de que quieres eliminar a{' '}
+                    <strong>{amigoAEliminar?.username}</strong> de tu lista de amigos?
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="danger" onClick={handleConfirmarEliminar}>
+                        Sí, eliminar
+                    </Button>
+                    <Button color="secondary" onClick={handleCerrarModal}>
+                        No, cancelar
+                    </Button>
+                </ModalFooter>
+            </Modal>
         </div>
     );
 }

@@ -84,33 +84,7 @@ function AppNavbar() {
         return () => { if (usuarioActual) { usuarioConectadoODesconectado(jwt, usuarioActual.id, true); } }
     }, [jwt]);
 
-    useEffect(() => {
-
-        // Segundo useEffect: Conexión al WebSocket
-        const socket = new SockJS("http://localhost:8080/ws");
-        const stompClient = Stomp.over(() => socket);
-
-        stompClient.connect({}, (frame) => {
-            console.log("Connected: " + frame);
-
-            stompClient.subscribe(
-                `/topic/amistad/${usuarioActual.id}`,
-                (messageOutput) => {
-                    const data = JSON.parse(messageOutput.body);
-                    console.log("Mensaje recibido: ", data); // Verifica que el mensaje se reciba correctamente
-                    setNuevasSolitudes(data); // Actualizamos la lista de nuevas solitudes con los datos recibidos
-                }
-            );
-        });
-        // Cleanup: Desconectar el WebSocket cuando el componente se desmonte
-        return () => {
-
-            stompClient.disconnect(() => {
-                console.log("Disconnected");
-            });
-        };
-
-    }, []); // Solo se ejecuta cuando cambia de baza
+    
 
     let adminLinks = <></>;
     let userLinks = <></>;
@@ -364,10 +338,6 @@ function AppNavbar() {
 
     return (
         <div>
-             <div className="validation-messages">
-                {errors.length > 0 && errors.map((error, index) => (
-                    <Alert key={index} color="danger">{error}</Alert>
-                ))}</div>
 
             <Navbar expand="md" dark color="dark">
                 <NavbarBrand href="/">
@@ -387,7 +357,13 @@ function AppNavbar() {
                     </Nav>
                 </Collapse>
             </Navbar>
+            <div className="validation-messages">
+                {errors.length > 0 && errors.map((error, index) => (
+                    <Alert key={index} color="danger">{error}</Alert>
+                ))}</div>
         </div>
+
+
     );
 }
 

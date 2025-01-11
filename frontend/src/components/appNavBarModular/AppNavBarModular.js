@@ -146,7 +146,7 @@ export async function usuarioConectadoODesconectado(jwt,usuario,conectado) {
             }
         }
 
-        export async function invitarAPartida(usuarioActual,amigo, partidaActual ,serEspectador, jwt) {
+        export async function invitarAPartida(usuarioActual,amigo, partidaActual ,serEspectador, jwt, showSuccess) {
             const Invitacion ={remitente: usuarioActual, destinatario: amigo ,partida:partidaActual, espectador:serEspectador}
             try {
                 const response = await fetch(`/api/v1/invitaciones`, {
@@ -157,8 +157,13 @@ export async function usuarioConectadoODesconectado(jwt,usuario,conectado) {
                     },
                     body: JSON.stringify(Invitacion),
                 });
-                if (!response.ok) {
-                    console.log("Algo falla");
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log("la solicitud fue", data);
+                    showSuccess("Solicitud de amistad enviada.");
+                }
+                else{
+                    console.log("algo falla");
                     throw new Error("Network response was not ok");
                 }
             } catch (error) {

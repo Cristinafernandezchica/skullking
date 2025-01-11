@@ -8,7 +8,6 @@ import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.ApuestaNoValidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
@@ -18,10 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataAccessException;
 
 import java.time.LocalDateTime;
@@ -29,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -320,8 +316,7 @@ public class ManoServiceTest {
 
         manoService.iniciarManos(1, ronda, jugadores);
 
-        verify(manoRepository, times(2)).save(argThat(mano -> mano.getCartas().size() == 4)); // Assuming 4 cards per
-                                                                                              // round
+        verify(manoRepository, times(2)).save(argThat(mano -> mano.getCartas().size() == 4));
     }
 
     @Test

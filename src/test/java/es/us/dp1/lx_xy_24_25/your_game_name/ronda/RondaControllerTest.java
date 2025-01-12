@@ -193,7 +193,7 @@ public class RondaControllerTest {
     @Test
     @WithMockUser("player")
     void shouldFindRondaActualByPartidaId() throws Exception {
-        when(rondaService.findRondaActualByPartidaId(1)).thenReturn(ronda1);
+        when(rondaService.rondaActual(1)).thenReturn(ronda1);
 
         // Realizar la solicitud y verificar la respuesta
         mockMvc.perform(get(BASE_URL + "/{partidaId}/partida", 1)
@@ -201,39 +201,5 @@ public class RondaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(ronda1.getId()));
     }
-
-
-    /*
-    @Test
-    void shouldNextBaza_Success() {
-        // Arrange
-        Integer bazaId = baza.getId();
-
-        when(rondaService.nextBaza(bazaId)).thenReturn(bazaV);
-
-        ResponseEntity<Baza> response = rc.nextBaza(bazaId);
-        assertNotNull(response);
-        assertEquals(200, response.getStatusCode().value());
-        assertEquals(bazaV, response.getBody());
-        verify(rondaService).nextBaza(bazaId);
-    }
-        */
-        
-    /*
-    @Test
-    void shouldNextBaza_ErrorHandling() {
-        Integer bazaId = bazaV.getId();
-        when(rondaService.nextBaza(bazaId)).thenThrow(new RuntimeException("Error al calcular la próxima baza"));
-
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            rc.nextBaza(bazaId);
-        });
-
-        // Assert
-        assertNotNull(exception);
-        assertEquals("Error al calcular la próxima baza", exception.getMessage());
-        verify(rondaService).nextBaza(bazaId);
-    }
-        */
 
 }

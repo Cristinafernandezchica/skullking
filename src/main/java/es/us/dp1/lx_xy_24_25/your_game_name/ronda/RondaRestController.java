@@ -87,18 +87,4 @@ public class RondaRestController {
         return rondaService.rondaActual(partidaId);
     }
 
-    /*
-    @PostMapping("/bazaActual/{bazaId}/next-baza") 
-    public ResponseEntity<Baza> nextBaza(@PathVariable("bazaId") Integer bazaId) { 
-    Baza newBaza = rondaService.nextBaza(bazaId); 
-    return ResponseEntity.ok(newBaza);
-    }
-
-    @PostMapping("/{rondaAnteriorId}/next-ronda") 
-    public ResponseEntity<Ronda> nextRonda(@PathVariable("rondaAnteriorId") Integer rondaAnteriorId) { 
-    Ronda newRonda = rondaService.nextRonda(rondaAnteriorId); 
-    return ResponseEntity.ok(newRonda);
-    }
-    */
-
 }

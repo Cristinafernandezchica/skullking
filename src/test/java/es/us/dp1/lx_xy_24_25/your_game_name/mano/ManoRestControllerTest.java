@@ -142,7 +142,7 @@ public class ManoRestControllerTest {
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Mano deleted!", response.getBody().getMessage());
+        assertEquals("Mano eliminada!", response.getBody().getMessage());
 
         verify(manoService).deleteMano(1);
     }

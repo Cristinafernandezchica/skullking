@@ -96,9 +96,8 @@ public class JugadorRestController {
 	public ResponseEntity<MessageResponse> delete(@PathVariable("id") int id) {
 		RestPreconditions.checkNotNull(jugadorService.findById(id), "Jugador", "ID", id);
 		jugadorService.deleteJugador(id, false);
-		return new ResponseEntity<>(new MessageResponse("Jugador deleted!"), HttpStatus.OK);
+		return new ResponseEntity<>(new MessageResponse("Jugador eliminado!"), HttpStatus.OK);
 	}
-    
     
     // borrar un jugador por id con websocket
     @DeleteMapping(value = "{id}/websocket")
@@ -106,7 +105,7 @@ public class JugadorRestController {
 	public ResponseEntity<MessageResponse> deleteWebsocket(@PathVariable("id") int id) {
 		RestPreconditions.checkNotNull(jugadorService.findById(id), "Jugador", "ID", id);
 		jugadorService.deleteJugador(id, true);
-		return new ResponseEntity<>(new MessageResponse("Jugador deleted!"), HttpStatus.OK);
+		return new ResponseEntity<>(new MessageResponse("Jugador eliminado!"), HttpStatus.OK);
 	}
     
 

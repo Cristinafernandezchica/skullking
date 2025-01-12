@@ -18,10 +18,10 @@ public class BazaValidator implements Validator{
     @Override
     public void validate(Object obj, Errors errors) {
         Baza baza = (Baza) obj;
-        
+
         // Validar la Ronda y el número máximo de bazas permitido
         Ronda ronda = baza.getRonda();
-        if (ronda != null) {
+        if (ronda != null && ronda.getNumBazas() != null) {
             if (baza.getNumBaza() != null && baza.getNumBaza() > ronda.getNumBazas()) {
                 errors.rejectValue("numBaza", "numBaza.exceeds", "El número de baza excede el máximo permitido para la ronda.");
             }
@@ -30,7 +30,7 @@ public class BazaValidator implements Validator{
         // Validar que no haya bazas duplicadas en la misma ronda con el mismo numBaza
         if (ronda != null && baza.getNumBaza() != null) {
             Baza existingBaza = bazaService.findByRondaIdAndNumBaza(ronda.getId(), baza.getNumBaza());
-            if (existingBaza.getId().equals(baza.getId())) {
+            if (existingBaza != null && !existingBaza.getId().equals(baza.getId())) {
                 errors.rejectValue("numBaza", "numBaza.duplicate", "Ya existe una baza con el mismo número en esta ronda.");
             }
         }

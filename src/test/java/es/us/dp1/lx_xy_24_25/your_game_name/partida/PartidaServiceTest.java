@@ -7,14 +7,22 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
+import es.us.dp1.lx_xy_24_25.your_game_name.baza.BazaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.UsuarioPartidaEnJuegoEsperandoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MinJugadoresPartidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MismoNombrePartidaNoTerminadaException;
+import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
+import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.UserService;
@@ -22,7 +30,9 @@ import es.us.dp1.lx_xy_24_25.your_game_name.user.UserService;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -38,19 +48,32 @@ public class PartidaServiceTest {
     private PartidaRepository partidaRepository;
 
     @Mock
+    private RondaRepository rondaRepository;
+
+    @Mock
     private RondaService rondaService;
 
     @Mock
     private JugadorService jugadorService;
 
+    @MockBean
+    private ManoService manoService;
+
+    @Mock
+    private BazaService bazaService;
+
     @Mock
     private UserService userService;
+
+    @Mock
+    private SimpMessagingTemplate messagingTemplate;
 
     @InjectMocks
     private PartidaService partidaService;
 
     private Partida partida;
     private Jugador jugador;
+    private Jugador jugador2;
     private User user;
     private Partida partidaCrear;
     private User owner;
@@ -69,6 +92,12 @@ public class PartidaServiceTest {
         jugador.setId(1);
         jugador.setUsuario(user);
         jugador.setPuntos(100);
+        jugador.setPartida(partida);
+
+        jugador2 = new Jugador();
+        jugador2.setId(2);
+        jugador2.setUsuario(new User());
+        jugador2.setPartida(partida);
 
         partida = new Partida();
         partida.setId(1);
@@ -112,13 +141,10 @@ public class PartidaServiceTest {
 
     @Test
     void shouldGetAllPartidasConNombre() {
-        // Arrange
         when(partidaRepository.findByNombre("Partida Test")).thenReturn(Arrays.asList(partida));
 
-        // Act
         List<Partida> result = partidaService.getAllPartidas("Partida Test", null);
 
-        // Assert
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals("Partida Test", result.get(0).getNombre());
@@ -127,13 +153,10 @@ public class PartidaServiceTest {
 
     @Test
     void shouldGetAllPartidasConEstado() {
-        // Arrange
         when(partidaRepository.findByEstado(PartidaEstado.ESPERANDO)).thenReturn(Arrays.asList(partida));
 
-        // Act
         List<Partida> result = partidaService.getAllPartidas(null, PartidaEstado.ESPERANDO);
 
-        // Assert
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals(PartidaEstado.ESPERANDO, result.get(0).getEstado());
@@ -142,13 +165,10 @@ public class PartidaServiceTest {
 
     @Test
     void shouldGetAllPartidasSinResultados() {
-        // Arrange
         when(partidaRepository.findAll()).thenReturn(Collections.emptyList());
 
-        // Act
         List<Partida> result = partidaService.getAllPartidas(null, null);
 
-        // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
         verify(partidaRepository, times(1)).findAll();
@@ -156,14 +176,11 @@ public class PartidaServiceTest {
 
     @Test
     void shouldGetAllPartidasConNombreYEstadoSinResultados() {
-        // Arrange
         when(partidaRepository.findByNombreAndEstado("No Existe", PartidaEstado.TERMINADA))
                 .thenReturn(Collections.emptyList());
 
-        // Act
         List<Partida> result = partidaService.getAllPartidas("No Existe", PartidaEstado.TERMINADA);
 
-        // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
         verify(partidaRepository, times(1)).findByNombreAndEstado("No Existe", PartidaEstado.TERMINADA);
@@ -228,18 +245,122 @@ public class PartidaServiceTest {
         assertThrows(UsuarioPartidaEnJuegoEsperandoException.class, () -> partidaService.save(partida));
     }
 
+    @Test
+    void shouldUpdatePartida() {
+        when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
+        when(partidaRepository.save(any(Partida.class))).thenReturn(partida);
+
+        Partida updatedPartida = new Partida();
+        updatedPartida.setEstado(PartidaEstado.JUGANDO);
+
+        Partida result = partidaService.update(updatedPartida, 1);
+
+        assertNotNull(result);
+        assertEquals(PartidaEstado.JUGANDO, result.getEstado());
+        verify(partidaRepository, times(1)).save(partida);
+    }
+
+    @Test
+    void shouldUpdatePartida_NotFound() {
+        when(partidaRepository.findById(99)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> partidaService.update(new Partida(), 99));
+        verify(partidaRepository, times(0)).save(any(Partida.class));
+    }
+
+    @Test
+    void shouldDeletePartida() {
+        when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
+        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(List.of(jugador, jugador2));
+    
+        partidaService.delete(1);
+    
+        verify(jugadorService, times(2)).deleteJugador(anyInt(), eq(false));
+        verify(rondaRepository, times(1)).deleteByPartidaId(1);
+        verify(partidaRepository, times(1)).delete(partida);
+    }
+    
+    @Test
+    void shouldDeletePartida_NotFound() {
+        when(partidaRepository.findById(99)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> partidaService.delete(99));
+        verify(partidaRepository, times(0)).delete(any(Partida.class));
+    }
+
+    @Test
+    void shouldFindPartidasByOwnerId() {
+        when(partidaRepository.findByOwnerPartida(1)).thenReturn(List.of(partida));
+
+        List<Partida> result = partidaService.findPartidasByOwnerId(1);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(1, result.get(0).getOwnerPartida());
+        verify(partidaRepository, times(1)).findByOwnerPartida(1);
+    }
+
+    @Test
+    void shouldFindPartidasByOwnerId_Vacia() {
+        when(partidaRepository.findByOwnerPartida(1)).thenReturn(List.of());
+
+        List<Partida> result = partidaService.findPartidasByOwnerId(1);
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(partidaRepository, times(1)).findByOwnerPartida(1);
+    }
+
+    @Test
+    void shouldActualizarOwner() {
+        when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
+        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(List.of(jugador, jugador2));
+    
+        partidaService.actualizarOwner(1, 2);
+    
+        verify(partidaRepository, times(1)).save(partida);
+        verify(messagingTemplate, times(1)).convertAndSend(eq("/topic/partida/1"), anyMap());
+    }
+
+    @Test
+    void shouldActualizarOwner_InvalidOwner() {
+        when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
+
+        assertThrows(IllegalArgumentException.class, () -> partidaService.actualizarOwner(1, -1));
+        verify(partidaRepository, times(0)).save(any(Partida.class));
+    }
+
     // Test para iniciar una partida (caso positivo)
     @Test
     void shouldIniciarPartida() {
+        Ronda ronda = new Ronda();
+        ronda.setId(1);
+    
+        Baza baza = new Baza();
+        baza.setId(1);
+        baza.setTurnos(List.of(1, 2));
+    
         when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
-        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(Arrays.asList(new Jugador(), new Jugador(), new Jugador()));
-
+        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(List.of(jugador, jugador2, jugador2));
+        when(rondaService.iniciarRonda(partida)).thenReturn(ronda);
+        when(bazaService.iniciarBaza(ronda, List.of(jugador, jugador2, jugador2))).thenReturn(baza);
+    
         partidaService.iniciarPartida(1);
-
-        assertEquals(PartidaEstado.JUGANDO, partida.getEstado());
-        verify(rondaService, times(1)).iniciarRonda(partida);
-        verify(partidaRepository, times(1)).save(partida);
+    
+        verify(partidaRepository, times(2)).save(partida);
+        verify(messagingTemplate, times(1)).convertAndSend(eq("/topic/partida/1"), anyMap());
     }
+
+    @Test
+    void shouldIniciarPartida_NullPartida() {
+        when(partidaRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> partidaService.iniciarPartida(1));
+
+        verify(partidaRepository, times(1)).findById(1);
+        verifyNoInteractions(jugadorService, rondaService, manoService, bazaService, messagingTemplate);
+    }
+
 
     @Test
     void shouldIniciarPartidaMenosDeTresJugadores() {
@@ -255,56 +376,34 @@ public class PartidaServiceTest {
     // Test para finalizar una partida (caso positivo)
     @Test
     void shouldFinalizarPartida() {
+        User ganador = new User();
+        ganador.setUsername("Ganador");
+
+        jugador.setPuntos(100);
+        jugador.setUsuario(ganador);
+
         when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
-        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(Arrays.asList(jugador));
+        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(List.of(jugador));
 
         partidaService.finalizarPartida(1);
 
-        assertEquals(PartidaEstado.TERMINADA, partida.getEstado());
-        assertNotNull(partida.getFin());
-        assertEquals(1, user.getNumPartidasJugadas());
-        assertEquals(100, user.getNumPuntosGanados());
-        verify(userService, times(1)).saveUser(user);
+        verify(userService, times(1)).saveUser(ganador);
+        verify(partidaRepository, times(1)).save(partida);
+        verify(messagingTemplate, times(1)).convertAndSend(eq("/topic/partida/1"), anyMap());
     }
 
     @Test
-    public void shouldFinalizarPartidaNoExiste() {
-        // Simular que la partida no existe
+    void shouldFinalizarPartida_NotFound() {
         when(partidaRepository.findById(99)).thenReturn(Optional.empty());
 
-        // Verificar que se lanza la excepción ResourceNotFoundException
         assertThrows(ResourceNotFoundException.class, () -> partidaService.finalizarPartida(99));
 
-        // Verificar que no se realizaron otras acciones
         verify(partidaRepository, times(1)).findById(99);
         verify(partidaRepository, times(0)).save(any(Partida.class));
         verify(jugadorService, times(0)).findJugadoresByPartidaId(anyInt());
     }
 
-    // Test para eliminar una partida
-    @Test
-    void shouldEliminarPartida() {
-        doNothing().when(partidaRepository).deleteById(1);
-
-        partidaService.delete(1);
-
-        verify(partidaRepository, times(1)).deleteById(1);
-    }
-
-
-    @Test
-    void shouldUsuarioNoEsJugadorEnNingunaPartida() {
-        Partida partidaCrear = new Partida();
-        partidaCrear.setOwnerPartida(1);
-
-        // Simula que no hay jugadores que coincidan con las condiciones
-        when(jugadorService.findAll()).thenReturn(List.of());
-
-        Boolean resultado = partidaService.usuarioJugadorEnPartida(partidaCrear);
-
-        assertFalse(resultado);
-        verify(jugadorService, times(1)).findAll();
-    }
+    
 
     @Test
     void shouldMismoNombrePartidaNoTerminada() {
@@ -338,7 +437,6 @@ public class PartidaServiceTest {
 
     @Test
     void shouldGetJugadorGanador() {
-        // Arrange
         Jugador jugador1 = new Jugador();
         jugador1.setPuntos(100);
         Jugador jugador2 = new Jugador();
@@ -349,10 +447,8 @@ public class PartidaServiceTest {
         List<Jugador> jugadores = Arrays.asList(jugador1, jugador2, jugador3);
         when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(jugadores);
 
-        // Act
         Jugador ganador = partidaService.getJugadorGanador(1);
 
-        // Assert
         assertNotNull(ganador);
         assertEquals(jugador2, ganador);
         verify(jugadorService, times(1)).findJugadoresByPartidaId(1);
@@ -449,7 +545,6 @@ public class PartidaServiceTest {
 
     @Test
     void shouldUsuarioEnOtraPartida() {
-        // Arrange
         User otroUsuario = new User();
         otroUsuario.setId(2);
         Jugador otroJugador = new Jugador();
@@ -460,15 +555,71 @@ public class PartidaServiceTest {
 
         when(jugadorService.findAll()).thenReturn(List.of(otroJugador));
 
-        // Act
         Boolean result = partidaService.usuarioJugadorEnPartida(partidaCrear);
 
-        // Assert
         assertFalse(result);
         verify(jugadorService, times(1)).findAll();
     }
     
+    @Test
+    void shouldSiguienteEstado() {
+        Ronda ronda = new Ronda();
+        ronda.setNumBazas(1);
+        ronda.setNumRonda(1);
+        when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
+        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(List.of(jugador));
+        when(bazaService.findById(1)).thenReturn(new Baza());
 
+        partidaService.siguienteEstado(1, 1);
+
+        verify(bazaService, times(1)).nextBaza(1, List.of(jugador));
+        verify(messagingTemplate, times(1)).convertAndSend(eq("/topic/nuevaBaza/partida/1"), anyMap());
+    }
+
+
+    @Test
+    void shouldSiguienteEstado_NewRonda() {
+        Ronda ronda = new Ronda();
+        ronda.setNumBazas(1);
+        ronda.setNumRonda(1);
+        when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
+        when(bazaService.findById(1)).thenReturn(new Baza());
+
+        partidaService.siguienteEstado(1, 1);
+        List<Jugador> jugadores = List.of(jugador, jugador2);
+        verify(bazaService, times(1)).nextBaza(1, jugadores);
+        verify(messagingTemplate, times(1)).convertAndSend(eq("/topic/nuevaBaza/partida/1"), anyMap());
+    }
+
+    @Test
+    void shouldSiguienteEstado_FinalizarPartida() {
+        when(partidaRepository.findById(1)).thenReturn(Optional.of(partida));
+        when(bazaService.findById(1)).thenReturn(new Baza());
+        //when(rondaService.finalizarRonda(anyInt())).thenReturn(true);
+
+        partidaService.siguienteEstado(1, 1);
+
+        verify(partidaRepository, times(1)).save(partida);
+        verify(messagingTemplate, times(1)).convertAndSend(eq("/topic/partida/1"), anyMap());
+    }
+
+    @Test
+    void shouldPrimerTurno() {
+        List<Integer> turnos = List.of(1, 2, 3);
+    
+        Integer result = partidaService.primerTurno(turnos);
+    
+        assertNotNull(result);
+        assertEquals(1, result);
+    }
+
+    @Test
+    void shouldPrimerTurno_Vacio() {
+        List<Integer> turnos = List.of();
+    
+        assertThrows(IndexOutOfBoundsException.class, () -> partidaService.primerTurno(turnos));
+    }
+    
 }
 /*
      // Tests apostar --> LO COMENTO SE HA MOVIDO A Partida

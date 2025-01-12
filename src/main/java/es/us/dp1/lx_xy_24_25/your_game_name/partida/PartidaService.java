@@ -143,7 +143,6 @@ public class PartidaService {
         return partidaRepository.findByOwnerPartida(ownerId);
     }
     
-    // Hacer test
     public void actualizarOwner(Integer partidaId, Integer nuevoOwnerId) {
         Partida partida = getPartidaById(partidaId);
 

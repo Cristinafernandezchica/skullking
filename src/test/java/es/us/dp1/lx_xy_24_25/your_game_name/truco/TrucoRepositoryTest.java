@@ -134,4 +134,14 @@ public class TrucoRepositoryTest {
         assertEquals(truco1, result.get());
         verify(trucoRepository, times(1)).findTrucoByBazaIdCartaId(1, 1);
     }
+
+    @Test
+    public void shouldDeleteByJugadorId() {
+        Integer jugadorId = jugador.getId();
+
+        trucoRepository.deleteByJugadorId(jugadorId);
+        assertEquals(trucoRepository.findById(1), Optional.empty());
+        assertEquals(trucoRepository.findById(2), Optional.empty());
+        verify(trucoRepository, times(1)).deleteByJugadorId(jugadorId);
+    }
 }

@@ -52,8 +52,7 @@ public class PartidaRestController {
 
     @GetMapping("/{id}")
     public Partida getPartidaById(@PathVariable("id")Integer id){
-        Partida p = partidaService.getPartidaById(id);
-        return p;
+        return partidaService.getPartidaById(id);
     }
 
     
@@ -94,8 +93,6 @@ public class PartidaRestController {
             return new ResponseEntity<>(new MessageResponse("Partida no encontrada."), HttpStatus.NOT_FOUND);             
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(new MessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST); 
-        } catch (Exception e) {
-            return new ResponseEntity<>(new MessageResponse("Error al actualizar el owner."), HttpStatus.INTERNAL_SERVER_ERROR); 
         }
     }
 
@@ -108,14 +105,7 @@ public class PartidaRestController {
         return ResponseEntity.ok(jugadoresPartida);
     }
 
-    // Relación de uno a 10 con la clase Ronda, mirar los nombres de los métodos
-    /* 
-    @GetMapping("/{id}/rondas")
-    public List<Ronda> getRondasByPartidaId(@PathVariable("id")Integer id){
-        return rondaService.getRondasByPartidaId(id);
-    }
-    */
-
+    // Obtener las partidas dado el id de un usuario owner
     @GetMapping(params = "ownerId")
     public ResponseEntity<List<Partida>> findPartidasByOwnerId(@RequestParam("ownerId") Integer ownerId) {
         List<Partida> partidas = partidaService.findPartidasByOwnerId(ownerId);
@@ -125,8 +115,7 @@ public class PartidaRestController {
         return new ResponseEntity<>(partidas, HttpStatus.OK);
     }
 
-
-
+    // Obtener el jugador ganador de la partida
     @GetMapping("/{id}/jugadorGanador")
     public ResponseEntity<Jugador> ganadorPartida (@PathVariable("id") Integer id){
         partidaService.getJugadorGanador(id);

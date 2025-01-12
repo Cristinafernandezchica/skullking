@@ -199,11 +199,11 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Elegir rol de la carta Tigresa](../mockups/Elegir_la_carta_Tigresa.png)|
 |El jugador selecciona la carta Tigresa, aparece una ventana emergente donde le aparecerán dos botones con cada una de las opciones, deberá pulsar una de los dos para elegir el rol. Una vez pulsado el rol quedará seleccionado.|
 
-### HJJ7-(ISSUE#42): Salir de la partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/42]())
-| "Como jugador quiero poder rendirme y salir en mitad de la partida para evitar seguir jugando en caso de que me surja un imprevisto."| 
+### HJJ7-(ISSUE#175): Ver ganador de la baza ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/175]())
+| "Como jugador quiero poder ver el ganador de una baza al terminar cada una de ellas para poder saber quién la ha ganado."| 
 |-----|
-|![Salir de la partida](../mockups/Poder_salir_en_mitad_de_la_partida.png)|
-|El jugador debe pulsar el botón 'Salir', situado en la esquina inferior derecha.|
+|![Ver ganador de la baza](../mockups/ver_ganador_baza.png)|
+|Una vez se haya llegado al fin de la baza trás echar la última carta de la baza, aparecerá un modal donde se mostrará el ganador de la misma.|
 
 ### HJJ8-(ISSUE#47): Conocer reglas de juego ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/47]())
 | "Como jugador quiero conocer las reglas del juego para poder jugar correctamente."| 
@@ -255,6 +255,24 @@ A continuación se definen todas las historias de usuario a implementar:
 |-----|
 |![Lobby](../mockups/iniciar_partida.png)|
 |Una vez el jugador se encuentre en la sala de espera de una partida, el jugador podrá salir de la sala de espera para poder crear su propia partida o unirse a otra partida distinta.|
+
+### HJJ16-(ISSUE#238): Ver el ganador de la partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/238]())
+| "Como jugador quiero poder ver el ganador/es de una partida al terminar la última ronda para poder saber quién la ha ganado."| 
+|-----|
+|![Ver ganador partida](../mockups/ver_ganador_partida.png)|
+|Una vez se haya llegado al fin de la última ronda de una partida, aparecerá un modal donde se mostrará el ganador o ganadores de la partida.|
+
+### HJJ17-(ISSUE#239): Ver bazas ganadas en cada ronda ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/239]())
+| "Como jugador quiero poder ver las bazas que gana cada uno en cada ronda para poder saber cuántas me quedan por ganar a mi o al resto."| 
+|-----|
+|![Ver bazas ganadas cada ronda](../mockups/ver_bazas_ganadas.png)|
+|Cada vez que se termine una baza, se actualizarán los valores de bazas ganadas. Se renovarán al empezar cada ronda.|
+
+### HJJ18-(ISSUE#240): Saber ronda y baza actual ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/240]())
+| "Como jugador quiero poder saber la ronda y baza actual para saber cuánto me queda de la partida"| 
+|-----|
+|![Saber ronda y baza actual](../mockups/saber_ronda_baza.png)|
+|Cada vez que comience una ronda o una baza, aparecerá una alerta indicando la ronda y baza en la que se encuentra la partida.|
 
 
 ## Diagrama conceptual del sistema

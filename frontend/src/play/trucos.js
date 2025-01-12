@@ -1,7 +1,7 @@
 export default class Trucos {
     static async fetchListaDeTrucos(bazaId, jwt) {
         try {
-            const response = await fetch(`/api/v1/bazas/${bazaId}/trucos`, {
+            const response = await fetch(`/api/v1/trucos/trucosBaza/${bazaId}`, {
                 headers: {
                     "Authorization": `Bearer ${jwt}`,
                     "Content-Type": "application/json",

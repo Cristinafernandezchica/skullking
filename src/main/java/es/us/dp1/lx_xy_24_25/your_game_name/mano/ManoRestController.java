@@ -80,11 +80,6 @@ public class ManoRestController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @GetMapping(value = "{manoId}/trucos")
-    public ResponseEntity<List<Truco>> findTrucosByManoId(@PathVariable("manoId") int id) {
-        return new ResponseEntity<>(trucoService.findTrucosByManoId(id), HttpStatus.OK);
-    }
-
     @GetMapping(value = "/{manoId}/manoDisabled")
     public ResponseEntity<List<Carta>> cartasDisabled(@PathVariable("manoId") int id,
             @RequestParam TipoCarta tipoCarta) {

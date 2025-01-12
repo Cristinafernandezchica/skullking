@@ -159,22 +159,6 @@ public class ManoRestControllerTest {
         assertEquals(mano.getJugador().getId(), response.getBody().getJugador().getId());
     }
 
-    // Test para obtener los trucos de una mano
-    @Test
-    void shouldFindTrucosByManoId() {
-        Truco truco = new Truco();
-        truco.setId(1);
-        List<Truco> trucos = Arrays.asList(truco);
-
-        given(trucoService.findTrucosByManoId(1)).willReturn(trucos);
-
-        ResponseEntity<List<Truco>> response = new ManoRestController(manoService, trucoService).findTrucosByManoId(1);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(1, response.getBody().size());
-    }
-
     @Test
     void shouldCartasDisabled_SuccessNonEmpty() {
         Carta carta1 = new Carta();

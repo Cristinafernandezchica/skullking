@@ -2,7 +2,6 @@ package es.us.dp1.lx_xy_24_25.your_game_name.truco;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,12 +27,9 @@ import es.us.dp1.lx_xy_24_25.your_game_name.bazaCartaManoDTO.BazaCartaManoDTO;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
@@ -85,18 +81,6 @@ public class TrucoService {
 		return trucoRepository.findByJugadorId(jugadorId);
 	}
 
-    // Para ManoRestController
-    @Transactional(readOnly = true)
-	public List<Truco> findTrucosByManoId(int manoId) throws DataAccessException {
-		return trucoRepository.findByManoId(manoId);
-	}
-
-    // REVISAR Y QUIZAS QUITAR
-    @Transactional(readOnly = true)
-	public Truco findTrucoByBazaIdCartaId(int bazaId, int cartaId) throws DataAccessException {
-		return trucoRepository.findTrucoByBazaIdCartaId(bazaId, cartaId)
-				.orElseThrow(() -> new ResourceNotFoundException("Truco", "Baza", bazaId));
-	}
 
     @Transactional
 	public Truco saveTruco(Truco truco) throws DataAccessException {
@@ -130,7 +114,7 @@ public class TrucoService {
 	@Transactional
 	public Truco jugarTruco(BazaCartaManoDTO DTO, Integer jugadorId){
 		
-		Jugador jugador =jugadorService.findById(jugadorId);
+		Jugador jugador = jugadorService.findById(jugadorId);
 		Partida partida = jugador.getPartida();
 
 		Truco trucoIniciado= new Truco();
@@ -141,9 +125,38 @@ public class TrucoService {
 		trucoIniciado.setCarta(DTO.getCarta());
 		trucoRepository.save(trucoIniciado);
 
-		// Envía la lista actualizada de trucos al canal WebSocket
 		messagingTemplate.convertAndSend("/topic/baza/truco/partida/" + partida.getId(), findTrucosByBazaId(trucoIniciado.getBaza().getId()));
 
+		Ronda ronda = trucoIniciado.getBaza().getRonda();
+		Baza baza = trucoIniciado.getBaza();
+		manoSinCarta(trucoIniciado, partida, ronda);
+
+		Integer numJugadores = jugadorService.findJugadoresByPartidaId(partida.getId()).size();
+		Integer numTrucosBaza = findTrucosByBazaId(baza.getId()).size();
+		Boolean esUltimoTruco = (numJugadores == numTrucosBaza);
+		Boolean noEsUltimoTruco = (numJugadores > numTrucosBaza);
+
+		Baza bazaParaCambio = bazaService.findById(baza.getId());
+		if(bazaParaCambio.getPaloBaza() == PaloBaza.sinDeterminar){
+			Baza bazaConPaloCambiado = cambiarPaloBaza(baza, trucoIniciado);
+			mandarCartasDisabled(bazaConPaloCambiado, ronda, partida);
+		}
+
+		if(noEsUltimoTruco){
+			actualizarTurno(partida, trucoIniciado);
+		}
+		else if(esUltimoTruco){
+			Jugador ganadorBaza = calculoGanador(baza.getId());
+			messagingTemplate.convertAndSend("/topic/ganadorBaza/partida/" + partida.getId(), ganadorBaza);
+			messagingTemplate.convertAndSend("/topic/listaTrucos/partida/" + partida.getId(), new ArrayList<>());
+			partidaService.siguienteEstado(partida.getId(), baza.getId());
+		}
+
+		return trucoIniciado;
+	}
+
+	@Transactional
+	public void manoSinCarta(Truco trucoIniciado, Partida partida, Ronda ronda){
 		Mano manoSinCartaJugada = trucoIniciado.getMano();
 		List<Carta> nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
 			filter(cartaJugada -> cartaJugada.getId()!=trucoIniciado.getCarta().getId()).toList();
@@ -155,18 +168,51 @@ public class TrucoService {
 		manoSinCartaJugada.setCartas(nuevaListaCarta);
 		manoService.saveMano(manoSinCartaJugada);
 
-		Ronda ronda = trucoIniciado.getBaza().getRonda();
 		messagingTemplate.convertAndSend("/topic/nuevasManos/partida/" + partida.getId(), manoService.findAllManosByRondaId(ronda.getId()));
 
-		Integer numJugadores = jugadorService.findJugadoresByPartidaId(partida.getId()).size();
-		Baza baza = trucoIniciado.getBaza();
-		Integer numTrucosBaza = findTrucosByBazaId(baza.getId()).size();
+	}
 
-		Baza bazaParaCambio = bazaService.findById(baza.getId());
-		// Cambiamos el palo de la baza y calculamos las cartas deshabilitadas
-		if(bazaParaCambio.getPaloBaza() == PaloBaza.sinDeterminar){
-			Baza bazaConPaloCambiado = cambiarPaloBaza(baza, trucoIniciado);
-			TipoCarta tipoCarta;
+	@Transactional
+	public Baza cambiarPaloBaza(Baza baza, Truco truco){
+		PaloBaza paloBaza = PaloBaza.sinDeterminar;
+		if(truco.getCarta().getTipoCarta() != TipoCarta.banderaBlanca){
+			if(truco.getCarta().getTipoCarta() == TipoCarta.pirata || 
+			truco.getCarta().getTipoCarta() == TipoCarta.skullking || 
+			truco.getCarta().getTipoCarta() == TipoCarta.sirena){
+				paloBaza = PaloBaza.noHayPalo;
+			} else{
+				if(truco.getCarta().getTipoCarta() == TipoCarta.amarillo){
+					paloBaza = PaloBaza.amarillo;
+				} else if(truco.getCarta().getTipoCarta() == TipoCarta.morada){
+					paloBaza = PaloBaza.morada;
+				} else if(truco.getCarta().getTipoCarta() == TipoCarta.triunfo){
+					paloBaza = PaloBaza.triunfo;
+				} else if(truco.getCarta().getTipoCarta() == TipoCarta.verde){
+					paloBaza = PaloBaza.verde;
+				}
+			}
+		}
+
+		baza.setPaloBaza(paloBaza);
+		return bazaService.saveBaza(baza);
+	}
+
+	@Transactional
+	public Map<Integer, List<Carta>> cartasDisabledBaza(Integer rondaId, TipoCarta paloBaza){
+		List<Integer> idsManos = manoService.findAllManosByRondaId(rondaId).stream().map(Mano::getId).toList(); 
+		Map<Integer, List<Carta>> cartasDisabledPorJugador = new HashMap<>();
+    
+    	for (Integer idMano : idsManos) {
+        	List<Carta> cartasDisabled = manoService.cartasDisabled(idMano, paloBaza);
+        	cartasDisabledPorJugador.put(idMano, cartasDisabled);
+    	}
+    
+    	return cartasDisabledPorJugador;
+	}
+
+	@Transactional
+	public void mandarCartasDisabled(Baza bazaConPaloCambiado, Ronda ronda, Partida partida){
+		TipoCarta tipoCarta;
 			switch (bazaConPaloCambiado.getPaloBaza()) {
 				case amarillo:
 					tipoCarta = TipoCarta.amarillo;
@@ -187,69 +233,8 @@ public class TrucoService {
 			
 			Map<Integer, List<Carta>> cartasDisabled = cartasDisabledBaza(ronda.getId(), tipoCarta);
 			messagingTemplate.convertAndSend("/topic/cartasDisabled/partida/" + partida.getId(), cartasDisabled);
-		}
 
-		// Si no es el último truco de la Baza, se actualiza el turno
-		if(numJugadores > numTrucosBaza){
-			Integer turnoAntesCambio = partida.getTurnoActual();
-			List<Integer> turnos = trucoIniciado.getBaza().getTurnos();
-			Integer nuevoTurno = siguienteTurno(turnos, turnoAntesCambio);
-			partida.setTurnoActual(nuevoTurno);
-			partidaService.update(partida, partida.getId());
-			messagingTemplate.convertAndSend("/topic/turnoActual/" + partida.getId(), partida.getTurnoActual());
-		}
-		// Si es el último truco de la Baza, se calcula el ganador de la baza
-		
-		else if(numJugadores == numTrucosBaza){
-			Jugador ganadorBaza = calculoGanador(baza.getId());
-			messagingTemplate.convertAndSend("/topic/ganadorBaza/partida/" + partida.getId(), ganadorBaza);
-			messagingTemplate.convertAndSend("/topic/listaTrucos/partida/" + partida.getId(), new ArrayList<>());
-			partidaService.siguienteEstado(partida.getId(), baza.getId());
-		}
-		
-
-		return trucoIniciado;
 	}
-
-	@Transactional
-	public Baza cambiarPaloBaza(Baza baza, Truco truco){
-		PaloBaza paloBaza = PaloBaza.sinDeterminar;
-		if(truco.getCarta().getTipoCarta() != TipoCarta.banderaBlanca){
-			if(truco.getCarta().getTipoCarta() == TipoCarta.pirata || 
-			truco.getCarta().getTipoCarta() == TipoCarta.skullking || 
-			truco.getCarta().getTipoCarta() == TipoCarta.sirena){
-				paloBaza = PaloBaza.noHayPalo;
-			} else{
-				if(truco.getCarta().getTipoCarta() == TipoCarta.amarillo){
-					paloBaza = PaloBaza.amarillo;
-				} else if(truco.getCarta().getTipoCarta() == TipoCarta.morada){
-					paloBaza = PaloBaza.morada;
-				} else if(truco.getCarta().getTipoCarta() == TipoCarta.triunfo){
-					paloBaza = PaloBaza.triunfo; // Preguntar si esto es así, o se trata como la bandera blanca, o como carta especial
-				} else if(truco.getCarta().getTipoCarta() == TipoCarta.verde){
-					paloBaza = PaloBaza.verde;
-				}
-			}
-		}
-
-		// messagingTemplate.convertAndSend("/topic/palobaza/partida/", paloBaza);
-		baza.setPaloBaza(paloBaza);
-		return bazaService.saveBaza(baza);
-	}
-
-	@Transactional
-	public Map<Integer, List<Carta>> cartasDisabledBaza(Integer rondaId, TipoCarta paloBaza){
-		List<Integer> idsManos = manoService.findAllManosByRondaId(rondaId).stream().map(Mano::getId).toList(); 
-		Map<Integer, List<Carta>> cartasDisabledPorJugador = new HashMap<>();
-    
-    	for (Integer idMano : idsManos) {
-        	List<Carta> cartasDisabled = manoService.cartasDisabled(idMano, paloBaza);
-        	cartasDisabledPorJugador.put(idMano, cartasDisabled);
-    	}
-    
-    	return cartasDisabledPorJugador;
-	}
-
 
 
 	// Método calculoGanador usando Patrón State
@@ -280,25 +265,21 @@ public class TrucoService {
     }
 
 
-    // Para BazaRestController
-    public Map<Carta, Jugador> getCartaByJugador(Integer bazaId) {
-        List<Truco> trucos = findTrucosByBazaId(bazaId);
-        List<Truco> trucosOrdenados = trucos.stream().sorted(Comparator.comparing(t-> t.getTurno())).toList();
-        return trucosOrdenados.stream()
-            .collect(Collectors.toMap(
-                Truco::getCarta,   
-                Truco::getJugador,    
-                (v1, v2) -> v1,      
-                LinkedHashMap::new
-            ));
-    }
-	
-
 	@Transactional
 	public Integer siguienteTurno(List<Integer> turnos, Integer turnoActual){
 		Integer indexTurnoActual = turnos.indexOf(turnoActual);
 		Integer indexSiguienteTurno = indexTurnoActual + 1;
 		return turnos.get(indexSiguienteTurno);
+	}
+
+	@Transactional
+	public void actualizarTurno(Partida partida, Truco trucoIniciado){
+		Integer turnoAntesCambio = partida.getTurnoActual();
+		List<Integer> turnos = trucoIniciado.getBaza().getTurnos();
+		Integer nuevoTurno = siguienteTurno(turnos, turnoAntesCambio);
+		partida.setTurnoActual(nuevoTurno);
+		partidaService.update(partida, partida.getId());
+		messagingTemplate.convertAndSend("/topic/turnoActual/" + partida.getId(), partida.getTurnoActual());
 	}
 
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Input, FormGroup, Label, Alert } from 'reactstrap';
 import '../formGenerator/css/Temporizador.css';
 
-export default function ApuestaModal({ isVisible, onCancel, onConfirm, tiempoRestante }) {
+export default function ApuestaModal({ isVisible, onCancel, onConfirm}) {
     const [apuesta, setApuesta] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -29,21 +29,13 @@ export default function ApuestaModal({ isVisible, onCancel, onConfirm, tiempoRes
             setErrorMessage('');
         } catch (error) {
             setErrorMessage(error.message);
-        } finally {
-            let timerCerrarTrasError;
-            timerCerrarTrasError = setTimeout(() => {
-                setErrorMessage('');
-                onCancel();
-            }, 3000);
-
-            return () => clearTimeout(timerCerrarTrasError);
         }
 
     };
 
     return (
-        <Modal isOpen={isVisible} toggle={onCancel}>
-            <ModalHeader toggle={onCancel}>Realizar Apuesta</ModalHeader>
+        <Modal isOpen={isVisible}>
+            <ModalHeader toggle={onCancel}> Realizar Apuesta</ModalHeader>
             <ModalBody>
                 {errorMessage && <Alert color="danger">{errorMessage}</Alert>}
                 <FormGroup>
@@ -63,15 +55,6 @@ export default function ApuestaModal({ isVisible, onCancel, onConfirm, tiempoRes
                     <i className="fa fa-check" aria-hidden="true"></i> Confirmar
                 </Button>
             </ModalFooter>
-            {/* Barra de cuenta regresiva */}
-            {isVisible && (
-                <div className="barra-cuenta-regresiva-fija">
-                    <div
-                        className="barra-progreso"
-                        style={{ width: `${(tiempoRestante / 15) * 100}%` }} // Asumiendo 15 segundos como total
-                    ></div>
-                </div>
-            )}
         </Modal>
     );
 }

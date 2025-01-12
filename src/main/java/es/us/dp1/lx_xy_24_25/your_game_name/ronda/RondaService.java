@@ -90,14 +90,6 @@ public class RondaService {
         rondaRepository.save(ronda);
     }
 
-    @Transactional(readOnly = true)
-    public Ronda findRondaActualByPartidaId(Integer partidaId) {
-        List<Ronda> rondas = rondaRepository.findByPartidaId(partidaId);
-        Ronda rondasOrdenadas =rondas.stream()
-                .sorted((j1, j2) -> j2.getId().compareTo(j1.getId())) // Orden descendente
-                .findFirst().orElse(null);
-        return rondasOrdenadas;
-    }
 
     @Transactional(readOnly = true)
     public Ronda rondaActual(Integer partidaId){
@@ -106,5 +98,4 @@ public class RondaService {
         return rondaActual;
     }
     
-
 }

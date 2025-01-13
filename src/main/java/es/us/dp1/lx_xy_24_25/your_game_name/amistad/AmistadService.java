@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.AmistadNoExisteException;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.SolicitudEnviadaException;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.UserService;
 import jakarta.validation.Valid;
@@ -21,13 +22,15 @@ public class AmistadService {
     private AmistadRepository amistadRepository;
     private UserService userService;
     private SimpMessagingTemplate messagingTemplate;
+    private JugadorService jugadorService;
 
     
     @Autowired
-    public AmistadService(AmistadRepository amistadRepository, UserService userService, SimpMessagingTemplate messagingTemplate) {
+    public AmistadService(AmistadRepository amistadRepository, UserService userService, SimpMessagingTemplate messagingTemplate,JugadorService jugadorService) {
         this.amistadRepository = amistadRepository;
         this.userService = userService;
         this.messagingTemplate = messagingTemplate;
+        this.jugadorService = jugadorService;
     }
 
     //save a Amistad en la base de datos
@@ -148,6 +151,20 @@ public class AmistadService {
     Amistad result= amistadRepository.save(amistadAAceptar);
     messagingTemplate.convertAndSend("/topic/amistad/" + remitenteId, getAllMyFriends(remitenteId));
     return result;
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<User> puedesVerPartida(Integer partidaId,Integer miId){
+        List<User> result = new ArrayList<User>();
+        List<User> amigos = getAllMyFriends(miId);
+        List<User> jugadoresEnPartida = jugadorService.findJugadoresByPartidaId(partidaId).stream().map(x->x.getUsuario()).toList();
+        for(User amigo : amigos){
+            if(getAllMyFriends(amigo.getId()).containsAll(jugadoresEnPartida)){
+                result.add(amigo);
+            }
+        }
+        return result;
     }
 
 }

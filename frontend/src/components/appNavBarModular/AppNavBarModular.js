@@ -213,3 +213,26 @@ export async function usuarioConectadoODesconectado(jwt,usuario,conectado) {
                 console.error("Error:", error);
             }
         }
+
+        export async function fetchListaDeAmigosQuePuedenVer(jugadorActual, setAmigosQuePuedenVer, jwt) {
+            try {
+                const response = await fetch(`/api/v1/amistades/puedeVerLaPartida/${jugadorActual.partida.id}/${jugadorActual.usuario.id}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${jwt}`,
+                    },
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setAmigosQuePuedenVer(data);
+                    console.log("Lista de jugadores obtenida:", data);
+                    return data;
+                } else {
+                    console.error("Error al obtener los detalles de los jugadores.");
+                }
+            } catch (error) {
+                console.error("Error al conectar con el servidor:", error);
+            }
+        }
+
+

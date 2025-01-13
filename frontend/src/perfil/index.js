@@ -3,7 +3,7 @@ import { Button, Spinner, Alert, ModalFooter, ModalBody, ModalHeader, Modal } fr
 import { useNavigate } from "react-router-dom";
 import tokenService from "../services/token.service";
 import "./Perfil.css";
-import { aceptarORechazarSolicitud, fetchListaDeAmigos, invitarAPartida } from "../components/appNavBarModular/AppNavBarModular";
+import { aceptarORechazarSolicitud, eresAmigoDeTodaLaPartida, fetchListaDeAmigos, fetchListaDeAmigosQuePuedenVer, invitarAPartida } from "../components/appNavBarModular/AppNavBarModular";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
 
@@ -24,6 +24,7 @@ export default function Perfil() {
     const [listaDeAmigos, setListaDeAmigos] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [amigoAEliminar, setAmigoAEliminar] = useState(null);
+    const [listaDeAmigosQuePuedenVer, setListaDeAmigosQuePuedenVer] = useState([]);
     const navigate = useNavigate();
 
     const showError = (error) => { 
@@ -93,6 +94,13 @@ export default function Perfil() {
 
     }, []); // Solo se ejecuta cuando cambia de baza
 
+    useEffect(() => {
+        if(lastPlayer){
+
+        fetchListaDeAmigosQuePuedenVer(lastPlayer,setListaDeAmigosQuePuedenVer,jwt);
+    console.log(listaDeAmigosQuePuedenVer)}
+    },[listaDeAmigos,lastPlayer])
+
     async function enviarSolicitud() {
         try {
             const response = await fetch(`/api/v1/amistades/${usuarioActual.id}/${inputValue}`, {
@@ -126,6 +134,7 @@ export default function Perfil() {
     useEffect(() => {
         fetchListaDeAmigos(usuarioActual.id,setListaDeAmigos,jwt);
     },[]);
+
 
     useEffect(() => {
         async function fetchUserAndPlayers() {
@@ -460,7 +469,7 @@ export default function Perfil() {
                                             🎮
                                         </button>
                                     )}
-                                {lastPlayer != null &&
+                                {lastPlayer != null && listaDeAmigosQuePuedenVer.some(item => item.id === amigo.id) &&
                                     lastPlayer.partida.estado === 'JUGANDO' && (
                                         <button
                                             className="partida-button"

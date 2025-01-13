@@ -244,41 +244,58 @@ function AppNavbar() {
         </>
     )}
 
-    {/* Invitaciones */}
-    {invitaciones.length > 0 && (
-        <>
-            <p><b>Invitaciones</b></p>
-            {invitaciones.map((invitacion) => (
-                <DropdownItem 
-                    key={invitacion.id} 
-                    tag="div" 
-                    className="d-flex justify-content-between align-items-center"
-                >
-                    {invitacion.espectador ? (
-                        <>
-                            <span>Espectar a {invitacion.remitente.username}</span>
+{invitaciones.length > 0 && (
+    <>
+        <p><b>Invitaciones</b></p>
+        {invitaciones.map((invitacion) => (
+            <DropdownItem 
+                key={invitacion.id} 
+                tag="div" 
+                className="d-flex justify-content-between align-items-center"
+            >
+                {invitacion.espectador ? (
+                    <>
+                        <span>Espectar a {invitacion.remitente.username}</span>
+                        <div className="d-flex align-items-center">
                             <Button 
                                 className="btn btn-secondary btn-sm ms-2" 
-                                onClick={() => { invitacionAceptada(invitacion)}}
+                                onClick={() => invitacionAceptada(invitacion)}
                             >
                                 👁️
                             </Button>
-                        </>
-                    ) : (
-                        <>
+                            <Button 
+                                className="btn btn-danger btn-sm ms-2" 
+                                onClick={() => aceptarInvitacion(jwt,invitacion.id)} // Lógica para rechazar
+                                title="Rechazar invitación"
+                            >
+                                ✖
+                            </Button>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <div className="d-flex align-items-center">
                             <Button 
                                 className="btn btn-primary btn-sm me-2" 
-                                onClick={() => {invitacionAceptada(invitacion)}}
+                                onClick={() => invitacionAceptada(invitacion)}
                             >
                                 🎮
                             </Button>
                             <span>Únete a la partida de {invitacion.remitente.username}</span>
-                        </>
-                    )}
-                </DropdownItem>
-            ))}
-        </>
-    )}
+                            <Button 
+                                className="btn btn-danger btn-sm ms-2" 
+                                onClick={() => aceptarInvitacion(jwt,invitacion.id)} // Lógica para rechazar
+                                title="Rechazar invitación"
+                            >
+                                ✖
+                            </Button>
+                        </div>
+                    </>
+                )}
+            </DropdownItem>
+        ))}
+    </>
+)}
 </DropdownMenu>
 
                     </Dropdown>

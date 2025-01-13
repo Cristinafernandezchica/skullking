@@ -115,13 +115,13 @@ A continuación se definen todas las historias de usuario a implementar:
 | "Como jugador quiero poder editar mi perfil para modificar mi información a mi elección."| 
 |-----|
 |![Editar perfil](../mockups/Editar_perfil.png)|
-|  |
+|Al presionar el botón "Editar Perfil" en la visualización de su perfil se muestra un formulario en el cuál se puede modificar sus datos personales .|
 
 ### HGJ6-(ISSUE#204): Eliminar perfil de usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/204]())
 | "Como jugador quiero poder eliminar mi propia cuenta."| 
 |-----|
 |![Editar perfil](../mockups/Eliminar_perfil.png)|
-|  |
+|Al presionar el botón "Eliminar Perfil" en la visualización de su perfil se mostrará una advertencia en la cuál te advierte de la acción y debes Aceptar o Cancelar según quieras eliminar tu cuenta o no finalmente.|
 
 ### HGA1-(ISSUE#30): Listado usuarios registrados ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/30]())
 | "Como administrador quiero ver el listado de usuarios registrados para llevar un control sobre la cantidad de usuarios en el sistema."| 
@@ -211,7 +211,7 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Ver instrucciones](../mockups/Ver_Instrucciones.png)|
 |Puedes acceder al PDF con todas las reglas del juego e incluso descargar dicho pdf para tenerlo en tu dispositivo.|
 
- ### HJJ9-(ISSUE#48): Crear partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/48]())
+### HJJ9-(ISSUE#48): Crear partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/48]())
 | "Como jugador quiero poder crear partidas para poder jugar."| 
 |-----|
 |![Lobby](../mockups/Lobby_partidas.png)|
@@ -224,21 +224,21 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Hacer apuestas](../mockups/Hacer_apuesta_sobre_cuantas_bazas_ganare.png)|
 |Al inicio de cada ronda aparecerá una ventana emergente con botones del 0 al número de cartas repartidas en la ronda actual, el jugador deberá pulsar uno de los números en función de la predicción de bazas que cree que va a ganar en la ronda.|
 
- ### HJJ11-(ISSUE#106): Unirse a partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/106]())
+### HJJ11-(ISSUE#106): Unirse a partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/106]())
 | "Como jugador quiero poder unirme a una partida para poder jugar."| 
 |-----|
 |![Lobby](../mockups/Lobby_partidas.png)|
 |Puedes presionar en el botón "Unirse a partida" para unirte a una partida que esté en estado "ESPERANDO".|
 |Caso negativo: Si ya estás en una partida en estado "JUGANDO" o "ESPERANDO", se lanzará una excepción y no podrás unirte a otra partida.|
 
- ### HJJ12-(ISSUE#108): Iniciar partida creada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/108]())
+### HJJ12-(ISSUE#108): Iniciar partida creada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/108]())
 | "Como jugador quiero poder iniciar una partida que he creado para poder jugar."| 
 |-----|
 |![Lobby](../mockups/iniciar_partida.png)|
 |Una vez el jugador se encuentre en la sala de espera de la partida, si ha creado la partida, puede presionar el botón "Iniciar Partida".|
 |Caso negativo: Si en la partida hay menos de 3 jugadores, no se podrá iniciar, aparecerá una excepción que lo indique.|
 
- ### HJJ13-(ISSUE#109): Ver jugadores en la sala ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/109]())
+### HJJ13-(ISSUE#109): Ver jugadores en la sala ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/109]())
 | "Como jugador quiero poder ver los jugadores que se unen a la partida para poder saber con quién voy a jugar."| 
 |-----|
 |![Lobby](../mockups/iniciar_partida.png)|
@@ -274,6 +274,11 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Saber ronda y baza actual](../mockups/saber_ronda_baza.png)|
 |Cada vez que comience una ronda o una baza, aparecerá una alerta indicando la ronda y baza en la que se encuentra la partida.|
 
+### HJJ19-(ISSUE#146): Ver listado de mis partidas ordenadas y por filtros ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/146]())
+| "Como jugador quiero poder ver el listado de partidas que he jugado, incluyendo nombre de la partida, estado, jugadores participantes, si la he creado yo o no y la fecha de creación para llevar un control de las partidas en las que participado."| 
+|-----|
+|![Listado de partidas como jugador](../mockups/listado_partidas_jugador.png)|
+|El jugador, en la parte superior de la pantalla, tendrá un botón 'Partidas jugadas'. Dentro de esta pantalla encontrará una barra de búsqueda para filtrar las partidas por nombre y otra para realizar paginación en función a la cantidad de partidas que quieras por página. Además, encontrará diversos botones para filtrar en función del estado de las partidas.|
 
 ## Diagrama conceptual del sistema
 En esta sección proporcionamos un diagrama UML de clases que describe el modelo de datos a implementar en la aplicación. Este diagrama esta anotado con las restricciones simples de los datos a gestionar por la aplicación.

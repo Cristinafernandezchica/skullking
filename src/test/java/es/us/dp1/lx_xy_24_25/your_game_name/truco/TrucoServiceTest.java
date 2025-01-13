@@ -222,24 +222,6 @@ public class TrucoServiceTest {
     }
 
     @Test
-    public void shouldFindTrucoByBazaIdCartaId() throws DataAccessException {
-        when(trucoRepository.findTrucoByBazaIdCartaId(baza.getId(), carta.getId())).thenReturn(Optional.of(truco));
-
-        Truco result = this.trucoService.findTrucoByBazaIdCartaId(baza.getId(), carta.getId());
-        assertEquals(1, result.getId());
-        verify(trucoRepository).findTrucoByBazaIdCartaId(baza.getId(), carta.getId());
-    }
-
-    @Test
-    public void shouldNotFindTrucoByBazaIdCartaId(){
-        when(trucoRepository.findTrucoByBazaIdCartaId(999, 999)).thenReturn(Optional.empty());
-
-        assertThrows(ResourceNotFoundException.class, () -> {
-            trucoService.findTrucoByBazaIdCartaId(999, 999);
-        }, "Se esperaba que se lanzara una ResourceNotFoundException cuando no se encuentra el Truco");
-    }
-
-    @Test
     public void shouldSaveTruco() {
         when(trucoRepository.save(truco)).thenReturn(truco);
 

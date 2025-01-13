@@ -52,19 +52,7 @@ public class TrucoRestController {
 	public ResponseEntity<Truco> createTruco(@RequestBody @Valid Truco truco) throws URISyntaxException {
 		Truco newTruco = new Truco();
 		BeanUtils.copyProperties(truco, newTruco, "id");
-		// Integer jugadorId = truco.getMano().getJugador();
-		// newTruco.setIdJugador(jugadorId);
 		Truco savedTruco = this.trucoService.saveTruco(newTruco);
-
-		return new ResponseEntity<>(savedTruco, HttpStatus.CREATED);
-	}
-
-	@PostMapping(value= "{jugadorId}/jugar")
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Truco> jugarTruco(@PathVariable("jugadorId") int jugadorId,@RequestBody @Valid BazaCartaManoDTO DTO) throws URISyntaxException {
-
-		Truco savedTruco = this.trucoService.jugarTruco(DTO, jugadorId);
-
 		return new ResponseEntity<>(savedTruco, HttpStatus.CREATED);
 	}
 
@@ -88,6 +76,13 @@ public class TrucoRestController {
 	public ResponseEntity<List<Truco>> findTrucosByBazaId(@PathVariable("bazaId") int bazaId) {
 		List<Truco> res = (List<Truco>) this.trucoService.findTrucosByBazaId(bazaId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+
+	@PostMapping(value= "{jugadorId}/jugar")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<Truco> jugarTruco(@PathVariable("jugadorId") int jugadorId,@RequestBody @Valid BazaCartaManoDTO DTO) throws URISyntaxException {
+		Truco savedTruco = this.trucoService.jugarTruco(DTO, jugadorId);
+		return new ResponseEntity<>(savedTruco, HttpStatus.CREATED);
 	}
 
 }

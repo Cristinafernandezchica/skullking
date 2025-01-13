@@ -109,7 +109,7 @@ public class AmistadService {
     }
 
     @Transactional
-    public Amistad eviarSolicitudDeAmistad(Integer remitenteId, String destinatarioId){
+    public Amistad enviarSolicitudDeAmistad(Integer remitenteId, String destinatarioId){
         User remitente = userService.findUser(remitenteId);
         User destinatario = userService.findUser(destinatarioId);
         Amistad solicitud = new Amistad();

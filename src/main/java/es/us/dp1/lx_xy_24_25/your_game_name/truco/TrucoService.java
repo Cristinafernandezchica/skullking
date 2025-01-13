@@ -91,13 +91,6 @@ public class TrucoService {
 		return trucoRepository.findByManoId(manoId);
 	}
 
-    // REVISAR Y QUIZAS QUITAR
-    @Transactional(readOnly = true)
-	public Truco findTrucoByBazaIdCartaId(int bazaId, int cartaId) throws DataAccessException {
-		return trucoRepository.findTrucoByBazaIdCartaId(bazaId, cartaId)
-				.orElseThrow(() -> new ResourceNotFoundException("Truco", "Baza", bazaId));
-	}
-
     @Transactional
 	public Truco saveTruco(Truco truco) throws DataAccessException {
 		Boolean cartaEnMano = truco.getCarta() == null || 

@@ -235,4 +235,25 @@ export async function usuarioConectadoODesconectado(jwt,usuario,conectado) {
             }
         }
 
+        export async function fetchLastPlayer(usuarioActualId, setjugador, jwt) {
+            try {
+                const response = await fetch(`/api/v1/jugadores/${usuarioActualId}/usuario`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${jwt}`,
+                    },
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setjugador(data);
+                    console.log("jugador obtenido:", data);
+                    return data;
+                } else {
+                    console.error("Error al obtener los detalles del jugador.");
+                }
+            } catch (error) {
+                console.error("Error al conectar con el servidor:", error);
+            }
+        }
+
 

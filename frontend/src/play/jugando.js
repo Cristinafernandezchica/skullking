@@ -332,11 +332,12 @@ export default function Jugando() {
 
   // Para abrir el modal de apuesta
   useEffect(() => {
+    if(tu && tu.espectador===false){
     const timerAbrirApuestas = setTimeout(() => {
         setApuestaModalOpen(true);
     }, 5000); // Cambiar a 30 (30000)
 
-    return () => clearTimeout(timerAbrirApuestas);
+    return () => clearTimeout(timerAbrirApuestas);}
   }, [ronda, tu]);
 
   // Para actualizar la visualización de la apuesta en todos los jugadores

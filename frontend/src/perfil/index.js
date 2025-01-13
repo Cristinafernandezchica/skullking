@@ -449,8 +449,7 @@ export default function Perfil() {
                                     🚫
                                 </button>
 
-                                {/* Botón de acción según el estado de la partida */}
-                                {lastPlayer != null &&
+                                {lastPlayer != null && lastPlayer.espectador===false && amigo.conectado &&
                                     lastPlayer.partida.estado === 'ESPERANDO' && (
                                         <button
                                             className="partida-button"
@@ -469,7 +468,7 @@ export default function Perfil() {
                                             🎮
                                         </button>
                                     )}
-                                {lastPlayer != null && listaDeAmigosQuePuedenVer.some(item => item.id === amigo.id) &&
+                                {lastPlayer != null && lastPlayer.espectador===false&& amigo.conectado && listaDeAmigosQuePuedenVer.some(item => item.id === amigo.id) &&
                                     lastPlayer.partida.estado === 'JUGANDO' && (
                                         <button
                                             className="partida-button"

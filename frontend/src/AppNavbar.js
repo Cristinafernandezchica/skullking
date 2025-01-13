@@ -15,16 +15,17 @@ import {
     Button,
     Alert
 } from "reactstrap";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import tokenService from "./services/token.service";
 import jwt_decode from "jwt-decode";
 import logo from "./static/images/gamelogo_sin_fondo.png";
 import "./styles.css";
-import SockJS from "sockjs-client";
-import { Stomp } from "@stomp/stompjs";
 import { fetchListaDeSolicitudes, fetchUserDetails,fetchListaDeAmigosConectados,aceptarORechazarSolicitud,
     usuarioConectadoODesconectado, fetchListaDeInvitaciones,
-    unirseAPartida,aceptarInvitacion} from "./components/appNavBarModular/AppNavBarModular";
+    unirseAPartida,aceptarInvitacion,
+    fetchLastPlayer,
+    invitarAPartida} from "./components/appNavBarModular/AppNavBarModular";
+
 
 function AppNavbar() {
     const [roles, setRoles] = useState([]);
@@ -39,12 +40,15 @@ function AppNavbar() {
     const [amigosConectados, setAmigosConectados] = useState([]);
     const [invitaciones, setInvitaciones] = useState([]);
     const [errors, setErrors] = useState([]);
+    const [lastPlayer, setLastPlayer] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(null);
 
     const toggleDropdown = async () => {
         setDropdownOpen(!dropdownOpen);
         fetchListaDeAmigosConectados(usuarioActual.id,setAmigosConectados,jwt);
         fetchListaDeInvitaciones(usuarioActual.id,setInvitaciones,jwt);
         fetchListaDeSolicitudes(usuarioActual.id, setNuevasSolitudes, jwt);
+        fetchLastPlayer(usuarioActual.id, setLastPlayer,jwt);
     }
     const toggleNavbar = () => setCollapsed(!collapsed);
 
@@ -54,6 +58,13 @@ function AppNavbar() {
           setErrors([]); 
         }, 5000); // La alerta desaparece después de 5000 milisegundos (5 segundos) 
       };
+
+      const showSuccess = (success) => {
+        setSuccessMessage(success);
+        setTimeout(() => {
+            setSuccessMessage(null);
+        }, 5000); // La alerta desaparece después de 5000 milisegundos (5 segundos)
+    };
 
       async function invitacionAceptada(invitacion){
         unirseAPartida(usuarioActual,invitacion.partida,setErrors,showError,jwt);
@@ -170,7 +181,7 @@ function AppNavbar() {
                             Notificaciones
                         </DropdownToggle>
                         <DropdownMenu style={{ maxHeight: "300px", overflowY: "auto" }}>
-    {/* Solicitudes */}
+
     {nuevasSolitudes.length > 0 && (
         <>
             <p><b>Solicitudes</b></p>
@@ -214,35 +225,72 @@ function AppNavbar() {
         </>
     )}
 
-    {/* Amigos Conectados */}
-    {amigosConectados.length > 0 && (
-        <>
-            <p><b>Amigos conectados</b></p>
-            {amigosConectados.map((usuario) => (
-                <DropdownItem 
-                    key={usuario.id} 
-                    tag="div" 
-                    className="d-flex justify-content-between align-items-center"
-                >
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                        {usuario.imagenPerfil && (
-                            <img 
-                                src={usuario.imagenPerfil} 
-                                alt="Perfil" 
-                                style={{ 
-                                    width: "30px", 
-                                    height: "30px", 
-                                    borderRadius: "50%", 
-                                    marginRight: "10px" 
-                                }} 
-                            />
-                        )}
-                        <span>{usuario.username}</span>
-                    </div>
-                </DropdownItem>
-            ))}
-        </>
-    )}
+{amigosConectados.length > 0 && (
+    <>
+        <p><b>Amigos conectados</b></p>
+        {amigosConectados.map((amigo) => (
+            <DropdownItem 
+                key={amigo.id} 
+                tag="div" 
+                className="d-flex justify-content-between align-items-center"
+            >
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    {amigo.imagenPerfil && (
+                        <img 
+                            src={amigo.imagenPerfil} 
+                            alt="Perfil" 
+                            style={{ 
+                                width: "30px", 
+                                height: "30px", 
+                                borderRadius: "50%", 
+                                marginRight: "10px" 
+                            }} 
+                        />
+                    )}
+                    <span>{amigo.username}</span>
+                </div>
+                <div className="d-flex align-items-center">
+                    {lastPlayer && lastPlayer.espectador===false && lastPlayer.partida.estado === "ESPERANDO" && (
+                        <Button 
+                            className="btn btn-primary btn-sm me-2" 
+                            onClick={() => {
+                            invitarAPartida(
+                            usuarioActual,
+                            amigo,
+                            lastPlayer.partida,
+                            true,
+                            jwt,
+                            showSuccess("invitacion enviada"));
+                            }}
+                            title="Invitar a jugar"
+                        >
+                            🎮
+                        </Button>
+                    )}
+                    {lastPlayer && lastPlayer.espectador===false && lastPlayer.partida.estado === "JUGANDO" && (
+                        <Button 
+                            className="btn btn-secondary btn-sm ms-2" 
+                            onClick={() => {
+                                // Lógica para invitar a espectar
+                            invitarAPartida(
+                            usuarioActual,
+                            amigo,
+                            lastPlayer.partida,
+                            true,
+                            jwt,
+                            showSuccess("invitacion enviada")
+                            ); // Reutilizamos la lógica de invitación
+                            }}
+                            title="Invitar a espectar"
+                        >
+                            👁️
+                        </Button>
+                    )}
+                </div>
+            </DropdownItem>
+        ))}
+    </>
+)}
 
 {invitaciones.length > 0 && (
     <>
@@ -378,7 +426,11 @@ function AppNavbar() {
                 {errors.length > 0 && errors.map((error, index) => (
                     <Alert key={index} color="danger">{error}</Alert>
                 ))}</div>
-        </div>
+                {successMessage && (
+                    <Alert color="success">{successMessage}</Alert>
+                )}
+            </div>
+
 
 
     );

@@ -419,7 +419,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testFinalizarPartidaNumPartidasGanadasEsNull() {
+    void shouldFinalizarPartidaNumPartidasGanadasEsNull() {
         Partida partida = new Partida();
         partida.setId(1);
     
@@ -447,7 +447,7 @@ public class PartidaServiceTest {
     
 
     @Test
-    void testFinalizarPartidaNumPuntosGanadosYPartidasJugadasEsNull() {
+    void shouldFinalizarPartidaNumPuntosGanadosYPartidasJugadasEsNull() {
         Partida partida = new Partida();
         partida.setId(1);
     
@@ -619,7 +619,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testSiguienteEstadoCambiaBaza() {
+    void shouldSiguienteEstadoCambiaBaza() {
         Partida partida = new Partida();
         partida.setId(1);
         partida.setTurnoActual(1);
@@ -668,7 +668,7 @@ public class PartidaServiceTest {
     
 
     @Test
-    void testSiguienteEstadoFinalizaRondaPeroNoPartida() {
+    void shouldSiguienteEstadoFinalizaRondaPeroNoPartida() {
         Partida partida = new Partida();
         partida.setId(1);
         partida.setTurnoActual(1);
@@ -725,7 +725,7 @@ public class PartidaServiceTest {
     
 
     @Test
-    void testSiguienteEstadoFinalizaPartida() {
+    void shouldSiguienteEstadoFinalizaPartida() {
         PartidaService partidaServiceSpy = spy(partidaService);
 
         Partida partida = new Partida();
@@ -785,7 +785,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testGetPuntajeApuestaIgualResultadoCero() {
+    void shouldGetPuntajeApuestaIgualResultadoCero() {
         Jugador jugador = new Jugador();
         jugador.setId(1);
         jugador.setPuntos(0);
@@ -807,7 +807,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testGetPuntajeApuestaDiferenteResultadoCero() {
+    void shouldGetPuntajeApuestaDiferenteResultadoCero() {
         Jugador jugador = new Jugador();
         jugador.setId(1);
         jugador.setPuntos(0);
@@ -829,7 +829,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testGetPuntajeApuestaIgualResultadoConBonificacion() {
+    void shouldGetPuntajeApuestaIgualResultadoConBonificacion() {
         Jugador jugador = new Jugador();
         jugador.setId(1);
         jugador.setPuntos(0);
@@ -852,7 +852,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testGetPuntajeApuestaDiferenteResultadoConPenalizacion() {
+    void shouldGetPuntajeApuestaDiferenteResultadoConPenalizacion() {
         Jugador jugador = new Jugador();
         jugador.setId(1);
         jugador.setPuntos(0);
@@ -874,7 +874,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testApuestaManoNoEncontrada() {
+    void shouldApuestaManoNoEncontrada() {
         when(manoService.findLastManoByJugadorId(1)).thenReturn(null);
     
         Partida partida = new Partida();
@@ -893,7 +893,7 @@ public class PartidaServiceTest {
     
 
     @Test
-    void testApuestaMayorQueCartas() {
+    void shouldApuestaMayorQueCartas() {
         Jugador jugador = new Jugador();
         jugador.setId(1);
         jugador.setPartida(new Partida());
@@ -912,7 +912,7 @@ public class PartidaServiceTest {
     }
 
     @Test
-    void testApuestaValida() {
+    void shouldApuestaValida() {
         Partida partida = new Partida();
         partida.setId(1);
         partida.setTurnoActual(1);
@@ -946,8 +946,5 @@ public class PartidaServiceTest {
         verify(manoService).saveMano(mano);
         verify(jugadorService).updateJugador(jugador, 1);
     }
-    
-
-
     
 }

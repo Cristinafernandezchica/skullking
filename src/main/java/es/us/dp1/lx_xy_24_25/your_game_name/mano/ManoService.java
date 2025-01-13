@@ -92,20 +92,19 @@ private CartaService cartaService;
         List<Carta> listaCartas =(List<Carta>) cartaService.findAll();
         // para que no se cojan las cartas comodines
         listaCartas = listaCartas.stream().filter(c -> !( c.getId().equals(ID_TIGRESA_BANDERA_BLANCA) || c.getId().equals(ID_TIGRESA_PIRATA))).collect(Collectors.toList());
-        Collections.shuffle(listaCartas);   // Barajar cartas
-        //List<Jugador> jugadores = jugadorService.findJugadoresByPartidaId(partidaId);
+        Collections.shuffle(listaCartas);
         for(Jugador jugador: jugadores){
             Mano mano = new Mano();
             List<Carta> cartasBaraja = listaCartas.subList(0,getNumCartasARepartir(ronda.getNumRonda(), jugadores.size()));
             mano.setJugador(jugador);
-            mano.setApuesta(0);  // Esto lo elige el usuario, si no lo elige será 0
-            mano.setResultado(0);    // El resultado se establecerá más tarde
+            mano.setApuesta(0);
+            mano.setResultado(0);
             List<Carta> cartaMano= new ArrayList<Carta>();
             cartaMano.addAll(cartasBaraja);
             mano.setCartas(cartaMano);
             mano.setRonda(ronda);
             manoRepository.save(mano);
-            cartasBaraja.clear();   // Borramos las cartas de la baraja, para repartir al siguiente jugador
+            cartasBaraja.clear();
             
         }
     }

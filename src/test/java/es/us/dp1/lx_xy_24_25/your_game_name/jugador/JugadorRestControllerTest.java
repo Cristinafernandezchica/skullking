@@ -28,9 +28,6 @@ public class JugadorRestControllerTest {
 
     private static final String BASE_URL = "/api/v1/jugadores";
 
-    @Autowired
-    private JugadorRestController jugadorController;
-
     @MockBean
     private JugadorService jugadorService;
 
@@ -90,11 +87,29 @@ public class JugadorRestControllerTest {
 
     @Test
     @WithMockUser("player")
+    void shouldFindJugadoresByPartidaId_NotFound() throws Exception {
+        when(jugadorService.findJugadoresByPartidaId(99)).thenReturn(null);
+
+        mockMvc.perform(get(BASE_URL + "/99"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser("player")
     void shouldFindJugadorByUsuarioId() throws Exception {
         when(jugadorService.findJugadorByUsuarioId(any(Integer.class))).thenReturn(jugador);
 
         mockMvc.perform(get(BASE_URL+"/1/usuario")).andExpect(status().isOk())
         .andExpect(jsonPath("$.usuario.username").value("testUser"));
+    }
+
+    @Test
+    @WithMockUser("player")
+    void shouldFindJugadorByUsuarioId_NotFound() throws Exception {
+        when(jugadorService.findJugadorByUsuarioId(any(Integer.class))).thenReturn(null);
+
+        mockMvc.perform(get(BASE_URL + "/1/usuario"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -111,6 +126,17 @@ public class JugadorRestControllerTest {
 
     @Test
     @WithMockUser("player")
+    void shouldFindAllJugadores_Vacio() throws Exception {
+        when(jugadorService.findAll()).thenReturn(List.of());
+
+        mockMvc.perform(get(BASE_URL))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+    }
+
+
+    @Test
+    @WithMockUser("player")
     void shouldUpdateJugador() throws Exception {
 
         when(jugadorService.findById(any(Integer.class))).thenReturn(jugador);
@@ -123,6 +149,18 @@ public class JugadorRestControllerTest {
                 .content(objectMapper.writeValueAsString(jugador)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.puntos").value(100));
+    }
+
+    @Test
+    @WithMockUser("player")
+    void shouldUpdateJugador_NotFound() throws Exception {
+        when(jugadorService.findById(any(Integer.class))).thenReturn(null);
+
+        mockMvc.perform(put(BASE_URL + "/{id}", 1)
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(jugador)))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -160,6 +198,34 @@ public class JugadorRestControllerTest {
 
     @Test
     @WithMockUser("player")
+    void shouldDeleteJugador_NotFound() throws Exception {
+        when(jugadorService.findById(99)).thenReturn(null);
+
+        mockMvc.perform(delete(BASE_URL + "/{id}", 99)
+                        .with(csrf()))
+                    .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser("player")
+    void shouldDeleteJugadorWithWebSocket() throws Exception {
+        when(jugadorService.findById(any(Integer.class))).thenReturn(jugador);
+
+        mockMvc.perform(delete(BASE_URL + "/{id}/websocket", 1).with(csrf()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser("player")
+    void shouldDeleteJugadorWithWebSocket_NotFound() throws Exception {
+        when(jugadorService.findById(99)).thenReturn(null);
+
+        mockMvc.perform(delete(BASE_URL + "/{id}/websocket", 99).with(csrf()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser("player")
     void shouldFindPartidaByUsuarioId() throws Exception {
         int usuarioId = 123;
 
@@ -192,6 +258,25 @@ public class JugadorRestControllerTest {
 
         // Verificar que el servicio fue invocado
         verify(jugadorService, times(1)).findPartidaByUsuarioId(usuarioId);
+    }
+
+    @Test
+    @WithMockUser("player")
+    void shouldFindJugadoresByUsuarioId() throws Exception {
+        when(jugadorService.findJugadoresByUsuarioId(any(Integer.class))).thenReturn(List.of(jugador));
+
+        mockMvc.perform(get(BASE_URL + "/1/usuarios"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].usuario.username").value("testUser"));
+    }
+
+    @Test
+    @WithMockUser("player")
+    void shouldFindJugadoresByUsuarioId_NotFound() throws Exception {
+        when(jugadorService.findJugadoresByUsuarioId(any(Integer.class))).thenReturn(List.of());
+
+        mockMvc.perform(get(BASE_URL + "/1/usuarios"))
+                .andExpect(status().isNotFound());
     }
 
 }

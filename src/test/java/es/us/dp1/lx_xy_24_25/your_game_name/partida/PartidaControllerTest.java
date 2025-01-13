@@ -1,9 +1,10 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.partida;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -16,15 +17,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -32,11 +34,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import es.us.dp1.lx_xy_24_25.your_game_name.configuration.SecurityConfiguration;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.UsuarioPartidaEnJuegoEsperandoException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoRestController;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaRestController;
@@ -66,7 +68,7 @@ public class PartidaControllerTest {
     private MockMvc mockMvc;
 
     private Partida partida;
-
+    private User user;
     private Jugador jugadorGanador;
 
     @BeforeEach
@@ -80,7 +82,11 @@ public class PartidaControllerTest {
         jugadorGanador = new Jugador();
         jugadorGanador.setId(TEST_JUGADOR_ID);
         jugadorGanador.setPuntos(150);
-        
+        jugadorGanador.setPartida(partida);
+
+        user = new User();
+        user.setId(1);
+        user.setUsername("testUser");
     }
 
     @Test
@@ -178,6 +184,50 @@ public class PartidaControllerTest {
 
     @Test
     @WithMockUser("admin")
+    void shouldActualizarOwner() throws Exception {
+        Map<String, Integer> body = new HashMap<>();
+        body.put("ownerPartida", 2);
+
+        doNothing().when(partidaService).actualizarOwner(1, 2);
+
+        mockMvc.perform(put("/api/v1/partidas/1/actualizar-owner").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(body)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Owner actualizado con éxito."));
+    }
+
+    @Test
+    @WithMockUser("admin")
+    void shouldActualizarOwner_NotFound() throws Exception {
+        Map<String, Integer> body = new HashMap<>();
+        body.put("ownerPartida", 2);
+
+        doThrow(new NoSuchElementException()).when(partidaService).actualizarOwner(1, 2);
+
+        mockMvc.perform(put("/api/v1/partidas/1/actualizar-owner").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(body)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Partida no encontrada."));
+    }
+
+    @Test
+    @WithMockUser("admin")
+    void shouldActualizarOwner_BadRequest() throws Exception {
+        Map<String, Integer> body = new HashMap<>();
+
+        doThrow(new IllegalArgumentException("Owner inválido")).when(partidaService).actualizarOwner(1, null);
+
+        mockMvc.perform(put("/api/v1/partidas/1/actualizar-owner").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(body)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Owner inválido"));
+    }
+
+    @Test
+    @WithMockUser("admin")
     void shouldGetJugadoresByPartidaId() throws Exception {
         Jugador jugador1 = new Jugador();
         jugador1.setId(1);
@@ -198,6 +248,36 @@ public class PartidaControllerTest {
 
     @Test
     @WithMockUser("admin")
+    void shouldFindPartidasByOwnerId() throws Exception {
+        when(partidaService.findPartidasByOwnerId(1)).thenReturn(List.of(partida));
+
+        mockMvc.perform(get("/api/v1/partidas").param("ownerId", "1").with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(1));
+    }
+
+    @Test
+    @WithMockUser("admin")
+    void shouldFindPartidasByOwnerId_NotFound() throws Exception {
+        when(partidaService.findPartidasByOwnerId(1)).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/v1/partidas").param("ownerId", "1").with(csrf()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser("admin")
+    void shouldGanadoPartida() throws Exception {
+        when(partidaService.getJugadorGanador(TEST_PARTIDA_ID)).thenReturn(jugadorGanador);
+
+        mockMvc.perform(get(BASE_URL + "/{id}/jugadorGanador", TEST_PARTIDA_ID))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(TEST_JUGADOR_ID))
+            .andExpect(jsonPath("$.puntos").value(150));
+    }
+
+    @Test
+    @WithMockUser("admin")
     void shouldIniciarPartida() throws Exception {
         doNothing().when(partidaService).iniciarPartida(TEST_PARTIDA_ID);
 
@@ -207,14 +287,21 @@ public class PartidaControllerTest {
 
     @Test
     @WithMockUser("admin")
-    void shouldGetJugadorGanador() throws Exception {
-        when(partidaService.getJugadorGanador(TEST_PARTIDA_ID)).thenReturn(jugadorGanador);
+    void shouldSiguienteEstado() throws Exception {
+        doNothing().when(partidaService).siguienteEstado(1, 1);
 
-        mockMvc.perform(get(BASE_URL + "/{id}/jugadorGanador", TEST_PARTIDA_ID))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id").value(TEST_JUGADOR_ID))
-            .andExpect(jsonPath("$.puntos").value(150));
+        mockMvc.perform(post("/api/v1/partidas/1/bazas/1/siguiente-estado").with(csrf()))
+                .andExpect(status().isOk());
     }
 
+    @Test
+    @WithMockUser("admin")
+    void shouldApostar() throws Exception {
+        doNothing().when(partidaService).apuesta(5, 1);
 
+        mockMvc.perform(put("/api/v1/partidas/apuesta/1").with(csrf())
+                        .param("apuesta", "5"))
+                .andExpect(status().isOk());
+
+    }
 }

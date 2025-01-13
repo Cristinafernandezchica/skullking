@@ -9,7 +9,7 @@ public class AmistadNoExisteException extends RuntimeException{
     private static final long serialVersionUID = -3330551940727004798L;
 	
 	public AmistadNoExisteException() {
-		super("la amistad no a sido encontrada");
+		super("la amistad no ha sido encontrada");
 	}
     
 }

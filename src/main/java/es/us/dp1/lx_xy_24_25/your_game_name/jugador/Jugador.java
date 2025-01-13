@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,8 +36,8 @@ public class Jugador extends BaseEntity {
 	@ManyToOne(optional = false)
     private User usuario;
 
-    @Min(-1)
-    private Integer apuestaActual = -1;
+    @PositiveOrZero
+    private Integer apuestaActual = 0;
 
     
     private Boolean espectador = false;

@@ -56,6 +56,20 @@ public class PartidaRepositoryTest {
     }
 
     @Test
+    public void shouldFindByNombre_NotFound() {
+        String nombre = "Partida No Existente";
+
+        when(partidaRepository.findByNombre(nombre)).thenReturn(List.of());
+
+        List<Partida> result = partidaRepository.findByNombre(nombre);
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(partidaRepository, times(1)).findByNombre(nombre);
+    }
+
+
+    @Test
     public void shouldFindByEstado() {
         PartidaEstado estado = PartidaEstado.ESPERANDO;
         when(partidaRepository.findByEstado(estado)).thenReturn(List.of(partida, partidaEsperando));
@@ -66,6 +80,46 @@ public class PartidaRepositoryTest {
         assertEquals(2, result.size());
         assertTrue(result.stream().allMatch(p -> p.getEstado() == estado));
         verify(partidaRepository, times(1)).findByEstado(estado);
+    }
+
+    @Test
+    public void shouldFindByEstado_NotFound() {
+        PartidaEstado estado = PartidaEstado.TERMINADA;
+
+        when(partidaRepository.findByEstado(estado)).thenReturn(List.of());
+
+        List<Partida> result = partidaRepository.findByEstado(estado);
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(partidaRepository, times(1)).findByEstado(estado);
+    }
+
+    @Test
+    public void shouldFindByOwnerPartida() {
+        Integer ownerPartida = 1;
+
+        when(partidaRepository.findByOwnerPartida(ownerPartida)).thenReturn(List.of(partida, partidaEsperando, partidaJugando));
+
+        List<Partida> result = partidaRepository.findByOwnerPartida(ownerPartida);
+
+        assertNotNull(result);
+        assertEquals(3, result.size());
+        assertTrue(result.stream().allMatch(p -> p.getOwnerPartida().equals(ownerPartida)));
+        verify(partidaRepository, times(1)).findByOwnerPartida(ownerPartida);
+    }
+
+    @Test
+    public void shouldFindByOwnerPartida_NotFound() {
+        Integer ownerPartida = 99;
+
+        when(partidaRepository.findByOwnerPartida(ownerPartida)).thenReturn(List.of());
+
+        List<Partida> result = partidaRepository.findByOwnerPartida(ownerPartida);
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(partidaRepository, times(1)).findByOwnerPartida(ownerPartida);
     }
 
     @Test
@@ -85,6 +139,21 @@ public class PartidaRepositoryTest {
     }
 
     @Test
+    public void shouldFindByNombreAndEstado_NotFound() {
+        String nombre = "Partida No Existente";
+        PartidaEstado estado = PartidaEstado.ESPERANDO;
+
+        when(partidaRepository.findByNombreAndEstado(nombre, estado)).thenReturn(List.of());
+
+        List<Partida> result = partidaRepository.findByNombreAndEstado(nombre, estado);
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(partidaRepository, times(1)).findByNombreAndEstado(nombre, estado);
+    }
+
+
+    @Test
     public void shouldFindByOwnerPartidaAndEstado() {
         Integer ownerPartida = 1;
         List<PartidaEstado> estados = List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO);
@@ -98,4 +167,19 @@ public class PartidaRepositoryTest {
         assertTrue(result.stream().allMatch(p -> estados.contains(p.getEstado())));
         verify(partidaRepository, times(1)).findByOwnerPartidaAndEstado(ownerPartida, estados);
     }
+
+    @Test
+    public void shouldFindByOwnerPartidaAndEstado_NotFound() {
+        Integer ownerPartida = 99;
+        List<PartidaEstado> estados = List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO);
+
+        when(partidaRepository.findByOwnerPartidaAndEstado(ownerPartida, estados)).thenReturn(List.of());
+
+        List<Partida> result = partidaRepository.findByOwnerPartidaAndEstado(ownerPartida, estados);
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(partidaRepository, times(1)).findByOwnerPartidaAndEstado(ownerPartida, estados);
+    }
+
 }

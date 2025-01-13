@@ -16,7 +16,7 @@ export default function GanadorBazaModal({ isVisible, ganador, onClose }) {
     }, [isVisible, onClose]);
 
     return (
-        <Modal isOpen={isVisible} toggle={onClose} centered>
+        <Modal isOpen={isVisible} centered>
             <ModalHeader className="ganador-modal-header">
                 ¡Tenemos al ganador de la baza!
             </ModalHeader>
@@ -31,13 +31,7 @@ export default function GanadorBazaModal({ isVisible, ganador, onClose }) {
                 )}
             </ModalBody>
             <ModalFooter className="ganador-modal-footer">
-                <Button
-                    color="#ffd700"
-                    onClick={onClose}
-                    className="close-button"
-                >
-                    ¡Enhorabuena!
-                </Button>
+                ¡Enhorabuena!
             </ModalFooter>
         </Modal>
     );

@@ -379,7 +379,7 @@ public class UserControllerTests {
 	}
 
 	@Test
-	@WithMockUser("admin")
+	@WithMockUser
 	void shouldFindCurrentUserProfile() throws Exception {
 		when(userService.findCurrentUser()).thenReturn(user);
 
@@ -392,7 +392,7 @@ public class UserControllerTests {
 	}
 
 	@Test
-	@WithMockUser("admin")
+	@WithMockUser
 	void shouldFindCurrentUserProfile_UserNotFound() throws Exception {
 		when(userService.findCurrentUser())
 				.thenThrow(new ResourceNotFoundException("User", "username", "admin100000"));

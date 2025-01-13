@@ -50,7 +50,7 @@ class CartaRestControllerTest {
     }
 
     @Test
-    void testFindAllCartas() throws Exception {
+    void shouldFindAllCartas() throws Exception {
         when(cartaService.findAll()).thenReturn(Arrays.asList(carta));
 
         mockMvc.perform(get("/api/v1/cartas"))
@@ -63,7 +63,7 @@ class CartaRestControllerTest {
     }
 
     @Test
-    void testFindAllCartas_ListaVacia() throws Exception {
+    void shouldFindAllCartas_ListaVacia() throws Exception {
         when(cartaService.findAll()).thenReturn(Arrays.asList());
 
         mockMvc.perform(get("/api/v1/cartas"))
@@ -72,7 +72,7 @@ class CartaRestControllerTest {
     }
 
     @Test
-    void testGetCartaById() throws Exception {
+    void shouldGetCartaById() throws Exception {
         when(cartaService.findById(1)).thenReturn(Optional.of(carta));
 
         mockMvc.perform(get("/api/v1/cartas/carta/1"))
@@ -82,7 +82,7 @@ class CartaRestControllerTest {
     }
 
     @Test
-    void testGetCartaById_NotFound() throws Exception {
+    void shouldGetCartaById_NotFound() throws Exception {
         when(cartaService.findById(1)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/api/v1/cartas/carta/1"))
@@ -91,7 +91,7 @@ class CartaRestControllerTest {
     }
 
     @Test
-    void testCreateCarta() throws Exception {
+    void shouldCreateCarta() throws Exception {
         when(cartaService.saveCarta(Mockito.any(Carta.class))).thenReturn(carta);
 
         mockMvc.perform(post("/api/v1/cartas")
@@ -104,7 +104,7 @@ class CartaRestControllerTest {
     }
 
     @Test
-    void testUpdateCarta() throws Exception {
+    void shouldUpdateCarta() throws Exception {
         when(cartaService.findById(1)).thenReturn(Optional.of(carta));
         when(cartaService.updateCarta(Mockito.any(Carta.class), Mockito.eq(1))).thenReturn(carta);
 
@@ -118,7 +118,7 @@ class CartaRestControllerTest {
     }
 
     @Test
-    void testDeleteCarta() throws Exception {
+    void shouldDeleteCarta() throws Exception {
         when(cartaService.findById(1)).thenReturn(Optional.of(carta));
         doNothing().when(cartaService).deleteCarta(1);
 
@@ -128,7 +128,7 @@ class CartaRestControllerTest {
     }
 
     @Test
-    void testCambioTigresa() throws Exception {
+    void shouldCambioTigresa() throws Exception {
         when(cartaService.cambioTigresa("tigresa")).thenReturn(carta);
 
         mockMvc.perform(get("/api/v1/cartas/tigresa/tigresa"))
@@ -137,7 +137,7 @@ class CartaRestControllerTest {
     }
 
     @Test
-    void testCambioTigresa_NotFound() throws Exception {
+    void shouldCambioTigresa_NotFound() throws Exception {
         when(cartaService.cambioTigresa("inexistente")).thenReturn(null);
 
         mockMvc.perform(get("/api/v1/cartas/tigresa/inexistente"))

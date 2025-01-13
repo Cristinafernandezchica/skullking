@@ -142,15 +142,15 @@ public class AmistadService {
 
     @Transactional
     public Amistad aceptarORechazarSolicitudDeAmistad(Integer remitenteId, Integer destinatarioId, Boolean aceptar){
-    Amistad amistadAAceptar = amistadRepository.getOneAmistad(remitenteId, destinatarioId);
-    if(aceptar==false){
-    amistadAAceptar.setEstadoAmistad(EstadoAmistad.RECHAZADA);}
-    else if(aceptar==true){
-        amistadAAceptar.setEstadoAmistad(EstadoAmistad.ACEPTADA);}
+        Amistad amistadAAceptar = amistadRepository.getOneAmistad(remitenteId, destinatarioId);
+        if(aceptar==false){
+        amistadAAceptar.setEstadoAmistad(EstadoAmistad.RECHAZADA);}
+        else if(aceptar==true){
+            amistadAAceptar.setEstadoAmistad(EstadoAmistad.ACEPTADA);}
 
-    Amistad result= amistadRepository.save(amistadAAceptar);
-    messagingTemplate.convertAndSend("/topic/amistad/" + remitenteId, getAllMyFriends(remitenteId));
-    return result;
+        Amistad result= amistadRepository.save(amistadAAceptar);
+        messagingTemplate.convertAndSend("/topic/amistad/" + remitenteId, getAllMyFriends(remitenteId));
+        return result;
     }
 
 

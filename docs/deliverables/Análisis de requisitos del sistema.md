@@ -284,14 +284,14 @@ A continuación se definen todas las historias de usuario a implementar:
 ### HSJ1-(ISSUE##228): Chat en partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/228]())
 | "Como jugador quiero poder comunicarme con los jugadores de la partida para poder crear estrategias y unirme con otros jugadores."| 
 |-----|
-|![Chat de juego](../mockups/chat_mockup.png)|
+|![Chat de juego](../mockups/el_chat_partida.png)|
 |Una vez dentro de la partida el jugador tendra en la parte inferior derecha de la pantalla el botón 'Chat'. el cual abre un modal que contiene en la parte superior los mensajes enviados por todos los jugadores del chat, en la parte inferior se encuentra una barra en la cual puedes escribir el mensaje y finalmente dos botones, uno para enviar el mensaje y el otro para cerrar el chat.|
 
 
 ### HSJ2-(ISSUE##229): Enviar solicitud de amistad ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/229]())
 | "Como jugador quiero poder enviarle una solicitud de amistad a otro jugador para ser amigos."| 
 |-----|
-|![Enviar solicitud](../mockups/enviar_solicitud_mockup.png)|
+|![Enviar solicitud](../mockups/enviar_solicitud_amistad.png)|
 |En la pantalla de perfil el usuario tendra una barra en la cual podra escribir el nombre de usuario y tendra un botón 'enviar solicitud', el cual enviará la solicitud a la persona cuyo nombre de usuario hayas escrito.|
 
 ### HSJ4-(ISSUE##247): Ver, aceptar y rechazar solicitudes de amistad ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/247]())

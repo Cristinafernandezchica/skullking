@@ -81,7 +81,6 @@ public class TrucoService {
 		return trucoRepository.findByJugadorId(jugadorId);
 	}
 
-
     @Transactional
 	public Truco saveTruco(Truco truco) throws DataAccessException {
 		Boolean cartaEnMano = truco.getCarta() == null || 

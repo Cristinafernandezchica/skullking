@@ -39,13 +39,13 @@ public class ChatRestController {
         res = (List<Chat>) chatService.getAllChats();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
-    
 
+    // Get todos los chats de una partida por su id
     @GetMapping("/{partidaId}")
     public List<Chat> findAllChatByPartidaId(@PathVariable("partidaId") Integer partidaId) {
         return chatService.findAllChatByPartidaId(partidaId);
     }
-    
+
     @PostMapping
     public Chat enviarMensaje(@RequestBody @Valid Chat chat) {
         return chatService.enviarMensajes(chat);

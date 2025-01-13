@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
-public class ChatRepositoryTests {
+public class ChatRepositoryTest {
 
     @Autowired
     private ChatRepository chatRepository;

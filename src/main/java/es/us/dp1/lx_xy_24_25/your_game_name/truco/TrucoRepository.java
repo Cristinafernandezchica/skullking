@@ -25,9 +25,6 @@ public interface TrucoRepository extends CrudRepository<Truco, Integer> {
 
     @Query("SELECT t FROM Truco t WHERE t.mano.id = :manoId")
 	public List<Truco> findByManoId(Integer manoId);
- 
-    @Query("SELECT DISTINCT t FROM Truco t WHERE t.baza.id = :bazaId AND t.carta.id = :cartaId")
-	public Optional<Truco> findTrucoByBazaIdCartaId(Integer bazaId, Integer cartaId);
 
     @Modifying
     @Transactional

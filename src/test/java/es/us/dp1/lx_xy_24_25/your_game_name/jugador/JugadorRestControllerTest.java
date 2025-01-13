@@ -28,9 +28,6 @@ public class JugadorRestControllerTest {
 
     private static final String BASE_URL = "/api/v1/jugadores";
 
-    @Autowired
-    private JugadorRestController jugadorController;
-
     @MockBean
     private JugadorService jugadorService;
 

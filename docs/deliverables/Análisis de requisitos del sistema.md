@@ -294,38 +294,38 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Enviar solicitud](../mockups/enviar_solicitud_amistad.png)|
 |En la pantalla de perfil el usuario tendra una barra en la cual podra escribir el nombre de usuario y tendra un botón 'enviar solicitud', el cual enviará la solicitud a la persona cuyo nombre de usuario hayas escrito.|
 
-### HSJ4-(ISSUE##247): Ver, aceptar y rechazar solicitudes de amistad ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/247]())
+### HSJ3-(ISSUE##247): Ver, aceptar y rechazar solicitudes de amistad ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/247]())
 | "Como jugador quiero poder ver todas mis solicitudes de amistad para poder aceptarlas o rechazarlas."| 
 |-----|
 |![Listado de solicitudes](../mockups/ver_mis_solicitudes_mockup.png)|
 |En la parte superior, en la barra de navegación esta el botón "notificaciones", el cual una vez presionado te momstrará entre otras cosas tus solicitudes de amistad, en cada solicitud aparece el nombre de usuario del remitente y dos botones, uno para aceptar la solicitud y otro para rechazarla.|
 
 
-### HSJ5-(ISSUE##248): Ver a mis amigos conectados ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/248]())
+### HSJ4-(ISSUE##248): Ver a mis amigos conectados ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/248]())
 | "Como jugador quiero poder ver a todos mis amigos que estan conectados para poder saber con quien puedo jugar."| 
 |-----|
 |![Listado de amigos conectados](../mockups/ver_amigo_conectados.png)|
 |Puedes ver a tus amigos conectados desde dos partes distintas, desde la pantalla de perfil en la lista de amigos aparece un circulo en verde al lado del nombre indicando que dicho amigo esta conectado o desde la barra de navegacion en el botón de 'notificaciones' en la cual aparece una lista con tus amigos conectados.|
 
-### HSJ6-(ISSUE##250): Dejar de ser amigos ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/250]())
+### HSJ5-(ISSUE##250): Dejar de ser amigos ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/250]())
 | "Como jugador quiero poder dejaar de ser amigo de un jugador para evitar que me envie invitaciones a jugar."| 
 |-----|
 |![eliminar amigo](../mockups/eliminar_amistad.png)|
 |Puedes romper la amistad con un jugador desde la pantalla de perfil, en la sección de lista de amigos aparece un botón el cual te permite dejar de ser amigo, una vez lo presionas aparece un modal pidiendo la confirmación para romper la amistad.|
 
-### HSJ7-(ISSUE##249): Invitar a jugar o a espectar mi partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/249]())
+### HSJ6-(ISSUE##249): Invitar a jugar o a espectar mi partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/249]())
 | "Como jugador quiero poder enviarle una invitacion a mis amigos para que o bien jueguen conmigo o me miren jugar."| 
 |-----|
 |![Invitacion a partida](../mockups/Enviar_invitacion_a_partida.png)|
 |Puedes invitar a tus amigos desde dos partes distintas, desde la pantalla de perfil en la lista de amigos, si dicho amigo esta conectado aparece un botón con el cual puedes enviarle una invitación o desde la barra de navegacion en el botón de 'notificaciones' en la cual tambien aparece el botón para invitarlo a jugar o espectar dependiendo del estado de la partida.|
 
-### HSJ8-(ISSUE##252): Ver, aceptar y rechazar invitaciones a partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/252]())
+### HSJ7-(ISSUE##252): Ver, aceptar y rechazar invitaciones a partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/252]())
 | "Como jugador quiero poder ver todas mis invitaciones para poder aceptar o rechazar las invitaciones, sea bien para jugar o para espectar."| 
 |-----|
 |![Aceptar invitacion a partida](../mockups/invitaciones_a_partida.png)|
 |puedes ver todas tus invitaciones desde el botón de 'notificaciones', el cual entre otras cosas aparecen tus invitaciones pendientes y dos botones, uno para aceptar la invitación y otro para rechazarla.|
 
-### HSJ9-(ISSUE##251): Espectar partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/251]())
+### HSJ8-(ISSUE##251): Espectar partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/251]())
 | "Como jugador quiero poder espectar las partidas de mis amigos para poder ver como juegan."| 
 |-----|
 |![Modo espectador](../mockups/modo_espectador.png)|

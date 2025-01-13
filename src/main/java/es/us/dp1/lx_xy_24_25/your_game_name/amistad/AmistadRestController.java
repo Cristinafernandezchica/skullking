@@ -37,6 +37,12 @@ public class AmistadRestController {
         return new ResponseEntity<>(amistadService.getAllMyFriends(remitenteId), HttpStatus.OK);
     }
 
+    @GetMapping("puedeVerLaPartida/{partidaId}/{miId}")
+    public ResponseEntity<List<User>> getAmigosQuePuedenVerLaPartida(@PathVariable("partidaId")Integer partidaId,
+    @PathVariable("miId")Integer miId) {
+        return new ResponseEntity<>(amistadService.puedesVerPartida(partidaId,miId), HttpStatus.OK);
+    }
+
     @PostMapping("/{remitenteId}/{destinatarioId}")
     public ResponseEntity<Amistad> enviarSolicitud(
     @PathVariable("remitenteId")Integer remitenteId,

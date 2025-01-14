@@ -75,7 +75,7 @@ Si se halla alguna carta 14 de los palos normales, se deberá sumar 10 puntos po
 
 ### Diagrama de Dominio/Diseño
 
-![Diagrama de Dominio](/docs/diagrams/Diagrama_de_dominio_UML.png)
+![Diagrama de Dominio](/docs/diagrams/Diagrama_dominio_UML.png)
 
 En este diagrama de capas podemos ver las relaciones entre las distintas entidades. Como podemos observar hemos realizado todas las relaciones con unidireccionalidad de forma que se han implementado clases que funcionan como clases intermedias, ahorrandonos asociaciones many-to-many. Se ha obviado comentar el tipo de la entidad en la clase, pues todas las entidades implementan "BaseEntity".
 

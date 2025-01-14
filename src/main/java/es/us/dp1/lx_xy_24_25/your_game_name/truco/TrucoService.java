@@ -72,6 +72,10 @@ public class TrucoService {
     // Para BazaRestController
     @Transactional(readOnly = true)
 	public List<Truco> findTrucosByBazaId(int id) throws DataAccessException {
+		Baza baza = bazaService.findById(id);
+		Ronda ronda = baza.getRonda();
+		Partida partida = ronda.getPartida();
+		mandarCartasDisabled(baza, ronda, partida);
 		return trucoRepository.findTrucosByBazaId(id);
 	}
 

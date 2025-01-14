@@ -49,12 +49,8 @@ export default function Jugando() {
 
   // Para lógica de apuesta
   const [apuestaModalOpen, setApuestaModalOpen] = useState(false);
-
-
   const toggleApuestaModal = () => setApuestaModalOpen(!apuestaModalOpen);
   const [visualizandoCartas, setVisualizandoCartas] = useState(true);
-  const [apuestaTiempoRestante, setApuestaTiempoRestante] = useState(15);
-  const [barraVisible, setBarraVisible] = useState(false);
 
   // Para turno
   const [turnoAct, setTurnoAct] = useState(null);
@@ -336,46 +332,23 @@ export default function Jugando() {
 
   // Para abrir el modal de apuesta
   useEffect(() => {
-
+    if(tu && tu.espectador===false){
     const timerAbrirApuestas = setTimeout(() => {
-      if (tu && tu.espectador === false) {
         setApuestaModalOpen(true);
-        setApuestaTiempoRestante(15); // Reiniciar barra cuenta atrás
-        setBarraVisible(true);
-      }
     }, 5000); // Cambiar a 30 (30000)
 
-    return () => clearTimeout(timerAbrirApuestas);
+    return () => clearTimeout(timerAbrirApuestas);}
   }, [ronda, tu]);
 
   // Para actualizar la visualización de la apuesta en todos los jugadores
   useEffect(() => {
     const timerCerrarApuestas = setTimeout(() => {
-      if (tu && tu.espectador !== true) {
-        setVisualizandoCartas(false);
-        fetchJugadores();
-        setTurnoAct(partida.turnoActual);
-      }
-    }, 20000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
+      setVisualizandoCartas(false);
+      fetchJugadores();
+    }, 25000); // Hay que cambiarlo a 60000 (60 segundos entre ver cartas y apostar)
 
     return () => clearTimeout(timerCerrarApuestas);
   }, [ronda]);
-
-  useEffect(() => {
-    let intervalo;
-    if ((apuestaModalOpen && apuestaTiempoRestante > 0) || (barraVisible && apuestaTiempoRestante > 0)) {
-      intervalo = setInterval(() => {
-        setApuestaTiempoRestante((prev) => prev - 1);
-      }, 1000);
-    }
-
-    if (apuestaTiempoRestante === 0) {
-      setApuestaModalOpen(false); // Cierra el modal cuando el contador llega a 0
-      setBarraVisible(false);
-    }
-
-    return () => clearInterval(intervalo); // Limpia el intervalo para evitar fugas de memoria
-  }, [apuestaModalOpen, apuestaTiempoRestante]);
 
   useEffect(() => {
     if (ronda && BazaActual) {
@@ -415,7 +388,6 @@ export default function Jugando() {
 
       console.log("Apuesta realizada con éxito");
       toggleApuestaModal();
-      setTurnoAct(partida.turnoActual);
     } catch (error) {
       console.error("Error:", error);
       throw error;
@@ -502,8 +474,6 @@ export default function Jugando() {
     console.log("Carta a jugar:", cartaFinal);
     await iniciarTruco(tu.id, cartaFinal);
     console.log("Truco a jugar:", cartaFinal);
-    setTurnoAct(partida.turnoActual);
-
   };
 
   const iniciarTruco = async (jugadorId, cartaAJugar) => {
@@ -546,13 +516,6 @@ export default function Jugando() {
     console.log("pase", nuevaTigresa);
   };
 
-  const toggleApuesta = () => {
-    setApuestaModalOpen(!apuestaModalOpen);
-    setTurnoAct(partida.turnoActual);
-  };
-
-  console.log("turnoAct: ", turnoAct);
-
   return (
     <>
       <div className="validation-errors">
@@ -569,7 +532,7 @@ export default function Jugando() {
                   <img src={jugador.usuario.imagenPerfil} alt="Perfil" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "10px" }} />
                   <h3>{jugador.usuario.username}</h3>
                 </div>
-                <p>Apuesta: {jugador.apuestaActual !== -1 && jugador.apuestaActual}</p>
+                <p>Apuesta: {jugador.apuestaActual}</p>
                 <p>Puntos: {jugador.puntos}</p>
                 {jugador !== null && <p>Bazas ganadas: {resultadosMano[jugador.id]}</p>}
               </div>
@@ -643,15 +606,6 @@ export default function Jugando() {
             ))}
         </div>
 
-        {barraVisible && (
-          <div className="barra-cuenta-regresiva-fija">
-            <div
-              className="barra-progreso"
-              style={{ width: `${(apuestaTiempoRestante / 15) * 100}%` }} // Asumiendo 15 segundos como total
-            ></div>
-          </div>
-        )}
-
         <button
           className="boton-flotante-chat"
           onClick={() => setChatModalVisible(true)}
@@ -661,9 +615,8 @@ export default function Jugando() {
 
         <ApuestaModal
           isVisible={apuestaModalOpen}
-          onCancel={toggleApuesta}
+          onCancel={toggleApuestaModal}
           onConfirm={apostar}
-          tiempoRestante={apuestaTiempoRestante}
         />
 
         <ElegirTigresaModal

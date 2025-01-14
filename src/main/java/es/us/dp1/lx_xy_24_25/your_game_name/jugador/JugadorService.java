@@ -160,8 +160,6 @@ public class JugadorService {
         }
     }
 
-
-    
     // Update jugador
     @Transactional
 	public Jugador updateJugador(@Valid Jugador jugador, Integer idToUpdate) {
@@ -199,34 +197,5 @@ public class JugadorService {
         return jugadorRepository.findJugadoresByUsuarioId(usuarioId);
     }
 
-
-    /*
-    // Para ver el turno del jugador
-    @Transactional(readOnly = true)
-    public Integer findTurnoByJugadorId(Integer jugadorId) {
-        Optional<Jugador> jugador = jugadorRepository.findById(jugadorId);
-        return jugador.isPresent()? jugador.get().getTurno() : null;
-    }
-    */
-
-    // Método para verificar si un usuario tiene múltiples jugadores en la misma partida
-    /*
-    public boolean usuarioMultiplesJugadoresEnPartida(User usuario, Partida partida) {
-        List<Jugador> jugadoresUsuario = jugadorRepository.findJugadoresByUsuarioId(usuario.getId());
-        long count = jugadoresUsuario.stream()
-                .filter(jugador -> jugador.getPartida().equals(partida))
-                .count();
-        return count > 1;
-    }
-    */
-
-    // Método para verificar si un usuario tiene una partida en juego o esperando
-    /*
-    public boolean usuarioPartidaEnJuegoEsperando(Integer usuarioId) {
-        List<Partida> partidas = partidaRepository.findByOwnerPartidaAndEstado(usuarioId, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO));
-        return !partidas.isEmpty();
-    }
-    */
-    
 }
 

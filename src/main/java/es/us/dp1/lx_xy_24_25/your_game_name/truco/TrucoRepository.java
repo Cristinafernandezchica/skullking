@@ -17,26 +17,14 @@ public interface TrucoRepository extends CrudRepository<Truco, Integer> {
     @Query("SELECT t FROM Truco t WHERE (:bazaId IS NULL OR t.baza.id = :bazaId)")
 	public List<Truco> findTrucosByBazaId(Integer bazaId);
 
-    // Poner en TrucoService y luego en BazaRestController
     @Query("SELECT t.carta FROM Truco t WHERE t.baza.id = :bazaId ORDER BY t.turno ASC")
 	public List<Carta> findCartaIdByBazaId(Integer bazaId);
 
-    
     @Query("SELECT t FROM Truco t WHERE t.mano.jugador.id = :jugadorId")
 	public List<Truco> findByJugadorId(Integer jugadorId);
 
     @Query("SELECT t FROM Truco t WHERE t.mano.id = :manoId")
 	public List<Truco> findByManoId(Integer manoId);
- 
-    // REVISAR Y QUIZAS QUITAR
-    @Query("SELECT DISTINCT t FROM Truco t WHERE t.baza.id = :bazaId AND t.carta.id = :cartaId")
-	public Optional<Truco> findTrucoByBazaIdCartaId(Integer bazaId, Integer cartaId);
-
-    /* 
-    // REVISAR Y QUIZAS QUITAR
-    @Query("SELECT DISTINCT t.jugador FROM Truco t WHERE t.baza.id = :bazaId AND t.idCarta = :cartaId")
-	public Optional<Integer> findJugadorIdByBazaIdCartaId(Integer bazaId, Integer cartaId);
-    */
 
     @Modifying
     @Transactional

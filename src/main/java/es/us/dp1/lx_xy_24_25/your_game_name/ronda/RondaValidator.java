@@ -15,21 +15,19 @@ public class RondaValidator implements Validator{
     public void validate(Object obj, Errors errors) {
         Ronda ronda = (Ronda) obj;
 
-        if (ronda.getNumRonda() == null) { 
-            errors.rejectValue("numRonda", "field.required", "El número de ronda es obligatorio."); 
-        } 
-        if(ronda.getNumRonda()<=10){
-            errors.rejectValue("numRonda", "field.invalid", "El número de ronda no puede ser mayor que 10");
+        // Validar que numRonda no sea nulo
+        if (ronda.getNumRonda() == null) {
+            errors.rejectValue("numRonda", "field.required", "El número de ronda es obligatorio.");
+        } else if (ronda.getNumRonda() > 10) {
+            errors.rejectValue("numRonda", "field.invalid", "El número de ronda no puede ser mayor que 10.");
         }
 
-        if (ronda.getNumBazas() == null) { 
-            errors.rejectValue("numBazas", "field.required", "El número de bazas es obligatorio."); 
+        // Validar que numBazas no sea nulo
+        if (ronda.getNumBazas() == null) {
+            errors.rejectValue("numBazas", "field.required", "El número de bazas es obligatorio.");
+        } else if (ronda.getNumBazas() <= ronda.getNumRonda()) {
+            errors.rejectValue("numBazas", "field.invalid", "Las bazas de una ronda serán igual o menor que el número de ronda.");
         }
-
-        if(ronda.getNumBazas()<=ronda.getNumRonda()){
-            errors.rejectValue("numBazas", "field.invalid", "Las bazas de una ronda será igual o menor que el número de ronda"); 
-        }
-
     }
 
     @Override

@@ -1,8 +1,9 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.user;
 
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -22,7 +23,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
-import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.AccessDeniedException;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,16 +34,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.configuration.SecurityConfiguration;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
-import es.us.dp1.lx_xy_24_25.your_game_name.user.AuthoritiesService;
-import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
-import es.us.dp1.lx_xy_24_25.your_game_name.user.UserRestController;
-import es.us.dp1.lx_xy_24_25.your_game_name.user.UserService;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 
 /**
  * Test class for the {@link VetController}
  */
 @WebMvcTest(controllers = UserRestController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
-class UserControllerTests {
+public class UserControllerTests {
 
 	private static final int TEST_USER_ID = 1;
 	private static final int TEST_AUTH_ID = 1;
@@ -72,7 +69,7 @@ class UserControllerTests {
 	void setup() {
 		auth = new Authorities();
 		auth.setId(TEST_AUTH_ID);
-		auth.setAuthority("VET");
+		auth.setAuthority("PLAYER");
 
 		user = new User();
 		user.setId(1);
@@ -99,21 +96,34 @@ class UserControllerTests {
 	@Test
 	@WithMockUser("admin")
 	void shouldFindAll() throws Exception {
-		User sara = new User();
-		sara.setId(2);
-		sara.setUsername("Sara");
+		User player1 = new User();
+		player1.setId(2);
+		player1.setUsername("player1");
 
-		User juan = new User();
-		juan.setId(3);
-		juan.setUsername("Juan");
+		User player2 = new User();
+		player2.setId(3);
+		player2.setUsername("player2");
 
-		when(this.userService.findAll()).thenReturn(List.of(user, sara, juan));
+		when(this.userService.findAll()).thenReturn(List.of(user, player1, player2));
 
 		mockMvc.perform(get(BASE_URL)).andExpect(status().isOk()).andExpect(jsonPath("$.size()").value(3))
 				.andExpect(jsonPath("$[?(@.id == 1)].username").value("user"))
-				.andExpect(jsonPath("$[?(@.id == 2)].username").value("Sara"))
-				.andExpect(jsonPath("$[?(@.id == 3)].username").value("Juan"));
+				.andExpect(jsonPath("$[?(@.id == 2)].username").value("player1"))
+				.andExpect(jsonPath("$[?(@.id == 3)].username").value("player2"));
 	}
+
+	@Test
+	@WithMockUser("admin")
+	void findAll_Vacia() throws Exception {
+		when(this.userService.findAll()).thenReturn(List.of());
+
+		mockMvc.perform(get(BASE_URL))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.size()").value(0));
+
+		verify(userService, times(1)).findAll();
+	}
+
 
 	@Test
 	@WithMockUser("admin")
@@ -122,21 +132,21 @@ class UserControllerTests {
 		aux.setId(2);
 		aux.setAuthority("AUX");
 
-		User sara = new User();
-		sara.setId(2);
-		sara.setUsername("Sara");
-		sara.setAuthority(aux);
+		User player1 = new User();
+		player1.setId(2);
+		player1.setUsername("player1");
+		player1.setAuthority(aux);
 
-		User juan = new User();
-		juan.setId(3);
-		juan.setUsername("Juan");
-		juan.setAuthority(auth);
+		User player2 = new User();
+		player2.setId(3);
+		player2.setUsername("player2");
+		player2.setAuthority(auth);
 
-		when(this.userService.findAllByAuthority(auth.getAuthority())).thenReturn(List.of(user, juan));
+		when(this.userService.findAllByAuthority(auth.getAuthority())).thenReturn(List.of(user, player2));
 
-		mockMvc.perform(get(BASE_URL).param("auth", "VET")).andExpect(status().isOk())
+		mockMvc.perform(get(BASE_URL).param("auth", "PLAYER")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.size()").value(2)).andExpect(jsonPath("$[?(@.id == 1)].username").value("user"))
-				.andExpect(jsonPath("$[?(@.id == 3)].username").value("Juan"));
+				.andExpect(jsonPath("$[?(@.id == 3)].username").value("player2"));
 	}
 
 	@Test
@@ -149,9 +159,22 @@ class UserControllerTests {
 		when(this.authService.findAll()).thenReturn(List.of(auth, aux));
 
 		mockMvc.perform(get(BASE_URL + "/authorities")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.size()").value(2)).andExpect(jsonPath("$[?(@.id == 1)].authority").value("VET"))
+				.andExpect(jsonPath("$.size()").value(2)).andExpect(jsonPath("$[?(@.id == 1)].authority").value("PLAYER"))
 				.andExpect(jsonPath("$[?(@.id == 2)].authority").value("AUX"));
 	}
+
+	@Test
+	@WithMockUser("admin")
+	void findAllAuths_Vacia() throws Exception {
+		when(this.authService.findAll()).thenReturn(List.of());
+
+		mockMvc.perform(get(BASE_URL + "/authorities"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.size()").value(0));
+
+		verify(authService, times(1)).findAll();
+	}
+
 
 	@Test
 	@WithMockUser("admin")
@@ -209,42 +232,201 @@ class UserControllerTests {
 				.content(objectMapper.writeValueAsString(user))).andExpect(status().isNotFound());
 	}
 	
-/*  Tengo que cambiarlos para las nuevas restricciones
+	@Test
+	@WithMockUser("admin")
+	void shouldDeleteUser() throws Exception {
+		when(this.userService.findUser(TEST_USER_ID)).thenReturn(user);
+
+		mockMvc.perform(delete(BASE_URL + "/{id}", TEST_USER_ID).with(csrf()))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.message").value("Usuario eliminado"));
+
+		verify(userService, times(1)).findUser(TEST_USER_ID);
+		verify(userService, times(1)).deleteUser(TEST_USER_ID);
+	}
 
 	@Test
 	@WithMockUser("admin")
-	void shouldDeleteOtherUser() throws Exception {
-		logged.setId(2);
+	void shouldDeleteUser_NotFound() throws Exception {
+		when(this.userService.findUser(TEST_USER_ID)).thenThrow(ResourceNotFoundException.class);
 
-		when(this.userService.findUser(TEST_USER_ID)).thenReturn(user);
-		doNothing().when(this.userService).deleteUser(TEST_USER_ID);
+		mockMvc.perform(delete(BASE_URL + "/{id}", TEST_USER_ID).with(csrf()))
+				.andExpect(status().isNotFound());
 
-		mockMvc.perform(delete(BASE_URL + "/{id}", TEST_USER_ID).with(csrf())).andExpect(status().isNoContent())
-				.andExpect(jsonPath("$.message").value("Usuario eliminado"));
+		verify(userService, times(1)).findUser(TEST_USER_ID);
+		verify(userService, never()).deleteUser(TEST_USER_ID);
 	}
 
 	@Test
-	@WithMockUser("player")
-	void shouldDeleteLoggedUser() throws Exception {
-		logged.setId(TEST_USER_ID);
-
-		when(this.userService.findUser(TEST_USER_ID)).thenReturn(user);
-		doNothing().when(this.userService).deleteUser(TEST_USER_ID);
-
-		mockMvc.perform(delete(BASE_URL + "/{id}", TEST_USER_ID).with(csrf())).andExpect(status().isNoContent())
-		.andExpect(jsonPath("$.message").value("Usuario eliminado"));
+	@WithMockUser("admin")
+	void shouldGetUsersSortedByPoints() throws Exception {
+		User player1 = new User();
+		player1.setId(2);
+		player1.setUsername("player1");
+		player1.setNumPuntosGanados(150);
+	
+		User player2 = new User();
+		player2.setId(3);
+		player2.setUsername("player2");
+		player2.setNumPuntosGanados(120);
+	
+		when(userService.getUsersSortedByPoints()).thenReturn(List.of(player1, player2));
+	
+		mockMvc.perform(get(BASE_URL + "/sorted-by-points"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.size()").value(2))
+				.andExpect(jsonPath("$[0].username").value("player1"))
+				.andExpect(jsonPath("$[1].username").value("player2"));
 	}
 
 	@Test
-	@WithMockUser("player")
-	void shouldNotDeleteOtherLoggedUser() throws Exception {
-		logged.setId(TEST_USER_ID);
+	@WithMockUser("admin")
+	void shouldGetUsersSortedByWinPercentage() throws Exception {
+		User player1 = new User();
+		player1.setId(2);
+		player1.setUsername("player1");
+		player1.setNumPartidasJugadas(10);
+		player1.setNumPartidasGanadas(7);
+		player1.setAuthority(auth);
 
-		when(this.userService.findUser(TEST_USER_ID)).thenReturn(user);
-		doNothing().when(this.userService).deleteUser(TEST_USER_ID);
+		User player2 = new User();
+		player2.setId(3);
+		player2.setUsername("player2");
+		player2.setNumPartidasJugadas(15);
+		player2.setNumPartidasGanadas(9);
+		player2.setAuthority(auth);
 
-		mockMvc.perform(delete(BASE_URL + "/{id}", TEST_USER_ID + 1 ).with(csrf())).andExpect(status().isForbidden())
-				.andExpect(result -> assertTrue(result.getResolvedException() instanceof AccessDeniedException));
+		when(userService.getUsersSortedByWinPercentage()).thenReturn(List.of(player2, player1));
+
+		mockMvc.perform(get(BASE_URL + "/sorted-by-win-percentage"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.size()").value(2))
+				.andExpect(jsonPath("$[0].username").value("player2"))
+				.andExpect(jsonPath("$[1].username").value("player1"));
+
+		verify(userService, times(1)).getUsersSortedByWinPercentage();
 	}
-*/
+
+	// En caso de empate se devolverá la lista en el mismo orden en el que se paso
+	// si queremos que al empatar se ordene de otra forma hay que especificarlo en el service
+	@Test
+	@WithMockUser("admin")
+	void shouldGetUsersSortedByWinPercentage_ScoreIgual() throws Exception {
+		User user1 = new User();
+		user1.setId(2);
+		user1.setUsername("User1");
+		user1.setNumPartidasJugadas(10);
+		user1.setNumPartidasGanadas(5);
+		user1.setAuthority(auth);
+	
+		User user2 = new User();
+		user2.setId(3);
+		user2.setUsername("User2");
+		user2.setNumPartidasJugadas(20);
+		user2.setNumPartidasGanadas(10);
+		user2.setAuthority(auth);
+	
+		when(userService.getUsersSortedByWinPercentage()).thenReturn(List.of(user1, user2));
+	
+		mockMvc.perform(get(BASE_URL + "/sorted-by-win-percentage"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.size()").value(2))
+				.andExpect(jsonPath("$[0].username").value("User1"))
+				.andExpect(jsonPath("$[1].username").value("User2"));
+	
+		verify(userService, times(1)).getUsersSortedByWinPercentage();
+	}
+	
+
+	@Test
+	@WithMockUser("admin")
+	void shouldGetUsersSortedByWinPercentage_Vacio() throws Exception {
+		when(userService.findAll()).thenReturn(List.of());
+
+		mockMvc.perform(get(BASE_URL + "/sorted-by-win-percentage"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.size()").value(0));
+
+		verify(userService, times(1)).getUsersSortedByWinPercentage();
+	}
+
+
+	@Test
+	@WithMockUser("admin")
+	void shouldAceptarORechazarSolicitud() throws Exception {
+		user.setConectado(true);
+
+		when(userService.conectarseODesconectarse(TEST_USER_ID, true)).thenReturn(user);
+
+		mockMvc.perform(put(BASE_URL + "/conectarODesconectar/{userId}/{conectar}", TEST_USER_ID, true)
+						.with(csrf()))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.conectado").value(true));
+
+		verify(userService, times(1)).conectarseODesconectarse(TEST_USER_ID, true);
+	}
+
+	@Test
+	@WithMockUser("admin")
+	void shouldAceptarORechazarSolicitud_NotFound() throws Exception {
+		when(userService.conectarseODesconectarse(TEST_USER_ID, true)).thenThrow(ResourceNotFoundException.class);
+
+		mockMvc.perform(put(BASE_URL + "/conectarODesconectar/{userId}/{conectar}", TEST_USER_ID, true)
+						.with(csrf()))
+				.andExpect(status().isNotFound());
+
+		verify(userService, times(1)).conectarseODesconectarse(TEST_USER_ID, true);
+	}
+
+	@Test
+	@WithMockUser
+	void shouldFindCurrentUserProfile() throws Exception {
+		when(userService.findCurrentUser()).thenReturn(user);
+
+		mockMvc.perform(get(BASE_URL + "/current"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.username").value("user"))
+				.andExpect(jsonPath("$.id").value(TEST_USER_ID));
+
+		verify(userService, times(1)).findCurrentUser();
+	}
+
+	@Test
+	@WithMockUser
+	void shouldFindCurrentUserProfile_UserNotFound() throws Exception {
+		when(userService.findCurrentUser())
+				.thenThrow(new ResourceNotFoundException("User", "username", "admin100000"));
+
+		mockMvc.perform(get(BASE_URL + "/current"))
+				.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.message").value("User no encontrado con username: 'admin100000'"));
+
+		verify(userService, times(1)).findCurrentUser();
+	}
+
+
+	@Test
+	@WithMockUser("admin")
+	void shouldGetJugadoresByCurrentUser() throws Exception {
+		Jugador jugador = new Jugador();
+		jugador.setId(1);
+		jugador.setPuntos(100);
+
+		Jugador jugador2 = new Jugador();
+		jugador2.setId(2);
+		jugador2.setPuntos(200);
+
+		when(userService.getJugadoresByCurrentUser()).thenReturn(List.of(jugador, jugador2));
+
+		mockMvc.perform(get(BASE_URL + "/current/jugadores"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.size()").value(2))
+				.andExpect(jsonPath("$[0].id").value(1))
+				.andExpect(jsonPath("$[0].puntos").value(100))
+				.andExpect(jsonPath("$[1].id").value(2))
+				.andExpect(jsonPath("$[1].puntos").value(200));
+
+		verify(userService, times(1)).getJugadoresByCurrentUser();
+	}
+
 }

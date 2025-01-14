@@ -27,6 +27,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.AmistadNoExisteException;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.SolicitudEnviadaException;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.User;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.UserService;
 
@@ -45,6 +49,9 @@ public class AmistadServiceTest {
 
     @InjectMocks
     private AmistadService amistadService;
+    
+    @Mock
+    private JugadorService jugadorService;
 
     private User remitente;
     private User destinatario1;
@@ -52,6 +59,11 @@ public class AmistadServiceTest {
     private Amistad amistad1;
     private Amistad amistad2;
     private Amistad amistad3;
+    private Jugador jugador1;
+    private Jugador jugador2;
+    private Partida partida;
+    private List<Jugador> jugadoresEnPartida;
+    private List<User> amigosDeRemitente;
     
     @BeforeEach
     void setup() {
@@ -87,6 +99,25 @@ public class AmistadServiceTest {
         amistad3.setRemitente(destinatario1);
         amistad3.setDestinatario(remitente);
         amistad3.setEstadoAmistad(EstadoAmistad.PENDIENTE);
+
+        jugador1 = new Jugador();
+        jugador1.setId(1);
+        jugador1.setUsuario(destinatario1);
+        jugador1.setPartida(partida);
+
+        jugador2 = new Jugador();
+        jugador2.setId(2);
+        jugador2.setUsuario(destinatario2);
+        jugador2.setPartida(partida);
+
+        partida = new Partida();
+        partida.setId(1);
+        partida.setNombre("Partida Test");
+        partida.setEstado(PartidaEstado.ESPERANDO);
+
+        jugadoresEnPartida = List.of(jugador1, jugador2);
+
+        amigosDeRemitente = List.of(destinatario1, destinatario2);
     }
 
     @Test
@@ -382,4 +413,17 @@ public class AmistadServiceTest {
         verify(messagingTemplate).convertAndSend(eq("/topic/amistad/2"), any(List.class));
     }
 
+    @Test
+    void shouldPuedesVerPartida_NotFound() {
+        when(amistadRepository.getAllMyAmistad(1)).thenReturn(List.of(amistad1, amistad2));
+        when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(jugadoresEnPartida);
+        when(amistadRepository.getAllMyAmistad(2)).thenReturn(List.of());
+        when(amistadRepository.getAllMyAmistad(3)).thenReturn(List.of());
+    
+        List<User> result = amistadService.puedesVerPartida(1, 1);
+    
+        assertNotNull(result);
+        assertEquals(0, result.size());
+    }
+    
 }

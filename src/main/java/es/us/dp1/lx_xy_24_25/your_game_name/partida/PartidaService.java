@@ -329,6 +329,7 @@ public class PartidaService {
                 finalizarPartida(ronda.getPartida().getId());
             // Si no, pasamos de ronda, iniciamos sus manos e iniciamos la primera baza
             } else{
+                renovarHaApostado(jugadores);
                 Integer numJugadores = jugadores.size(); 
                 Integer numBazas = manoService.getNumCartasARepartir(nextRonda, numJugadores);
                 Ronda newRonda = rondaService.nextRonda(ronda.getId(), numBazas);
@@ -398,9 +399,14 @@ public class PartidaService {
             throw new ApuestaNoValidaException("La apuesta no puede ser mayor a " + mano.getCartas().size());
         }
 
+        if(jugador.getHaApostado() == true){
+            throw new NoPuedeApostarException("Ya has apostado en esta ronda");
+        }
+
 
         mano.setApuesta(ap);
         jugador.setApuestaActual(ap);
+        jugador.setHaApostado(true);
         manoService.saveMano(mano);
         jugadorService.updateJugador(jugador, jugadorId);       
     }
@@ -414,6 +420,14 @@ public class PartidaService {
             resultadosManos.put(j.getId(), manoJugador.getResultado());
         }
         messagingTemplate.convertAndSend("/topic/resultadosMano/partida/" + partidaId, resultadosManos);
+    }
+
+    @Transactional
+    public void renovarHaApostado(List<Jugador> jugadores){
+        for(Jugador j: jugadores){
+            j.setHaApostado(false);
+            jugadorService.updateJugador(j, j.getId());
+        }
     }
 
 }

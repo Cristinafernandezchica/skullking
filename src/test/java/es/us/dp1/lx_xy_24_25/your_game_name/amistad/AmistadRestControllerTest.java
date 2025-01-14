@@ -1,5 +1,7 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.amistad;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -74,6 +76,38 @@ class AmistadRestControllerTest {
         mockMvc.perform(get("/api/v1/amistades/misAmigos/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(0));
+    }
+
+    @Test
+    void shouldGetAmigosQuePuedenVerLaPartida() throws Exception {
+        User amigo1 = new User();
+        amigo1.setId(3);
+        amigo1.setUsername("Amigo1");
+
+        User amigo2 = new User();
+        amigo2.setId(4);
+        amigo2.setUsername("Amigo2");
+
+        when(amistadService.puedesVerPartida(1, 1)).thenReturn(List.of(amigo1, amigo2));
+
+        mockMvc.perform(get("/api/v1/amistades/puedeVerLaPartida/{partidaId}/{miId}", 1, 1))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(2))
+                .andExpect(jsonPath("$[0].username").value("Amigo1"))
+                .andExpect(jsonPath("$[1].username").value("Amigo2"));
+
+        verify(amistadService, times(1)).puedesVerPartida(1, 1);
+    }
+
+    @Test
+    void shouldGetAmigosQuePuedenVerLaPartida_Vacio() throws Exception {
+        when(amistadService.puedesVerPartida(1, 1)).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/v1/amistades/puedeVerLaPartida/{partidaId}/{miId}", 1, 1))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(0));
+
+        verify(amistadService, times(1)).puedesVerPartida(1, 1);
     }
 
     @Test

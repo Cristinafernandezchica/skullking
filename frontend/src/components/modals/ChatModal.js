@@ -96,8 +96,8 @@ export default function ChatModal({ isVisible, onCancel, partida, jugadorQueEscr
     };
 
     return (
-        <Modal isOpen={isVisible} toggle={handleClose}>
-            <ModalHeader toggle={handleClose}>Chat</ModalHeader>
+        <Modal isOpen={isVisible} toggle={handleClose} className="custom-modal">
+            <ModalHeader toggle={handleClose} className="custom-modal-header">Chat</ModalHeader>
             <ModalBody>
                 <div className="chat-list" style={{ maxHeight: "300px", overflowY: "auto" }}>
                     {chatList.length > 0 ? (
@@ -121,7 +121,8 @@ export default function ChatModal({ isVisible, onCancel, partida, jugadorQueEscr
                     />
                 </FormGroup>
             </ModalBody>
-            <ModalFooter>
+            <ModalFooter style={{background: "#112b44",
+    color: "#f5d76e"}}>
                 <Button color="primary" onClick={handleConfirmClick}>
                     Enviar
                 </Button>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Alert } from 'reactstrap';
-
+import "../../static/css/chat/chat.css";
 export default function ElegirTigresaModal({ isVisible, onCancel, onConfirm }) {
     const [carta, setCarta] = useState(''); // Inicializar como string vacío
     const [errorMessage, setErrorMessage] = useState('');
@@ -28,8 +28,8 @@ export default function ElegirTigresaModal({ isVisible, onCancel, onConfirm }) {
     };
 
     return (
-        <Modal isOpen={isVisible} toggle={onCancel}>
-            <ModalHeader toggle={onCancel}>Elige una opción</ModalHeader>
+        <Modal isOpen={isVisible} toggle={onCancel} className="custom-modal">
+            <ModalHeader toggle={onCancel} className="custom-modal-header">Elige una opción</ModalHeader>
             <ModalBody>
                 {errorMessage && <Alert color="danger">{errorMessage}</Alert>}
                 <button
@@ -57,7 +57,8 @@ export default function ElegirTigresaModal({ isVisible, onCancel, onConfirm }) {
                     />
                 </button>
             </ModalBody>
-            <ModalFooter>
+            <ModalFooter style={{background: "#112b44",
+    color: "#f5d76e"}}>
                 <Button color="danger" onClick={onCancel}>Cancelar</Button>
             </ModalFooter>
         </Modal>

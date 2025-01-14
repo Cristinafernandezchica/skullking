@@ -255,5 +255,3 @@ export async function usuarioConectadoODesconectado(jwt,usuario,conectado) {
                 console.error("Error al conectar con el servidor:", error);
             }
         }
-
-

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
 import tokenService from '../../services/token.service';
+import "../../static/css/chat/chat.css";
 
 const jwt = tokenService.getLocalAccessToken();
 
@@ -35,8 +36,8 @@ export default function UnirPartidaModal({ isVisible, onCancel, onConfirm }) {
         };
 
     return (
-        <Modal isOpen={isVisible} toggle={onCancel} >
-            <ModalHeader toggle={onCancel} style={{ backgroundColor: '#002147', color: '#ffffff' }}>Partidas disponibles</ModalHeader>
+        <Modal isOpen={isVisible} toggle={onCancel} className="custom-modal">
+            <ModalHeader toggle={onCancel} className="custom-modal-header">Partidas disponibles</ModalHeader>
             <ModalBody style={{ backgroundColor: '#002147', color: '#ffffff'}}>
                 <Table>
                     <thead>
@@ -64,7 +65,7 @@ export default function UnirPartidaModal({ isVisible, onCancel, onConfirm }) {
                     </tbody>
                 </Table>
             </ModalBody>
-            <ModalFooter style={{ backgroundColor: '#002147', color: '#ffffff' }}>
+            <ModalFooter style={{background: "#112b44", color: "#f5d76e"}}>
                 <Button color="secondary" onClick={onCancel}>Cerrar</Button>
             </ModalFooter>
         </Modal>

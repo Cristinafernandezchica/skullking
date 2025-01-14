@@ -14,3 +14,18 @@
         transform: rotateY(360deg);
     }
 }
+
+
+.custom-dropdown-menu {
+    background-color: #383838 !important; /* Un poco más claro que #333333 */
+    color: white !important; /* Texto blanco */
+}
+
+.custom-dropdown-item {
+    color: white !important;
+}
+
+.custom-dropdown-item:hover {
+    background-color: #444444 !important; /* Gris más claro al pasar el ratón */
+    color: white !important;
+}

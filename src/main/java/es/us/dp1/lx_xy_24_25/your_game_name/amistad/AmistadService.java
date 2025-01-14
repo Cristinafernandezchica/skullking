@@ -150,6 +150,7 @@ public class AmistadService {
 
         Amistad result= amistadRepository.save(amistadAAceptar);
         messagingTemplate.convertAndSend("/topic/amistad/" + remitenteId, getAllMyFriends(remitenteId));
+        messagingTemplate.convertAndSend("/topic/amistad/" + destinatarioId, getAllMyFriends(destinatarioId));
         return result;
     }
 

@@ -1,6 +1,19 @@
+.background-container {
+    position: fixed; /* Fija el contenedor al viewport */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../static/images/fondo_de_bikini.jpg'); /* Ruta relativa */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: -1; /* Asegura que quede detrás de otros elementos */
+}
+
 .editar-perfil-container {
     max-width: 600px;
-    margin: 50px auto;
+    margin: 100px auto;
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 10px;

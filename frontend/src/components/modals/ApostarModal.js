@@ -49,7 +49,7 @@ export default function ApuestaModal({ isVisible, onCancel, onConfirm}) {
 
     return (
         <Modal isOpen={isVisible} className="custom-modal">
-            <ModalHeader toggle={onCancel} className="custom-modal-header"> Realizar Apuesta</ModalHeader>
+            <ModalHeader className="custom-modal-header"> Realizar Apuesta</ModalHeader>
             <ModalBody>
                 {errorMessage && <Alert color="danger">{errorMessage}</Alert>}
                 <FormGroup>

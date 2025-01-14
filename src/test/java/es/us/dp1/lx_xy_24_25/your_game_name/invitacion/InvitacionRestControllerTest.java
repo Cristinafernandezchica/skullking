@@ -170,7 +170,7 @@ public class InvitacionRestControllerTest {
     }
 
     @Test
-    void shouldFailAceptarInvitacion_NotFound() throws Exception {
+    void shouldAceptarInvitacion_NotFound() throws Exception {
         doThrow(new ResourceNotFoundException("Invitacion no encontrada"))
                 .when(invitacionService).deleteInvitacion(999);
 

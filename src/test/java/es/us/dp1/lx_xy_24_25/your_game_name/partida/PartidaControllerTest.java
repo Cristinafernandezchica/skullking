@@ -267,7 +267,7 @@ public class PartidaControllerTest {
 
     @Test
     @WithMockUser("admin")
-    void shouldGanadoPartida() throws Exception {
+    void shouldGanadorPartida() throws Exception {
         when(partidaService.getJugadorGanador(TEST_PARTIDA_ID)).thenReturn(jugadorGanador);
 
         mockMvc.perform(get(BASE_URL + "/{id}/jugadorGanador", TEST_PARTIDA_ID))

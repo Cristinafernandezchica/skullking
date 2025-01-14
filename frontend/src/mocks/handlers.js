@@ -11,6 +11,19 @@ const authorityAdmin = {
     authority: 'ADMIN'
 };
 
+const admin = {
+    id: 3,
+    username: "admin",
+    password: "$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e",
+    descripcionPerfil: "Administrador",
+    imagenPerfil: "https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg",
+    conectado: false,
+    numPartidasJugadas: 0,
+    numPartidasGanadas: 0,
+    numPuntosGanados: 0,
+    authority: authorityAdmin,
+};
+
 // Simulación de Usuarios
 const user1 = {
     id: 1,
@@ -119,5 +132,83 @@ export const handlers = [
         let jugadores = [jugador1, jugador2, jugador3].filter(jugador => jugador.partida.id === parseInt(partidaId));
 
         return res(ctx.status(200), ctx.json(jugadores));
+    }),
+
+    // Endpoint para obtener jugadores por usuario ID
+    rest.get('/api/v1/jugadores/:usuarioId/usuarios', (req, res, ctx) => {
+        const { usuarioId } = req.params;
+        const jugadores = [jugador1, jugador2, jugador3].filter(jugador => jugador.usuario.id === parseInt(usuarioId));
+
+        if (jugadores.length === 0) {
+            return res(ctx.status(404), ctx.json({ message: "No se encontraron jugadores para este usuario" }));
+        }
+
+        return res(ctx.status(200), ctx.json(jugadores));
+    }),
+
+    // Endpoint para eliminar un jugador
+    rest.delete('/api/v1/jugadores/:id', (req, res, ctx) => {
+        const { id } = req.params;
+        const jugador = [jugador1, jugador2, jugador3].find(jugador => jugador.id === parseInt(id));
+
+        if (!jugador) {
+            return res(ctx.status(404), ctx.json({ message: "Jugador no encontrado" }));
+        }
+
+        return res(ctx.status(200), ctx.json({ message: "Jugador eliminado!" }));
+    }),
+
+    // Endpoint para obtener partidas por owner ID
+    rest.get('/api/v1/partidas', (req, res, ctx) => {
+        const { ownerId } = req.url.searchParams;
+        const partidas = [partida1, partida2].filter(partida => partida.ownerPartida.id === parseInt(ownerId));
+
+        if (partidas.length === 0) {
+            return res(ctx.status(404), ctx.json({ message: "No se encontraron partidas para este owner" }));
+        }
+
+        return res(ctx.status(200), ctx.json(partidas));
+    }),
+
+    // Endpoint para eliminar un usuario
+    rest.delete('/api/v1/users/:userId', (req, res, ctx) => {
+        const { userId } = req.params;
+        const user = [user1, user2].find(user => user.id === parseInt(userId));
+
+        if (!user) {
+            return res(ctx.status(404), ctx.json({ message: "Usuario no encontrado" }));
+        }
+
+        return res(ctx.status(204), ctx.json({ message: "Usuario eliminado" }));
+    }),
+
+    // Endpoint para eliminar una partida
+    rest.delete('/api/v1/partidas/:id', (req, res, ctx) => {
+        const { id } = req.params;
+        const partida = [partida1, partida2].find(partida => partida.id === parseInt(id));
+
+        if (!partida) {
+            return res(ctx.status(404), ctx.json({ message: "Partida no encontrada" }));
+        }
+
+        return res(ctx.status(204), ctx.json({ message: "Partida eliminada" }));
+    }),
+
+    // Endpoint para obtener todas las autoridades
+    rest.get('/api/v1/users/authorities', (req, res, ctx) => {
+        const authorities = [authorityAdmin, authorityPlayer];
+        return res(ctx.status(200), ctx.json(authorities));
+    }),
+    
+    // Endpoint para obtener un usuario por ID
+    rest.get('/api/v1/users/:id', (req, res, ctx) => {
+        const { id } = req.params;
+        const user = [user1, user2].find(user => user.id === parseInt(id));
+    
+        if (!user) {
+            return res(ctx.status(404), ctx.json({ message: "Usuario no encontrado" }));
+        }
+    
+        return res(ctx.status(200), ctx.json(user));
     })
 ];

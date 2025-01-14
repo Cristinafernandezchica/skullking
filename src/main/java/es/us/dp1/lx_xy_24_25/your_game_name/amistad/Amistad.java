@@ -21,11 +21,11 @@ import lombok.Setter;
 public class Amistad extends BaseEntity{
     
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private User remitente;
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private User destinatario;
 
     @NotNull

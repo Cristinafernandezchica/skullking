@@ -22,15 +22,15 @@ import lombok.Setter;
 public class Invitacion extends BaseEntity{
     
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private User remitente;
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private User destinatario;
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Partida partida;
 
     @NotNull

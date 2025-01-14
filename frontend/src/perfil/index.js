@@ -3,6 +3,7 @@ import { Button, Spinner, Alert, ModalFooter, ModalBody, ModalHeader, Modal } fr
 import { useNavigate } from "react-router-dom";
 import tokenService from "../services/token.service";
 import "./Perfil.css";
+import "../static/css/chat/chat.css";
 import { aceptarORechazarSolicitud, eresAmigoDeTodaLaPartida, fetchListaDeAmigos, fetchListaDeAmigosQuePuedenVer, invitarAPartida } from "../components/appNavBarModular/AppNavBarModular";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
@@ -61,7 +62,6 @@ export default function Perfil() {
                 false,
                 jwt
             );
-            fetchListaDeAmigos(usuarioActual, setListaDeAmigos, jwt);
         }
         handleCerrarModal();
     };
@@ -318,6 +318,10 @@ export default function Perfil() {
       };
 
     return (
+
+        <div
+        className="background-container"
+    >
         <div className="perfil-container">
             <h2 className="perfil-title">Mi Perfil</h2>
 
@@ -494,15 +498,16 @@ export default function Perfil() {
             </div>
 
             {/* Modal para confirmar eliminación */}
-            <Modal isOpen={modalVisible} toggle={handleCerrarModal}>
-                <ModalHeader toggle={handleCerrarModal}>
+            <Modal isOpen={modalVisible} toggle={handleCerrarModal} className="custom-modal">
+                <ModalHeader toggle={handleCerrarModal} className="custom-modal-header">
                     Confirmar Eliminación
                 </ModalHeader>
                 <ModalBody>
                     ¿Estás seguro de que quieres eliminar a{' '}
                     <strong>{amigoAEliminar?.username}</strong> de tu lista de amigos?
                 </ModalBody>
-                <ModalFooter>
+                <ModalFooter style={{background: "#112b44",
+    color: "#f5d76e"}}>
                     <Button color="danger" onClick={handleConfirmarEliminar}>
                         Sí, eliminar
                     </Button>
@@ -512,5 +517,6 @@ export default function Perfil() {
                 </ModalFooter>
             </Modal>
         </div>
+    </div>
     );
 }

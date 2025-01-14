@@ -188,15 +188,24 @@ function AppNavbar() {
                         <DropdownToggle nav caret style={{ color: "white" }}>
                             Notificaciones
                         </DropdownToggle>
-                        <DropdownMenu style={{ maxHeight: "300px", overflowY: "auto" }}>
-
+                        <DropdownMenu
+    style={{
+        backgroundColor: "#2B2B2B", 
+        color: "white", 
+        maxHeight: "300px",
+        overflowY: "auto",
+    }}
+>
     {nuevasSolitudes.length > 0 && (
         <>
             <p><b>Solicitudes</b></p>
             {nuevasSolitudes.map((usuario) => (
                 <DropdownItem
                     key={usuario.id}
-                    tag="div"
+                    style={{
+                        color: "white",
+                        backgroundColor: "#383838", // Negro claro
+                    }}
                     className="d-flex justify-content-between align-items-center"
                 >
                     <div style={{ display: "flex", alignItems: "center" }}>
@@ -217,7 +226,7 @@ function AppNavbar() {
                     <div>
                         <Button
                             className="btn btn-success btn-sm mx-1"
-                            onClick={() => aceptarORechazarSolicitud(usuarioActual.id, usuario.id, true, jwt)}
+                            onClick={async () => await aceptarORechazarSolicitud(usuarioActual.id, usuario.id, true, jwt)}
                         >
                             ✓
                         </Button>
@@ -240,6 +249,10 @@ function AppNavbar() {
             <DropdownItem 
                 key={amigo.id} 
                 tag="div" 
+                style={{
+                    color: "white",
+                    backgroundColor: "#383838", // Negro claro
+                }}
                 className="d-flex justify-content-between align-items-center"
             >
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -309,6 +322,10 @@ function AppNavbar() {
             <DropdownItem 
                 key={invitacion.id} 
                 tag="div" 
+                style={{
+                    color: "white",
+                    backgroundColor: "#383838", // Negro claro
+                }}
                 className="d-flex justify-content-between align-items-center"
             >
                 {invitacion.espectador ? (

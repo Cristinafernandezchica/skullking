@@ -5,26 +5,27 @@
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 5px;
+    background: #ffffff
+    
   }
 
   .custom-modal {
-    background-color: rgba(17, 62, 88, 0.804); /* Fondo gris claro */
-    color: white; /* Color del texto */
-    border: 3px solid #ccba4a; /* Borde verde */
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+    background: #112b44; /* Azul profundo */
+    border: 3px solid #f5d76e; /* Borde dorado */
 }
 
 .custom-modal-header {
-    background-color: rgba(17, 62, 88, 0.804); /* Mismo color de fondo que el modal */
-    color: white; /* Color del texto en el encabezado */
-    border-bottom: 3px solid #ccba4a; /* Borde en la parte inferior */
+    background: #112b44; /* Azul profundo */
+    color: #f5d76e; /* Dorado suave */
+    border-bottom: 2px solid #f5d76e; /* Línea dorada */
 }
 
 .custom-modal-footer {
-    background-color: rgba(17, 62, 88, 0.804); /* Mismo color de fondo que el modal */
-    color: white; /* Color del texto en el pie */
-    border-top: 3px solid #ccba4a; /* Borde en la parte superior */
+    background: #112b44; /* Azul profundo */
+    color: #f5d76e; /* Texto dorado */
+    border-top: 2px solid #f5d76e; /* Línea dorada */
+    text-align: center; /* Alineación del contenido */
+    padding: 1rem; /* Espaciado */
 }
 
 .custom-modal-body {

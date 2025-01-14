@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Input, FormGroup, Label } from 'reactstrap';
 import { useNavigate } from 'react-router-dom'; // Asegúrate de importar useNavigate
-
+import "../../static/css/chat/chat.css";
 export default function CrearPartidaModal({ isVisible, onCancel, onConfirm }) {
     const [nombrePartida, setNombrePartida] = useState('');
 
@@ -12,8 +12,8 @@ export default function CrearPartidaModal({ isVisible, onCancel, onConfirm }) {
     };
 
     return (
-        <Modal isOpen={isVisible} toggle={onCancel}>
-            <ModalHeader toggle={onCancel}>Crear partida</ModalHeader>
+        <Modal isOpen={isVisible} toggle={onCancel} className="custom-modal">
+            <ModalHeader toggle={onCancel} className="custom-modal-header">Crear partida</ModalHeader>
             <ModalBody>
                 <FormGroup>
                     <Label for="nombrePartida">Nombre de la partida</Label>
@@ -26,7 +26,8 @@ export default function CrearPartidaModal({ isVisible, onCancel, onConfirm }) {
                     />
                 </FormGroup>
             </ModalBody>
-            <ModalFooter>
+            <ModalFooter style={{background: "#112b44",
+    color: "#f5d76e"}}>
                 <Button color="secondary" onClick={onCancel}>
                     <i className="fa fa-times" aria-hidden="true"></i> Cancelar
                 </Button>

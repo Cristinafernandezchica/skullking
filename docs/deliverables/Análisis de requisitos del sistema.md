@@ -256,8 +256,8 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Lobby](../mockups/iniciar_partida.png)|
 |Una vez el jugador se encuentre en la sala de espera de una partida, el jugador podrá salir de la sala de espera para poder crear su propia partida o unirse a otra partida distinta.|
 
-### HJJ16-(ISSUE#238): Ver el ganador de la partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/238]())
-| "Como jugador quiero poder ver el ganador/es de una partida al terminar la última ronda para poder saber quién la ha ganado."| 
+### HJJ16-(ISSUE#238): Jugar partida completa ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/238]())
+| "Como jugador quiero poder jugar una partida completa para poder saber quién ha ganado."| 
 |-----|
 |![Ver ganador partida](../mockups/ver_ganador_partida.png)|
 |Una vez se haya llegado al fin de la última ronda de una partida, aparecerá un modal donde se mostrará el ganador o ganadores de la partida.|

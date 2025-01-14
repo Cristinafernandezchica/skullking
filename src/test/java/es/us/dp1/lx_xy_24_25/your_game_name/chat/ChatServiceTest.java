@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -145,6 +146,18 @@ class ChatServiceTest {
     }
 
     @Test
+    void shouldFindAllChatByPartidaId_NotFound() {
+        Integer partidaId = 1;
+        when(chatRepository.findAllChatByPartidaId(partidaId)).thenReturn(List.of());
+
+        List<Chat> result = chatService.findAllChatByPartidaId(partidaId);
+
+        assertNotNull(result);
+        assertEquals(result, List.of());
+        verify(chatRepository, times(1)).findAllChatByPartidaId(partidaId);
+    }
+
+    @Test
     void shouldEnviarMensajes() {
         Partida partida = new Partida();
         partida.setId(1);
@@ -169,5 +182,37 @@ class ChatServiceTest {
         verify(messagingTemplate, times(1))
                 .convertAndSend(eq("/topic/chats/" + partida.getId()), eq(chatList));
     }
+
+    @Test
+    void shouldEnviarMensajes_JugadorSinPartida() {
+        Jugador jugadorSinPartida = new Jugador();
+        jugadorSinPartida.setId(2); // Jugador sin partida asociada
+        chat.setJugador(jugadorSinPartida);
+
+        // Ejecutamos el test esperando una NullPointerException
+        assertThrows(NullPointerException.class, () -> chatService.enviarMensajes(chat));
+
+        verify(chatRepository, times(1)).save(any(Chat.class)); // No debería guardar nada
+        verify(messagingTemplate, times(0)).convertAndSend(anyString(), any(List.class));
+    }
+
+    @Test
+    void shouldEnviarMensajes_ErrorRepositorio() {
+        when(chatRepository.save(chat)).thenThrow(new RuntimeException("Error al guardar en base de datos"));
+
+        assertThrows(RuntimeException.class, () -> chatService.enviarMensajes(chat));
+
+        verify(chatRepository, times(1)).save(chat);
+        verify(messagingTemplate, times(0)).convertAndSend(anyString(), any(List.class));
+    }
+
+    @Test
+    void shouldEnviarMensajes_ChatNulo() {
+        assertThrows(NullPointerException.class, () -> chatService.enviarMensajes(null));
+    
+        verify(chatRepository, times(0)).save(any(Chat.class));
+        verify(messagingTemplate, times(0)).convertAndSend(anyString(), any(List.class));
+    }
+    
 
 }

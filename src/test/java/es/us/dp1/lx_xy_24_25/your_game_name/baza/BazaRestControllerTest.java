@@ -11,6 +11,8 @@ import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
+import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,6 +132,15 @@ public class BazaRestControllerTest {
     }
 
     @Test
+    void shouldGetAllBazas_Vacia() throws Exception {
+        when(bazaService.getAllBazas()).thenReturn(List.of());
+    
+        mockMvc.perform(get("/api/v1/bazas"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(0));
+    }
+
+    @Test
     void shouldGetBazaById() throws Exception {
         when(bazaService.findById(anyInt())).thenReturn(baza);
 
@@ -137,6 +148,15 @@ public class BazaRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(baza.getId()))
                 .andExpect(jsonPath("$.numBaza").value(baza.getNumBaza()));
+    }
+
+    @Test
+    void shouldGetBazaById_NotFound() throws Exception {
+        when(bazaService.findById(anyInt())).thenThrow(new ResourceNotFoundException("Baza", "id", 99));
+
+        mockMvc.perform(get("/api/v1/bazas/{id}", 99))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Baza no encontrado con id: '99'"));
     }
 
     @Test
@@ -157,6 +177,16 @@ public class BazaRestControllerTest {
                 .andExpect(jsonPath("$.id").value(1));
 
         verify(bazaService, times(1)).saveBaza(any(Baza.class));
+    }
+
+    @Test
+    void shouldCreateBaza_DatosNoValidos() throws Exception {
+        Baza invalidBaza = new Baza();
+    
+        mockMvc.perform(post("/api/v1/bazas")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(invalidBaza)))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -198,6 +228,15 @@ public class BazaRestControllerTest {
     }
 
     @Test
+    void shouldFindBazaByIdGanador_NotFound() throws Exception {
+        when(bazaService.findById(99)).thenThrow(new ResourceNotFoundException("Baza", "id", 99));
+    
+        mockMvc.perform(get("/api/v1/bazas/{id}/ganador", 99))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Baza no encontrado con id: '99'"));
+    }
+
+    @Test
     void shouldFindTrucosByBazaId() throws Exception {
         List<Truco> trucos = Arrays.asList(truco);
         when(trucoService.findTrucosByBazaId(1)).thenReturn(trucos);
@@ -209,8 +248,16 @@ public class BazaRestControllerTest {
                 .andExpect(jsonPath("$[0].id").value(truco.getId()));
     }
 
+    @Test
+    void shouldFindTrucosByBazaId_NotFound() throws Exception {
+        when(trucoService.findTrucosByBazaId(99)).thenThrow(new ResourceNotFoundException("Baza", "id", 99));
+    
+        mockMvc.perform(get("/api/v1/bazas/{id}/trucos", 99))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Baza no encontrado con id: '99'"));
+    }
+    
 
-    // Test para obtener la baza actual de una ronda
     @Test
     void shouldFindBazaActualByRondaId() throws Exception {
         when(bazaService.findBazaActualByRondaId(1)).thenReturn(baza);
@@ -219,5 +266,15 @@ public class BazaRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(baza.getId()));
     }
+
+    @Test
+    void shouldFindBazaActualByRondaId_NotFound() throws Exception {
+        when(bazaService.findBazaActualByRondaId(99)).thenThrow(new ResourceNotFoundException("Ronda", "id", 99));
+
+        mockMvc.perform(get("/api/v1/bazas/{rondaId}/bazaActual", 99))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Ronda no encontrado con id: '99'"));
+    }
+
 
 }

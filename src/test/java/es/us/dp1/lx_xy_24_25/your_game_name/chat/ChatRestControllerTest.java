@@ -78,7 +78,7 @@ public class ChatRestControllerTest {
     }
 
     @Test
-	void shouldFindAllTrucos_Vacia() throws Exception {
+	void shouldFindAllChats_Vacia() throws Exception {
 		when(chatService.getAllChats()).thenReturn(List.of());
 
 		mockMvc.perform(get(BASE_URL))
@@ -103,6 +103,17 @@ public class ChatRestControllerTest {
     }
 
     @Test
+    void shouldFindAllChatByPartidaId_Vacia() throws Exception {
+        when(chatService.findAllChatByPartidaId(99)).thenReturn(List.of()); // Supongamos que la partida ID 99 no tiene chats
+    
+        mockMvc.perform(get(BASE_URL + "/{partidaId}", 99))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(0)); // La lista está vacía
+    
+        verify(chatService, times(1)).findAllChatByPartidaId(99);
+    }
+
+    @Test
     void shouldSendChatMessage() throws Exception {
         when(chatService.enviarMensajes(any(Chat.class))).thenReturn(chat);
 
@@ -115,6 +126,29 @@ public class ChatRestControllerTest {
                 .andExpect(jsonPath("$.mensaje").value("Mensaje de prueba"));
 
         verify(chatService, times(1)).enviarMensajes(any(Chat.class));
+    }
+
+    @Test
+    void shouldSendChatMessage_InternalServerError() throws Exception {
+        when(chatService.enviarMensajes(any(Chat.class))).thenThrow(new RuntimeException("Error inesperado")); // Simula error en el servicio
+
+        mockMvc.perform(post(BASE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(chat))
+                        .with(csrf()))
+                .andExpect(status().isInternalServerError()); // Error 500
+
+        verify(chatService, times(1)).enviarMensajes(any(Chat.class));
+    }
+
+    @Test
+    void shouldSendChatMessage_NoAutentificado() throws Exception {
+        mockMvc.perform(post(BASE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(chat))) // Falta CSRF o autenticación
+                .andExpect(status().isForbidden()); // Debería fallar sin autenticación
+
+        verify(chatService, times(0)).enviarMensajes(any(Chat.class));
     }
 
 }

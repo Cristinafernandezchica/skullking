@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -23,6 +22,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.mano.ManoService;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.ApuestaNoValidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MinJugadoresPartidaException;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.MismoNombrePartidaNoTerminadaException;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.exceptions.NoPuedeApostarException;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
@@ -946,5 +946,32 @@ public class PartidaServiceTest {
         verify(manoService).saveMano(mano);
         verify(jugadorService).updateJugador(jugador, 1);
     }
+
+    @Test
+    void testApuestaJugadorYaHaApostado() {
+        Partida partida = new Partida();
+        partida.setId(1);
+
+        Jugador jugador = new Jugador();
+        jugador.setId(1);
+        jugador.setPartida(partida);
+        jugador.setHaApostado(true); 
+
+        Mano mano = new Mano();
+        mano.setId(1);
+        mano.setCartas(new ArrayList<>(List.of(new Carta(), new Carta(), new Carta()))); 
+        mano.setJugador(jugador);
+
+        when(manoService.findLastManoByJugadorId(1)).thenReturn(mano);
+        when(jugadorService.findById(1)).thenReturn(jugador);
+
+        assertThrows(NoPuedeApostarException.class, () -> {
+            partidaService.apuesta(2, 1);
+        });
+
+        verify(manoService).findLastManoByJugadorId(1);
+        verify(jugadorService).findById(1);
+    }
+
     
 }

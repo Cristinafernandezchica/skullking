@@ -75,7 +75,7 @@ Si se halla alguna carta 14 de los palos normales, se deberá sumar 10 puntos po
 
 ### Diagrama de Dominio/Diseño
 
-![Diagrama de Dominio](/docs/diagrams/Diagrama_de_dominio_UML.png)
+![Diagrama de Dominio](/docs/diagrams/Diagrama_dominio_UML.png)
 
 En este diagrama de capas podemos ver las relaciones entre las distintas entidades. Como podemos observar hemos realizado todas las relaciones con unidireccionalidad de forma que se han implementado clases que funcionan como clases intermedias, ahorrandonos asociaciones many-to-many. Se ha obviado comentar el tipo de la entidad en la clase, pues todas las entidades implementan "BaseEntity".
 
@@ -354,6 +354,14 @@ Parte del texto que se mostraba por pantalla estaba en español y otra en inglé
 #### Justificación de la solución adoptada
 Se determinó que todo el contenido estuviera a español, por lo que se procedió a su traducción. De esta manera, se presenta un texto más coherente y cohesionado
 
+### Decisión 11: Centralización de PartidaService
+
+#### Descripción del problema
+La estructura de clases de nuestro proyecto daba lugar a diversas dependencias circulares, lo que nos generó bastantes problemas a la hora de hacer funcionar algunas partes del mismo.
+
+#### Justificación de la solución adoptada
+Se decidió separar los métodos de inicio de Rondas, Bazas y Manos en sus respectivas clases Service, y que PartidaService actuase como un servicio central que fuese llamando a estos métodos conforme se cumpliesen ciertas condiciones y en el orden que fuese necesario. Además, se reorganizaron los métodos en las clases. De esta manera, conseguimos deshacernos de las dependencias circulares presentes en el proyecto, intentando mantener un nivel lo más adecuado posible de cohesión y acoplamiento.
+
 ## Refactorizaciones aplicadas
 
 Refactorizaciones aplicadas en el código:
@@ -394,23 +402,198 @@ Al invocar desde un servicio específico métodos pertenecientes a otros servici
 #### Ventajas que presenta la nueva versión del código respecto de la versión original
 Se han resuelto los problemas de dependencia circular y se ha optimizado el número de parámetros en los constructores de los servicios. Asimismo, se han corregido los code smells provocados por las message chains.
 
+### Refactorización 5:
+Se ha llevado a cabo la refactorización 'Extract Method', dividiendo el método jugarTruco de la clase TrucoService en varias partes, para facilitar la legibilidad del mismo, pues es uno de los métodos más importantes del juego. Además, facilita la realización de sus respectivas pruebas. 
 
-### Refactorización X: 
-En esta refactorización añadimos un mapa de parámtros a la partida para ayudar a personalizar la información precalculada de la que partimos en cada fase del juego.
+#### Problema que nos hizo realizar la refactorización
+Leer el método conforme se añadía código al mismo cada vez se hacía más costoso, además de la complejidad de hacer las pruebas del método.
+
+#### Ventajas que presenta la nueva versión del código respecto de la versión original
+La legibilidad del método es mucho mejor que antes y las pruebas no fueron tan costosas de hacer.
+
 #### Estado inicial del código
-```Java 
-class Animal
-{
-}
-``` 
-_Puedes añadir información sobre el lenguaje concreto en el que está escrito el código para habilitar el coloreado de sintaxis tal y como se especifica en [este tutorial](https://docs.github.com/es/get-started/writing-on-github/working-with-advanced-formatting/creating-and-highlighting-code-blocks)_
+```
+@Transactional
+	public Truco jugarTruco(BazaCartaManoDTO DTO, Integer jugadorId){
 
+		Jugador jugador =jugadorService.findById(jugadorId);
+		Partida partida = jugador.getPartida();
+
+		Truco trucoIniciado= new Truco();
+		trucoIniciado.setBaza(DTO.getBaza());
+		trucoIniciado.setMano(DTO.getMano());
+		trucoIniciado.setJugador(jugador);
+		trucoIniciado.setTurno(DTO.getTurno());
+		trucoIniciado.setCarta(DTO.getCarta());
+		trucoRepository.save(trucoIniciado);
+
+		// Envía la lista actualizada de trucos al canal WebSocket
+		messagingTemplate.convertAndSend("/topic/baza/truco/partida/" + partida.getId(), findTrucosByBazaId(trucoIniciado.getBaza().getId()));
+
+		Mano manoSinCartaJugada = trucoIniciado.getMano();
+		List<Carta> nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
+			filter(cartaJugada -> cartaJugada.getId()!=trucoIniciado.getCarta().getId()).toList();
+
+		if(trucoIniciado.getCarta().getId()==idComodinBanderaBlanca || trucoIniciado.getCarta().getId()==idComodinPirata){
+			nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
+				filter(cartaJugada -> cartaJugada.getId()!=idTigresa).toList();
+		}
+		manoSinCartaJugada.setCartas(nuevaListaCarta);
+		manoService.saveMano(manoSinCartaJugada);
+
+		Ronda ronda = trucoIniciado.getBaza().getRonda();
+		messagingTemplate.convertAndSend("/topic/nuevasManos/partida/" + partida.getId(), manoService.findAllManosByRondaId(ronda.getId()));
+
+		Integer numJugadores = jugadorService.findJugadoresByPartidaId(partida.getId()).size();
+		Baza baza = trucoIniciado.getBaza();
+		Integer numTrucosBaza = findTrucosByBazaId(baza.getId()).size();
+
+		Baza bazaParaCambio = bazaService.findById(baza.getId());
+		// Cambiamos el palo de la baza y calculamos las cartas deshabilitadas
+		if(bazaParaCambio.getPaloBaza() == PaloBaza.sinDeterminar){
+			Baza bazaConPaloCambiado = cambiarPaloBaza(baza, trucoIniciado);
+			TipoCarta tipoCarta;
+			switch (bazaConPaloCambiado.getPaloBaza()) {
+				case amarillo:
+					tipoCarta = TipoCarta.amarillo;
+					break;
+				case morada:
+					tipoCarta = TipoCarta.morada;
+					break;
+				case verde:
+					tipoCarta = TipoCarta.verde;
+					break;
+				case triunfo:
+					tipoCarta = TipoCarta.triunfo;
+					break;
+				default:
+					tipoCarta = TipoCarta.sinDeterminar;
+					break;
+			}
+			
+			Map<Integer, List<Carta>> cartasDisabled = cartasDisabledBaza(ronda.getId(), tipoCarta);
+			messagingTemplate.convertAndSend("/topic/cartasDisabled/partida/" + partida.getId(), cartasDisabled);
+		}
+
+		// Si no es el último truco de la Baza, se actualiza el turno
+		if(numJugadores > numTrucosBaza){
+			Integer turnoAntesCambio = partida.getTurnoActual();
+			List<Integer> turnos = trucoIniciado.getBaza().getTurnos();
+			Integer nuevoTurno = siguienteTurno(turnos, turnoAntesCambio);
+			partida.setTurnoActual(nuevoTurno);
+			partidaService.update(partida, partida.getId());
+			messagingTemplate.convertAndSend("/topic/turnoActual/" + partida.getId(), partida.getTurnoActual());
+		}
+		// Si es el último truco de la Baza, se calcula el ganador de la baza
+
+		else if(numJugadores == numTrucosBaza){
+			Jugador ganadorBaza = calculoGanador(baza.getId());
+			messagingTemplate.convertAndSend("/topic/ganadorBaza/partida/" + partida.getId(), ganadorBaza);
+			messagingTemplate.convertAndSend("/topic/listaTrucos/partida/" + partida.getId(), new ArrayList<>());
+			partidaService.siguienteEstado(partida.getId(), baza.getId());
+		}
+
+
+		return trucoIniciado;
+	}
+```
 #### Estado del código refactorizado
 
 ```
-código fuente en java, jsx o javascript
+@Transactional
+	public Truco jugarTruco(BazaCartaManoDTO DTO, Integer jugadorId){
+		
+		Jugador jugador = jugadorService.findById(jugadorId);
+		Partida partida = jugador.getPartida();
+
+		Truco trucoIniciado= new Truco();
+		trucoIniciado.setBaza(DTO.getBaza());
+		trucoIniciado.setMano(DTO.getMano());
+		trucoIniciado.setJugador(jugador);
+		trucoIniciado.setTurno(DTO.getTurno());
+		trucoIniciado.setCarta(DTO.getCarta());
+		trucoRepository.save(trucoIniciado);
+
+		messagingTemplate.convertAndSend("/topic/baza/truco/partida/" + partida.getId(), findTrucosByBazaId(trucoIniciado.getBaza().getId()));
+
+		Ronda ronda = trucoIniciado.getBaza().getRonda();
+		Baza baza = trucoIniciado.getBaza();
+		manoSinCarta(trucoIniciado, partida, ronda);
+
+		Integer numJugadores = jugadorService.findJugadoresByPartidaId(partida.getId()).size();
+		Integer numTrucosBaza = findTrucosByBazaId(baza.getId()).size();
+		Boolean esUltimoTruco = (numJugadores == numTrucosBaza);
+		Boolean noEsUltimoTruco = (numJugadores > numTrucosBaza);
+
+		Baza bazaParaCambio = bazaService.findById(baza.getId());
+		if(bazaParaCambio.getPaloBaza() == PaloBaza.sinDeterminar){
+			Baza bazaConPaloCambiado = cambiarPaloBaza(baza, trucoIniciado);
+			mandarCartasDisabled(bazaConPaloCambiado, ronda, partida);
+		}
+
+		if(noEsUltimoTruco){
+			actualizarTurno(partida, trucoIniciado);
+		}
+		else if(esUltimoTruco){
+			Jugador ganadorBaza = calculoGanador(baza.getId());
+			messagingTemplate.convertAndSend("/topic/ganadorBaza/partida/" + partida.getId(), ganadorBaza);
+			messagingTemplate.convertAndSend("/topic/listaTrucos/partida/" + partida.getId(), new ArrayList<>());
+			partidaService.siguienteEstado(partida.getId(), baza.getId());
+		}
+
+		return trucoIniciado;
+	}
+
+   @Transactional
+	public void manoSinCarta(Truco trucoIniciado, Partida partida, Ronda ronda){
+		Mano manoSinCartaJugada = trucoIniciado.getMano();
+		List<Carta> nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
+			filter(cartaJugada -> cartaJugada.getId()!=trucoIniciado.getCarta().getId()).toList();
+			
+		if(trucoIniciado.getCarta().getId()==idComodinBanderaBlanca || trucoIniciado.getCarta().getId()==idComodinPirata){
+			nuevaListaCarta = trucoIniciado.getMano().getCartas().stream().
+				filter(cartaJugada -> cartaJugada.getId()!=idTigresa).toList();
+		}
+		manoSinCartaJugada.setCartas(nuevaListaCarta);
+		manoService.saveMano(manoSinCartaJugada);
+
+		messagingTemplate.convertAndSend("/topic/nuevasManos/partida/" + partida.getId(), manoService.findAllManosByRondaId(ronda.getId()));
+
+	}
+
+   @Transactional
+	public void mandarCartasDisabled(Baza bazaConPaloCambiado, Ronda ronda, Partida partida){
+		TipoCarta tipoCarta;
+			switch (bazaConPaloCambiado.getPaloBaza()) {
+				case amarillo:
+					tipoCarta = TipoCarta.amarillo;
+					break;
+				case morada:
+					tipoCarta = TipoCarta.morada;
+					break;
+				case verde:
+					tipoCarta = TipoCarta.verde;
+					break;
+				case triunfo:
+					tipoCarta = TipoCarta.triunfo;
+					break;
+				default:
+					tipoCarta = TipoCarta.sinDeterminar;
+					break;
+			}
+			
+			Map<Integer, List<Carta>> cartasDisabled = cartasDisabledBaza(ronda.getId(), tipoCarta);
+			messagingTemplate.convertAndSend("/topic/cartasDisabled/partida/" + partida.getId(), cartasDisabled);
+
+	}
+
+   @Transactional
+	public void actualizarTurno(Partida partida, Truco trucoIniciado){
+		Integer turnoAntesCambio = partida.getTurnoActual();
+		List<Integer> turnos = trucoIniciado.getBaza().getTurnos();
+		Integer nuevoTurno = siguienteTurno(turnos, turnoAntesCambio);
+		partida.setTurnoActual(nuevoTurno);
+		partidaService.update(partida, partida.getId());
+		messagingTemplate.convertAndSend("/topic/turnoActual/" + partida.getId(), partida.getTurnoActual());
+	}
 ```
-#### Problema que nos hizo realizar la refactorización
-_Ej: Era difícil añadir información para implementar la lógica de negocio en cada una de las fases del juego (en nuestro caso varía bastante)_
-#### Ventajas que presenta la nueva versión del código respecto de la versión original
-_Ej: Ahora podemos añadir arbitrariamente los datos que nos hagan falta al contexto de la partida para que sea más sencillo llevar a cabo los turnos y jugadas_

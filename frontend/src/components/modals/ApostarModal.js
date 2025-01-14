@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Input, FormGroup, Label, Alert } from 'reactstrap';
-import { useNavigate } from 'react-router-dom';
+import '../formGenerator/css/Temporizador.css';
+import "../../static/css/chat/chat.css";
 
-export default function ApuestaModal({ isVisible, onCancel, onConfirm }) {
+
+export default function ApuestaModal({ isVisible, onCancel, onConfirm}) {
     const [apuesta, setApuesta] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
+    const [errorTimer, setErrorTimer] = useState(null);
+
 
     useEffect(() => {
         let autoApuestaTimer;
@@ -12,7 +16,7 @@ export default function ApuestaModal({ isVisible, onCancel, onConfirm }) {
             autoApuestaTimer = setTimeout(() => {
                 setApuesta(0);
                 handleConfirmClick();
-            }, 30000); // 30 (30000) segundos para realizar la apuesta
+            }, 20000); // 30 (30000) segundos para realizar la apuesta
         }
 
         return () => clearTimeout(autoApuestaTimer);
@@ -26,16 +30,26 @@ export default function ApuestaModal({ isVisible, onCancel, onConfirm }) {
         try {
             await onConfirm(apuesta);
             setApuesta(0);
-            // setErrorMessage('');
+            setErrorMessage('');
         } catch (error) {
             setErrorMessage(error.message);
+            startErrorTimer();
         }
-        
+
+    };
+
+    const startErrorTimer = () => {
+        // Iniciar un temporizador para cerrar el modal
+        const timer = setTimeout(() => {
+            setErrorMessage('');
+            onCancel(); // Cierra el modal después de 3 segundos
+        }, 3000);
+        setErrorTimer(timer);
     };
 
     return (
-        <Modal isOpen={isVisible} toggle={onCancel}>
-            <ModalHeader toggle={onCancel}>Realizar Apuesta</ModalHeader>
+        <Modal isOpen={isVisible} className="custom-modal">
+            <ModalHeader className="custom-modal-header"> Realizar Apuesta</ModalHeader>
             <ModalBody>
                 {errorMessage && <Alert color="danger">{errorMessage}</Alert>}
                 <FormGroup>
@@ -50,7 +64,8 @@ export default function ApuestaModal({ isVisible, onCancel, onConfirm }) {
                     />
                 </FormGroup>
             </ModalBody>
-            <ModalFooter>
+            <ModalFooter style={{background: "#112b44",
+    color: "#f5d76e"}}>
                 <Button color="primary" onClick={handleConfirmClick}>
                     <i className="fa fa-check" aria-hidden="true"></i> Confirmar
                 </Button>

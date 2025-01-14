@@ -125,13 +125,12 @@ public class TrucoRepositoryTest {
     }
 
     @Test
-    void shouldFindTrucoByBazaIdCartaId() {
-        when(trucoRepository.findTrucoByBazaIdCartaId(1, 1)).thenReturn(Optional.of(truco1));
+    public void shouldDeleteByJugadorId() {
+        Integer jugadorId = jugador.getId();
 
-        Optional<Truco> result = trucoRepository.findTrucoByBazaIdCartaId(1, 1);
-
-        assertTrue(result.isPresent());
-        assertEquals(truco1, result.get());
-        verify(trucoRepository, times(1)).findTrucoByBazaIdCartaId(1, 1);
+        trucoRepository.deleteByJugadorId(jugadorId);
+        assertEquals(trucoRepository.findById(1), Optional.empty());
+        assertEquals(trucoRepository.findById(2), Optional.empty());
+        verify(trucoRepository, times(1)).deleteByJugadorId(jugadorId);
     }
 }

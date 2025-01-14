@@ -1,6 +1,8 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.jugador;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -60,6 +62,10 @@ public class JugadorService {
         Partida partida = jugador.getPartida();
         List<Jugador> jugadoresPartida = findJugadoresByPartidaId(partida.getId());
 
+        if(partida.getEstado()== PartidaEstado.JUGANDO){
+            jugador.setEspectador(true);
+        }
+
         if(jugadoresPartida.size() == MAX_JUGADORES){
             throw new MaximoJugadoresPartidaException("La partida está completa.");
         } else if(jugador.getUsuario().getId() == partida.getOwnerPartida() || jugadorEnPartida(jugadoresPartida, jugador)){
@@ -118,15 +124,17 @@ public class JugadorService {
     // Get jugadores por id de partida
     @Transactional
     public List<Jugador> findJugadoresByPartidaId(Integer partidaId) {
-        return jugadorRepository.findJugadoresByPartidaId(partidaId);
+        return jugadorRepository.findJugadoresByPartidaId(partidaId).stream().filter(x->x.getEspectador()!=true).toList();
     }
 
     // Delete jugador por id
     @Transactional
-    public void deleteJugador(Integer id) {
+    public void deleteJugador(Integer id, boolean notificar) {
         Jugador jugador = jugadorRepository.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("Jugador no encontrado.")
         );
+
+        Integer partidaId = jugador.getPartida().getId(); // Obtener el ID de la partida
 
         
 		// Eliminar dependencias relacionadas con el jugador
@@ -136,10 +144,22 @@ public class JugadorService {
         manoRepository.deleteByJugadorId(jugador.getId());
         
         jugadorRepository.delete(jugador);
+
+        if(notificar){
+            List<Jugador> jugadoresRestantes = findJugadoresByPartidaId(partidaId);
+            Map<String, Object> message = new HashMap<>();
+            message.put("status", "ACTUALIZADO");
+            message.put("jugadores", jugadoresRestantes);
+
+            // Si no hay jugadores restantes, partida será eliminada desde el frontend
+            if (!jugadoresRestantes.isEmpty()) {
+                message.put("ownerPartida", jugadoresRestantes.get(0).getUsuario().getId()); // Nuevo owner si hay jugadores
+            }
+
+            messagingTemplate.convertAndSend("/topic/partida/" + partidaId, message);
+        }
     }
 
-
-    
     // Update jugador
     @Transactional
 	public Jugador updateJugador(@Valid Jugador jugador, Integer idToUpdate) {
@@ -177,34 +197,5 @@ public class JugadorService {
         return jugadorRepository.findJugadoresByUsuarioId(usuarioId);
     }
 
-
-    /*
-    // Para ver el turno del jugador
-    @Transactional(readOnly = true)
-    public Integer findTurnoByJugadorId(Integer jugadorId) {
-        Optional<Jugador> jugador = jugadorRepository.findById(jugadorId);
-        return jugador.isPresent()? jugador.get().getTurno() : null;
-    }
-    */
-
-    // Método para verificar si un usuario tiene múltiples jugadores en la misma partida
-    /*
-    public boolean usuarioMultiplesJugadoresEnPartida(User usuario, Partida partida) {
-        List<Jugador> jugadoresUsuario = jugadorRepository.findJugadoresByUsuarioId(usuario.getId());
-        long count = jugadoresUsuario.stream()
-                .filter(jugador -> jugador.getPartida().equals(partida))
-                .count();
-        return count > 1;
-    }
-    */
-
-    // Método para verificar si un usuario tiene una partida en juego o esperando
-    /*
-    public boolean usuarioPartidaEnJuegoEsperando(Integer usuarioId) {
-        List<Partida> partidas = partidaRepository.findByOwnerPartidaAndEstado(usuarioId, List.of(PartidaEstado.ESPERANDO, PartidaEstado.JUGANDO));
-        return !partidas.isEmpty();
-    }
-    */
-    
 }
 

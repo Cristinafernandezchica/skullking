@@ -124,3 +124,134 @@ export async function usuarioConectadoODesconectado(jwt,usuario,conectado) {
                 console.error("Error al conectar con el servidor:", error);
             }
         }
+
+        export async function fetchListaDeInvitaciones(usuarioActual, setInvitaciones, jwt) {
+            try {
+                const response = await fetch(`/api/v1/invitaciones/misInvitaciones/${usuarioActual}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${jwt}`,
+                    },
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setInvitaciones(data);
+                    console.log("Lista de invitaciones obtenida:", data);
+                    return data;
+                } else {
+                    console.error("Error al obtener los detalles de las invitaciones.");
+                }
+            } catch (error) {
+                console.error("Error al conectar con el servidor:", error);
+            }
+        }
+
+        export async function invitarAPartida(usuarioActual,amigo, partidaActual ,serEspectador, jwt, showSuccess) {
+            const Invitacion ={remitente: usuarioActual, destinatario: amigo ,partida:partidaActual, espectador:serEspectador}
+            try {
+                const response = await fetch(`/api/v1/invitaciones`, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(Invitacion),
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log("la solicitud fue", data);
+                    showSuccess("Solicitud de amistad enviada.");
+                }
+                else{
+                    console.log("algo falla");
+                    throw new Error("Network response was not ok");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        export async function aceptarInvitacion(jwt,invitacionId) {
+            try {
+                const response = await fetch(`/api/v1/invitaciones/${invitacionId}`, {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                        "Content-Type": "application/json",
+                    },
+                });
+                if (!response.ok) {
+                    console.log("Algo falla");
+                    throw new Error("Network response was not ok");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+
+        export async function unirseAPartida(usuarioActual,partida,setErrors,showError,jwt){
+            try {
+                const response = await fetch(`/api/v1/jugadores`, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        puntos: 0,
+                        partida: partida,
+                        usuario: usuarioActual
+                      }),
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    setErrors(errorData);
+                    showError(errorData.message || errorData);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        export async function fetchListaDeAmigosQuePuedenVer(jugadorActual, setAmigosQuePuedenVer, jwt) {
+            try {
+                const response = await fetch(`/api/v1/amistades/puedeVerLaPartida/${jugadorActual.partida.id}/${jugadorActual.usuario.id}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${jwt}`,
+                    },
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setAmigosQuePuedenVer(data);
+                    console.log("Lista de jugadores obtenida:", data);
+                    return data;
+                } else {
+                    console.error("Error al obtener los detalles de los jugadores.");
+                }
+            } catch (error) {
+                console.error("Error al conectar con el servidor:", error);
+            }
+        }
+
+        export async function fetchLastPlayer(usuarioActualId, setjugador, jwt) {
+            try {
+                const response = await fetch(`/api/v1/jugadores/${usuarioActualId}/usuario`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${jwt}`,
+                    },
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setjugador(data);
+                    console.log("jugador obtenido:", data);
+                    return data;
+                } else {
+                    console.error("Error al obtener los detalles del jugador.");
+                }
+            } catch (error) {
+                console.error("Error al conectar con el servidor:", error);
+            }
+        }

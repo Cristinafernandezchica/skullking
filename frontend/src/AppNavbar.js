@@ -12,19 +12,25 @@ import {
     DropdownToggle,
     DropdownMenu,
     DropdownItem,
-    Button
+    Button,
+    Alert
 } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import tokenService from "./services/token.service";
 import jwt_decode from "jwt-decode";
 import logo from "./static/images/gamelogo_sin_fondo.png";
 import "./styles.css";
-import SockJS from "sockjs-client";
-import { Stomp } from "@stomp/stompjs";
-import { fetchListaDeSolicitudes, fetchUserDetails, fetchListaDeAmigosConectados, aceptarORechazarSolicitud, usuarioConectadoODesconectado } from "./components/appNavBarModular/AppNavBarModular";
+import { fetchListaDeSolicitudes, fetchUserDetails,fetchListaDeAmigosConectados,aceptarORechazarSolicitud,
+    usuarioConectadoODesconectado, fetchListaDeInvitaciones,
+    unirseAPartida,aceptarInvitacion,
+    fetchLastPlayer,
+    invitarAPartida,
+    fetchListaDeAmigosQuePuedenVer} from "./components/appNavBarModular/AppNavBarModular";
+
 
 function AppNavbar() {
     const [roles, setRoles] = useState([]);
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [profileImage, setProfileImage] = useState(null);
     const [collapsed, setCollapsed] = useState(true);
@@ -33,20 +39,59 @@ function AppNavbar() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [nuevasSolitudes, setNuevasSolitudes] = useState([]);
     const [amigosConectados, setAmigosConectados] = useState([]);
+    const [invitaciones, setInvitaciones] = useState([]);
+    const [errors, setErrors] = useState([]);
+    const [lastPlayer, setLastPlayer] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(null);
+        const [listaDeAmigosQuePuedenVer, setListaDeAmigosQuePuedenVer] = useState([]);
+
 
     const toggleDropdown = async () => {
         setDropdownOpen(!dropdownOpen);
-        fetchListaDeAmigosConectados(usuarioActual.id, setAmigosConectados, jwt);
+        fetchListaDeAmigosConectados(usuarioActual.id,setAmigosConectados,jwt);
+        fetchListaDeInvitaciones(usuarioActual.id,setInvitaciones,jwt);
+        fetchListaDeSolicitudes(usuarioActual.id, setNuevasSolitudes, jwt);
+        fetchLastPlayer(usuarioActual.id, setLastPlayer,jwt);
     }
     const toggleNavbar = () => setCollapsed(!collapsed);
+
+    useEffect(()=>{
+        if(lastPlayer){
+    fetchListaDeAmigosQuePuedenVer(lastPlayer,setListaDeAmigosQuePuedenVer,jwt);}
+    },[lastPlayer])
+
+    const showError = (error) => { 
+        setErrors([error]); 
+        setTimeout(() => { 
+          setErrors([]); 
+        }, 5000); // La alerta desaparece después de 5000 milisegundos (5 segundos) 
+      };
+
+      const showSuccess = (success) => {
+        setSuccessMessage(success);
+        setTimeout(() => {
+            setSuccessMessage(null);
+        }, 5000); // La alerta desaparece después de 5000 milisegundos (5 segundos)
+    };
+
+      async function invitacionAceptada(invitacion){
+        unirseAPartida(usuarioActual,invitacion.partida,setErrors,showError,jwt);
+        aceptarInvitacion(jwt,invitacion.id);
+        if(errors.length===0){
+            if(invitacion.espectador===true){
+                navigate(`/tablero/${invitacion.partida.id}`);
+            }
+            else if(invitacion.espectador===false){
+                navigate(`/salaEspera/${invitacion.partida.id}`);
+            }
+        }
+      }
 
     useEffect(() => {
         if (jwt) {
             const decodedToken = jwt_decode(jwt);
             setRoles(decodedToken.authorities);
             setUsername(decodedToken.sub);
-            fetchListaDeSolicitudes(usuarioActual.id, setNuevasSolitudes, jwt);
-            // Fetch detalles del usuario para obtener la imagen de perfil
             fetchUserDetails(jwt, setProfileImage);
             roles.forEach((role) => {
                 if (role === "PLAYER") {
@@ -58,33 +103,7 @@ function AppNavbar() {
         return () => { if (usuarioActual) { usuarioConectadoODesconectado(jwt, usuarioActual.id, true); } }
     }, [jwt]);
 
-    useEffect(() => {
-
-        // Segundo useEffect: Conexión al WebSocket
-        const socket = new SockJS("http://localhost:8080/ws");
-        const stompClient = Stomp.over(() => socket);
-
-        stompClient.connect({}, (frame) => {
-            console.log("Connected: " + frame);
-
-            stompClient.subscribe(
-                `/topic/amistad/${usuarioActual.id}`,
-                (messageOutput) => {
-                    const data = JSON.parse(messageOutput.body);
-                    console.log("Mensaje recibido: ", data); // Verifica que el mensaje se reciba correctamente
-                    setNuevasSolitudes(data); // Actualizamos la lista de nuevas solitudes con los datos recibidos
-                }
-            );
-        });
-        // Cleanup: Desconectar el WebSocket cuando el componente se desmonte
-        return () => {
-
-            stompClient.disconnect(() => {
-                console.log("Disconnected");
-            });
-        };
-
-    }, []); // Solo se ejecuta cuando cambia de baza
+    
 
     let adminLinks = <></>;
     let userLinks = <></>;
@@ -169,73 +188,192 @@ function AppNavbar() {
                         <DropdownToggle nav caret style={{ color: "white" }}>
                             Notificaciones
                         </DropdownToggle>
-                        <DropdownMenu>
-                            <p><b>Solicitudes</b></p>
-                            {nuevasSolitudes.map((usuario) => (
-                                <DropdownItem
-                                    key={usuario.id}
-                                    tag="div"
-                                    className="d-flex justify-content-between align-items-center"
-                                >
-                                    <div style={{ display: "flex", alignItems: "center" }}>
-                                        {usuario.imagenPerfil && (
-                                            <img
-                                                src={usuario.imagenPerfil}
-                                                alt="Perfil"
-                                                style={{
-                                                    width: "30px",
-                                                    height: "30px",
-                                                    borderRadius: "50%",
-                                                    marginRight: "10px"
-                                                }}
-                                            />
-                                        )}
-                                        <span>{usuario.username}</span>
-                                    </div>
-                                    <div>
-                                        <Button
-                                            className="btn btn-success btn-sm mx-1"
-                                            onClick={async () => await aceptarORechazarSolicitud(usuarioActual.id, usuario.id, true, jwt)}
-                                        >
-                                            ✓
-                                        </Button>
-                                        <Button
-                                            className="btn btn-danger btn-sm"
-                                            onClick={() => aceptarORechazarSolicitud(usuarioActual.id, usuario.id, false, jwt)}
-                                        >
-                                            ✕
-                                        </Button>
-                                    </div>
-                                </DropdownItem>
-                            ))}
+                        <DropdownMenu
+    style={{
+        backgroundColor: "#2B2B2B", 
+        color: "white", 
+        maxHeight: "300px",
+        overflowY: "auto",
+    }}
+>
+    {nuevasSolitudes.length > 0 && (
+        <>
+            <p><b>Solicitudes</b></p>
+            {nuevasSolitudes.map((usuario) => (
+                <DropdownItem
+                    key={usuario.id}
+                    style={{
+                        color: "white",
+                        backgroundColor: "#383838", // Negro claro
+                    }}
+                    className="d-flex justify-content-between align-items-center"
+                >
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                        {usuario.imagenPerfil && (
+                            <img
+                                src={usuario.imagenPerfil}
+                                alt="Perfil"
+                                style={{
+                                    width: "30px",
+                                    height: "30px",
+                                    borderRadius: "50%",
+                                    marginRight: "10px"
+                                }}
+                            />
+                        )}
+                        <span>{usuario.username}</span>
+                    </div>
+                    <div>
+                        <Button
+                            className="btn btn-success btn-sm mx-1"
+                            onClick={async () => await aceptarORechazarSolicitud(usuarioActual.id, usuario.id, true, jwt)}
+                        >
+                            ✓
+                        </Button>
+                        <Button
+                            className="btn btn-danger btn-sm"
+                            onClick={() => aceptarORechazarSolicitud(usuarioActual.id, usuario.id, false, jwt)}
+                        >
+                            ✕
+                        </Button>
+                    </div>
+                </DropdownItem>
+            ))}
+        </>
+    )}
 
-                            <p><b>Amigos conectados</b></p>
+{amigosConectados.length > 0 && (
+    <>
+        <p><b>Amigos conectados</b></p>
+        {amigosConectados.map((amigo) => (
+            <DropdownItem 
+                key={amigo.id} 
+                tag="div" 
+                style={{
+                    color: "white",
+                    backgroundColor: "#383838", // Negro claro
+                }}
+                className="d-flex justify-content-between align-items-center"
+            >
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    {amigo.imagenPerfil && (
+                        <img 
+                            src={amigo.imagenPerfil} 
+                            alt="Perfil" 
+                            style={{ 
+                                width: "30px", 
+                                height: "30px", 
+                                borderRadius: "50%", 
+                                marginRight: "10px" 
+                            }} 
+                        />
+                    )}
+                    <span>{amigo.username}</span>
+                </div>
+                <div className="d-flex align-items-center">
+                    {lastPlayer && lastPlayer.espectador===false && lastPlayer.partida.estado === "ESPERANDO" && (
+                        <Button 
+                            className="btn btn-primary btn-sm me-2" 
+                            onClick={() => {
+                            invitarAPartida(
+                            usuarioActual,
+                            amigo,
+                            lastPlayer.partida,
+                            false,
+                            jwt,
+                            showSuccess("invitacion enviada"));
+                            }}
+                            title="Invitar a jugar"
+                        >
+                            🎮
+                        </Button>
+                    )}
+                    {lastPlayer && lastPlayer.espectador===false && listaDeAmigosQuePuedenVer.some(item => item.id === amigo.id) &&
+                    
+                    lastPlayer.partida.estado === "JUGANDO" && (
+                        <Button 
+                            className="btn btn-secondary btn-sm ms-2" 
+                            onClick={() => {
+                                // Lógica para invitar a espectar
+                            invitarAPartida(
+                            usuarioActual,
+                            amigo,
+                            lastPlayer.partida,
+                            true,
+                            jwt,
+                            showSuccess("invitacion enviada")
+                            ); // Reutilizamos la lógica de invitación
+                            }}
+                            title="Invitar a espectar"
+                        >
+                            👁️
+                        </Button>
+                    )}
+                </div>
+            </DropdownItem>
+        ))}
+    </>
+)}
 
-                            {amigosConectados.map((usuario) => (
-                                <DropdownItem
-                                    key={usuario.id}
-                                    tag="div"
-                                    className="d-flex justify-content-between align-items-center"
-                                >
-                                    <div style={{ display: "flex", alignItems: "center" }}>
-                                        {usuario.imagenPerfil && (
-                                            <img
-                                                src={usuario.imagenPerfil}
-                                                alt="Perfil"
-                                                style={{
-                                                    width: "30px",
-                                                    height: "30px",
-                                                    borderRadius: "50%",
-                                                    marginRight: "10px"
-                                                }}
-                                            />
-                                        )}
-                                        <span>{usuario.username}</span>
-                                    </div>
-                                </DropdownItem>
-                            ))}
+{invitaciones.length > 0 && (
+    <>
+        <p><b>Invitaciones</b></p>
+        {invitaciones.map((invitacion) => (
+            <DropdownItem 
+                key={invitacion.id} 
+                tag="div" 
+                style={{
+                    color: "white",
+                    backgroundColor: "#383838", // Negro claro
+                }}
+                className="d-flex justify-content-between align-items-center"
+            >
+                {invitacion.espectador ? (
+                    <>
+                        <span>Espectar a {invitacion.remitente.username}</span>
+                        <div className="d-flex align-items-center">
+                            <Button 
+                                className="btn btn-secondary btn-sm ms-2" 
+                                onClick={() => invitacionAceptada(invitacion)}
+                            >
+                                👁️
+                            </Button>
+                            <Button 
+                                className="btn btn-danger btn-sm ms-2" 
+                                onClick={() => aceptarInvitacion(jwt,invitacion.id)} // Lógica para rechazar
+                                title="Rechazar invitación"
+                            >
+                                ✖
+                            </Button>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                    <span>Únete a la partida de {invitacion.remitente.username}</span>
+                        <div className="d-flex align-items-center">
+                            <Button 
+                                className="btn btn-primary btn-sm me-2" 
+                                onClick={() => invitacionAceptada(invitacion)}
+                            >
+                                🎮
+                            </Button>
+                            
+                            <Button 
+                                className="btn btn-danger btn-sm ms-2" 
+                                onClick={() => aceptarInvitacion(jwt,invitacion.id)} // Lógica para rechazar
+                                title="Rechazar invitación"
+                            >
+                                ✖
+                            </Button>
+                        </div>
+                    </>
+                )}
+            </DropdownItem>
+        ))}
+    </>
+)}
+</DropdownMenu>
 
-                        </DropdownMenu>
                     </Dropdown>
                     <NavItem>
                         <NavLink style={{ color: "white" }} id="instructions" tag={Link} to="/instructions">
@@ -293,6 +431,7 @@ function AppNavbar() {
 
     return (
         <div>
+
             <Navbar expand="md" dark color="dark">
                 <NavbarBrand href="/">
                     <img alt="logo" src={logo} className="animated-logo" />
@@ -311,7 +450,17 @@ function AppNavbar() {
                     </Nav>
                 </Collapse>
             </Navbar>
-        </div>
+            <div className="validation-messages">
+                {errors.length > 0 && errors.map((error, index) => (
+                    <Alert key={index} color="danger">{error}</Alert>
+                ))}</div>
+                {successMessage && (
+                    <Alert color="success">{successMessage}</Alert>
+                )}
+            </div>
+
+
+
     );
 }
 

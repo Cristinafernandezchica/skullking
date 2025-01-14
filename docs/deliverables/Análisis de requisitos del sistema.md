@@ -115,37 +115,41 @@ A continuación se definen todas las historias de usuario a implementar:
 | "Como jugador quiero poder editar mi perfil para modificar mi información a mi elección."| 
 |-----|
 |![Editar perfil](../mockups/Editar_perfil.png)|
-|  |
+|Al presionar el botón "Editar Perfil" en la visualización de su perfil se muestra un formulario en el cuál se puede modificar sus datos personales .|
 
 ### HGJ6-(ISSUE#204): Eliminar perfil de usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/204]())
 | "Como jugador quiero poder eliminar mi propia cuenta."| 
 |-----|
 |![Editar perfil](../mockups/Eliminar_perfil.png)|
-|  |
+|Al presionar el botón "Eliminar Perfil" en la visualización de su perfil se mostrará una advertencia en la cuál te advierte de la acción y debes Aceptar o Cancelar según quieras eliminar tu cuenta o no finalmente.|
 
 ### HGA1-(ISSUE#30): Listado usuarios registrados ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/30]())
 | "Como administrador quiero ver el listado de usuarios registrados para llevar un control sobre la cantidad de usuarios en el sistema."| 
 |-----|
 |![Listado de usuarios](../mockups/Listado_usuarios.png)|
-|Se despliega una lista de todos los usuarios registrados en el sistema.|
+|Se despliega una lista de todos los usuarios registrados en el sistema ordenados por su autoridad y por nombre paginados en seis usuarios por página.|
 
 ### HGA2-(ISSUE#197): Borrar un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/197]())
 | "Como administrador quiero poder borrar usuarios para llevar un control adecuado de los usuarios del sistema."|
 |-----|
 |![Borrar usuario](../mockups/Eliminar_usuario.png)|
-|Al presionar el botón "Borrar" en la visualización de los usuarios se mostrará una advertencia en el navegador en la cuál debes confirmar la acción realizada y se eliminará el usuario.|
+|Al presionar el botón "Borrar" en la visualización de los usuarios se mostrará una alerta la cuál te muestra que se ha eliminado el usuario, las partidas de las que era dueño y sus jugadores correctamente.|
+|Caso negativo: Si el usuario a eliminar se encuentra en una partida en curso o en esperando no será posible eliminarlo y se mostrará en cada caso una alerta con su respectivo error.|
+|![Borrar usuario esperando](../mockups/Eliminar_usuario_esperando.png)|
 
 ### HGA3-(ISSUE#54): Editar un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/54]())
-| "Como administrador quiero poder editar el perfil de un usuario para reestablecimiento de credenciales manualmente."|
+| "Como administrador quiero poder editar el perfil de cualquier usuario registrado en el sistema."|
 |-----|
-|![Edición jugador](../mockups/Cambio_de_credenciales.png)|
+|![Edición usuario](../mockups/Cambio_de_credenciales.png)|
 |Al presionar el botón "Editar" en la visualización de los usuarios se mostrará un formulario en el que se podrá modificar los datos del usuario especifico.|
+|Caso negativo: Si el usuario a editar se encuentra en una partida en curso o en esperando no será posible editarlo y se mostrará en cada caso una alerta con su respectivo error.|
+|![Borrar usuario esperando](../mockups/Cambio_de_credenciales_esperando.png)|
 
 ### HGA4-(ISSUE#53): Crear un usuario ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/53]())
 | "Como administrador quiero poder crear un usuario para llevar una administración del sistema"|
 |-----|
-|![Creación jugador](../mockups/Listado_usuarios.png)|
-|Pulsando el botón "Añadir usuario", el administrador deberá rellenar los datos correspondientes y confirmar la creación.|
+|![Creación jugador](../mockups/Crear_usuarios.png)|
+|Pulsando el botón "Añadir usuario" en la visualización de usuarios, el administrador podrá ver un formulario para rellenar los datos correspondientes al nuevo usuario y confirmar la creación.|
 
 ### HJA1-(ISSUE#44): Ver listado de partidas ordenadas y por filtros ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/44]())
 | "Como administrador quiero poder ver el listado de partidas, incluyendo nombre de la partida, estado, jugadores participantes, jugador creador y la fecha de creación para llevar un control sobre las partidas creadas."| 
@@ -195,11 +199,11 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Elegir rol de la carta Tigresa](../mockups/Elegir_la_carta_Tigresa.png)|
 |El jugador selecciona la carta Tigresa, aparece una ventana emergente donde le aparecerán dos botones con cada una de las opciones, deberá pulsar una de los dos para elegir el rol. Una vez pulsado el rol quedará seleccionado.|
 
-### HJJ7-(ISSUE#42): Salir de la partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/42]())
-| "Como jugador quiero poder rendirme y salir en mitad de la partida para evitar seguir jugando en caso de que me surja un imprevisto."| 
+### HJJ7-(ISSUE#175): Ver ganador de la baza ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/175]())
+| "Como jugador quiero poder ver el ganador de una baza al terminar cada una de ellas para poder saber quién la ha ganado."| 
 |-----|
-|![Salir de la partida](../mockups/Poder_salir_en_mitad_de_la_partida.png)|
-|El jugador debe pulsar el botón 'Salir', situado en la esquina inferior derecha.|
+|![Ver ganador de la baza](../mockups/ver_ganador_baza.png)|
+|Una vez se haya llegado al fin de la baza trás echar la última carta de la baza, aparecerá un modal donde se mostrará el ganador de la misma.|
 
 ### HJJ8-(ISSUE#47): Conocer reglas de juego ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/47]())
 | "Como jugador quiero conocer las reglas del juego para poder jugar correctamente."| 
@@ -207,7 +211,7 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Ver instrucciones](../mockups/Ver_Instrucciones.png)|
 |Puedes acceder al PDF con todas las reglas del juego e incluso descargar dicho pdf para tenerlo en tu dispositivo.|
 
- ### HJJ9-(ISSUE#48): Crear partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/48]())
+### HJJ9-(ISSUE#48): Crear partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/48]())
 | "Como jugador quiero poder crear partidas para poder jugar."| 
 |-----|
 |![Lobby](../mockups/Lobby_partidas.png)|
@@ -220,31 +224,112 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Hacer apuestas](../mockups/Hacer_apuesta_sobre_cuantas_bazas_ganare.png)|
 |Al inicio de cada ronda aparecerá una ventana emergente con botones del 0 al número de cartas repartidas en la ronda actual, el jugador deberá pulsar uno de los números en función de la predicción de bazas que cree que va a ganar en la ronda.|
 
- ### HJJ11-(ISSUE#106): Unirse a partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/106]())
+### HJJ11-(ISSUE#106): Unirse a partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/106]())
 | "Como jugador quiero poder unirme a una partida para poder jugar."| 
 |-----|
 |![Lobby](../mockups/Lobby_partidas.png)|
 |Puedes presionar en el botón "Unirse a partida" para unirte a una partida que esté en estado "ESPERANDO".|
 |Caso negativo: Si ya estás en una partida en estado "JUGANDO" o "ESPERANDO", se lanzará una excepción y no podrás unirte a otra partida.|
 
- ### HJJ12-(ISSUE#108): Iniciar partida creada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/108]())
+### HJJ12-(ISSUE#108): Iniciar partida creada ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/108]())
 | "Como jugador quiero poder iniciar una partida que he creado para poder jugar."| 
 |-----|
 |![Lobby](../mockups/iniciar_partida.png)|
 |Una vez el jugador se encuentre en la sala de espera de la partida, si ha creado la partida, puede presionar el botón "Iniciar Partida".|
 |Caso negativo: Si en la partida hay menos de 3 jugadores, no se podrá iniciar, aparecerá una excepción que lo indique.|
 
- ### HJJ13-(ISSUE#109): Ver jugadores en la sala ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/109]())
+### HJJ13-(ISSUE#109): Ver jugadores en la sala ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/109]())
 | "Como jugador quiero poder ver los jugadores que se unen a la partida para poder saber con quién voy a jugar."| 
 |-----|
 |![Lobby](../mockups/iniciar_partida.png)|
 |Una vez el jugador se encuentre en la sala de espera de la partida, el jugador podrá ver los jugadores que hay en la partida. Estos se van actualizando conforme se van uniendo.|
 
-### HJJ14-(ISSUE#155): Volver a partida en curso ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/155]())
+### HJJ14-(ISSUE#155): Volver a partida esperando o en curso ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/155]())
 | "Como jugador quiero poder volver a la partida empezada anteriormente."| 
 |-----|
 |![Lobby](../mockups/volverAPartida.png)|
 |Una vez el jugador se encuentre en una partida en espera o empezada, puede presionar el botón "Volver a partida".|
+
+### HJJ15-(ISSUE#223): Salir de una sala de espera ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/223]())
+| "Como jugador quiero poder salir de la sala de espera de una partida antes de que comience."| 
+|-----|
+|![Lobby](../mockups/iniciar_partida.png)|
+|Una vez el jugador se encuentre en la sala de espera de una partida, el jugador podrá salir de la sala de espera para poder crear su propia partida o unirse a otra partida distinta.|
+
+### HJJ16-(ISSUE#238): Jugar partida completa ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/238]())
+| "Como jugador quiero poder jugar una partida completa para poder saber quién ha ganado."| 
+|-----|
+|![Ver ganador partida](../mockups/ver_ganador_partida.png)|
+|Una vez se haya llegado al fin de la última ronda de una partida, aparecerá un modal donde se mostrará el ganador o ganadores de la partida.|
+
+### HJJ17-(ISSUE#239): Ver bazas ganadas en cada ronda ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/239]())
+| "Como jugador quiero poder ver las bazas que gana cada uno en cada ronda para poder saber cuántas me quedan por ganar a mi o al resto."| 
+|-----|
+|![Ver bazas ganadas cada ronda](../mockups/ver_bazas_ganadas.png)|
+|Cada vez que se termine una baza, se actualizarán los valores de bazas ganadas. Se renovarán al empezar cada ronda.|
+
+### HJJ18-(ISSUE#240): Saber ronda y baza actual ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/240]())
+| "Como jugador quiero poder saber la ronda y baza actual para saber cuánto me queda de la partida"| 
+|-----|
+|![Saber ronda y baza actual](../mockups/saber_ronda_baza.png)|
+|Cada vez que comience una ronda o una baza, aparecerá una alerta indicando la ronda y baza en la que se encuentra la partida.|
+
+### HJJ19-(ISSUE#146): Ver listado de mis partidas ordenadas y por filtros ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/146]())
+| "Como jugador quiero poder ver el listado de partidas que he jugado, incluyendo nombre de la partida, estado, jugadores participantes, si la he creado yo o no y la fecha de creación para llevar un control de las partidas en las que participado."| 
+|-----|
+|![Listado de partidas como jugador](../mockups/listado_partidas_jugador.png)|
+|El jugador, en la parte superior de la pantalla, tendrá un botón 'Partidas jugadas'. Dentro de esta pantalla encontrará una barra de búsqueda para filtrar las partidas por nombre y otra para realizar paginación en función a la cantidad de partidas que quieras por página. Además, encontrará diversos botones para filtrar en función del estado de las partidas.|
+
+
+### HSJ1-(ISSUE##228): Chat en partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/228]())
+| "Como jugador quiero poder comunicarme con los jugadores de la partida para poder crear estrategias y aliarme con otros jugadores."| 
+|-----|
+|![Chat de juego](../mockups/el_chat_partida.png)|
+|Una vez dentro de la partida el jugador tendrá en la parte inferior derecha de la pantalla el botón 'Chat'. el cuál abre un modal que contiene en la parte superior los mensajes enviados por todos los jugadores del chat. En la parte inferior se encuentra una barra en la cuál puedes escribir el mensaje y finalmente dos botones, uno para enviar el mensaje y otro para cerrar el chat.|
+
+
+### HSJ2-(ISSUE##229): Enviar solicitud de amistad ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/229]())
+| "Como jugador quiero poder enviarle una solicitud de amistad a otro jugador para ser amigos."| 
+|-----|
+|![Enviar solicitud](../mockups/enviar_solicitud_amistad.png)|
+|En la pantalla de perfil el usuario tendrá una barra en la cuál podrá escribir el nombre de usuario y tendrá un botón 'Enviar solicitud', el cuál enviará la solicitud a la persona cuyo nombre de usuario hayas escrito.|
+
+### HSJ3-(ISSUE##247): Ver, aceptar y rechazar solicitudes de amistad ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/247]())
+| "Como jugador quiero poder ver todas mis solicitudes de amistad para poder aceptarlas o rechazarlas."| 
+|-----|
+|![Listado de solicitudes](../mockups/ver_mis_solicitudes_mockup.png)|
+|En la parte superior, en la barra de navegación está el botón "Notificaciones", el cuál una vez presionado te mostrará, entre otras opciones, tus solicitudes de amistad en las que aparece el nombre de usuario del remitente y dos botones, uno para aceptar la solicitud y otro para rechazarla.|
+
+
+### HSJ4-(ISSUE##248): Ver a mis amigos conectados ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/248]())
+| "Como jugador quiero poder ver a todos mis amigos que están conectados para poder saber con quién puedo jugar."| 
+|-----|
+|![Listado de amigos conectados](../mockups/ver_amigo_conectados.png)|
+|Puedes ver a tus amigos conectados de dos formas, desde la pantalla de perfil en la lista de amigos aparece un círculo en verde al lado del nombre indicando que dicho amigo está conectado o desde la barra de navegacion en el botón de 'Notificaciones' en la cuál aparece una lista con tus amigos conectados.|
+
+### HSJ5-(ISSUE##250): Dejar de ser amigos ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/250]())
+| "Como jugador quiero poder dejar de ser amigo de un jugador para evitar que me envie invitaciones a jugar."| 
+|-----|
+|![eliminar amigo](../mockups/eliminar_amistad.png)|
+|Puedes romper la amistad con un jugador desde la pantalla de perfil, en la sección de lista de amigos aparece un botón el cuál te permite dejar de ser amigo, una vez lo presionas aparece un modal pidiendo la confirmación para romper la amistad.|
+
+### HSJ6-(ISSUE##249): Invitar a jugar o a espectar mi partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/249]())
+| "Como jugador quiero poder enviarle una invitación a mis amigos para que jueguen conmigo o me vean jugar una partida."| 
+|-----|
+|![Invitacion a partida](../mockups/Enviar_invitacion_a_partida.png)|
+|Puedes invitar a tus amigos de dos formas, desde la pantalla de perfil en la lista de amigos si dicho amigo está conectado, ya que aparecerá un botón para poder  enviarle una invitación; o desde la barra de navegación en el botón 'Notificaciones' donde también aparecerá el botón para invitarlo a jugar o espectar en función del estado de la partida.|
+
+### HSJ7-(ISSUE##252): Ver, aceptar y rechazar invitaciones a partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/252]())
+| "Como jugador quiero poder ver todas mis invitaciones para poder aceptarlas o rechazarlas, ya sean para jugar o para espectar."| 
+|-----|
+|![Aceptar invitacion a partida](../mockups/invitaciones_a_partida.png)|
+|Puedes ver todas tus invitaciones desde el botón 'Notificaciones', en el cuál entre las opciones aparecerán tus invitaciones pendientes y dos botones, uno para aceptar la invitación y otro para rechazarla.|
+
+### HSJ8-(ISSUE##251): Espectar partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/251]())
+| "Como jugador quiero poder espectar las partidas de mis amigos para poder ver cómo juegan."| 
+|-----|
+|![Modo espectador](../mockups/modo_espectador.png)|
+|Puedes espectar la partida de tus compañeros una vez aceptes la invitación desde el apartado 'Notificaciones', una vez aceptada se te redireccionará a la partida en cuestión.|
 
 
 ## Diagrama conceptual del sistema
@@ -385,7 +470,28 @@ No pueden existir dos partidas en curso o en espera con el mismo nombre.
 Tras el reparto de cartas se deberá apostar dentro del tiempo establecido (20 segundos), en otro caso, la apuesta se establecerá a 0.
 
 ### R43 - Borrar su propio usuario
-Una vez te encuentras en la sala de espera de una partida o en una partida en curso no podrás borrar tu propia cuenta hasta que no termines la partida iniciada.
+Una vez te encuentras en la sala de espera de una partida o en una partida en curso no podrás borrar tu propia cuenta hasta que no termines la partida.
 
 ### R44 - Editar su propio usuario
-Una vez te encuentras en la sala de espera de una partida o en una partida en curso no podrás editar ninguna información de tu propia cuenta hasta que no termines la partida iniciada.
+Una vez te encuentras en la sala de espera de una partida o en una partida en curso no podrás editar ninguna información de tu propia cuenta hasta que no termines la partida.
+
+### R45 - Borrar un usuario siendo administrador
+Si el usuario a eliminar tiene un jugador en la sala de espera de una partida o en una partida en curso no podrá borrar el usuario hasta que no termine la partida.
+
+### R46 - Editar un usuario siendo administrador
+Si el usuario a editar tiene un jugador en la sala de espera de una partida o en una partida en curso no podrá editar el usuario hasta que no termine la partida.
+
+### R47 - Salir de una sala de espera siendo el dueño
+Si el jugador que quiere salir de una sala de espera es el creador de la partida, al salir de la sala de espera el dueño de la partida será el siguiente jugador que entró en la sala.
+
+### R48 - No puedes ser tu propio amigo
+
+El usuario no podra enviarse una solicitud de amistad a si mismo
+
+### R49 - No puedes enviar mas de una solicitud de amistad a un mismo usuario
+
+El usuario no podra enviarle multiples solicitudes de amistad a un mismo usuario, sin importar que el estado sea pendiente, aceptado o rechazado
+
+### R50 - No puedes invitar mas de una vez a un usuario a partida
+
+El usuario no podra enviar multiples invitaciones a un mismo usuario

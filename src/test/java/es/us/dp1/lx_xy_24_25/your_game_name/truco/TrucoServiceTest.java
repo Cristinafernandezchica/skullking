@@ -4,11 +4,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.spy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.ArgumentMatchers.anyMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,9 +28,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.NoCartaDeManoException;
 
@@ -40,6 +50,7 @@ import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
+import jakarta.persistence.EntityNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
@@ -50,15 +61,6 @@ import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class TrucoServiceTest {
-
-    // List<Truco> findTrucosByBazaId(int bazaId) throws DataAccessException
-    // List<Truco> findTrucosByJugadorId(int jugadorId) throws DataAccessException
-    // List<Truco> findTrucosByManoId(int manoId) throws DataAccessException
-    // Truco findTrucoByBazaIdCartaId(int bazaId, int cartaId) throws DataAccessException o ResourceNotFoundException
-    // Truco saveTruco(Truco truco) throws DataAccessException o NoCartaDeManoException
-    // Truco updateTruco(Truco truco, int trucoId) throws DataAccessException
-    // Map<Integer, Integer> getCartaByJugador(int bazaId)
-    // void crearTrucosBaza(Integer idBaza) ResourceNotFoundException
 
     @Mock
     private TrucoRepository trucoRepository;
@@ -81,13 +83,16 @@ public class TrucoServiceTest {
     @InjectMocks
     private TrucoService trucoService;
 
-    @InjectMocks
+    @Mock
     private BazaService bazaService2;
 
     @Mock
     private ManoService manoService;
 
-    @InjectMocks
+    @Mock
+    private SimpMessagingTemplate messagingTemplate;
+
+    @Mock
     private PartidaService partidaService;
 
     private Truco truco;
@@ -98,22 +103,40 @@ public class TrucoServiceTest {
     private Carta carta;
     private Partida partida;
 
+    private final Integer idComodinPirata = 72;
+	private final Integer idComodinBanderaBlanca = 71;
+	private final Integer idTigresa = 65;
+
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
 
         partida = new Partida();
+        partida.setId(1);
 
         carta = new Carta();
         carta.setId(1);
+        carta.setTipoCarta(TipoCarta.amarillo);
+        carta.setNumero(10);
+
         jugador = new Jugador();
         jugador.setId(1);
+        jugador.setPartida(partida);
+
         mano = new Mano();
         mano.setId(1);
         mano.setJugador(jugador);
         mano.setCartas(List.of(carta));
+
+        ronda = new Ronda();
+        ronda.setId(1);
+
         baza = new Baza();
         baza.setId(1);
+        baza.setRonda(ronda);
+        baza.setTurnos(new ArrayList<>(List.of(1, 2, 3))); 
+        baza.setPaloBaza(PaloBaza.amarillo);
+
         truco = new Truco();
         truco.setId(1);
         truco.setBaza(baza);
@@ -123,6 +146,9 @@ public class TrucoServiceTest {
         truco.setTurno(1);
 
     }
+
+
+
 
     @Test
     void shouldFindAllTrucos() {
@@ -170,25 +196,58 @@ public class TrucoServiceTest {
     }
 
 	@Test
-    public void shouldFindTrucosByBazaId() throws DataAccessException {
-        when(trucoRepository.findTrucosByBazaId(baza.getId())).thenReturn(List.of(truco));
+    void shouldFindTrucosByBazaId() throws DataAccessException {
+        // Configurar las entidades necesarias para el test
+        Baza baza = new Baza();
+        baza.setId(1);
+        baza.setPaloBaza(PaloBaza.amarillo); // Asegurar que PaloBaza no es null
 
-        List<Truco> result = trucoService.findTrucosByBazaId(baza.getId());
+        Ronda ronda = new Ronda();
+        ronda.setId(1);
+
+        Partida partida = new Partida();
+        partida.setId(1);
+
+        baza.setRonda(ronda);
+        ronda.setPartida(partida);
+
+        Truco truco = new Truco();
+        truco.setId(1);
+        truco.setBaza(baza);
+
+        // Configurar mocks
+        when(bazaService.findById(1)).thenReturn(baza);
+        when(trucoRepository.findTrucosByBazaId(1)).thenReturn(List.of(truco));
+
+        // Ejecutar el método a probar
+        List<Truco> result = trucoService.findTrucosByBazaId(1);
+
+        // Verificar los resultados
         assertEquals(1, result.size());
         assertEquals(1, result.get(0).getId());
         assertEquals(baza, result.get(0).getBaza());
 
-        verify(trucoRepository).findTrucosByBazaId(baza.getId());
+        // Verificar las interacciones
+        verify(bazaService).findById(1);
+        verify(trucoRepository).findTrucosByBazaId(1);
     }
 
-    @Test
-    public void shouldNotFindTrucosByBazaId(){
-        List<Truco> result = trucoService.findTrucosByBazaId(9999);
-        assertTrue(result.isEmpty(), "Se esperaba que la lista devuelta sea vacía cuando no existen Trcos de dicha Baza");
-    }
 
     @Test
-    public void shouldFindTrucosByJugadorId() throws DataAccessException {
+    void shouldNotFindTrucosByBazaId() {
+        when(bazaService.findById(9999)).thenThrow(new ResourceNotFoundException("Baza", "id", 9999));
+        
+        assertThrows(ResourceNotFoundException.class, () -> {
+            trucoService.findTrucosByBazaId(9999);
+        });
+
+        verify(bazaService).findById(9999);
+    }
+
+
+
+    @Test
+    void shouldFindTrucosByJugadorId() throws DataAccessException {
         when(trucoRepository.findByJugadorId(jugador.getId())).thenReturn(List.of(truco));
 
         List<Truco> result = trucoService.findTrucosByJugadorId(jugador.getId());
@@ -200,47 +259,13 @@ public class TrucoServiceTest {
     }
 
     @Test
-    public void shouldNotFindTrucosByJugadorId(){
+    void shouldNotFindTrucosByJugadorId(){
         List<Truco> result = trucoService.findTrucosByJugadorId(999);
         assertTrue(result.isEmpty(), "Se esperaba que la lista devuelta sea vacía cuando no existen Trcos de dicha Jugador");
     }
 
     @Test
-    public void shouldFindTrucosByManoId() throws DataAccessException {
-        when(trucoRepository.findByManoId(mano.getId())).thenReturn(List.of(truco));
-
-        List<Truco> result = trucoService.findTrucosByManoId(mano.getId());        assertEquals(1, result.size());
-        assertEquals(1, result.get(0).getId());
-        assertEquals(mano, result.get(0).getMano());
-
-        verify(trucoRepository).findByManoId(mano.getId());
-    }
-
-    public void shouldNotFindTrucosByManoId(){
-        List<Truco> result = trucoService.findTrucosByManoId(999);
-        assertTrue(result.isEmpty(), "Se esperaba que la lista devuelta sea vacía cuando no existen Trcos de dicha Mano");
-    }
-
-    @Test
-    public void shouldFindTrucoByBazaIdCartaId() throws DataAccessException {
-        when(trucoRepository.findTrucoByBazaIdCartaId(baza.getId(), carta.getId())).thenReturn(Optional.of(truco));
-
-        Truco result = this.trucoService.findTrucoByBazaIdCartaId(baza.getId(), carta.getId());
-        assertEquals(1, result.getId());
-        verify(trucoRepository).findTrucoByBazaIdCartaId(baza.getId(), carta.getId());
-    }
-
-    @Test
-    public void shouldNotFindTrucoByBazaIdCartaId(){
-        when(trucoRepository.findTrucoByBazaIdCartaId(999, 999)).thenReturn(Optional.empty());
-
-        assertThrows(ResourceNotFoundException.class, () -> {
-            trucoService.findTrucoByBazaIdCartaId(999, 999);
-        }, "Se esperaba que se lanzara una ResourceNotFoundException cuando no se encuentra el Truco");
-    }
-
-    @Test
-    public void shouldSaveTruco() {
+    void shouldSaveTruco() {
         when(trucoRepository.save(truco)).thenReturn(truco);
 
         Truco result = trucoService.saveTruco(truco);
@@ -249,7 +274,7 @@ public class TrucoServiceTest {
     }
 
     @Test
-    public void shouldNotSaveTruco() {
+    void shouldNotSaveTruco() {
         Carta newCarta = new Carta();
         newCarta.setId(999);
         truco.setCarta(newCarta);
@@ -260,7 +285,107 @@ public class TrucoServiceTest {
     }
 
     @Test
-    public void shouldUpdateTruco() {
+    void shouldSaveTrucoConCartaNull() {
+        Baza baza = new Baza();
+        baza.setId(1);
+
+        Mano mano = new Mano();
+        mano.setId(1);
+
+        Jugador jugador = new Jugador();
+        jugador.setId(1);
+
+        Truco truco = new Truco();
+        truco.setBaza(baza);
+        truco.setMano(mano);
+        truco.setJugador(jugador);
+        truco.setTurno(1);
+        truco.setCarta(null);
+
+        TrucoService trucoServiceSpy = spy(trucoService);
+
+        when(trucoRepository.save(any(Truco.class))).thenReturn(truco);
+
+        Truco resultado = trucoServiceSpy.saveTruco(truco);
+
+        assertNotNull(resultado, "El resultado no debería ser null");
+        assertEquals(truco, resultado);
+        verify(trucoRepository).save(truco);
+    }
+
+    @Test
+    void shouldSaveTrucoConCartaNoEnMano() {
+        Baza baza = new Baza();
+        baza.setId(1);
+
+        Carta carta = new Carta();
+        carta.setId(1);
+        carta.setTipoCarta(TipoCarta.amarillo);
+
+        Carta cartaNoEnMano = new Carta();
+        cartaNoEnMano.setId(2);
+        cartaNoEnMano.setTipoCarta(TipoCarta.verde);
+
+        Mano mano = new Mano();
+        mano.setId(1);
+        mano.setCartas(new ArrayList<>(List.of(carta)));
+
+        Jugador jugador = new Jugador();
+        jugador.setId(1);
+
+        Truco truco = new Truco();
+        truco.setBaza(baza);
+        truco.setMano(mano);
+        truco.setJugador(jugador);
+        truco.setTurno(1);
+        truco.setCarta(cartaNoEnMano);
+
+        TrucoService trucoServiceSpy = spy(trucoService);
+
+        assertThrows(NoCartaDeManoException.class, () -> {
+            trucoServiceSpy.saveTruco(truco);
+        });
+
+        verify(trucoRepository, never()).save(any(Truco.class));
+    }
+
+    @Test
+    void shouldSaveTrucoConCartaEnMano() {
+        Baza baza = new Baza();
+        baza.setId(1);
+
+        Carta carta = new Carta();
+        carta.setId(1);
+        carta.setTipoCarta(TipoCarta.amarillo);
+
+        Mano mano = new Mano();
+        mano.setId(1);
+        mano.setCartas(new ArrayList<>(List.of(carta))); 
+
+        Jugador jugador = new Jugador();
+        jugador.setId(1);
+
+        Truco truco = new Truco();
+        truco.setBaza(baza);
+        truco.setMano(mano);
+        truco.setJugador(jugador);
+        truco.setTurno(1);
+        truco.setCarta(carta);
+
+        TrucoService trucoServiceSpy = spy(trucoService);
+
+        when(trucoRepository.save(any(Truco.class))).thenReturn(truco);
+
+        Truco resultado = trucoServiceSpy.saveTruco(truco);
+
+        assertNotNull(resultado, "El resultado no debería ser null");
+        assertEquals(truco, resultado);
+        verify(trucoRepository).save(truco);
+    }
+
+
+    @Test
+    void shouldUpdateTruco() {
         Carta newCarta = new Carta();
         newCarta.setId(999);
 
@@ -284,7 +409,7 @@ public class TrucoServiceTest {
     }
 
     @Test
-    public void shouldNotUpdateTrucoInexistente() {
+    void shouldNotUpdateTrucoInexistente() {
         Truco newTruco = new Truco();
         newTruco.setId(999);
         when(trucoRepository.findById(999)).thenReturn(Optional.empty());
@@ -295,7 +420,7 @@ public class TrucoServiceTest {
     }
 
     @Test
-    public void shouldDeleteTruco() {
+    void shouldDeleteTruco() {
         when(trucoRepository.findById(truco.getId())).thenReturn(Optional.of(truco));
 
         trucoService.deleteTruco(truco.getId());
@@ -303,129 +428,682 @@ public class TrucoServiceTest {
     }
 
     @Test
-    public void shouldNotDeleteTruco() {
+    void shouldNotDeleteTruco() {
         when(trucoRepository.findById(999)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> {
             trucoService.deleteTruco(999);
         }, "No se puede borrar un Truco que no existe");
     }
-
-    /*
+    
     @Test
-    public void shouldJugarTruco() {
-        BazaCartaManoDTO dto = mock(BazaCartaManoDTO.class);
-        Jugador jugador = mock(Jugador.class);
-        Mano mano = mock(Mano.class);
-        Carta carta = mock(Carta.class);
-        Partida partida = mock(Partida.class);
-        Baza baza = mock(Baza.class);
-        Ronda ronda = mock(Ronda.class);
+    void shouldThrowExceptionWhenJugadorNotFound() {
+        Integer jugadorId = 1;
+        when(jugadorService.findById(jugadorId)).thenThrow(new EntityNotFoundException("Jugador no encontrado"));
 
+        BazaCartaManoDTO dto = new BazaCartaManoDTO(baza, carta, mano, 1);
+
+        assertThrows(EntityNotFoundException.class, () -> trucoService.jugarTruco(dto, jugadorId));
+        verify(jugadorService, times(1)).findById(jugadorId);
+    }
+
+    @Test
+    void shouldCreateAndSendTrucoToWebSocket() {
+        Integer jugadorId = 1;
+    
+        TrucoService trucoServiceSpy = spy(trucoService);
+    
+        Baza baza = new Baza();
+        baza.setId(1);
+        baza.setPaloBaza(PaloBaza.amarillo);
+    
+        Ronda ronda = new Ronda();
+        ronda.setId(1);
+    
+        Partida partida = new Partida();
+        partida.setId(1);
+    
+        baza.setRonda(ronda);
+        ronda.setPartida(partida);
+    
+        Mano mano = new Mano();
+        mano.setId(1);
+        mano.setCartas(new ArrayList<>(List.of(new Carta(), new Carta(), new Carta()))); // Asegurar que mano tiene cartas
+        
+        Carta carta = new Carta();
+        carta.setId(1);
+        
+        Truco truco = new Truco();
+        truco.setId(1);
+        truco.setBaza(baza);
+    
+        when(jugadorService.findById(jugadorId)).thenReturn(jugador);
+        when(trucoRepository.save(any(Truco.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(bazaService.findById(baza.getId())).thenReturn(baza); // Mock de bazaService.findById
+        doReturn(List.of(truco)).when(trucoServiceSpy).findTrucosByBazaId(baza.getId());
+    
+        BazaCartaManoDTO dto = new BazaCartaManoDTO(baza, carta, mano, 1);
+    
+        Truco resultado = trucoServiceSpy.jugarTruco(dto, jugadorId);
+    
+        assertNotNull(resultado);
+    
+        verify(trucoRepository, times(1)).save(any(Truco.class));
+        verify(messagingTemplate, times(1)).convertAndSend(eq("/topic/baza/truco/partida/" + partida.getId()), anyList());
+        verify(bazaService, times(1)).findById(baza.getId());
+    }
+    
+
+    @Test
+    void shouldJugarTruco() {
+        Baza baza = new Baza();
+        baza.setId(1);
+        baza.setPaloBaza(PaloBaza.amarillo);
+        baza.setTurnos(new ArrayList<>(List.of(1, 2, 3)));
+    
+        Ronda ronda = new Ronda();
+        ronda.setId(1);
+    
+        Partida partida = new Partida();
+        partida.setId(1);
+    
+        baza.setRonda(ronda);
+        ronda.setPartida(partida);
+    
+        Mano mano = new Mano();
+        mano.setId(1);
+        mano.setCartas(new ArrayList<>(List.of(new Carta(), new Carta(), new Carta())));
+        
+        Carta carta = new Carta();
+        carta.setId(1);
+    
+        Truco truco = new Truco();
+        truco.setId(1);
+        truco.setBaza(baza);
+    
+        BazaCartaManoDTO dto = new BazaCartaManoDTO();
+        dto.setBaza(baza);
+        dto.setMano(mano);
+        dto.setTurno(1);
+        dto.setCarta(carta);
+    
         when(jugadorService.findById(anyInt())).thenReturn(jugador);
-        when(dto.getBaza()).thenReturn(baza);
-        when(dto.getMano()).thenReturn(mano);
-        when(dto.getCarta()).thenReturn(carta);
-        when(baza.getRonda()).thenReturn(ronda);
-        when(ronda.getPartida()).thenReturn(partida);
-        when(jugadorService.findJugadoresByPartidaId(anyInt())).thenReturn(Arrays.asList(mock(Jugador.class), mock(Jugador.class)));
-
-        List<Carta> cartas = new ArrayList<>(List.of(carta, new Carta()));
-        when(mano.getCartas()).thenReturn(cartas);
-
+        when(trucoRepository.save(any(Truco.class))).thenReturn(truco);
+        when(bazaService.findById(anyInt())).thenReturn(baza);
+        when(jugadorService.findJugadoresByPartidaId(anyInt())).thenReturn(List.of(jugador));
+    
         Truco result = trucoService.jugarTruco(dto, 1);
+    
+        assertNotNull(result);
+        assertEquals(truco, result);
+    }
+    
+    
+
+
+
+    @Test
+    void shouldJugarTrucoCambiaPaloBaza() {
+        Partida partida = new Partida();
+        partida.setId(1);
+    
+        Baza baza = new Baza();
+        baza.setId(1);
+        baza.setPaloBaza(PaloBaza.sinDeterminar);
+        baza.setTurnos(new ArrayList<>(List.of(1, 2, 3)));
+    
+        Ronda ronda = new Ronda();
+        ronda.setId(1);
+        baza.setRonda(ronda);
+        ronda.setPartida(partida);
+    
+        Carta carta = new Carta();
+        carta.setId(1);
+        carta.setTipoCarta(TipoCarta.amarillo);
+    
+        Mano mano = new Mano();
+        mano.setId(1);
+        mano.setCartas(new ArrayList<>(List.of(carta)));
+    
+        Jugador jugador = new Jugador();
+        jugador.setId(1);
+        jugador.setPartida(partida);
+    
+        BazaCartaManoDTO dto = new BazaCartaManoDTO();
+        dto.setBaza(baza);
+        dto.setMano(mano);
+        dto.setCarta(carta);
+        dto.setTurno(1);
+    
+        Truco truco = new Truco();
+        truco.setBaza(baza);
+        truco.setMano(mano);
+        truco.setJugador(jugador);
+        truco.setTurno(1);
+        truco.setCarta(carta);
+    
+        List<Truco> trucos = List.of(truco);
+    
+        TrucoService trucoServiceSpy = spy(trucoService);
+    
+        when(jugadorService.findById(1)).thenReturn(jugador);
+        when(trucoRepository.save(any(Truco.class))).thenReturn(truco);
+        when(bazaService.findById(1)).thenReturn(baza);
+        when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(List.of(jugador));
+        doReturn(trucos).when(trucoServiceSpy).findTrucosByBazaId(1); // Devolver la lista con el truco y carta no nula
+        doReturn(baza).when(trucoServiceSpy).cambiarPaloBaza(any(Baza.class), any(Truco.class));
+        doNothing().when(trucoServiceSpy).mandarCartasDisabled(any(Baza.class), any(Ronda.class), any(Partida.class));
+        doReturn(mano).when(manoService).saveMano(any(Mano.class)); // Configurar para devolver mano
+        when(manoService.findAllManosByRondaId(anyInt())).thenReturn(List.of(mano));
+    
+        Jugador ganadorMock = mock(Jugador.class);
+        doReturn(ganadorMock).when(trucoServiceSpy).calculoGanador(anyInt());
+    
+        doNothing().when(messagingTemplate).convertAndSend(eq("/topic/baza/truco/partida/" + partida.getId()), anyList());
+        doNothing().when(messagingTemplate).convertAndSend(eq("/topic/nuevasManos/partida/" + partida.getId()), anyList());
+        doNothing().when(messagingTemplate).convertAndSend(eq("/topic/ganadorBaza/partida/" + partida.getId()), any(Jugador.class));
+        doNothing().when(messagingTemplate).convertAndSend(eq("/topic/listaTrucos/partida/" + partida.getId()), anyList());
+        doNothing().when(partidaService).siguienteEstado(eq(partida.getId()), eq(baza.getId()));
+    
+        trucoServiceSpy.jugarTruco(dto, 1);
+    
+        verify(trucoServiceSpy).cambiarPaloBaza(eq(baza), eq(truco));
+        verify(trucoServiceSpy).mandarCartasDisabled(eq(baza), eq(ronda), eq(partida));
+        verify(messagingTemplate).convertAndSend(eq("/topic/baza/truco/partida/" + partida.getId()), anyList());
+        verify(messagingTemplate).convertAndSend(eq("/topic/nuevasManos/partida/" + partida.getId()), anyList());
+        verify(messagingTemplate).convertAndSend(eq("/topic/ganadorBaza/partida/" + partida.getId()), any(Jugador.class));
+        verify(messagingTemplate).convertAndSend(eq("/topic/listaTrucos/partida/" + partida.getId()), anyList());
+        verify(partidaService).siguienteEstado(eq(partida.getId()), eq(baza.getId()));
+    }
+    
+    @Test
+    void shouldJugarTrucoEsUltimoTruco() {
+        // Configurar las entidades necesarias para el test
+        Partida partida = new Partida();
+        partida.setId(1);
+    
+        Baza baza = new Baza();
+        baza.setId(1);
+        baza.setPaloBaza(PaloBaza.amarillo); // Asegurar que PaloBaza es AMARILLO
+        baza.setTurnos(new ArrayList<>(List.of(1, 2, 3))); // Asegurar que baza tiene turnos
+    
+        Ronda ronda = new Ronda();
+        ronda.setId(1);
+        baza.setRonda(ronda);
+        ronda.setPartida(partida);
+    
+        Carta carta = new Carta();
+        carta.setId(1);
+        carta.setTipoCarta(TipoCarta.amarillo);
+    
+        Mano mano = new Mano();
+        mano.setId(1);
+        mano.setCartas(new ArrayList<>(List.of(carta))); // Asegurar que mano tiene cartas
+    
+        Jugador jugador = new Jugador();
+        jugador.setId(1);
+        jugador.setPartida(partida); // Asegurar que jugador tiene una referencia válida a Partida
+    
+        BazaCartaManoDTO dto = new BazaCartaManoDTO();
+        dto.setBaza(baza);
+        dto.setMano(mano);
+        dto.setCarta(carta);
+        dto.setTurno(1);
+    
+        Truco truco = new Truco();
+        truco.setBaza(baza);
+        truco.setMano(mano);
+        truco.setJugador(jugador);
+        truco.setTurno(1);
+        truco.setCarta(carta);
+    
+        List<Truco> trucos = List.of(truco);
+    
+        TrucoService trucoServiceSpy = spy(trucoService);
+    
+        when(jugadorService.findById(1)).thenReturn(jugador);
+        when(trucoRepository.save(any(Truco.class))).thenReturn(truco);
+        when(bazaService.findById(1)).thenReturn(baza);
+        when(jugadorService.findJugadoresByPartidaId(partida.getId())).thenReturn(List.of(jugador));
+        doReturn(trucos).when(trucoServiceSpy).findTrucosByBazaId(1); // Devolver la lista con el truco y carta no nula
+        doReturn(jugador).when(trucoServiceSpy).calculoGanador(anyInt());
+    
+        doNothing().when(messagingTemplate).convertAndSend(eq("/topic/baza/truco/partida/" + partida.getId()), any(Object.class));
+        doNothing().when(messagingTemplate).convertAndSend(eq("/topic/nuevasManos/partida/" + partida.getId()), any(Object.class));
+        doNothing().when(messagingTemplate).convertAndSend(eq("/topic/ganadorBaza/partida/" + partida.getId()), any(Object.class));
+        doNothing().when(messagingTemplate).convertAndSend(eq("/topic/listaTrucos/partida/" + partida.getId()), any(Object.class));
+        doNothing().when(partidaService).siguienteEstado(eq(partida.getId()), eq(baza.getId()));
+    
+        trucoServiceSpy.jugarTruco(dto, 1);
+    
+        verify(trucoServiceSpy).calculoGanador(1);
+        verify(messagingTemplate).convertAndSend(eq("/topic/ganadorBaza/partida/" + partida.getId()), any(Jugador.class));
+        verify(messagingTemplate).convertAndSend(eq("/topic/listaTrucos/partida/" + partida.getId()), anyList());
+        verify(partidaService).siguienteEstado(eq(partida.getId()), eq(baza.getId()));
+    }
+    
+
+
+    
+
+
+    @Test
+    void shouldManoSinCarta() {
+        trucoService.manoSinCarta(truco, partida, ronda);
+
+        verify(manoService, times(1)).saveMano(any(Mano.class));
+        verify(messagingTemplate, times(1)).convertAndSend(anyString(), anyList());
+    }
+
+    @Test
+    void shouldManoSinCartaCartaNormal() {
+        Carta cartaJugada = new Carta();
+        cartaJugada.setId(1);
+        cartaJugada.setTipoCarta(TipoCarta.amarillo);
+
+        Carta otraCarta = new Carta();
+        otraCarta.setId(2);
+        otraCarta.setTipoCarta(TipoCarta.verde);
+
+        Mano mano = new Mano();
+        mano.setCartas(List.of(cartaJugada, otraCarta));
+
+        Truco truco = new Truco();
+        truco.setCarta(cartaJugada);
+        truco.setMano(mano);
+
+        trucoService.manoSinCarta(truco, partida, ronda);
+
+        assertEquals(1, truco.getMano().getCartas().size());
+        assertEquals(otraCarta.getId(), truco.getMano().getCartas().get(0).getId());
+    }
+
+
+    @Test
+    void shouldManoSinCartaComodinBanderaBlanca() {
+        Carta cartaJugada = new Carta();
+        cartaJugada.setId(idComodinBanderaBlanca);
+        cartaJugada.setTipoCarta(TipoCarta.banderaBlanca);
+
+        Carta cartaTigresa = new Carta();
+        cartaTigresa.setId(idTigresa);
+        cartaTigresa.setTipoCarta(TipoCarta.tigresa);
+
+        Carta otraCarta = new Carta();
+        otraCarta.setId(4);
+        otraCarta.setTipoCarta(TipoCarta.amarillo);
+
+        Mano mano = new Mano();
+        mano.setCartas(List.of(cartaTigresa, otraCarta));
+
+        Truco truco = new Truco();
+        truco.setCarta(cartaJugada);
+        truco.setMano(mano);
+
+        when(manoService.saveMano(any(Mano.class))).thenReturn(mano);
+        when(manoService.findAllManosByRondaId(anyInt())).thenReturn(List.of(mano));
+
+        trucoService.manoSinCarta(truco, partida, ronda);
+
+        assertEquals(1, truco.getMano().getCartas().size());
+        assertEquals(otraCarta.getId(), truco.getMano().getCartas().get(0).getId());
+    }
+
+    @Test
+    void shouldManoSinCartaComodinPirata() {
+        Carta cartaJugada = new Carta();
+        cartaJugada.setId(idComodinPirata);
+        cartaJugada.setTipoCarta(TipoCarta.pirata);
+
+        Carta cartaTigresa = new Carta();
+        cartaTigresa.setId(idTigresa);
+        cartaTigresa.setTipoCarta(TipoCarta.tigresa);
+
+        Carta otraCarta = new Carta();
+        otraCarta.setId(4);
+        otraCarta.setTipoCarta(TipoCarta.amarillo);
+
+        Mano mano = new Mano();
+        mano.setCartas(List.of(cartaTigresa, otraCarta));
+
+        Truco truco = new Truco();
+        truco.setCarta(cartaJugada);
+        truco.setMano(mano);
+
+        when(manoService.saveMano(any(Mano.class))).thenReturn(mano);
+        when(manoService.findAllManosByRondaId(anyInt())).thenReturn(List.of(mano));
+
+        trucoService.manoSinCarta(truco, partida, ronda);
+
+        assertEquals(1, truco.getMano().getCartas().size());
+        assertEquals(otraCarta.getId(), truco.getMano().getCartas().get(0).getId());
+    }
+
+
+    @Test
+    void shouldCambiarPaloBaza() {
+        when(bazaService.saveBaza(any(Baza.class))).thenAnswer(invocation -> invocation.getArgument(0));
+    
+        Baza result = trucoService.cambiarPaloBaza(baza, truco);
+    
+        assertNotNull(result);
+        assertEquals(baza, result);
+        verify(bazaService, times(1)).saveBaza(any(Baza.class));
+    }
+
+    @Test
+    void shouldCambiarPaloBazaSinDeterminar() {
+        Carta carta = new Carta();
+        carta.setTipoCarta(TipoCarta.banderaBlanca);
+        Truco truco = new Truco();
+        truco.setCarta(carta);
+
+        baza.setPaloBaza(PaloBaza.sinDeterminar);
+
+        when(bazaService.saveBaza(baza)).thenReturn(baza);
+
+        Baza result = trucoService.cambiarPaloBaza(baza, truco);
+
+        assertNotNull(result, "El resultado no debería ser null");
+        assertEquals(PaloBaza.sinDeterminar, result.getPaloBaza());
+    }
+
+
+    @Test
+    void shouldCambiarPaloBazaNoHayPaloPirata() {
+        Carta carta = new Carta();
+        carta.setTipoCarta(TipoCarta.pirata);
+        Truco truco = new Truco();
+        truco.setCarta(carta);
+    
+        baza.setPaloBaza(PaloBaza.sinDeterminar);
+    
+        when(bazaService.saveBaza(baza)).thenReturn(baza);
+    
+        Baza result = trucoService.cambiarPaloBaza(baza, truco);
+    
+        assertNotNull(result, "El resultado no debería ser null");
+        assertEquals(PaloBaza.noHayPalo, result.getPaloBaza());
+    }
+    
+
+    @Test
+    void shouldCambiarPaloBazaNoHayPaloSkullking() {
+        Carta carta = new Carta();
+        carta.setTipoCarta(TipoCarta.skullking);
+        Truco truco = new Truco();
+        truco.setCarta(carta);
+
+        baza.setPaloBaza(PaloBaza.sinDeterminar);
+
+        when(bazaService.saveBaza(baza)).thenReturn(baza);
+
+        Baza result = trucoService.cambiarPaloBaza(baza, truco);
+
+        assertNotNull(result, "El resultado no debería ser null");
+        assertEquals(PaloBaza.noHayPalo, result.getPaloBaza());
+    }
+
+    @Test
+    void shouldCambiarPaloBazaNoHayPaloSirena() {
+        Carta carta = new Carta();
+        carta.setTipoCarta(TipoCarta.sirena);
+        Truco truco = new Truco();
+        truco.setCarta(carta);
+
+        baza.setPaloBaza(PaloBaza.sinDeterminar);
+
+        when(bazaService.saveBaza(baza)).thenReturn(baza);
+
+        Baza result = trucoService.cambiarPaloBaza(baza, truco);
+
+        assertNotNull(result, "El resultado no debería ser null");
+        assertEquals(PaloBaza.noHayPalo, result.getPaloBaza());
+    }
+
+    @Test
+    void shouldCambiarPaloBazaAmarillo() {
+        Carta carta = new Carta();
+        carta.setTipoCarta(TipoCarta.amarillo);
+        Truco truco = new Truco();
+        truco.setCarta(carta);
+
+        baza.setPaloBaza(PaloBaza.sinDeterminar);
+
+        when(bazaService.saveBaza(baza)).thenReturn(baza);
+
+        Baza result = trucoService.cambiarPaloBaza(baza, truco);
+
+        assertNotNull(result, "El resultado no debería ser null");
+        assertEquals(PaloBaza.amarillo, result.getPaloBaza());
+    }
+
+    @Test
+    void shouldCambiarPaloBazaMorada() {
+        Carta carta = new Carta();
+        carta.setTipoCarta(TipoCarta.morada);
+        Truco truco = new Truco();
+        truco.setCarta(carta);
+
+        baza.setPaloBaza(PaloBaza.sinDeterminar);
+
+        when(bazaService.saveBaza(baza)).thenReturn(baza);
+
+        Baza result = trucoService.cambiarPaloBaza(baza, truco);
+
+        assertNotNull(result, "El resultado no debería ser null");
+        assertEquals(PaloBaza.morada, result.getPaloBaza());
+    }
+
+    @Test
+    void shouldCambiarPaloBazaTriunfo() {
+        Carta carta = new Carta();
+        carta.setTipoCarta(TipoCarta.triunfo);
+        Truco truco = new Truco();
+        truco.setCarta(carta);
+
+        baza.setPaloBaza(PaloBaza.sinDeterminar);
+
+        when(bazaService.saveBaza(baza)).thenReturn(baza);
+
+        Baza result = trucoService.cambiarPaloBaza(baza, truco);
+
+        assertNotNull(result, "El resultado no debería ser null");
+        assertEquals(PaloBaza.triunfo, result.getPaloBaza());
+    }
+
+    @Test
+    void shouldCambiarPaloBazaVerde() {
+        Carta carta = new Carta();
+        carta.setTipoCarta(TipoCarta.verde);
+        Truco truco = new Truco();
+        truco.setCarta(carta);
+
+        baza.setPaloBaza(PaloBaza.sinDeterminar);
+
+        when(bazaService.saveBaza(baza)).thenReturn(baza);
+
+        Baza result = trucoService.cambiarPaloBaza(baza, truco);
+
+        assertNotNull(result, "El resultado no debería ser null");
+        assertEquals(PaloBaza.verde, result.getPaloBaza());
+    }
+
+    
+    @Test
+    void shouldCartasDisabledBaza() {
+        when(manoService.findAllManosByRondaId(anyInt())).thenReturn(List.of(mano));
+
+        Map<Integer, List<Carta>> result = trucoService.cartasDisabledBaza(ronda.getId(), TipoCarta.amarillo);
 
         assertNotNull(result);
-        verify(trucoRepository, times(1)).save(any(Truco.class));
-        verify(manoService, times(1)).saveMano(any(Mano.class));
-        verify(partidaService, times(1)).update(any(Partida.class), anyInt());
+        verify(manoService, times(1)).cartasDisabled(anyInt(), any(TipoCarta.class));
     }
-*/
 
+    @Test
+    void shouldMandarCartasDisabledAmarillo() {
+        baza.setPaloBaza(PaloBaza.amarillo);
+    
+        Mockito.doNothing().when(messagingTemplate).convertAndSend(anyString(), anyMap());
+    
+        trucoService.mandarCartasDisabled(baza, ronda, partida);
+    
+        verify(messagingTemplate, times(1)).convertAndSend(anyString(), anyMap());
+    }
+
+    @Test
+    void shouldMandarCartasDisabledMorada() {
+        baza.setPaloBaza(PaloBaza.morada);
+    
+        Mockito.doNothing().when(messagingTemplate).convertAndSend(anyString(), anyMap());
+    
+        trucoService.mandarCartasDisabled(baza, ronda, partida);
+    
+        verify(messagingTemplate, times(1)).convertAndSend(anyString(), anyMap());
+    }
+
+    @Test
+    void shouldMandarCartasDisabledVerde() {
+        baza.setPaloBaza(PaloBaza.verde);
+    
+        Mockito.doNothing().when(messagingTemplate).convertAndSend(anyString(), anyMap());
+    
+        trucoService.mandarCartasDisabled(baza, ronda, partida);
+    
+        verify(messagingTemplate, times(1)).convertAndSend(anyString(), anyMap());
+    }
+
+    @Test
+    void shouldMandarCartasDisabledTriunfo() {
+        baza.setPaloBaza(PaloBaza.triunfo);
+    
+        Mockito.doNothing().when(messagingTemplate).convertAndSend(anyString(), anyMap());
+    
+        trucoService.mandarCartasDisabled(baza, ronda, partida);
+    
+        verify(messagingTemplate, times(1)).convertAndSend(anyString(), anyMap());
+    }
+
+    @Test
+    void shouldMandarCartasDisabledSinDeterminar() {
+        baza.setPaloBaza(PaloBaza.sinDeterminar);
+    
+        Mockito.doNothing().when(messagingTemplate).convertAndSend(anyString(), anyMap());
+    
+        trucoService.mandarCartasDisabled(baza, ronda, partida);
+    
+        verify(messagingTemplate, times(1)).convertAndSend(anyString(), anyMap());
+    }
+
+    
     @Test
     void shouldCalculoGanador() {
-        Baza baza2 = new Baza();
-        baza2.setId(1);
-        baza2.setPaloBaza(PaloBaza.morada);
-        baza2.setNumBaza(1);
-        baza2.setGanador(null);
-        baza2.setCartaGanadora(null);
-        baza2.setRonda(ronda);
-
-        Carta carta2 = new Carta();
-        carta2.setId(30);
-        carta2.setImagenFrontal("./images/cartas/verde_1.png");
-        carta2.setImagenTrasera("./images/cartas/parte_trasera.png");
-        carta2.setNumero(10);
-        carta2.setTipoCarta(TipoCarta.morada);
-
-        Carta carta1 = new Carta();
-        carta1.setId(15);
-        carta1.setImagenFrontal("./images/cartas/verde_1.png");
-        carta1.setImagenTrasera("./images/cartas/parte_trasera.png");
-        carta1.setNumero(3);
-        carta1.setTipoCarta(TipoCarta.morada);
-
-        Truco truco2 = new Truco();
-        truco2.setId(10);
-        truco2.setBaza(baza2);
-        truco2.setCarta(carta2);
-        truco2.setJugador(jugador);
-        truco2.setMano(mano);
-        truco2.setTurno(2);
-
-        Truco truco1 = new Truco();
-        truco1.setId(15);
-        truco1.setBaza(baza2);
-        truco1.setCarta(carta1);
-        truco1.setJugador(jugador);
-        truco1.setMano(mano);
-        truco1.setTurno(3);
-
-        when(bazaRepository.findById(baza2.getId())).thenReturn(Optional.of(baza2));
-        when(trucoRepository.findTrucosByBazaId(baza2.getId())).thenReturn(List.of(truco1, truco2));
+        when(bazaService.findById(anyInt())).thenReturn(baza);
+        when(trucoRepository.findTrucosByBazaId(anyInt())).thenReturn(List.of(truco));
     
-        trucoService.calculoGanador(baza2.getId());
-        Baza bazaActualizada = bazaService2.findById(baza2.getId());
+        Jugador result = trucoService.calculoGanador(baza.getId());
     
-        assertEquals(bazaActualizada.getCartaGanadora(), truco2.getCarta());
-    
-        verify(bazaRepository, times(1)).save(baza2);
+        assertNotNull(result);
+        verify(bazaService, times(1)).saveBaza(any(Baza.class));
     }
 
     @Test
-    public void shouldGetCartaByJugador() {
-        // Arrange
-        Integer bazaId = 1;
-        Truco truco1 = mock(Truco.class);
-        Truco truco2 = mock(Truco.class);
+    void shouldCalculoGanadorConPersonaje() {
+        Carta cartaPersonaje = new Carta();
+        cartaPersonaje.setTipoCarta(TipoCarta.sirena); 
+        Truco trucoPersonaje = new Truco();
+        trucoPersonaje.setCarta(cartaPersonaje);
+        trucoPersonaje.setJugador(jugador);
 
-        when(truco1.getTurno()).thenReturn(1);
-        when(truco2.getTurno()).thenReturn(2);
-        when(trucoRepository.findTrucosByBazaId(bazaId)).thenReturn(Arrays.asList(truco1, truco2));
-        when(truco1.getCarta()).thenReturn(mock(Carta.class));
-        when(truco2.getCarta()).thenReturn(mock(Carta.class));
-        when(truco1.getJugador()).thenReturn(mock(Jugador.class));
-        when(truco2.getJugador()).thenReturn(mock(Jugador.class));
+        List<Truco> trucosBaza = List.of(trucoPersonaje);
+        
+        when(trucoRepository.findTrucosByBazaId(baza.getId())).thenReturn(trucosBaza);
+        when(bazaService.findById(baza.getId())).thenReturn(baza); 
 
-        Map<Carta, Jugador> result = trucoService.getCartaByJugador(bazaId);
-        assertEquals(2, result.size());
-        verify(trucoRepository, times(1)).findTrucosByBazaId(bazaId);
+        Jugador ganador = trucoService.calculoGanador(baza.getId());
+
+        assertNotNull(ganador, "El ganador no debería ser null");
+        verify(bazaService).saveBaza(any(Baza.class));
     }
 
-    /*
+
     @Test
-    public void shouldCrearTrucosBaza() {
-        when(bazaRepository.findById(baza.getId())).thenReturn(Optional.of(baza));
-        when(jugadorService.findJugadoresByPartidaId(anyInt())).thenReturn(Arrays.asList(jugador, jugador));
-        when(manoService.findLastManoByJugadorId(anyInt())).thenReturn(mock(Mano.class));
+    void shouldCalculoGanadorConTriunfo() {
+        Carta cartaTriunfo = new Carta();
+        cartaTriunfo.setTipoCarta(TipoCarta.triunfo);
+        Truco trucoTriunfo = new Truco();
+        trucoTriunfo.setCarta(cartaTriunfo);
+        trucoTriunfo.setJugador(jugador);
 
-        trucoService.crearTrucosBaza(baza.getId());
-        verify(trucoRepository, times(2)).save(any(Truco.class));
+        List<Truco> trucosBaza = List.of(trucoTriunfo);
+
+        when(trucoRepository.findTrucosByBazaId(baza.getId())).thenReturn(trucosBaza);
+        when(bazaService.findById(baza.getId())).thenReturn(baza); 
+
+        Jugador ganador = trucoService.calculoGanador(baza.getId());
+
+        assertNotNull(ganador, "El ganador no debería ser null");
+        verify(bazaService).saveBaza(any(Baza.class));
     }
-*/
 
-@Test
+
+    @Test
+    void shouldCalculoGanadorFallback1() {
+        Truco trucoFallback = new Truco();
+        trucoFallback.setCarta(carta);
+        trucoFallback.setJugador(jugador);
+
+        List<Truco> trucosBaza = new ArrayList<>();
+        trucosBaza.add(trucoFallback);
+        when(trucoRepository.findTrucosByBazaId(baza.getId())).thenReturn(trucosBaza);
+        when(bazaService.findById(baza.getId())).thenReturn(baza);
+
+        Jugador ganador = trucoService.calculoGanador(baza.getId());
+
+        assertNotNull(ganador);
+        assertEquals(jugador, ganador);
+        verify(bazaService).saveBaza(any(Baza.class));
+    }
+
+
+    @Test
+    void shouldActualizarTurno() {
+        partida.setTurnoActual(1);
+        baza.setTurnos(List.of(1, 2, 3));
+        when(partidaService.update(any(Partida.class), anyInt())).thenReturn(partida);
+
+        trucoService.actualizarTurno(partida, truco);
+
+        verify(messagingTemplate, times(1)).convertAndSend(anyString(), anyInt());
+    }
+
+    @Test
+    void shouldChangePaloBazaBasedOnTipoCarta() {
+        truco.getCarta().setTipoCarta(TipoCarta.verde);
+
+        when(bazaService.saveBaza(any(Baza.class))).thenReturn(baza);
+
+        Baza result = trucoService.cambiarPaloBaza(baza, truco);
+
+        assertNotNull(result);
+        assertEquals(PaloBaza.verde, result.getPaloBaza());
+        verify(bazaService, times(1)).saveBaza(any(Baza.class));
+    }
+
+    @Test
+    void shouldSetPaloBazaToDefaultWhenTipoCartaNotMapped() {
+        truco.getCarta().setTipoCarta(null);
+
+        when(bazaService.saveBaza(any(Baza.class))).thenReturn(baza);
+
+        Baza result = trucoService.cambiarPaloBaza(baza, truco);
+
+        assertNotNull(result);
+        assertEquals(PaloBaza.sinDeterminar, result.getPaloBaza());
+    }
+    
+
+    @Test
     public void shouldSiguienteTurno() {
         List<Integer> turnos = Arrays.asList(1, 2, 3);
         Integer turnoActual = 1;

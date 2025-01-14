@@ -83,7 +83,7 @@ function App() {
   } else {
     userRoutes = (
       <>
-        {/* <Route path="/users/statistics" element={<UserStatisticsDashboard />} /> */} 
+        <Route path="/users/statistics" element={<UserStatisticsDashboard />} />
         <Route path="/users/partidas" element={<UserPartidas />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/login" element={<Login />} />

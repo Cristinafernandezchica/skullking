@@ -52,19 +52,7 @@ public class TrucoRestController {
 	public ResponseEntity<Truco> createTruco(@RequestBody @Valid Truco truco) throws URISyntaxException {
 		Truco newTruco = new Truco();
 		BeanUtils.copyProperties(truco, newTruco, "id");
-		// Integer jugadorId = truco.getMano().getJugador();
-		// newTruco.setIdJugador(jugadorId);
 		Truco savedTruco = this.trucoService.saveTruco(newTruco);
-
-		return new ResponseEntity<>(savedTruco, HttpStatus.CREATED);
-	}
-
-	@PostMapping(value= "{jugadorId}/jugar")
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Truco> jugarTruco(@PathVariable("jugadorId") int jugadorId,@RequestBody @Valid BazaCartaManoDTO DTO) throws URISyntaxException {
-
-		Truco savedTruco = this.trucoService.jugarTruco(DTO, jugadorId);
-
 		return new ResponseEntity<>(savedTruco, HttpStatus.CREATED);
 	}
 
@@ -80,8 +68,21 @@ public class TrucoRestController {
 	public ResponseEntity<MessageResponse> deleteTruco(@PathVariable("trucoId") int id) {
 		RestPreconditions.checkNotNull(trucoService.findTrucoById(id), "Truco", "ID", id);
 		trucoService.deleteTruco(id);
-		return new ResponseEntity<>(new MessageResponse("Truco deleted!"), HttpStatus.OK);
+		return new ResponseEntity<>(new MessageResponse("Truco eliminado!"), HttpStatus.OK);
 	}
 
+	@GetMapping(value = "/trucosBaza/{bazaId}")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<Truco>> findTrucosByBazaId(@PathVariable("bazaId") int bazaId) {
+		List<Truco> res = (List<Truco>) this.trucoService.findTrucosByBazaId(bazaId);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+
+	@PostMapping(value= "{jugadorId}/jugar")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<Truco> jugarTruco(@PathVariable("jugadorId") int jugadorId,@RequestBody @Valid BazaCartaManoDTO DTO) throws URISyntaxException {
+		Truco savedTruco = this.trucoService.jugarTruco(DTO, jugadorId);
+		return new ResponseEntity<>(savedTruco, HttpStatus.CREATED);
+	}
 
 }

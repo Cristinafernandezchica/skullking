@@ -1,300 +1,214 @@
-import { rest } from 'msw'
+import { rest } from 'msw';
 
-const authOwner = {
-    "authority": "OWNER"
+// Simulación de Authorities
+const authorityPlayer = {
+    id: 2,
+    authority: 'PLAYER'
 };
 
-const userAdmin1 = {
-    "id": 1,
-    "username": "admin1",
-    "authority": {
-        "authority": "ADMIN"
-    }
+const authorityAdmin = {
+    id: 1,
+    authority: 'ADMIN'
 };
 
-const userOwner1 = {
-    "id": 2,
-    "username": "owner1",
-    "authority": authOwner
+const admin = {
+    id: 3,
+    username: "admin",
+    password: "$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e",
+    descripcionPerfil: "Administrador",
+    imagenPerfil: "https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg",
+    conectado: false,
+    numPartidasJugadas: 0,
+    numPartidasGanadas: 0,
+    numPuntosGanados: 0,
+    authority: authorityAdmin,
 };
 
-const userOwner2 = {
-    "id": 3,
-    "username": "owner2",
-    "authority": authOwner
+// Simulación de Usuarios
+const user1 = {
+    id: 1,
+    username: "user1",
+    password: "$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e",
+    descripcionPerfil: "A Jugar!",
+    imagenPerfil: "https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg",
+    conectado: false,
+    numPartidasJugadas: 10,
+    numPartidasGanadas: 5,
+    numPuntosGanados: 100,
+    authority: authorityPlayer,
 };
 
-const userVet1 = {
-    "id": 12,
-    "username": "vet1",
-    "authority": {
-        "authority": "VET"
-    }
+const user2 = {
+    id: 2,
+    username: "user2",
+    password: "$2a$10$DaS6KIEfF5CRTFrxIoGc7emY3BpZZ0.fVjwA3NiJ.BjpGNmocaS3e",
+    descripcionPerfil: "A Jugar!",
+    imagenPerfil: "https://blog.tienda-medieval.com/wp-content/uploads/2019/02/Parche-pirata-ojo-derecho.jpg",
+    conectado: false,
+    numPartidasJugadas: 8,
+    numPartidasGanadas: 6,
+    numPuntosGanados: 120,
+    authority: authorityPlayer,
 };
 
-const userVet2 = {
-    "id": 13,
-    "username": "vet2",
-    "authority": {
-        "authority": "VET"
-    }
+// Simulación de Partidas
+const partida1 = {
+    id: 1,
+    nombre: "Partida Ejemplo1",
+    inicio: "2024-11-05 13:00:00",
+    fin: "2024-11-05 15:00:00",
+    estado: "ESPERANDO",
+    ownerPartida: user1,
+    turnoActual: 2,
 };
 
-const owner1 = {
-    "id": 1,
-    "firstName": "George",
-    "lastName": "Franklin",
-    "address": "110 W. Liberty St.",
-    "city": "Sevilla",
-    "telephone": "608555103",
-    "plan": "PLATINUM",
-    "user": userOwner1
+const partida2 = {
+    id: 2,
+    nombre: "Partida Ejemplo2",
+    inicio: "2024-11-07 18:00:00",
+    fin: "2024-11-07 21:00:00",
+    estado: "JUGANDO",
+    ownerPartida: user2,
+    turnoActual: null,
 };
 
-const owner2 = {
-    "id": 2,
-    "firstName": "Betty",
-    "lastName": "Davis",
-    "address": "638 Cardinal Ave.",
-    "city": "Sevilla",
-    "telephone": "608555174",
-    "plan": "PLATINUM",
-    "user": userOwner2
+// Simulación de Jugadores
+const jugador1 = {
+    id: 1,
+    puntos: 15,
+    partida: partida1,
+    usuario: user1,
+    apuestaActual: 0,
 };
 
-const pet1 = {
-    "id": 1,
-    "name": "Leo",
-    "birthDate": "2010-09-07",
-    "type": {
-        "id": 1,
-        "name": "cat"
-    },
-    "owner": owner1
+const jugador2 = {
+    id: 2,
+    puntos: 20,
+    partida: partida1,
+    usuario: user2,
+    apuestaActual: 0,
 };
 
-const pet2 = {
-    "id": 2,
-    "name": "Basil",
-    "birthDate": "2012-08-06",
-    "type": {
-        "id": 6,
-        "name": "hamster"
-    },
-    "owner": owner2
+const jugador3 = {
+    id: 3,
+    puntos: 30,
+    partida: partida2,
+    usuario: user1,
+    apuestaActual: 0,
 };
 
-const vet1 = {
-    "id": 1,
-    "firstName": "James",
-    "lastName": "Carter",
-    "specialties": [],
-    "user": userVet1,
-    "city": "Sevilla"
-}
+// Usuarios ordenados por puntos (simulando la respuesta del backend)
+const usersSortedByPoints = [user2, user1]; // user2 tiene más puntos que user1
 
-const vet2 = {
-    "id": 2,
-    "firstName": "Helen",
-    "lastName": "Leary",
-    "specialties": [
-        {
-            "id": 1,
-            "name": "radiology"
-        }
-    ],
-    "user": userVet2,
-    "city": "Sevilla"
-};
-
-const visit1 = {
-    "id": 1,
-    "datetime": "2013-01-01T13:00:00",
-    "description": "rabies shot",
-    "pet": pet1,
-    "vet": vet1,
-    "city": "Badajoz",
-};
-
-const visit2 = {
-    "id": 2,
-    "datetime": "2013-01-02T15:30:00",
-    "description": "",
-    "pet": pet1,
-    "vet": vet2
-};
-
-const consultation1 = {
-    "id": 1,
-    "title": "Mi gato no come",
-    "status": "ANSWERED",
-    "owner": owner2,
-    "pet": pet1,
-    "creationDate": "2023-04-11T11:20:00"
-};
-
-const consultation2 = {
-    "id": 2,
-    "title": "Título 2",
-    "status": "PENDING",
-    "owner": owner1,
-    "pet": pet1,
-    "creationDate": "2023-04-11T11:20:00"
-};
-
-const ticket1 = {
-    "id": 1,
-    "description": "What vaccine should my dog recieve?",
-    "creationDate": "2023-01-04T17:32:00",
-    "user": userOwner1,
-    "consultation": consultation1
-};
-
-const ticket2 = {
-    "id": 2,
-    "description": "Rabies' one.",
-    "creationDate": "2023-01-04T17:36:00",
-    "user": userVet1,
-    "consultation": consultation1
-}
+// Usuarios ordenados por porcentaje de victorias (simulando la respuesta del backend)
+const usersSortedByWinPercentage = [user2, user1]; // user2 tiene mejor porcentaje de victorias que user1
 
 export const handlers = [
-    rest.delete('*/:id', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json({
-                message: "Entity deleted"
-            }),
-        )
+    // Endpoint para obtener todos los usuarios
+    rest.get('/api/v1/users', (req, res, ctx) => {
+        const users = [user1, user2];
+        return res(ctx.status(200), ctx.json(users));
     }),
 
-    rest.get('*/api/v1/owners', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                owner1,
-                owner2,
-            ]),
-        )
+    // Endpoint para obtener usuarios ordenados por puntos totales
+    rest.get('/api/v1/users/sorted-by-points', (req, res, ctx) => {
+        return res(ctx.status(200), ctx.json(usersSortedByPoints));
     }),
 
-    rest.get('*/api/v1/pets', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                pet1,
-                pet2,
-            ]),
-        )
+    // Endpoint para obtener usuarios ordenados por porcentaje de victorias
+    rest.get('/api/v1/users/sorted-by-win-percentage', (req, res, ctx) => {
+        return res(ctx.status(200), ctx.json(usersSortedByWinPercentage));
     }),
 
-    rest.get('*/api/v1/users', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                userAdmin1,
-                userOwner1,
-            ]),
-        )
+    // Endpoint para obtener todas las partidas
+    rest.get('/api/v1/partidas', (req, res, ctx) => {
+        const partidas = [partida1, partida2];
+        return res(ctx.status(200), ctx.json(partidas));
     }),
 
-    rest.get('*/api/v1/vets', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                vet1,
-                vet2,
-            ]),
-        )
+    // Endpoint para obtener los jugadores de una partida específica
+    rest.get('/api/v1/partidas/:partidaId/jugadores', (req, res, ctx) => {
+        const { partidaId } = req.params;
+        let jugadores = [jugador1, jugador2, jugador3].filter(jugador => jugador.partida.id === parseInt(partidaId));
+
+        return res(ctx.status(200), ctx.json(jugadores));
     }),
 
-    rest.get('*/api/v1/vets/specialties', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                {
-                    "id": 1,
-                    "name": "radiology"
-                },
-                {
-                    "id": 2,
-                    "name": "surgery"
-                },
-                {
-                    "id": 3,
-                    "name": "dentistry"
-                }
-            ]),
-        )
+    // Endpoint para obtener jugadores por usuario ID
+    rest.get('/api/v1/jugadores/:usuarioId/usuarios', (req, res, ctx) => {
+        const { usuarioId } = req.params;
+        const jugadores = [jugador1, jugador2, jugador3].filter(jugador => jugador.usuario.id === parseInt(usuarioId));
+
+        if (jugadores.length === 0) {
+            return res(ctx.status(404), ctx.json({ message: "No se encontraron jugadores para este usuario" }));
+        }
+
+        return res(ctx.status(200), ctx.json(jugadores));
     }),
 
-    rest.get('*/api/v1/pets/:petId/visits', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                visit1,
-                visit2,
-            ]),
-        )
+    // Endpoint para eliminar un jugador
+    rest.delete('/api/v1/jugadores/:id', (req, res, ctx) => {
+        const { id } = req.params;
+        const jugador = [jugador1, jugador2, jugador3].find(jugador => jugador.id === parseInt(id));
+
+        if (!jugador) {
+            return res(ctx.status(404), ctx.json({ message: "Jugador no encontrado" }));
+        }
+
+        return res(ctx.status(200), ctx.json({ message: "Jugador eliminado!" }));
     }),
 
-    rest.get('*/api/v1/consultations', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                consultation1,
-                consultation2,
-            ]),
-        )
+    // Endpoint para obtener partidas por owner ID
+    rest.get('/api/v1/partidas', (req, res, ctx) => {
+        const { ownerId } = req.url.searchParams;
+        const partidas = [partida1, partida2].filter(partida => partida.ownerPartida.id === parseInt(ownerId));
+
+        if (partidas.length === 0) {
+            return res(ctx.status(404), ctx.json({ message: "No se encontraron partidas para este owner" }));
+        }
+
+        return res(ctx.status(200), ctx.json(partidas));
     }),
 
-    rest.get('*/api/v1/consultations/:id', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                consultation1,
-            ]),
-        )
+    // Endpoint para eliminar un usuario
+    rest.delete('/api/v1/users/:userId', (req, res, ctx) => {
+        const { userId } = req.params;
+        const user = [user1, user2].find(user => user.id === parseInt(userId));
+
+        if (!user) {
+            return res(ctx.status(404), ctx.json({ message: "Usuario no encontrado" }));
+        }
+
+        return res(ctx.status(204), ctx.json({ message: "Usuario eliminado" }));
     }),
 
-    rest.get('*/api/v1/consultations/:id/tickets', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                ticket1,
-                ticket2
-            ]),
-        )
+    // Endpoint para eliminar una partida
+    rest.delete('/api/v1/partidas/:id', (req, res, ctx) => {
+        const { id } = req.params;
+        const partida = [partida1, partida2].find(partida => partida.id === parseInt(id));
+
+        if (!partida) {
+            return res(ctx.status(404), ctx.json({ message: "Partida no encontrada" }));
+        }
+
+        return res(ctx.status(204), ctx.json({ message: "Partida eliminada" }));
     }),
 
-    rest.post('*/api/v1/consultations/:id/tickets', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json(
-                {
-                    "id": 3,
-                    "description": "test ticket",
-                    "creationDate": "2023-01-04T17:32:00",
-                    "user": userOwner1,
-                    "consultation": consultation1
-                },
-            ))
+    // Endpoint para obtener todas las autoridades
+    rest.get('/api/v1/users/authorities', (req, res, ctx) => {
+        const authorities = [authorityAdmin, authorityPlayer];
+        return res(ctx.status(200), ctx.json(authorities));
     }),
-
-    rest.put('*/api/v1/consultations/:id', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json(
-                {
-                    "id": 1,
-                    "title": "Consulta sobre vacunas",
-                    "status": "CLOSED",
-                    "owner": owner1,
-                    "pet": pet1,
-                    "creationDate": "2023-01-04T17:30:00"
-                }
-            )
-        )
-    }),
-
-]
+    
+    // Endpoint para obtener un usuario por ID
+    rest.get('/api/v1/users/:id', (req, res, ctx) => {
+        const { id } = req.params;
+        const user = [user1, user2].find(user => user.id === parseInt(id));
+    
+        if (!user) {
+            return res(ctx.status(404), ctx.json({ message: "Usuario no encontrado" }));
+        }
+    
+        return res(ctx.status(200), ctx.json(user));
+    })
+];

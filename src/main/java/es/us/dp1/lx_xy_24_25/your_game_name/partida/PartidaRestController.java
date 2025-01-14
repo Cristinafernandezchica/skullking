@@ -2,6 +2,8 @@ package es.us.dp1.lx_xy_24_25.your_game_name.partida;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +52,7 @@ public class PartidaRestController {
 
     @GetMapping("/{id}")
     public Partida getPartidaById(@PathVariable("id")Integer id){
-        Partida p = partidaService.getPartidaById(id);
-        return p;
+        return partidaService.getPartidaById(id);
     }
 
     
@@ -82,6 +83,19 @@ public class PartidaRestController {
         return new ResponseEntity<>(new MessageResponse("Partida eliminada"), HttpStatus.NO_CONTENT); 
     }
 
+    @PutMapping("/{id}/actualizar-owner")
+    public ResponseEntity<MessageResponse> actualizarOwner(@PathVariable Integer id, @RequestBody Map<String, Integer> body) {
+        try {
+            Integer nuevoOwnerId = body.get("ownerPartida");
+            partidaService.actualizarOwner(id, nuevoOwnerId);
+            return new ResponseEntity<>(new MessageResponse("Owner actualizado con éxito."), HttpStatus.OK); 
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(new MessageResponse("Partida no encontrada."), HttpStatus.NOT_FOUND);             
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(new MessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST); 
+        }
+    }
+
     // Relación de uno a muchos con la clase Jugador, mirar los nombres de los métodos
     // TENER EN CUENTA  -->  Habrá que hacer un DTO seguramente
     // Te devulve el jugador con la contraseña incluida, para frontend solo queremos el username
@@ -91,14 +105,7 @@ public class PartidaRestController {
         return ResponseEntity.ok(jugadoresPartida);
     }
 
-    // Relación de uno a 10 con la clase Ronda, mirar los nombres de los métodos
-    /* 
-    @GetMapping("/{id}/rondas")
-    public List<Ronda> getRondasByPartidaId(@PathVariable("id")Integer id){
-        return rondaService.getRondasByPartidaId(id);
-    }
-    */
-
+    // Obtener las partidas dado el id de un usuario owner
     @GetMapping(params = "ownerId")
     public ResponseEntity<List<Partida>> findPartidasByOwnerId(@RequestParam("ownerId") Integer ownerId) {
         List<Partida> partidas = partidaService.findPartidasByOwnerId(ownerId);
@@ -108,8 +115,7 @@ public class PartidaRestController {
         return new ResponseEntity<>(partidas, HttpStatus.OK);
     }
 
-
-
+    // Obtener el jugador ganador de la partida
     @GetMapping("/{id}/jugadorGanador")
     public ResponseEntity<Jugador> ganadorPartida (@PathVariable("id") Integer id){
         partidaService.getJugadorGanador(id);

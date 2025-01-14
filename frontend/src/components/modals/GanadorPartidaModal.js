@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import '../formGenerator/css/ganadorBazaModal.css';
+import "../../static/css/chat/chat.css";
 
 export default function GanadorPartidaModal({ isVisible, ganador, onClose }) {
 
@@ -19,8 +20,8 @@ export default function GanadorPartidaModal({ isVisible, ganador, onClose }) {
 
     return (
         <Modal isOpen={isVisible} toggle={onClose} centered>
-            <ModalHeader className="ganador-modal-header">
-                EL ganador o ganadores de la partida es...
+            <ModalHeader className="custom-modal-header" style={{ textAlign: 'center'}}>
+                El ganador o ganadores de la partida es...
             </ModalHeader>
             <ModalBody className="ganador-modal-body">
                 {ganador && ganador.length > 0 ? (
@@ -36,14 +37,11 @@ export default function GanadorPartidaModal({ isVisible, ganador, onClose }) {
                     <p className="loading-message">Obteniendo el ganador...</p>
                 )}
             </ModalBody>
-            <ModalFooter className="ganador-modal-footer">
-                <Button
-                    color="#ffd700"
-                    onClick={onClose}
-                    className="close-button"
-                >
-                    ¡Enhorabuena!
-                </Button>
+            <ModalFooter style={{
+                background: "#112b44",
+                color: "#f5d76e", textAlign: 'center'
+            }}>
+                ¡Enhorabuena!
             </ModalFooter>
         </Modal>
     );

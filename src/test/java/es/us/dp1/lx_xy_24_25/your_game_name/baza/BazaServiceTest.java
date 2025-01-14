@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,10 +16,8 @@ import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.mano.Mano;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
-import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaEstado;
-import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.RondaService;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
@@ -28,15 +25,13 @@ import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -64,6 +59,7 @@ public class BazaServiceTest {
     private Baza baza;
     private Baza bazaV;
     private Jugador jugador;
+    private Jugador jugador2;
     private Carta carta;
     private Carta cartaV;
     private Truco truco;
@@ -82,6 +78,11 @@ public class BazaServiceTest {
         jugador.setUsuario(null);
         jugador.setPartida(partida);
 
+        jugador2 = new Jugador();
+        jugador2.setId(2);
+        jugador2.setPuntos(25);
+        jugador2.setUsuario(null);
+        jugador2.setPartida(partida);
 
         carta = new Carta();
         carta.setId(1);
@@ -111,7 +112,7 @@ public class BazaServiceTest {
         trucoT.setMano(mano);
         trucoT.setTurno(2);
 
-        mano =new Mano();
+        mano = new Mano();
         mano.setApuesta(1);
         mano.setCartas(List.of(carta));
         mano.setId(1);
@@ -153,7 +154,7 @@ public class BazaServiceTest {
         bazaV.setRonda(ronda);
     }
 
-    // Test para guardar una Baza
+    // Test para guardar una Baza: MANTENER
     @Test
     void shouldSaveBaza() {
         when(bazaRepository.save(any(Baza.class))).thenReturn(baza);
@@ -167,7 +168,7 @@ public class BazaServiceTest {
         verify(bazaRepository, times(1)).save(baza);
     }
 
-    // Test para listar todas las Bazas
+    // Test para listar todas las Bazas: MANTENER
     @Test
     void shouldGetAllBazas() {
         List<Baza> bazaList = Arrays.asList(baza);
@@ -181,7 +182,7 @@ public class BazaServiceTest {
         verify(bazaRepository, times(1)).findAll();
     }
 
-    // Test para obtener una Baza por ID
+    // Test para obtener una Baza por ID: MANTENER
     @Test
     void shouldFindById() {
         when(bazaRepository.findById(1)).thenReturn(Optional.of(baza));
@@ -194,7 +195,7 @@ public class BazaServiceTest {
         verify(bazaRepository, times(1)).findById(1);
     }
 
-    // Test para obtener una Baza por ID (Excepción)
+    // Test para obtener una Baza por ID (Excepción): MANTENER
     @Test
     void shouldFindByIdNotFound() {
         when(bazaRepository.findById(99)).thenReturn(Optional.empty());
@@ -202,14 +203,14 @@ public class BazaServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> bazaService.findById(99));
     }
 
-    // Test para eliminar una Baza por ID
+    // Test para eliminar una Baza por ID: MANTENER
     @Test
     void shouldDeleteBaza() {
         bazaService.deleteBaza(1);
         verify(bazaRepository, times(1)).deleteById(1);
     }
 
-    // Test para actualizar una Baza existente
+    // Test para actualizar una Baza existente: MANTENER
     @Test
     void shouldUpdateBaza() {
         Baza newBaza = new Baza();
@@ -238,8 +239,8 @@ public class BazaServiceTest {
         assertNotNull(bazaActual);
         assertEquals(1, bazaActual.getId());
         verify(bazaRepository, times(1)).findBazasByRondaId(1);
-    }    
-    
+    }
+
     @Test
     void shouldFindByRondaIdAndNumBaza() {
         when(bazaRepository.findByRondaIdAndNumBaza(1, 3)).thenReturn(Optional.of(baza));
@@ -252,6 +253,13 @@ public class BazaServiceTest {
     }
 
     @Test
+    void shouldFindByRondaIdAndNumBazaNotFound() {
+        when(bazaRepository.findByRondaIdAndNumBaza(99, 99)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> bazaService.findByRondaIdAndNumBaza(99, 99));
+    }
+    
+    @Test
     void shouldFindByIdRondaAndIdJugador() {
         List<Baza> bazas = Arrays.asList(baza);
         when(bazaRepository.findByIdRondaAndIdJugador(1, 1)).thenReturn(bazas);
@@ -263,8 +271,6 @@ public class BazaServiceTest {
         verify(bazaRepository, times(1)).findByIdRondaAndIdJugador(1, 1);
     }
 
-    //TODO: findBazaAnterior() cuando no cree dependencia circular
-    /*
     @Test
     void shouldFindBazaAnterior() {
         when(bazaRepository.findBazaAnterior(1, 1)).thenReturn(Optional.of(baza));
@@ -275,203 +281,229 @@ public class BazaServiceTest {
         assertEquals(1, bazaAnterior.getId());
         verify(bazaRepository, times(1)).findBazaAnterior(1, 1);
     }
-    */
 
+    @Test
+    void shouldIniciarBaza() {
+        
+        when(bazaRepository.save(any(Baza.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        List<Jugador> jugadores = List.of(jugador, jugador2);
+        Baza nuevaBaza = bazaService.iniciarBaza(ronda, jugadores);
 
+        assertNotNull(nuevaBaza);
+        assertEquals(1, nuevaBaza.getNumBaza());
+        assertNull(nuevaBaza.getCartaGanadora());
+        assertNull(nuevaBaza.getGanador());
+        assertEquals(ronda, nuevaBaza.getRonda());
+        assertEquals(PaloBaza.sinDeterminar, nuevaBaza.getPaloBaza());
+        assertEquals(jugadores.stream().map(Jugador::getId).collect(Collectors.toList()), nuevaBaza.getTurnos());
 
-/*
-       // Test para iniciar una nueva Baza
-       @Test
-       void shouldIniciarBazas() {
-           when(bazaRepository.save(any(Baza.class))).thenAnswer(invocation -> invocation.getArgument(0));
-   
-           Baza nuevaBaza = bazaService.iniciarBazas(ronda);
-   
-           assertNotNull(nuevaBaza);
-           assertEquals(1, nuevaBaza.getNumBaza());
-           assertNull(nuevaBaza.getCartaGanadora());
-           assertNull(nuevaBaza.getGanador());
-           assertEquals(ronda, nuevaBaza.getRonda());
-   
-           //Cuando esté hecho iniciarTrucos, descomentar y probar (antes de esta implementacion funciona todo :D)
-           // verify(trucoService, times(1)).crearTrucosBazaConTurno(nuevaBaza.getId());
-
-           verify(bazaRepository, times(1)).save(nuevaBaza);
-       }
-*/
-
-/*
-       @Test
-       void shouldCalcularTurnosNuevaBaza_PrimeraBaza() {
-           List<Jugador> jugadores = Arrays.asList(jugador);
-           when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(jugadores);
-   
-           List<Integer> turnos = bazaService.calcularTurnosNuevaBaza(1, null);
-   
-           assertNotNull(turnos);
-           assertEquals(1, turnos.size());
-           assertEquals(1, turnos.get(0));
-           verify(jugadorService, times(1)).findJugadoresByPartidaId(1);
-       }
-           */
-   
-       /*
-       @Test
-       void shouldCalcularTurnosNuevaBaza_ConGanador() {
-           List<Jugador> jugadores = Arrays.asList(jugador);
-           when(jugadorService.findJugadoresByPartidaId(1)).thenReturn(jugadores);
-   
-           baza.setGanador(jugador);
-           List<Integer> turnos = bazaService.calcularTurnosNuevaBaza(1, baza);
-   
-           assertNotNull(turnos);
-           assertEquals(1, turnos.size());
-           assertEquals(1, turnos.get(0));
-           verify(jugadorService, times(1)).findJugadoresByPartidaId(1);
-       }
-           */
-   
-       @Test
-       void shouldPrimerTurno() {
-           List<Integer> turnos = Arrays.asList(1, 2, 3);
-           Integer primerTurno = bazaService.primerTurno(turnos);
-   
-           assertNotNull(primerTurno);
-           assertEquals(1, primerTurno);
-       }
-   
-       @Test
-       void shouldGetPtosBonificacion() {
-           List<Baza> bazas = Arrays.asList(baza);
-           List<Truco> trucos = Arrays.asList(truco);
-   
-           when(bazaRepository.findByIdRondaAndIdJugador(1, 1)).thenReturn(bazas);
-           when(trucoRepository.findTrucosByBazaId(1)).thenReturn(trucos);
-   
-           Integer puntos = bazaService.getPtosBonificacion(1, 1);
-   
-           assertNotNull(puntos);
-           verify(bazaRepository, times(1)).findByIdRondaAndIdJugador(1, 1);
-           verify(trucoRepository, times(1)).findTrucosByBazaId(1);
-       }
-   
-       @Test
-       void shouldGetPrimeraSirena() {
-           List<Truco> sirenas = Arrays.asList(truco);
-           Truco resultado = bazaService.getPrimeraSirena(sirenas);
-   
-           assertNotNull(resultado);
-           assertEquals(1, resultado.getId());
-       }
-   
-       @Test
-       void shouldGetPrimerPirata() {
-           List<Truco> piratas = Arrays.asList(truco);
-           Truco resultado = bazaService.getPrimerPirata(piratas);
-   
-           assertNotNull(resultado);
-           assertEquals(1, resultado.getId());
-       }
-   
-       @Test
-       void shouldGetTriunfoMayorTruco() {
-           truco.getCarta().setNumero(10);
-           List<Truco> triunfos = Arrays.asList(truco);
-           Truco resultado = bazaService.getTriunfoMayorTruco(triunfos);
-   
-           assertNotNull(resultado);
-           assertEquals(1, resultado.getId());
-       }
-   
-       @Test
-       void shouldGetCartaPaloMayorNum() {
-           truco.getCarta().setNumero(10);
-           List<Truco> cartasPalo = Arrays.asList(truco);
-           Truco resultado = bazaService.getCartaPaloMayorNum(cartasPalo);
-   
-           assertNotNull(resultado);
-           assertEquals(1, resultado.getId());
-       }
-
-       @Test
-       void testGetPrimerTruco() {
-        Carta carta1 = new Carta();
-        carta1.setNumero(5);
-
-        Carta carta2 = new Carta();
-        carta2.setNumero(10);
-
-        Carta carta3 = new Carta();
-        carta3.setNumero(3);
-
-        Truco truco1 = new Truco();
-        truco1.setCarta(carta1);
-
-        Truco truco2 = new Truco();
-        truco2.setCarta(carta2);
-
-        Truco truco3 = new Truco();
-        truco3.setCarta(carta3);
-
-        // Lista de trucos
-        List<Truco> cartasPalo = new ArrayList<>();
-        cartasPalo.add(truco1);
-        cartasPalo.add(truco2);
-        cartasPalo.add(truco3);
-
-        // Llamar al método a probar
-        Truco resultado = bazaService.getPrimerTruco(cartasPalo);
-
-        // Validar el resultado
-        assertEquals(truco2, resultado); // truco2 tiene la carta con el número más alto
-        assertEquals(10, resultado.getCarta().getNumero()); // Validar que el número más alto es 10
+        verify(bazaRepository, times(1)).save(nuevaBaza);
     }
 
-
-
-   }
-
-
-/*
-    // Test para nextBaza: Incrementar numBaza dentro de la misma ronda
     @Test
     void shouldNextBaza_IncrementarNumBaza() {
         baza.setNumBaza(1);
+        List<Jugador> jugadores = List.of(jugador, jugador2);
+
         when(bazaRepository.findById(1)).thenReturn(Optional.of(baza));
         when(bazaRepository.save(any(Baza.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Baza resultado = rondaService.nextBaza(1);
+        Baza resultado = bazaService.nextBaza(1, jugadores);
 
         assertNotNull(resultado);
         assertEquals(2, resultado.getNumBaza());
         assertNull(resultado.getCartaGanadora());
         assertNull(resultado.getGanador());
+        assertEquals(ronda, resultado.getRonda());
+        assertEquals(PaloBaza.sinDeterminar, resultado.getPaloBaza());
 
-        verify(bazaRepository, times(1)).save(baza);
-        verify(rondaService, never()).nextRonda(anyInt());
+        List<Integer> expectedTurnos = jugadores.stream().map(Jugador::getId).collect(Collectors.toList());
+        assertEquals(expectedTurnos, resultado.getTurnos());
+
+        verify(bazaRepository, times(1)).save(any(Baza.class));
     }
 
-    // Test para nextBaza: Cambiar a la siguiente ronda cuando se alcanza la última baza
-    @Test
-    void shouldNextBaza_CambiarARondaSiguiente() {
-        baza.setNumBaza(3);
-        when(bazaRepository.findById(1)).thenReturn(Optional.of(baza));
-        when(bazaRepository.save(any(Baza.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
-        Baza resultado = rondaService.nextBaza(1);
-
-        assertNotNull(resultado);
-        assertEquals(3, resultado.getNumBaza());
-
-        verify(rondaService, times(1)).nextRonda(ronda.getId());
-        verify(bazaRepository, times(1)).save(baza);
-    }
-    
-    // Test: Excepción cuando la baza no se encuentra
     @Test
     void shouldNextBaza_BazaNoEncontrada() {
+        List<Jugador> jugadores = List.of(jugador, jugador2);
         when(bazaRepository.findById(99)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> rondaService.nextBaza(99));
+        assertThrows(ResourceNotFoundException.class, () -> bazaService.nextBaza(99, jugadores));
     }
-        */
+
+    @Test
+    void shouldCalcularTurnosNuevaBaza_PrimeraBaza() {
+        List<Jugador> jugadores = Arrays.asList(jugador, jugador2);
+
+        List<Integer> turnos = bazaService.calcularTurnosNuevaBaza(1, null, jugadores);
+
+        assertNotNull(turnos);
+        assertEquals(2, turnos.size());
+        assertEquals(Arrays.asList(jugador.getId(), jugador2.getId()), turnos);
+    }
+
+    @Test
+    void shouldCalcularTurnosNuevaBaza_ConGanador() {
+        List<Jugador> jugadores = Arrays.asList(jugador, jugador2);
+        Baza bazaAnterior = new Baza();
+        bazaAnterior.setGanador(jugador2);
+
+        List<Integer> turnos = bazaService.calcularTurnosNuevaBaza(1, bazaAnterior, jugadores);
+
+        assertNotNull(turnos);
+        assertEquals(2, turnos.size());
+        assertEquals(Arrays.asList(jugador2.getId(), jugador.getId()), turnos);
+    }
+
+    @Test
+    void shouldPrimerTurno() {
+        List<Integer> turnos = Arrays.asList(1, 2, 3);
+        Integer primerTurno = bazaService.primerTurno(turnos);
+   
+        assertNotNull(primerTurno);
+        assertEquals(1, primerTurno);
+    }
+
+    @Test
+    void shouldGetPtosBonificacion() {
+        List<Baza> bazas = Arrays.asList(baza);
+        List<Truco> trucos = Arrays.asList(truco);
+
+        when(bazaRepository.findByIdRondaAndIdJugador(1, 1)).thenReturn(bazas);
+        when(trucoRepository.findTrucosByBazaId(1)).thenReturn(trucos);
+
+        Integer puntos = bazaService.getPtosBonificacion(1, 1);
+
+        assertNotNull(puntos);
+        verify(bazaRepository, times(1)).findByIdRondaAndIdJugador(1, 1);
+        verify(trucoRepository, times(1)).findTrucosByBazaId(1);
+    }
+    @Test
+    void shouldCalculoPtosBonificacion() {
+        Carta cartaGanadora = mock(Carta.class);
+        Carta carta = mock(Carta.class);
+
+        when(cartaGanadora.getTipoCarta()).thenReturn(TipoCarta.skullking);
+        when(carta.getTipoCarta()).thenReturn(TipoCarta.pirata);
+
+        Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
+
+        assertNotNull(puntos);
+        assertEquals(30, puntos);
+    }
+
+    @Test
+    void shouldCalculoPtosBonificacion_SkullkingVsSirena() {
+        Carta cartaGanadora = new Carta();
+        cartaGanadora.setTipoCarta(TipoCarta.skullking);
+        Carta carta = new Carta();
+        carta.setTipoCarta(TipoCarta.sirena);
+    
+        Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
+    
+        assertNotNull(puntos);
+        assertEquals(0, puntos);
+    }
+    
+    @Test
+    void shouldCalculoPtosBonificacion_PirataVsSirena() {
+        Carta cartaGanadora = new Carta();
+        cartaGanadora.setTipoCarta(TipoCarta.pirata);
+        Carta carta = new Carta();
+        carta.setTipoCarta(TipoCarta.sirena);
+    
+        Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
+    
+        assertNotNull(puntos);
+        assertEquals(20, puntos);
+    }
+    
+    @Test
+    void shouldCalculoPtosBonificacion_SkullkingVsPirata() {
+        Carta cartaGanadora = new Carta();
+        cartaGanadora.setTipoCarta(TipoCarta.skullking);
+        Carta carta = new Carta();
+        carta.setTipoCarta(TipoCarta.pirata);
+    
+        Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
+    
+        assertNotNull(puntos);
+        assertEquals(30, puntos);
+    }
+    
+    @Test
+    void shouldCalculoPtosBonificacion_SirenaVsSkullking() {
+        Carta cartaGanadora = new Carta();
+        cartaGanadora.setTipoCarta(TipoCarta.sirena);
+        Carta carta = new Carta();
+        carta.setTipoCarta(TipoCarta.skullking);
+    
+        Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
+    
+        assertNotNull(puntos);
+        assertEquals(40, puntos);
+    }
+
+    @Test
+    void shouldCalculoPtosBonificacion_NoSkullking() {
+        Carta cartaGanadora = new Carta();
+        cartaGanadora.setTipoCarta(TipoCarta.sirena);
+        Carta carta = new Carta();
+        carta.setTipoCarta(TipoCarta.pirata);
+
+        Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
+
+        assertNotNull(puntos);
+        assertEquals(0, puntos);
+    }
+
+    @Test
+    void shouldCalculoPtosBonificacion_Catorce() {
+        Carta cartaGanadora = mock(Carta.class);
+        Carta carta = mock(Carta.class);
+
+        when(cartaGanadora.getTipoCarta()).thenReturn(TipoCarta.pirata);
+        when(carta.getTipoCarta()).thenReturn(TipoCarta.pirata);
+        when(carta.esCatorce()).thenReturn(true);
+        when(carta.esTriunfo()).thenReturn(true);
+
+        Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
+
+        assertNotNull(puntos);
+        assertEquals(30, puntos);
+    }
+
+
+    @Test
+    void shouldCalculoPtosBonificacion_CatorceSinTriunfo() {
+        Carta cartaGanadora = mock(Carta.class);
+        Carta carta = mock(Carta.class);
+
+        when(cartaGanadora.getTipoCarta()).thenReturn(TipoCarta.pirata);
+        when(carta.getTipoCarta()).thenReturn(TipoCarta.pirata);
+        when(carta.esCatorce()).thenReturn(true);
+        when(carta.esTriunfo()).thenReturn(false);
+
+        Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
+
+        assertNotNull(puntos);
+        assertEquals(10, puntos);
+    }
+
+
+    @Test
+    void shouldCalculoPtosBonificacion_SinBonificacion() {
+        Carta cartaGanadora = mock(Carta.class);
+        Carta carta = mock(Carta.class);
+
+        when(cartaGanadora.getTipoCarta()).thenReturn(TipoCarta.pirata);
+        when(carta.getTipoCarta()).thenReturn(TipoCarta.pirata);
+        when(carta.esCatorce()).thenReturn(false);
+        when(carta.esTriunfo()).thenReturn(false);
+
+        Integer puntos = bazaService.calculoPtosBonificacion(cartaGanadora, carta);
+
+        assertNotNull(puntos);
+        assertEquals(0, puntos);
+    }
+}

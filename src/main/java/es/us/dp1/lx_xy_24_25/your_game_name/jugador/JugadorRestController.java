@@ -95,10 +95,20 @@ public class JugadorRestController {
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<MessageResponse> delete(@PathVariable("id") int id) {
 		RestPreconditions.checkNotNull(jugadorService.findById(id), "Jugador", "ID", id);
-		jugadorService.deleteJugador(id);
-		return new ResponseEntity<>(new MessageResponse("Jugador deleted!"), HttpStatus.OK);
+		jugadorService.deleteJugador(id, false);
+		return new ResponseEntity<>(new MessageResponse("Jugador eliminado!"), HttpStatus.OK);
 	}
     
+    // borrar un jugador por id con websocket
+    @DeleteMapping(value = "{id}/websocket")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<MessageResponse> deleteWebsocket(@PathVariable("id") int id) {
+		RestPreconditions.checkNotNull(jugadorService.findById(id), "Jugador", "ID", id);
+		jugadorService.deleteJugador(id, true);
+		return new ResponseEntity<>(new MessageResponse("Jugador eliminado!"), HttpStatus.OK);
+	}
+    
+
     @GetMapping(value="/{usuarioId}/partida")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Partida> findPartidaByUsuarioId(@PathVariable("usuarioId") int usuarioId){

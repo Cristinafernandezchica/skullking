@@ -24,7 +24,8 @@ import { fetchListaDeSolicitudes, fetchUserDetails,fetchListaDeAmigosConectados,
     usuarioConectadoODesconectado, fetchListaDeInvitaciones,
     unirseAPartida,aceptarInvitacion,
     fetchLastPlayer,
-    invitarAPartida} from "./components/appNavBarModular/AppNavBarModular";
+    invitarAPartida,
+    fetchListaDeAmigosQuePuedenVer} from "./components/appNavBarModular/AppNavBarModular";
 
 
 function AppNavbar() {
@@ -42,6 +43,8 @@ function AppNavbar() {
     const [errors, setErrors] = useState([]);
     const [lastPlayer, setLastPlayer] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
+        const [listaDeAmigosQuePuedenVer, setListaDeAmigosQuePuedenVer] = useState([]);
+
 
     const toggleDropdown = async () => {
         setDropdownOpen(!dropdownOpen);
@@ -51,6 +54,11 @@ function AppNavbar() {
         fetchLastPlayer(usuarioActual.id, setLastPlayer,jwt);
     }
     const toggleNavbar = () => setCollapsed(!collapsed);
+
+    useEffect(()=>{
+        if(lastPlayer){
+    fetchListaDeAmigosQuePuedenVer(lastPlayer,setListaDeAmigosQuePuedenVer,jwt);}
+    },[lastPlayer])
 
     const showError = (error) => { 
         setErrors([error]); 
@@ -209,7 +217,7 @@ function AppNavbar() {
                     <div>
                         <Button
                             className="btn btn-success btn-sm mx-1"
-                            onClick={async () => await aceptarORechazarSolicitud(usuarioActual.id, usuario.id, true, jwt)}
+                            onClick={() => aceptarORechazarSolicitud(usuarioActual.id, usuario.id, true, jwt)}
                         >
                             ✓
                         </Button>
@@ -258,7 +266,7 @@ function AppNavbar() {
                             usuarioActual,
                             amigo,
                             lastPlayer.partida,
-                            true,
+                            false,
                             jwt,
                             showSuccess("invitacion enviada"));
                             }}
@@ -267,7 +275,9 @@ function AppNavbar() {
                             🎮
                         </Button>
                     )}
-                    {lastPlayer && lastPlayer.espectador===false && lastPlayer.partida.estado === "JUGANDO" && (
+                    {lastPlayer && lastPlayer.espectador===false && listaDeAmigosQuePuedenVer.some(item => item.id === amigo.id) &&
+                    
+                    lastPlayer.partida.estado === "JUGANDO" && (
                         <Button 
                             className="btn btn-secondary btn-sm ms-2" 
                             onClick={() => {
@@ -322,6 +332,7 @@ function AppNavbar() {
                     </>
                 ) : (
                     <>
+                    <span>Únete a la partida de {invitacion.remitente.username}</span>
                         <div className="d-flex align-items-center">
                             <Button 
                                 className="btn btn-primary btn-sm me-2" 
@@ -329,7 +340,7 @@ function AppNavbar() {
                             >
                                 🎮
                             </Button>
-                            <span>Únete a la partida de {invitacion.remitente.username}</span>
+                            
                             <Button 
                                 className="btn btn-danger btn-sm ms-2" 
                                 onClick={() => aceptarInvitacion(jwt,invitacion.id)} // Lógica para rechazar

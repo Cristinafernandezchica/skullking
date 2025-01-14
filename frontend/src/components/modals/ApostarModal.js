@@ -5,6 +5,8 @@ import '../formGenerator/css/Temporizador.css';
 export default function ApuestaModal({ isVisible, onCancel, onConfirm}) {
     const [apuesta, setApuesta] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
+    const [errorTimer, setErrorTimer] = useState(null);
+
 
     useEffect(() => {
         let autoApuestaTimer;
@@ -29,8 +31,18 @@ export default function ApuestaModal({ isVisible, onCancel, onConfirm}) {
             setErrorMessage('');
         } catch (error) {
             setErrorMessage(error.message);
+            startErrorTimer();
         }
 
+    };
+
+    const startErrorTimer = () => {
+        // Iniciar un temporizador para cerrar el modal
+        const timer = setTimeout(() => {
+            setErrorMessage('');
+            onCancel(); // Cierra el modal después de 3 segundos
+        }, 3000);
+        setErrorTimer(timer);
     };
 
     return (

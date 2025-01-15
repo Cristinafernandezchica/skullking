@@ -721,6 +721,7 @@ public class PartidaServiceTest {
         verify(rondaService).nextRonda(1, 5);
         verify(manoService).iniciarManos(1, nuevaRonda, List.of(jugador));
         verify(bazaService).iniciarBaza(nuevaRonda, List.of(jugador));
+        verify(messagingTemplate).convertAndSend(eq("/topic/apuesta/partida/1"), anyList());
     }
     
 

@@ -56,6 +56,7 @@ public class AmistadServiceTest {
     private User remitente;
     private User destinatario1;
     private User destinatario2;
+    private User destinatario3;
     private Amistad amistad1;
     private Amistad amistad2;
     private Amistad amistad3;
@@ -63,7 +64,6 @@ public class AmistadServiceTest {
     private Jugador jugador2;
     private Partida partida;
     private List<Jugador> jugadoresEnPartida;
-    private List<User> amigosDeRemitente;
     
     @BeforeEach
     void setup() {
@@ -81,6 +81,11 @@ public class AmistadServiceTest {
         destinatario2.setId(3);
         destinatario2.setUsername("Destinatario2");
         destinatario2.setConectado(false);
+
+        destinatario3 = new User();
+        destinatario3.setId(4);
+        destinatario3.setUsername("Destinatario3");
+        destinatario3.setConectado(true);
 
         amistad1 = new Amistad();
         amistad1.setId(1);
@@ -116,8 +121,6 @@ public class AmistadServiceTest {
         partida.setEstado(PartidaEstado.ESPERANDO);
 
         jugadoresEnPartida = List.of(jugador1, jugador2);
-
-        amigosDeRemitente = List.of(destinatario1, destinatario2);
     }
 
     @Test
@@ -363,7 +366,7 @@ public class AmistadServiceTest {
         SolicitudEnviadaException exception = assertThrows(SolicitudEnviadaException.class, () ->
                 amistadService.enviarSolicitudDeAmistad(1, "2"));
 
-        assertEquals("no puedes enviar una solicitud a alguien que ya es tu amigo", exception.getMessage());
+        assertEquals("No puedes enviar una solicitud a alguien que ya es tu amigo.", exception.getMessage());
     }
 
     @Test
@@ -375,7 +378,7 @@ public class AmistadServiceTest {
         SolicitudEnviadaException exception = assertThrows(SolicitudEnviadaException.class, () ->
                 amistadService.enviarSolicitudDeAmistad(1, "2"));
 
-        assertEquals("ya tienes una solicitud pendiente", exception.getMessage());
+        assertEquals("Ya tiene una solicitud pendiente.", exception.getMessage());
     }
 
     @Test
@@ -386,7 +389,7 @@ public class AmistadServiceTest {
         SolicitudEnviadaException exception = assertThrows(SolicitudEnviadaException.class, () ->
                 amistadService.enviarSolicitudDeAmistad(1, "1"));
 
-        assertEquals("no puedes ser tu propio amigo", exception.getMessage());
+        assertEquals("No puedes mandarte una solicitud a ti mismo.", exception.getMessage());
     }
 
     @Test

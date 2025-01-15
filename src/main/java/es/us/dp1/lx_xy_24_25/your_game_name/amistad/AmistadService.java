@@ -123,16 +123,16 @@ public class AmistadService {
         solicitud.getRemitente().getId());
         
         if(laAmistadYaExiste!=null && laAmistadYaExiste.getEstadoAmistad().equals(EstadoAmistad.ACEPTADA)){
-            throw new SolicitudEnviadaException("no puedes enviar una solicitud a alguien que ya es tu amigo");
+            throw new SolicitudEnviadaException("No puedes enviar una solicitud a alguien que ya es tu amigo.");
         }
         else if(laAmistadYaExiste!=null && laAmistadYaExiste.getEstadoAmistad().equals(EstadoAmistad.RECHAZADA)){
-            throw new SolicitudEnviadaException("no puedes enviar una solicitud a alguien que ya la rechazo, NO SEAS PESAO");
+            throw new SolicitudEnviadaException("No puedes enviar una solicitud a alguien que ya la rechazó.");
         }
         else if(laAmistadYaExiste!=null && laAmistadYaExiste.getEstadoAmistad().equals(EstadoAmistad.PENDIENTE)){
-            throw new SolicitudEnviadaException("ya tienes una solicitud pendiente");
+            throw new SolicitudEnviadaException("Ya tiene una solicitud pendiente.");
         }
         if(solicitud.getDestinatario().getId() == solicitud.getRemitente().getId()){
-            throw new SolicitudEnviadaException("no puedes ser tu propio amigo");
+            throw new SolicitudEnviadaException("No puedes mandarte una solicitud a ti mismo.");
         }
 
         Amistad result=amistadRepository.save(solicitud);

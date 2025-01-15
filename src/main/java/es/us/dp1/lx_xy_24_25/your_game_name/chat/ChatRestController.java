@@ -3,6 +3,9 @@ package es.us.dp1.lx_xy_24_25.your_game_name.chat;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -32,7 +35,10 @@ public class ChatRestController {
         this.chatService = chatService;
     }
 
-    // Get todos los chats
+    @Operation(summary = "Obtener todos los chats", description = "Devuelve una lista de todos los chats.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de chats obtenida")
+    })
     @GetMapping
     public ResponseEntity<List<Chat>> findAll() {
         List<Chat> res;
@@ -40,12 +46,22 @@ public class ChatRestController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    // Get todos los chats de una partida por su id
+    @Operation(summary = "Obtener todos los chats de una partida", description = "Devuelve una lista de todos los chats de una partida específica por su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de chats obtenida"),
+        @ApiResponse(responseCode = "404", description = "Chats no encontrados")
+    })
     @GetMapping("/{partidaId}")
     public List<Chat> findAllChatByPartidaId(@PathVariable("partidaId") Integer partidaId) {
         return chatService.findAllChatByPartidaId(partidaId);
     }
 
+    @Operation(summary = "Enviar un mensaje", description = "Envía un mensaje en una partida específica por su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Mensaje enviado con éxito"),
+        @ApiResponse(responseCode = "404", description = "Partida no encontrada"),
+        @ApiResponse(responseCode = "400", description = "Datos del mensaje no válidos")
+    })
     @PostMapping
     public Chat enviarMensaje(@RequestBody @Valid Chat chat) {
         return chatService.enviarMensajes(chat);

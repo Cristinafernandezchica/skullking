@@ -20,10 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
-import es.us.dp1.lx_xy_24_25.your_game_name.truco.Truco;
 import es.us.dp1.lx_xy_24_25.your_game_name.truco.TrucoService;
-import es.us.dp1.lx_xy_24_25.your_game_name.user.AuthoritiesService;
 import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
@@ -41,7 +42,12 @@ public class ManoRestController {
         this.trucoService = trucoService;
     }
 
-    // get todos los Manos
+
+    @Operation(summary = "Obtener todas las manos", description = "Devuelve una lista de todas las manos.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de manos obtenida con éxito"),
+        @ApiResponse(responseCode = "404", description = "No se encontraron manos")
+    })
     @GetMapping
     public ResponseEntity<List<Mano>> findAll() {
         List<Mano> res;
@@ -49,7 +55,12 @@ public class ManoRestController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    // update Mano
+    @Operation(summary = "Actualizar una mano", description = "Actualiza una mano existente dado su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Mano actualizada con éxito"),
+        @ApiResponse(responseCode = "404", description = "No se encontró la mano"),
+        @ApiResponse(responseCode = "400", description = "Los datos de la mano son inválidos")
+    })
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Mano> update(@PathVariable Integer id, @RequestBody @Valid Mano Mano) {
@@ -57,7 +68,11 @@ public class ManoRestController {
         return new ResponseEntity<>(this.manoService.updateMano(Mano, id), HttpStatus.OK);
     }
 
-    // crear un nuevo Mano
+    @Operation(summary = "Crear una nueva mano", description = "Crear una nueva mano.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Mano creada con éxito"),
+        @ApiResponse(responseCode = "400", description = "Los datos de la mano son inválidos")
+    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Mano> create(@RequestBody @Valid Mano Mano) {
@@ -65,7 +80,11 @@ public class ManoRestController {
         return new ResponseEntity<>(savedMano, HttpStatus.CREATED);
     }
 
-    // borrar un Mano por id
+    @Operation(summary = "Eliminar una mano", description = "Elimina una mano existente por su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Mano eliminada con éxito"),
+        @ApiResponse(responseCode = "404", description = "No se encontró la mano")
+    })
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MessageResponse> delete(@PathVariable("id") int id) {
@@ -74,12 +93,22 @@ public class ManoRestController {
         return new ResponseEntity<>(new MessageResponse("Mano eliminada!"), HttpStatus.OK);
     }
 
+    @Operation(summary = "Obtener la última mano de un jugador", description = "Devuelve la ñultima mano de un jugador por el ID del jugador.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Última mano obtenida con éxito"),
+        @ApiResponse(responseCode = "404", description = "No se encontró la última mano")
+    })
     @GetMapping("/{jugadorId}")
     public ResponseEntity<Mano> findLastManoByJugadorId(@PathVariable("jugadorId") Integer jugadorId) {
         Mano res = manoService.findLastManoByJugadorId(jugadorId);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @Operation(summary = "Obtener las cartas deshabilitadas de una mano", description = "Devuelve las cartas deshabilitadas de una mano por su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Cartas deshabilitadas obtenidas con éxito"),
+        @ApiResponse(responseCode = "404", description = "Mano no encontrada")
+    })
     @GetMapping(value = "/{manoId}/manoDisabled")
     public ResponseEntity<List<Carta>> cartasDisabled(@PathVariable("manoId") int id,
             @RequestParam TipoCarta tipoCarta) {
@@ -87,6 +116,11 @@ public class ManoRestController {
         return new ResponseEntity<>(res != null ? res : new ArrayList<>(), HttpStatus.OK);
     }
 
+    @Operation(summary = "Obtener las manos de un jugador por ronda", description = "Devuelve las manos de un jugador por el ID de la ronda.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Manos de la ronda obtenidas con éxito"),
+        @ApiResponse(responseCode = "404", description = "Ronda no encontrada")
+    })
     @GetMapping(value = "/rondas/{rondaId}")
     public ResponseEntity<List<Mano>> findManoByRondaId(@PathVariable("rondaId") Integer rondaId) {
         List<Mano> res = manoService.findAllManosByRondaId(rondaId);

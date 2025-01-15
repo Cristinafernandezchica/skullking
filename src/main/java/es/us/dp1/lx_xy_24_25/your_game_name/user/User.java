@@ -1,18 +1,15 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.user;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.model.BaseEntity;
-import jakarta.persistence.Transient;
 
 import lombok.Getter;
 import lombok.Setter;

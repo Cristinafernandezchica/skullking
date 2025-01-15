@@ -1,18 +1,3 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package es.us.dp1.lx_xy_24_25.your_game_name.user;
 
 import jakarta.validation.Valid;
@@ -30,10 +15,19 @@ import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorRepository;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaService;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class UserService {
@@ -42,8 +36,6 @@ public class UserService {
 	private JugadorRepository jugadorRepository;	
 	private JugadorService jugadorService;
     private AmistadRepository amistadRepository;
-
-	//private final ConcurrentHashMap<Integer, UserStats> userStatsMap = new ConcurrentHashMap<>();
 
 	@Autowired
 	public UserService(UserRepository userRepository, JugadorRepository jugadorRepository, 
@@ -129,7 +121,7 @@ public class UserService {
 		userRepository.delete(user);
 	}
 
-    // Método para obtener usuarios ordenados por puntos totales
+    // Método para obtener usuarios ordenados por puntos totales (Ranking)
     @Transactional(readOnly = true)
     public List<User> getUsersSortedByPoints() {
         List<User> users = (List<User>) findAll();
@@ -141,7 +133,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    // Nuevo método: Obtener usuarios ordenados por porcentaje de victorias
+    // Nuevo método: Obtener usuarios ordenados por porcentaje de victorias (Ranking)
     @Transactional(readOnly = true)
     public List<User> getUsersSortedByWinPercentage() {
         List<User> users = (List<User>) findAll();
@@ -177,4 +169,157 @@ public class UserService {
 		User currentUser = findCurrentUser();
 		return jugadorRepository.findJugadoresByUsuarioId(currentUser.getId());
 	}
+
+    // Métodos para obtener una lista con la duración de cada partida (Estadísticas)
+    @Transactional
+    public List<Long> getTiempoPartidas(Integer usuarioId) {
+        List<Long> tiempoPartidas;
+        // Si se pasa un ID de usuario
+        if(usuarioId != null) {
+            List<Jugador> jugadoresPorUsuario = jugadorService.findJugadoresByUsuarioId(usuarioId);
+            
+            // Filtramos solo las partidas terminadas
+            tiempoPartidas = jugadoresPorUsuario.stream()
+                .filter(j -> j.getPartida().getEstado().equals(PartidaEstado.TERMINADA))  // Solo partidas terminadas
+                .map(j -> {
+                    LocalDateTime inicio = j.getPartida().getInicio();
+                    LocalDateTime fin = j.getPartida().getFin() != null ? j.getPartida().getFin() : LocalDateTime.now();  // Si fin es null, usamos el tiempo actual
+
+                    // Convertimos las fechas a segundos desde el epoch (usando UTC)
+                    long inicioEnSegundos = inicio.toEpochSecond(java.time.ZoneOffset.UTC);
+                    long finEnSegundos = fin.toEpochSecond(java.time.ZoneOffset.UTC);
+
+                    // Calculamos la diferencia en segundos
+                    return finEnSegundos - inicioEnSegundos;
+                })
+                .collect(Collectors.toList());
+        } else {
+            // Si no se pasa un ID de usuario, se calculan las partidas de todos los jugadores
+            List<Jugador> jugadores = new ArrayList<Jugador>();
+            for (Jugador j: jugadorService.findAll()){
+                jugadores.add(j);
+            }
+            List<Partida> partidas = jugadores.stream()
+                .filter(j -> j.getPartida().getEstado().equals(PartidaEstado.TERMINADA))  // Solo partidas terminadas
+                .map(j -> j.getPartida())
+                .collect(Collectors.toMap(
+                    Partida::getNombre,  // Usamos el nombre para garantizar la unicidad
+                    partida -> partida,  // El valor es la partida misma
+                    (partida1, partida2) -> partida1  // En caso de duplicados, se elige una
+                ))
+                .values()  // Extraemos solo los valores (las partidas)
+                .stream()
+                .collect(Collectors.toList());  // Convertimos de nuevo a una lista 
+            
+            // Mapeo y cálculo del tiempo de las partidas terminadas
+            tiempoPartidas = partidas.stream()
+                .map(p -> {
+                    LocalDateTime inicio = p.getInicio();
+                    LocalDateTime fin = p.getFin() != null ? p.getFin() : LocalDateTime.now();  // Si fin es null, se usa el tiempo actual
+
+                    // Convertimos las fechas a segundos desde el epoch (usando UTC)
+                    long inicioEnSegundos = inicio.toEpochSecond(java.time.ZoneOffset.UTC);
+                    long finEnSegundos = fin.toEpochSecond(java.time.ZoneOffset.UTC);
+
+                    // Calculamos la diferencia en segundos
+                    return finEnSegundos - inicioEnSegundos;
+                })
+                .collect(Collectors.toList());
+        }
+
+        return tiempoPartidas;
+    }
+
+    // Métodos para obtener un Map con la duración media de una partida, duración máxima y mínima de una partida y tiempo total invertida en jugar partidas (Estadísticas)
+    @Transactional
+    public Double getPromedioTiempoPartidas(Integer usuarioId) {
+        // Obtener la lista de tiempos en segundos
+        List<Long> tiempoPartidas = getTiempoPartidas(usuarioId);
+
+        // Calcular tiempo promedio de las partidas
+        Double promedio = tiempoPartidas.stream()
+            .mapToLong(Long::longValue)
+            .average()                 
+            .orElse(0.0);              
+        return promedio;
+    }
+
+    @Transactional
+    public Integer getMaxTiempoPartidas(Integer usuarioId) {
+        List<Long> tiempoPartidas = getTiempoPartidas(usuarioId);
+
+        Long max = tiempoPartidas.stream()
+            .mapToLong(Long::longValue)
+            .max()
+            .orElse(0L);
+        return max.intValue();
+    }
+
+    @Transactional
+    public Integer getMinTiempoPartidas(Integer usuarioId) {
+        List<Long> tiempoPartidas = getTiempoPartidas(usuarioId);
+
+        Long min = tiempoPartidas.stream()
+            .mapToLong(Long::longValue)
+            .min()
+            .orElse(0L);
+        return min.intValue();
+    }
+
+    @Transactional
+    public Integer getTotalTiempoPartidas(Integer usuarioId) {
+        List<Long> tiempoPartidas = getTiempoPartidas(usuarioId);
+
+        Long total = tiempoPartidas.stream()
+            .mapToLong(Long::longValue)
+            .sum();
+        return total.intValue();
+    }
+
+    // Métodos para obtener una lista con el número de partidas jugadas por cada usuario (Estadísticas)
+    @Transactional
+    public List<Integer> getNumPartidas() {
+        // Convertir el Iterable<Integer> en una lista para poder trabajar con Streams
+        List<Integer> numPartidas = StreamSupport.stream(findAll().spliterator(), false)
+            .filter(u -> !(u.getAuthority().getAuthority().equals("ADMIN")))
+            .map(u -> u.getNumPartidasJugadas() != null ? u.getNumPartidasJugadas() : 0)  // Asignar 0 si es null
+            .collect(Collectors.toList());
+    
+        return numPartidas;
+    }    
+
+    // Métodos para obtener una Map con el número medio de partidas que juega un usuario, el número máximo y mínimo de partidas jugadas por un usuario (Estadísticas)
+    @Transactional
+    public Double getPromedioPartidas() {
+        List<Integer> numPartidas = getNumPartidas();
+
+        Double promedio = numPartidas.stream()
+            .mapToInt(Integer::intValue)
+            .average()
+            .orElse(0.0);
+        return promedio;
+    }
+
+    @Transactional
+    public Integer getMaxPartidas() {
+        List<Integer> numPartidas = getNumPartidas();
+
+        Integer max = numPartidas.stream()
+            .mapToInt(Integer::intValue)
+            .max()
+            .orElse(0);
+        return max;
+    }
+
+    @Transactional
+    public Integer getMinPartidas() {
+        List<Integer> numPartidas = getNumPartidas();
+
+        Integer min = numPartidas.stream()
+            .mapToInt(Integer::intValue)
+            .min()
+            .orElse(0);
+        return min;
+    }
+
 }

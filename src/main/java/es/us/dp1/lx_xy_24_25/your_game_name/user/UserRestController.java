@@ -1,6 +1,7 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.user;
 
 import java.util.List;
+import java.util.Map;
 
 import jakarta.validation.Valid;
 
@@ -8,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.AccessDeniedException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
 import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -118,4 +119,73 @@ class UserRestController {
         List<Jugador> jugadores = userService.getJugadoresByCurrentUser();
         return new ResponseEntity<>(jugadores, HttpStatus.OK);
     }
+
+    // Métodos para obtener estadísticas de tiempo de partidas
+    @GetMapping("/promedio-tiempo-partidas")
+    public ResponseEntity<Double> getPromedioTiempoPartidas() {
+        Double promedio = userService.getPromedioTiempoPartidas(null);
+        return new ResponseEntity<>(promedio, HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/promedio-tiempo-partidas")
+    public ResponseEntity<Double> getPromedioTiempoPartidasByUserId(@PathVariable Integer userId) {
+        Double promedio = userService.getPromedioTiempoPartidas(userId);
+        return new ResponseEntity<>(promedio, HttpStatus.OK);
+    }
+
+    @GetMapping("/max-tiempo-partidas")
+    public ResponseEntity<Integer> getMaxTiempoPartidas() {
+        Integer max = userService.getMaxTiempoPartidas(null);
+        return new ResponseEntity<>(max, HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/max-tiempo-partidas")
+    public ResponseEntity<Integer> getMaxTiempoPartidasByUserId(@PathVariable Integer userId) {
+        Integer max = userService.getMaxTiempoPartidas(userId);
+        return new ResponseEntity<>(max, HttpStatus.OK);
+    }
+
+    @GetMapping("/min-tiempo-partidas")
+    public ResponseEntity<Integer> getMinTiempoPartidas() {
+        Integer min = userService.getMinTiempoPartidas(null);
+        return new ResponseEntity<>(min, HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/min-tiempo-partidas")
+    public ResponseEntity<Integer> getMinTiempoPartidasByUserId(@PathVariable Integer userId) {
+        Integer min = userService.getMinTiempoPartidas(userId);
+        return new ResponseEntity<>(min, HttpStatus.OK);
+    }
+
+    @GetMapping("/total-tiempo-partidas")
+    public ResponseEntity<Integer> getTotalTiempoPartidas() {
+        Integer total = userService.getTotalTiempoPartidas(null); // Se pasa null explícitamente
+        return new ResponseEntity<>(total, HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/total-tiempo-partidas")
+    public ResponseEntity<Integer> getTotalTiempoPartidasByUserId(@PathVariable Integer userId) {
+        Integer total = userService.getTotalTiempoPartidas(userId);
+        return new ResponseEntity<>(total, HttpStatus.OK);
+    }
+
+    // Métodos para obtener estadísticas de número de partidas
+    @GetMapping("/promedio-partidas")
+    public ResponseEntity<Double> getPromedioPartidas() {
+        Double promedio = userService.getPromedioPartidas();
+        return new ResponseEntity<>(promedio, HttpStatus.OK);
+    }
+
+    @GetMapping("/max-partidas")
+    public ResponseEntity<Integer> getMaxPartidas() {
+        Integer max = userService.getMaxPartidas();
+        return new ResponseEntity<>(max, HttpStatus.OK);
+    }
+
+    @GetMapping("/min-partidas")
+    public ResponseEntity<Integer> getMinPartidas() {
+        Integer min = userService.getMinPartidas();
+        return new ResponseEntity<>(min, HttpStatus.OK);
+    }
+
 }

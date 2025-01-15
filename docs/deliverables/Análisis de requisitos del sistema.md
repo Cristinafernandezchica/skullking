@@ -331,6 +331,41 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Modo espectador](../mockups/modo_espectador.png)|
 |Puedes espectar la partida de tus compañeros una vez aceptes la invitación desde el apartado 'Notificaciones', una vez aceptada se te redireccionará a la partida en cuestión.|
 
+### HSJ9-(ISSUE##270): Visualizar ranking de usuarios por puntos([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/270]())
+| "Como usuario quiero poder ver el ranking de usuarios por puntos para saber mi posición en la clasificación"| 
+|-----|
+|![Ranking de usuarios por puntos](../mockups/Ranking_por_puntos.png)|
+|Pulsando sobre el botón 'Ordenar por puntos' puedes ver la clasificaicón de los usuarios ordenados en función del total de puntos que han adquirido en las distintas partidas que han jugado y al usuario con más puntos.|
+
+### HSJ10-(ISSUE##270): Visualizar ranking de usuarios por victorias ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/270]())
+| "Como usuario quiero poder ver el ranking de usuarios por victorias para saber mi posición en la clasificación"| 
+|-----|
+|![Ranking de usuarios por victorias](../mockups/Ranking_por_victorias.png)|
+|Pulsando sobre el botón 'Ordenar por porcentaje de victorias' puedes ver la clasificaicón de los usuarios ordenados en función del porcentaje de victorias que tienen en el juego, es decir, ordenados en función de cual tiene mayor número de partidas ganadas en función del número de partidas totales que ha jugado y al usuario mayor porcentaje.|
+
+### HSJ11-(ISSUE##269): Visualizar estadísticas globales de la duración de las partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/269]())
+| "Como usuario quiero poder visualizar las estadísticas sobre la duración de todas las partidas jugadas para saber la media de lo que suele durar una partida, lo máximo y lo mínimo que se ha llegado a tardar en jugar una partida y el tiempo total que los usuarios han invertido en el juego"| 
+|-----|
+|![Estadísticas globales de duración de partidas](../mockups/Estadisticas_globales_duracion.png)|
+|Pulsando sobre el botón 'Estadísticas globales' se puede ver la duración media de una partida de skullking, el tiempo máximo y mínimo que ha llegado a durar una partida del juego y el tiempo que todos los usuarios han invertido en el juego.|
+
+### HSJ12-(ISSUE##269): Visualizar estadísticas por usuario de la duración de las partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/269]())
+| "Como usuario quiero poder visualizar las estadísticas de cada usuario sobre la duración de todas las partidas a las que ha jugado para saber la media de lo que suele durarle a dicho usuario una partida, el tiempo máximo y mínimo que ha tardado ese usuario en jugar una partida y el tiempo total que el suuario ha jugado al juego"| 
+|-----|
+|![Estadísticas por usuario de la duración de partidas](../mockups/Estadisticas_usuarios_duracion.png)|
+|Pulsando sobre el botón 'Estadísticas por usuario' se puede ver para cada usaurio la media de tiempo que suele tardar en jugar una partida, el tiempo máximo y mínimo que ha llegado a estar jugando una partida y el tiempo total que ha estado jugando al juego.|
+
+### HSJ13-(ISSUE##268): Visualizar estadísticas globales del número de partidas jugadas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/268]())
+| "Como usuario quiero poder ver las estadísticas globales sobre el número de partidas jugadas para saber el número medio de partidas que suele jugar un único usuario y el número máximo y mínimo de partidas a las que ha jugado un usuario"| 
+|-----|
+|![Estadísticas globales del número de partidas jugadas](../mockups/Estadisticas_globales_num_partidas.png)|
+|Pulsando sobre el botón 'Estadísticas globales' se puede ver la media de partidas que suele jugar un único usuario y el número máximo y mínimo de partidas a las que ha jugado un usuario.|
+
+### HSJ14-(ISSUE##268): Visualizar estadísticas por usuario del número de partidas jugadas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/268]())
+| "Como usuario quiero poder ver las estadísticas por usuario sobre el número de partidas a las que ha jugado para saber el número total de partidas a las que ha jugado cada usuario"| 
+|-----|
+|![Estadísticas por usuario del número total de partidas jugadas](../mockups/Estadisticas_por_usuario_num_partidas.png)|
+|Pulsando sobre el botón 'Estadísticas por usuario' se puede ver el número total de partidas jugadas por cada usuario.|
 
 ## Diagrama conceptual del sistema
 En esta sección proporcionamos un diagrama UML de clases que describe el modelo de datos a implementar en la aplicación. Este diagrama esta anotado con las restricciones simples de los datos a gestionar por la aplicación.

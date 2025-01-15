@@ -151,10 +151,10 @@ export default function DuracionStatisticsDashboard() {
                   <Table striped>
                     <thead>
                       <tr>
-                        <th>Promedio</th>
-                        <th>Máximo</th>
-                        <th>Mínimo</th>
-                        <th>Total</th>
+                        <th>Promedio (segundos)</th>
+                        <th>Máximo (segundos)</th>
+                        <th>Mínimo (segundos)</th>
+                        <th>Total (segundos)</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -183,10 +183,10 @@ export default function DuracionStatisticsDashboard() {
                     <thead>
                       <tr>
                         <th>Nombre de Usuario</th>
-                        <th>Promedio</th>
-                        <th>Máximo</th>
-                        <th>Mínimo</th>
-                        <th>Total</th>
+                        <th>Promedio (segundos)</th>
+                        <th>Máximo (segundos)</th>
+                        <th>Mínimo (segundos)</th>
+                        <th>Total (segundos)</th>
                       </tr>
                     </thead>
                     <tbody>

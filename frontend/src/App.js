@@ -22,6 +22,8 @@ import UserPartidas from "./admin/users/UserPartidas";
 import UserStatisticsDashboard from "./admin/users/UserDashboard";
 import EditarPerfil from "./perfil/editarPerfil";
 import Perfil from "./perfil/index";
+import PartidasStatisticsDashboard from "./admin/users/PartidaDashboard";
+import DuracionStatisticsDashboard from "./admin/users/DuracionDashboard";
 
 
 function ErrorFallback({ error, resetErrorBoundary }) {
@@ -59,7 +61,9 @@ function App() {
           <Route path="/users/:id" exact={true} element={<PrivateRoute><UserEditAdmin /></PrivateRoute>} />
           <Route path="/users/new" exact={true} element={<PrivateRoute><UserCreateAdmin /></PrivateRoute>} />
           <Route path="/partidas" exact={true} element={<PrivateRoute><PartidaListAdmin /></PrivateRoute>} />
-          <Route path="/users/statistics" exact={true} element={<PrivateRoute><UserStatisticsDashboard /></PrivateRoute>} />         
+          <Route path="/users/ranking" exact={true} element={<PrivateRoute><UserStatisticsDashboard /></PrivateRoute>} />
+          <Route path="/users/partidasStatistics" exact={true} element={<PrivateRoute><PartidasStatisticsDashboard /></PrivateRoute>} />
+          <Route path="/users/duracionStatistics" exact={true} element={<PrivateRoute><DuracionStatisticsDashboard /></PrivateRoute>} />                  
         </>)
     }
     if (role === "PLAYER") {
@@ -83,7 +87,9 @@ function App() {
   } else {
     userRoutes = (
       <>
-        <Route path="/users/statistics" element={<UserStatisticsDashboard />} />
+        <Route path="/users/ranking" element={<UserStatisticsDashboard />} />
+        <Route path="/users/partidasStatistics" element={<PartidasStatisticsDashboard />} />
+        <Route path="/users/duracionStatistics" element={<DuracionStatisticsDashboard />} />
         <Route path="/users/partidas" element={<UserPartidas />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/login" element={<Login />} />

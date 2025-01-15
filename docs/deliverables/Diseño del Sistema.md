@@ -97,12 +97,37 @@ En esta sección procesaremos el mockup del tablero de juego (o los mockups si e
 
 ![Descomposición en componentes de la interfaz de creación y unión a partidas](../mockups/descomposicion_mockup_creacion_union.png)
 
-  - App – Componente principal de la aplicación
-    - $\color{#ff9800}{\textsf{NavBar – Barra de navegación superior}}$
-      - $\color{#f44336}{\textsf{[ NavButton ]. Muestra un botón de navegación con un icono asociado.}}$
-    - $\color{#3f51b5}{\textsf{UserIdentificationArea – Área de identificación del usuario actual}}$
-    - $\color{#9c27b0}{\textsf{PlayUnionBar – En este componente se muestran los botones para crear o unirse a una partida}}$
-      - $\color{#e91e63}{\textsf{[ NavButton ] – Muestra un botón de navegación a los distintos modales con un texto asociado. }}$
+  - App (blanco) – Componente principal de la aplicación
+    - NavBar (naranja) – Barra de navegación superior
+      - NavButton (rojo) . Muestra un botón de navegación con un icono asociado.
+    - UserIdentificationArea (azul) – Área de identificación del usuario actual.
+    - PlayUnionBar (rosa) – En este componente se muestran los botones para crear o unirse a una partida.
+      - NavButton (rojo) – Muestra un botón de navegación a los distintos modales con un texto asociado. 
+
+![Descomposición en componentes de la interfaz de inicio](../descomposiciones/partida.png)
+- App – Componente principal de la aplicación
+    - NavBar (rojo) – Barra de navegación superior, se corresponde a la parte superior de la misma forma.
+     - NavButton (naranja) - Muestra un botón de navegación con un icono asociado.
+   - PlayersArea (lila) - Recoge los jugadores de la partida.
+     - PlayerData (rosa) - Indica la información relevante en la partida del jugador.
+   - OtrasManos (azul) - Recoge las manos que no sean del usuario de la pantalla.
+   - TrucosPlayed (amarillo) - Cartas jugadas hasta el momento.
+   - ManoPlayer (verde) - Cartas de la mano del jugador.
+   - ChatModal (marrón) - Modal del chat del juego.
+
+![Descomposición en componentes de la interfaz de inicio](../descomposiciones/perfil.png)
+- App (blanco) – Componente principal de la aplicación
+    - NavBar (rojo) – Barra de navegación superior, se corresponde a la parte superior de la misma forma.
+     - NavButton (naranja fuerte) - Muestra un botón de navegación con un icono asociado.
+   - PerfilArea (beige) - Componente en el que hallan los datos del usuario.
+     - PerfilData (azul) - Datos relevantes del usuario
+     - PerfilImage (violeta) - Imagen del usuario.
+     - ModifyData (naranja suave) - Botones que implican la modificación de datos del usuario o relacionado a este.
+     - NavButton (rojo) - Botón para navegar al inicio del sistema.
+     - FriendForm (lila) - Campo de texto para añadir un amigo del usuario.
+     - FriendsArea (verde) - Espacio en el que se hallan los amigos del usuario.
+
+
 
 ## Documentación de las APIs
 Se considerará parte del documento de diseño del sistema la documentación generada para las APIs, que debe incluir como mínimo, una descripción general de las distintas APIs/tags  proporcionadas. Una descripción de los distintos endpoints y operaciones soportadas. Y la especificación de las políticas de seguridad especificadas para cada endpoint y operación. Por ejemplo: “la operación POST sobre el endpoint /api/v1/game, debe realizarse por parte de un usuario autenticado como Player”.

@@ -93,7 +93,7 @@ public class JugadorService {
         return lanzarExcepcion;
     }
 
-    // Comprueba si el jugador tiene alguna partida en juego o en espera (CREAR PRUEBA)
+    // Comprueba si el jugador tiene alguna partida en juego o en espera 
     @Transactional
     public Boolean partidaEnJuegoEspera(Jugador jugadorCrear) throws DataAccessException{
         Boolean lanzarExcepcion = false;

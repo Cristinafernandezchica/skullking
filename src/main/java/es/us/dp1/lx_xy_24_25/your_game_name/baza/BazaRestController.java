@@ -22,8 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -44,28 +45,43 @@ public class BazaRestController {
         this.trucoService=trucoService;
     }
 
-    // Get todas las bazas
+    @Operation(summary = "Obtener todas las bazas", description = "Devuelve una lista de todas las bazas.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de bazas obtenida")
+    })
     @GetMapping
     public ResponseEntity<List<Baza>> getAllBazas(){
         List<Baza> listaAux= bazaService.getAllBazas();
         return new ResponseEntity<>(listaAux, HttpStatus.OK);
     }
 
-    // Get de una baza en función de su id
+    @Operation(summary = "Obtener una baza por ID", description = "Devuelve una baza específica por su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Baza obtenida"),
+        @ApiResponse(responseCode = "404", description = "Baza no encontrada")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<Baza> getBazaById(@PathVariable("id")Integer id){
         Baza bazaById = bazaService.findById(id);
         return new ResponseEntity<>(bazaById, HttpStatus.OK);
     }
 
-    // Create una nueva baza
+    @Operation(summary = "Crear una nueva baza", description = "Crea una nueva baza.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Baza creada con éxito"),
+        @ApiResponse(responseCode = "400", description = "Datos de la baza no válidos")
+    })
     @PostMapping()
     public ResponseEntity<Baza> createBaza(@Valid @RequestBody Baza b){
         Baza bAux =bazaService.saveBaza(b);
         return new ResponseEntity<>(bAux, HttpStatus.CREATED);
     }
 
-    // Update una baza existente
+    @Operation(summary = "Actualizar una baza existente", description = "Actualizar una baza existente dado su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Baza actualizada con éxito"),
+        @ApiResponse(responseCode = "404", description = "Baza no encontrada")
+    })
     @PutMapping(value="/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Baza> updateBaza(@Valid @RequestBody Baza b,@PathVariable("id")Integer id){
@@ -74,7 +90,11 @@ public class BazaRestController {
 
     }
 
-    // Delete una baza existente
+    @Operation(summary = "Eliminar una baza existente", description = "Elimina una baza dado su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Baza eliminada con éxito"),
+        @ApiResponse(responseCode = "404", description = "Baza no encontrada")
+    })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<MessageResponse> deleteBaza(@PathVariable("id") int id) {
@@ -83,14 +103,22 @@ public class BazaRestController {
 		return new ResponseEntity<>(new MessageResponse("Baza eliminada"), HttpStatus.NO_CONTENT);
 	}
 
-    //Get ganador de una baza concreta
+    @Operation(summary = "Obtener el ganador de una baza", description = "Devuelve el ganador de una baza específica por su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Ganador obtenido"),
+        @ApiResponse(responseCode = "404", description = "Baza no encontrada")
+    })
     @GetMapping("/{id}/ganador")
     public Jugador findBazaByIdGanador(@PathVariable(value = "id") int id) {
         Baza bazaById = bazaService.findById(id);
         return bazaById.getGanador();
     }
 
-    // PETICIÓN PARA OBTENER LOS TRUCOS DE UNA BAZA CONCRETA
+    @Operation(summary = "Obtener los trucos de una baza concreta", description = "Devuelve la lista de trucos de una baza específica por su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de trucos obtenida"),
+        @ApiResponse(responseCode = "404", description = "Baza no encontrada")
+    })
     @GetMapping(value = "{bazaId}/trucos")
 	public ResponseEntity<List<Truco>> findTrucosByBazaId(@PathVariable("bazaId") int id) {
 		return new ResponseEntity<>(trucoService.findTrucosByBazaId(id), HttpStatus.OK);
@@ -98,7 +126,11 @@ public class BazaRestController {
 
 
     
-    // PETICION PARA OBTENER LA ULTIMA BAZA DE UNA RONDA EN CONCRETA
+    @Operation(summary = "Obtener la última baza de una ronda concreta", description = "Devuelve la última baza de una ronda específica por su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Última baza obtenida"),
+        @ApiResponse(responseCode = "404", description = "Ronda no encontrada")
+    })
     @GetMapping(value = "{rondaId}/bazaActual")
     public ResponseEntity<Baza> findBazaActualByRondaId(@PathVariable("rondaId") Integer rondaId) {
         return new ResponseEntity<>(bazaService.findBazaActualByRondaId(rondaId), HttpStatus.OK);

@@ -150,7 +150,6 @@ public class BazaService {
         return turnosNuevaBaza;
     }
 
-    // Está repetida en partida
     @Transactional
     public Integer primerTurno(List<Integer> turnos) {
         return turnos.get(0);

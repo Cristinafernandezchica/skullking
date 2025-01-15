@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
 import es.us.dp1.lx_xy_24_25.your_game_name.user.AuthoritiesService;
 import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
@@ -37,7 +40,11 @@ public class CartaRestController {
         this.cartaService = cartaService;
     }
     
-    //get todas las Cartas
+    @Operation(summary = "Obtener todas las cartas", description = "Devuelve una lista de todas las cartas.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Cartas obtenidas correctamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontraron cartas")
+    })
     @GetMapping
     public ResponseEntity<List<Carta>> findAll() {
         List<Carta> res;
@@ -45,7 +52,11 @@ public class CartaRestController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
     
-    //update Carta
+    @Operation(summary = "Actualizar una carta", description = "Actualiza una cartda dado su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Carta actualizada correctamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontró la carta")
+    })
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Carta> update(@PathVariable Integer id, @RequestBody @Valid Carta carta) {
@@ -53,14 +64,23 @@ public class CartaRestController {
 		return new ResponseEntity<>(this.cartaService.updateCarta(carta, id), HttpStatus.OK);
     }
 
-    // crear un nuevo Carta
+    @Operation(summary = "Crear una nueva carta", description = "Crea una nueva carta.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Carta creada con éxito"),
+        @ApiResponse(responseCode = "400", description = "Datos de la carta no válidos")
+    })
     @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Carta> create(@RequestBody @Valid Carta carta) {
 		Carta savedCarta = cartaService.saveCarta(carta);
 		return new ResponseEntity<>(savedCarta, HttpStatus.CREATED);
 	}
-    // borrar un Carta por id
+
+    @Operation(summary = "Eliminar una carta", description = "Elimina una carta existente por su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Carta eliminada con éxito"),
+        @ApiResponse(responseCode = "404", description = "No se encontró la carta")
+    })
     @DeleteMapping(value = "{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<MessageResponse> delete(@PathVariable("id") int id) {
@@ -69,7 +89,11 @@ public class CartaRestController {
 		return new ResponseEntity<>(new MessageResponse("Carta eliminada!"), HttpStatus.OK);
 	}
 
-    // Para que se puedan ver las cartas
+    @Operation(summary = "Obtener las imágenes de una carta", description = "Devuelve las imágenes frontal y trasera de una carta específica por su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Imágenes obtenidas con éxito"),
+        @ApiResponse(responseCode = "404", description = "Carta no encontrada")
+    })
     @GetMapping("/carta/{id}")
     public ResponseEntity<?> getCarta(@PathVariable Integer id) {
         Optional<Carta> cartaOpt = cartaService.findById(id);
@@ -84,6 +108,12 @@ public class CartaRestController {
 
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "Cambiar la carta Tigresa", description = "Cambia la carta Tigresa por el tipo seleccionado.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Carta Tigresa cambiada con éxito"),
+        @ApiResponse(responseCode = "400", description = "Tipo de carta no válido")
+    })
     @GetMapping("/tigresa/{tipoCarta}")
     public ResponseEntity<Carta> cambioTigresa(@PathVariable String tipoCarta){
         RestPreconditions.checkNotNull(cartaService.cambioTigresa(tipoCarta), "Carta", "tipoCarta", tipoCarta);

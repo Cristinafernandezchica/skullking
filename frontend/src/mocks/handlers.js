@@ -58,7 +58,7 @@ const partida1 = {
     inicio: "2024-11-05 13:00:00",
     fin: "2024-11-05 15:00:00",
     estado: "ESPERANDO",
-    ownerPartida: user1,
+    ownerPartida: 1,
     turnoActual: 2,
 };
 
@@ -68,7 +68,7 @@ const partida2 = {
     inicio: "2024-11-07 18:00:00",
     fin: "2024-11-07 21:00:00",
     estado: "JUGANDO",
-    ownerPartida: user2,
+    ownerPartida: 2,
     turnoActual: null,
 };
 
@@ -211,4 +211,6 @@ export const handlers = [
     
         return res(ctx.status(200), ctx.json(user));
     })
+
+    
 ];

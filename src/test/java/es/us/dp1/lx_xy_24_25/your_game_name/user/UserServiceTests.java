@@ -64,7 +64,7 @@ class UserServiceTests {
 	@Test
 	void shouldFindAllUsers() {
 		List<User> users = (List<User>) this.userService.findAll();
-		assertEquals(16, users.size());
+		assertEquals(17, users.size());
 	}
 
 	@Test
@@ -102,7 +102,7 @@ class UserServiceTests {
 	@Test
 	void shouldFindUsersByAuthority() {
 		List<User> players = (List<User>) userService.findAllByAuthority("PLAYER");
-        assertEquals(15, players.size());
+        assertEquals(16, players.size());
 
         List<User> admins = (List<User>) userService.findAllByAuthority("ADMIN");
         assertEquals(1, admins.size());
@@ -188,4 +188,171 @@ class UserServiceTests {
     void shouldNotGetJugadoresSinAutenticacion() {
         assertThrows(ResourceNotFoundException.class, () -> userService.getJugadoresByCurrentUser());
     }
+
+	@Test
+	void shouldGetTiempoPartidasForAllUsers() {
+		List<Long> tiempos = userService.getTiempoPartidas(null);
+		assertNotNull(tiempos);
+		assertTrue(tiempos.size() > 0); // Como hay usuarios con partidas en estado TERMINADA ebe haber al menos una partida
+		assertTrue(tiempos.stream().allMatch(t -> t >= 0)); // Los tiempos deben ser no negativos
+	}
+
+	@Test
+	void shouldGetTiempoPartidasForUser() {
+		Integer userId = 5; // ID de un usuario con partidas con estado TERMINADA
+		List<Long> tiempos = userService.getTiempoPartidas(userId);
+		assertNotNull(tiempos);
+		assertTrue(tiempos.size() > 0); // Debe haber al menos una partida
+		assertTrue(tiempos.stream().allMatch(t -> t >= 0)); // Los tiempos deben ser no negativos
+	}
+
+	@Test 
+	void shouldNotGetTiempoPartidasForUser() {
+		Integer userId = 13; // ID de un usuario sin partidas con estado TERMINADA
+		List<Long> tiempos = userService.getTiempoPartidas(userId);
+		assertNotNull(tiempos);
+		assertTrue(tiempos.isEmpty()); // La lista debe estar vacía
+	}
+
+	@Test
+	void shouldGetPromedioTiempoPartidasForAllUsers() {
+		Double promedio = userService.getPromedioTiempoPartidas(null);
+		assertNotNull(promedio);
+		assertTrue(promedio > 0); // Como hay usuarios con partidas en estado TERMINADA, el promedio debe ser mayor que 0
+	}
+
+	@Test
+	void shouldGetPromedioTiempoPartidasForUser() {
+		Integer userId = 5; // ID de un usuario con partidas con estado TERMINADA
+		Double promedio = userService.getPromedioTiempoPartidas(userId);
+		assertNotNull(promedio);
+		assertTrue(promedio > 0); // El promedio debe ser mayor que 0
+	}
+
+	@Test
+	void shouldNotGetPromedioTiempoPartidasForUser() {
+		Integer userId = 13; // ID de un usuario sin partidas con estado TERMINADA
+		Double promedio = userService.getPromedioTiempoPartidas(userId);
+		assertNotNull(promedio);
+		assertEquals(0.0, promedio); // El promedio debe ser 0.0
+	}
+
+	@Test
+	void shouldGetMaxTiempoPartidasForAllUsers() {
+		Integer max = userService.getMaxTiempoPartidas(null);
+		assertNotNull(max);
+		assertTrue(max > 0); // Como hay usuarios con partidas en estado TERMINADA, el máximo debe ser mayor que 0
+	}
+
+	@Test
+	void shouldGetMaxTiempoPartidasForUser() {
+		Integer userId = 5; // ID de un usuario con partidas con estado TERMINADA
+		Integer max = userService.getMaxTiempoPartidas(userId);
+		assertNotNull(max);
+		assertTrue(max > 0); // El máximo debe ser mayor que 0
+	}
+
+	@Test
+	void shouldNotGetMaxTiempoPartidasForUser() {
+		Integer userId = 13; // ID de un usuario sin partidas con estado TERMINADA
+		Integer max = userService.getMaxTiempoPartidas(userId);
+		assertNotNull(max);
+		assertEquals(0, max); // El máximo debe ser 0
+	}
+
+	@Test
+	void shouldGetMinTiempoPartidasForAllUsers() {
+		Integer min = userService.getMinTiempoPartidas(null);
+		assertNotNull(min);
+		assertTrue(min > 0); // Como hay usuarios con partidas en estado TERMINADA, el mínimo debe ser mayor que 0
+	}
+
+	@Test
+	void shouldGetMinTiempoPartidasForUser() {
+		Integer userId = 5; // ID de un usuario con partidas con estado TERMINADA
+		Integer min = userService.getMinTiempoPartidas(userId);
+		assertNotNull(min);
+		assertTrue(min > 0); // El mínimo debe ser mayor que 0
+	}
+
+	@Test
+	void shouldNotGetMinTiempoPartidasForUser() {
+		Integer userId = 13; // ID de un usuario sin partidas con estado TERMINADA
+		Integer min = userService.getMinTiempoPartidas(userId);
+		assertNotNull(min);
+		assertEquals(0, min); // El mínimo debe ser 0
+	}
+
+	@Test
+	void shouldGetMaxMayorIgualMinTiempo() {
+		Integer max = userService.getMaxTiempoPartidas(null);
+		Integer min = userService.getMinTiempoPartidas(null);
+		
+		assertNotNull(max);
+		assertNotNull(min);
+		assertTrue(max >= min, "El valor máximo debe ser mayor o igual al mínimo");
+	}
+
+	@Test
+	void shouldGetTotalTiempoPartidasForAllUsers() {
+		Integer total = userService.getTotalTiempoPartidas(null);
+		assertNotNull(total);
+		assertTrue(total > 0); // Como hay usuarios con partidas en estado TERMINADA, el total debe ser mayor que 0
+	}
+
+	@Test
+	void shouldGetTotalTiempoPartidasForUser() {
+		Integer userId = 5; // ID de un usuario con partidas con estado TERMINADA
+		Integer total = userService.getTotalTiempoPartidas(userId);
+		assertNotNull(total);
+		assertTrue(total > 0); // El total debe ser mayor que 0
+	}
+
+	@Test
+	void shouldNotGetTotalTiempoPartidasForUser() {
+		Integer userId = 13; // ID de un usuario sin partidas con estado TERMINADA
+		Integer total = userService.getTotalTiempoPartidas(userId);
+		assertNotNull(total);
+		assertEquals(0, total); // El total debe ser 0
+	}
+
+	@Test
+	void shouldGetNumPartidas() {
+		List<Integer> numPartidas = userService.getNumPartidas();
+		assertNotNull(numPartidas);
+		assertTrue(numPartidas.size() > 0); // Debe haber al menos un usuario, ya que hay usuarios guardados en la base de datos
+		assertTrue(numPartidas.stream().allMatch(n -> n >= 0)); // El número de partidas de cada usuario debe ser no negativo
+	}
+
+	@Test
+	void shouldGetPromedioPartidas() {
+		Double promedio = userService.getPromedioPartidas();
+		assertNotNull(promedio);
+		assertTrue(promedio > 0); // El promedio debe ser mayor que 0, porque hay al menos un usuario con partidas jugadas en la base de datos
+	}
+
+	@Test
+	void shouldGetMaxPartidas() {
+		Integer max = userService.getMaxPartidas();
+		assertNotNull(max);
+		assertTrue(max > 0); // El máximo debe ser mayor que 0, porque hay al menos un usuario con partidas jugadas en la base de datos
+	}
+
+	@Test
+	void shouldGetMinPartidas() {
+		Integer min = userService.getMinPartidas();
+		assertNotNull(min);
+		assertEquals(0, min); // El mínimo debe ser 0, porque hay al menos un usuario sin partidas jugadas en la base de datos
+	}
+
+	@Test
+	void shouldGetMaxMayorIgualMinPartidas() {
+		Integer max = userService.getMaxPartidas();
+		Integer min = userService.getMinPartidas();
+		
+		assertNotNull(max);
+		assertNotNull(min);
+		assertTrue(max >= min, "El valor máximo debe ser mayor o igual al mínimo");
+	}
+
 }

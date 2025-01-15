@@ -201,3 +201,86 @@ En cuanto a la medición del tiempo trabajado, hemos vuelto a usar la herramient
 #### Sprint Gráfica Chávez Malavé, Luis Emmanuel
 
 ![Sprint3 Emmanuel](/docs/deliverables/reportesClockify/Sprint3/Emmanuel_sprint3.png)
+
+
+
+## Sprint 4
+### ¿Qué ha funcionado bien?
+
+Nuestro mayor reto durante este sprint era que se pudiese completar una partida, pues aún estabamos estancados en el cambio de ronda. Además, nos propusimos intentar superar nuestras expectativas iniciales en cuanto a la cantidad de módulos que finalmente íbamos a desarrollar.
+
+Para ello cada uno de nosotros se centró en alguna de las partes que quedaba por implementar, trabajando en conjunto para algunos casos que requerían varios puntos de vista.
+
+Gracias a esta estrategia de división de tareas, hemos podido desarrollar todo lo relacionado con estadísticas, el módulo de juego social donde se incluyen las amistades, invitaciones a partidas, modo espectador, etc. También, la edición y eliminación de los usuarios por sí mismos y, por último, la ejecución completa de una partida.
+
+Todas estas tareas han implicado algunos problemas durante su realización por la complejidad que conllevan, pero mediante la colaboración del equipo se han ido solucionando, ofreciéndonos ayuda entre nosotros para lo que fuese necesario.
+
+Cabe recalcar que, de forma paralela, se implementaron aún más tests para verificar el correcto funcionamiento del código.
+
+### Asignación de tareas (añadidos del sprint)
+
+#### Documentación
+
+Plan de pruebas: Actualizado por Ángel Amo Sánchez.
+Decisiones de diseño y refactorizaciones: Actualizadas por Cristina Fernández Chica.
+Historias de usuario: Todos hemos hecho actualización de historias de usuario, debido a los añadido hechos al proyecto.
+Diagrama de capas y división pantallas en componentes: Actualizado por Candela Jazmín Gutiérrez Gonzalez.
+Reglas de negocio: Actualizadas por Luis Emmanuel Chávez Malavé por inclusión de nuevo módulo.
+Diagrama de dominio: Actualizado por Luis Emmanuel Chávez Malavé, Cristina Fernández Chica y Ángel Amo Sánchez.
+
+
+#### Tests
+
+Los test han sido actualizados y realizados por:
+Amo Sánchez, Ángel (Frontend y Backend); Fernández Chica, Cristina (Backend); Aguilar Morcillo, Marta (Frontend)
+
+#### Backend y Frontend
+
+Debido a las grandes tareas que se han llevado a cabo todos nosotros hemos participado en la realización de lo necesario en backend y frontend para nuestras respectivas tareas.
+
+El reparto de desarrollo de partes principales que quedaban por desarrollar ha sido concretamente:
+
+Edición y eliminación de usuario por uno mismo: Ángel Amo Sánchez
+Salir de la sala de espera de una partida: Ángel Amo Sánchez
+Jugar partida completa: Cristina Fernández Chica y Candela Jazmín Gutiérrez González
+Módulo de amistad, invitaciones y espectación: Luis Emmanuel Chávez Malavé
+Módulo de estadísticas: Marta Aguilar Morcillo
+
+Ha podido haber más tareas pero estas has sido las principales durante este Sprint.
+
+ ### ¿Problemas que hayamos tenido para poder progresar correctamente en el último Sprint?
+
+Debido a la complejidad de cada parte principal que quedaba por desarrollar, todos en algún punto del desarrollo de nuestras respectivas tareas hemos tenido problemas, por ejemplo a la hora del cambio de ronda y baza en el flujo de una partida o en la eliminación de un usuario. Estos problemas no nos han impedido su desarrollo, ni nos han provocado atrasos demasiado significativos, lo hemos ido solucionando en el momento pensando en otras ideas que podiesen dar solución al problema.
+
+
+### Medición del tiempo trabajado
+
+En cuanto a la medición del tiempo trabajado, hemos vuelto a usar la herramienta Clockify:
+
+#### Sprint Rueda (todos)
+
+![Sprint4 Rueda](/docs/deliverables/reportesClockify/Sprint4/rueda_todos_sprint4.png)
+
+#### Sprint Gráfica (todos)
+
+![Sprint4 Gráfica](/docs/deliverables/reportesClockify/Sprint4/grafica_todos_sprint4.png)
+
+#### Sprint Gráfica Aguilar Morcillo, Marta
+
+![Sprint4 Marta](/docs/deliverables/reportesClockify/Sprint4/rueda_marta_sprint4.png)
+
+#### Sprint Gráfica  Amo Sánchez, Ángel
+
+![Sprint3 Angel](/docs/deliverables/reportesClockify/Sprint4/rueda_angel_sprint4.png)
+
+#### Sprint Gráfica Fernández Chica, Cristina
+
+![Sprint3 Cristina](/docs/deliverables/reportesClockify/Sprint4/rueda_cristina_sprint4.png)
+
+#### Sprint Gráfica Gutiérrez González, Candela Jazmín
+
+![Sprint3 Candela](/docs/deliverables/reportesClockify/Sprint4/rueda_candela_sprint4.png)
+
+#### Sprint Gráfica Chávez Malavé, Luis Emmanuel
+
+![Sprint3 Emmanuel](/docs/deliverables/reportesClockify/Sprint4/rueda_emmanuel_sprint4.png)

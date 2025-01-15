@@ -256,8 +256,8 @@ A continuación se definen todas las historias de usuario a implementar:
 |![Lobby](../mockups/iniciar_partida.png)|
 |Una vez el jugador se encuentre en la sala de espera de una partida, el jugador podrá salir de la sala de espera para poder crear su propia partida o unirse a otra partida distinta.|
 
-### HJJ16-(ISSUE#238): Ver el ganador de la partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/238]())
-| "Como jugador quiero poder ver el ganador/es de una partida al terminar la última ronda para poder saber quién la ha ganado."| 
+### HJJ16-(ISSUE#238): Jugar partida completa ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/238]())
+| "Como jugador quiero poder jugar una partida completa para poder saber quién ha ganado."| 
 |-----|
 |![Ver ganador partida](../mockups/ver_ganador_partida.png)|
 |Una vez se haya llegado al fin de la última ronda de una partida, aparecerá un modal donde se mostrará el ganador o ganadores de la partida.|
@@ -282,54 +282,54 @@ A continuación se definen todas las historias de usuario a implementar:
 
 
 ### HSJ1-(ISSUE##228): Chat en partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/228]())
-| "Como jugador quiero poder comunicarme con los jugadores de la partida para poder crear estrategias y unirme con otros jugadores."| 
+| "Como jugador quiero poder comunicarme con los jugadores de la partida para poder crear estrategias y aliarme con otros jugadores."| 
 |-----|
 |![Chat de juego](../mockups/el_chat_partida.png)|
-|Una vez dentro de la partida el jugador tendra en la parte inferior derecha de la pantalla el botón 'Chat'. el cual abre un modal que contiene en la parte superior los mensajes enviados por todos los jugadores del chat, en la parte inferior se encuentra una barra en la cual puedes escribir el mensaje y finalmente dos botones, uno para enviar el mensaje y el otro para cerrar el chat.|
+|Una vez dentro de la partida el jugador tendrá en la parte inferior derecha de la pantalla el botón 'Chat'. el cuál abre un modal que contiene en la parte superior los mensajes enviados por todos los jugadores del chat. En la parte inferior se encuentra una barra en la cuál puedes escribir el mensaje y finalmente dos botones, uno para enviar el mensaje y otro para cerrar el chat.|
 
 
 ### HSJ2-(ISSUE##229): Enviar solicitud de amistad ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/229]())
 | "Como jugador quiero poder enviarle una solicitud de amistad a otro jugador para ser amigos."| 
 |-----|
 |![Enviar solicitud](../mockups/enviar_solicitud_amistad.png)|
-|En la pantalla de perfil el usuario tendra una barra en la cual podra escribir el nombre de usuario y tendra un botón 'enviar solicitud', el cual enviará la solicitud a la persona cuyo nombre de usuario hayas escrito.|
+|En la pantalla de perfil el usuario tendrá una barra en la cuál podrá escribir el nombre de usuario y tendrá un botón 'Enviar solicitud', el cuál enviará la solicitud a la persona cuyo nombre de usuario hayas escrito.|
 
 ### HSJ3-(ISSUE##247): Ver, aceptar y rechazar solicitudes de amistad ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/247]())
 | "Como jugador quiero poder ver todas mis solicitudes de amistad para poder aceptarlas o rechazarlas."| 
 |-----|
 |![Listado de solicitudes](../mockups/ver_mis_solicitudes_mockup.png)|
-|En la parte superior, en la barra de navegación esta el botón "notificaciones", el cual una vez presionado te momstrará entre otras cosas tus solicitudes de amistad, en cada solicitud aparece el nombre de usuario del remitente y dos botones, uno para aceptar la solicitud y otro para rechazarla.|
+|En la parte superior, en la barra de navegación está el botón "Notificaciones", el cuál una vez presionado te mostrará, entre otras opciones, tus solicitudes de amistad en las que aparece el nombre de usuario del remitente y dos botones, uno para aceptar la solicitud y otro para rechazarla.|
 
 
 ### HSJ4-(ISSUE##248): Ver a mis amigos conectados ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/248]())
-| "Como jugador quiero poder ver a todos mis amigos que estan conectados para poder saber con quien puedo jugar."| 
+| "Como jugador quiero poder ver a todos mis amigos que están conectados para poder saber con quién puedo jugar."| 
 |-----|
 |![Listado de amigos conectados](../mockups/ver_amigo_conectados.png)|
-|Puedes ver a tus amigos conectados desde dos partes distintas, desde la pantalla de perfil en la lista de amigos aparece un circulo en verde al lado del nombre indicando que dicho amigo esta conectado o desde la barra de navegacion en el botón de 'notificaciones' en la cual aparece una lista con tus amigos conectados.|
+|Puedes ver a tus amigos conectados de dos formas, desde la pantalla de perfil en la lista de amigos aparece un círculo en verde al lado del nombre indicando que dicho amigo está conectado o desde la barra de navegacion en el botón de 'Notificaciones' en la cuál aparece una lista con tus amigos conectados.|
 
 ### HSJ5-(ISSUE##250): Dejar de ser amigos ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/250]())
-| "Como jugador quiero poder dejaar de ser amigo de un jugador para evitar que me envie invitaciones a jugar."| 
+| "Como jugador quiero poder dejar de ser amigo de un jugador para evitar que me envie invitaciones a jugar."| 
 |-----|
 |![eliminar amigo](../mockups/eliminar_amistad.png)|
-|Puedes romper la amistad con un jugador desde la pantalla de perfil, en la sección de lista de amigos aparece un botón el cual te permite dejar de ser amigo, una vez lo presionas aparece un modal pidiendo la confirmación para romper la amistad.|
+|Puedes romper la amistad con un jugador desde la pantalla de perfil, en la sección de lista de amigos aparece un botón el cuál te permite dejar de ser amigo, una vez lo presionas aparece un modal pidiendo la confirmación para romper la amistad.|
 
 ### HSJ6-(ISSUE##249): Invitar a jugar o a espectar mi partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/249]())
-| "Como jugador quiero poder enviarle una invitacion a mis amigos para que o bien jueguen conmigo o me miren jugar."| 
+| "Como jugador quiero poder enviarle una invitación a mis amigos para que jueguen conmigo o me vean jugar una partida."| 
 |-----|
 |![Invitacion a partida](../mockups/Enviar_invitacion_a_partida.png)|
-|Puedes invitar a tus amigos desde dos partes distintas, desde la pantalla de perfil en la lista de amigos, si dicho amigo esta conectado aparece un botón con el cual puedes enviarle una invitación o desde la barra de navegacion en el botón de 'notificaciones' en la cual tambien aparece el botón para invitarlo a jugar o espectar dependiendo del estado de la partida.|
+|Puedes invitar a tus amigos de dos formas, desde la pantalla de perfil en la lista de amigos si dicho amigo está conectado, ya que aparecerá un botón para poder  enviarle una invitación; o desde la barra de navegación en el botón 'Notificaciones' donde también aparecerá el botón para invitarlo a jugar o espectar en función del estado de la partida.|
 
 ### HSJ7-(ISSUE##252): Ver, aceptar y rechazar invitaciones a partida ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/252]())
-| "Como jugador quiero poder ver todas mis invitaciones para poder aceptar o rechazar las invitaciones, sea bien para jugar o para espectar."| 
+| "Como jugador quiero poder ver todas mis invitaciones para poder aceptarlas o rechazarlas, ya sean para jugar o para espectar."| 
 |-----|
 |![Aceptar invitacion a partida](../mockups/invitaciones_a_partida.png)|
-|puedes ver todas tus invitaciones desde el botón de 'notificaciones', el cual entre otras cosas aparecen tus invitaciones pendientes y dos botones, uno para aceptar la invitación y otro para rechazarla.|
+|Puedes ver todas tus invitaciones desde el botón 'Notificaciones', en el cuál entre las opciones aparecerán tus invitaciones pendientes y dos botones, uno para aceptar la invitación y otro para rechazarla.|
 
 ### HSJ8-(ISSUE##251): Espectar partidas ([https://github.com/gii-is-DP1/DP1-2024-2025--l7-5/issues/251]())
-| "Como jugador quiero poder espectar las partidas de mis amigos para poder ver como juegan."| 
+| "Como jugador quiero poder espectar las partidas de mis amigos para poder ver cómo juegan."| 
 |-----|
 |![Modo espectador](../mockups/modo_espectador.png)|
-|Puedes espectar la partida de tus compañeros una vez aceptes la invitación desde el apartado de 'notificaciones', una vez aceptada se te redireccionará a la partida en cuestión.|
+|Puedes espectar la partida de tus compañeros una vez aceptes la invitación desde el apartado 'Notificaciones', una vez aceptada se te redireccionará a la partida en cuestión.|
 
 
 ## Diagrama conceptual del sistema

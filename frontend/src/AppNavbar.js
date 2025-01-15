@@ -24,7 +24,8 @@ import { fetchListaDeSolicitudes, fetchUserDetails,fetchListaDeAmigosConectados,
     usuarioConectadoODesconectado, fetchListaDeInvitaciones,
     unirseAPartida,aceptarInvitacion,
     fetchLastPlayer,
-    invitarAPartida} from "./components/appNavBarModular/AppNavBarModular";
+    invitarAPartida,
+    fetchListaDeAmigosQuePuedenVer} from "./components/appNavBarModular/AppNavBarModular";
 
 
 function AppNavbar() {
@@ -42,6 +43,8 @@ function AppNavbar() {
     const [errors, setErrors] = useState([]);
     const [lastPlayer, setLastPlayer] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
+        const [listaDeAmigosQuePuedenVer, setListaDeAmigosQuePuedenVer] = useState([]);
+
 
     const toggleDropdown = async () => {
         setDropdownOpen(!dropdownOpen);
@@ -51,6 +54,11 @@ function AppNavbar() {
         fetchLastPlayer(usuarioActual.id, setLastPlayer,jwt);
     }
     const toggleNavbar = () => setCollapsed(!collapsed);
+
+    useEffect(()=>{
+        if(lastPlayer){
+    fetchListaDeAmigosQuePuedenVer(lastPlayer,setListaDeAmigosQuePuedenVer,jwt);}
+    },[lastPlayer])
 
     const showError = (error) => { 
         setErrors([error]); 
@@ -200,15 +208,24 @@ function AppNavbar() {
                         <DropdownToggle nav caret style={{ color: "white" }}>
                             Notificaciones
                         </DropdownToggle>
-                        <DropdownMenu style={{ maxHeight: "300px", overflowY: "auto" }}>
-
+                        <DropdownMenu
+    style={{
+        backgroundColor: "#2B2B2B", 
+        color: "white", 
+        maxHeight: "300px",
+        overflowY: "auto",
+    }}
+>
     {nuevasSolitudes.length > 0 && (
         <>
             <p><b>Solicitudes</b></p>
             {nuevasSolitudes.map((usuario) => (
                 <DropdownItem
                     key={usuario.id}
-                    tag="div"
+                    style={{
+                        color: "white",
+                        backgroundColor: "#383838", // Negro claro
+                    }}
                     className="d-flex justify-content-between align-items-center"
                 >
                     <div style={{ display: "flex", alignItems: "center" }}>
@@ -252,6 +269,10 @@ function AppNavbar() {
             <DropdownItem 
                 key={amigo.id} 
                 tag="div" 
+                style={{
+                    color: "white",
+                    backgroundColor: "#383838", // Negro claro
+                }}
                 className="d-flex justify-content-between align-items-center"
             >
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -278,7 +299,7 @@ function AppNavbar() {
                             usuarioActual,
                             amigo,
                             lastPlayer.partida,
-                            true,
+                            false,
                             jwt,
                             showSuccess("invitacion enviada"));
                             }}
@@ -287,7 +308,9 @@ function AppNavbar() {
                             🎮
                         </Button>
                     )}
-                    {lastPlayer && lastPlayer.espectador===false && lastPlayer.partida.estado === "JUGANDO" && (
+                    {lastPlayer && lastPlayer.espectador===false && listaDeAmigosQuePuedenVer.some(item => item.id === amigo.id) &&
+                    
+                    lastPlayer.partida.estado === "JUGANDO" && (
                         <Button 
                             className="btn btn-secondary btn-sm ms-2" 
                             onClick={() => {
@@ -319,6 +342,10 @@ function AppNavbar() {
             <DropdownItem 
                 key={invitacion.id} 
                 tag="div" 
+                style={{
+                    color: "white",
+                    backgroundColor: "#383838", // Negro claro
+                }}
                 className="d-flex justify-content-between align-items-center"
             >
                 {invitacion.espectador ? (
@@ -342,6 +369,7 @@ function AppNavbar() {
                     </>
                 ) : (
                     <>
+                    <span>Únete a la partida de {invitacion.remitente.username}</span>
                         <div className="d-flex align-items-center">
                             <Button 
                                 className="btn btn-primary btn-sm me-2" 
@@ -349,7 +377,7 @@ function AppNavbar() {
                             >
                                 🎮
                             </Button>
-                            <span>Únete a la partida de {invitacion.remitente.username}</span>
+                            
                             <Button 
                                 className="btn btn-danger btn-sm ms-2" 
                                 onClick={() => aceptarInvitacion(jwt,invitacion.id)} // Lógica para rechazar

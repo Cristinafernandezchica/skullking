@@ -70,13 +70,15 @@ public class InvitacionService {
 
     @Transactional
     public Invitacion enviarInvitacion(Invitacion invitacion) {
-    Invitacion yaExiste = InvitacionRepository.getOneInvitacion(invitacion.getDestinatario().getId(), invitacion.getRemitente().getId());
-    if(yaExiste != null){
-        throw new InvitacionException("Ya existe una invitacion");
-    }
-    if(invitacion.getDestinatario().equals(invitacion.getRemitente())){
-        throw new InvitacionException("No puedes enviar una invitacion a ti mismo");
-    }
-    return InvitacionRepository.save(invitacion);
+        if(invitacion.getDestinatario().equals(invitacion.getRemitente())){
+            throw new InvitacionException("No puedes enviar una invitacion a ti mismo");
+        }
+        
+        Invitacion yaExiste = InvitacionRepository.getOneInvitacion(invitacion.getDestinatario().getId(), invitacion.getRemitente().getId());
+        
+        if(yaExiste != null){
+            throw new InvitacionException("Ya existe una invitacion");
+        }
+        return InvitacionRepository.save(invitacion);
     }
 }

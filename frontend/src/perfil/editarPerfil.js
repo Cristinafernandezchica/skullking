@@ -83,6 +83,9 @@ export default function EditarPerfil() {
     }
 
     return (
+        <div
+        className="background-container"
+    >
         <div className="editar-perfil-container">
             <h2 className="editar-perfil-title">Editar Perfil</h2>
             <Form onSubmit={actualizarPerfil} className="editar-perfil-form">
@@ -132,7 +135,7 @@ export default function EditarPerfil() {
                 </div>
 
                 <div className="form-buttons">
-                    <Button type="submit" className="form-button save-button">
+                    <Button type="submit" color="primary" className="form-button save-button">
                         Guardar Cambios
                     </Button>
                     <Button
@@ -144,6 +147,7 @@ export default function EditarPerfil() {
                     </Button>
                 </div>
             </Form>
+        </div>
         </div>
     );
 }

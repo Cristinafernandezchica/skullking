@@ -39,6 +39,8 @@ public class Jugador extends BaseEntity {
     @PositiveOrZero
     private Integer apuestaActual = 0;
 
+    private Boolean haApostado = false;
+
     
     private Boolean espectador = false;
 

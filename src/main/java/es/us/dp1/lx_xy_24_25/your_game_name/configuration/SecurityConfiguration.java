@@ -78,6 +78,9 @@ public class SecurityConfiguration {
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/partidas/**")).authenticated()
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/ws/**")).permitAll()
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/amistades/**")).hasAuthority(PLAYER)
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/invitaciones/**")).hasAuthority(PLAYER)
+
 			.anyRequest().authenticated())					
 			
 			.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);		

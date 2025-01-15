@@ -239,6 +239,7 @@ public class UserService {
         // Calcular tiempo promedio de las partidas
         Double promedio = tiempoPartidas.stream()
             .mapToLong(Long::longValue)
+            .map(x -> x/60)
             .average()                 
             .orElse(0.0);              
         return promedio;
@@ -250,6 +251,7 @@ public class UserService {
 
         Long max = tiempoPartidas.stream()
             .mapToLong(Long::longValue)
+            .map(x -> x/60)
             .max()
             .orElse(0L);
         return max.intValue();
@@ -261,6 +263,7 @@ public class UserService {
 
         Long min = tiempoPartidas.stream()
             .mapToLong(Long::longValue)
+            .map(x -> x/60)
             .min()
             .orElse(0L);
         return min.intValue();
@@ -272,6 +275,7 @@ public class UserService {
 
         Long total = tiempoPartidas.stream()
             .mapToLong(Long::longValue)
+            .map(x -> x/60)
             .sum();
         return total.intValue();
     }

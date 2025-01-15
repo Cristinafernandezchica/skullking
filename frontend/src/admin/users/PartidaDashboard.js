@@ -111,9 +111,9 @@ export default function PartidasStatisticsDashboard() {
           <Table aria-label="global-stats" className="mt-4">
             <thead>
               <tr>
-                <th>Promedio de Partidas</th>
-                <th>Máximo de Partidas</th>
-                <th>Mínimo de Partidas</th>
+                <th>Promedio de Partidas jugadas</th>
+                <th>Máximo de Partidas jugadas por un usuario</th>
+                <th>Mínimo de Partidas jugadas por un usuario</th>
               </tr>
             </thead>
             <tbody>

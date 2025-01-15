@@ -151,10 +151,10 @@ export default function DuracionStatisticsDashboard() {
                   <Table striped>
                     <thead>
                       <tr>
-                        <th>Promedio (segundos)</th>
-                        <th>Máximo (segundos)</th>
-                        <th>Mínimo (segundos)</th>
-                        <th>Total (segundos)</th>
+                        <th>Promedio (minutos)</th>
+                        <th>Máximo (minutos)</th>
+                        <th>Mínimo (minutos)</th>
+                        <th>Total (minutos)</th>
                       </tr>
                     </thead>
                     <tbody>

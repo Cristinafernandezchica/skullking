@@ -434,11 +434,11 @@ public class UserControllerTests {
 	@Test
 	@WithMockUser("admin")
 	void shouldGetPromedioTiempoPartidas() throws Exception {
-		when(userService.getPromedioTiempoPartidas(null)).thenReturn(120600.0);
+		when(userService.getPromedioTiempoPartidas(null)).thenReturn(2010.0);
 
 		mockMvc.perform(get(BASE_URL + "/promedio-tiempo-partidas"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$").value(120600.0));
+				.andExpect(jsonPath("$").value(2010.0));
 
 		verify(userService, times(1)).getPromedioTiempoPartidas(null);
 	}
@@ -446,11 +446,11 @@ public class UserControllerTests {
 	@Test
 	@WithMockUser("admin")
 	void shouldGetPromedioTiempoPartidasByUserId() throws Exception {
-		when(userService.getPromedioTiempoPartidas(TEST_USER_ID)).thenReturn(120600.0);
+		when(userService.getPromedioTiempoPartidas(TEST_USER_ID)).thenReturn(2010.0);
 
 		mockMvc.perform(get(BASE_URL + "/{userId}/promedio-tiempo-partidas", TEST_USER_ID))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$").value(120600.0));
+				.andExpect(jsonPath("$").value(2010.0));
 
 		verify(userService, times(1)).getPromedioTiempoPartidas(TEST_USER_ID);
 	}
@@ -458,11 +458,11 @@ public class UserControllerTests {
 	@Test
 	@WithMockUser("admin")
 	void shouldGetMaxTiempoPartidas() throws Exception {
-		when(userService.getMaxTiempoPartidas(null)).thenReturn(165600);
+		when(userService.getMaxTiempoPartidas(null)).thenReturn(2760);
 
 		mockMvc.perform(get(BASE_URL + "/max-tiempo-partidas"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$").value(165600));
+				.andExpect(jsonPath("$").value(2760));
 
 		verify(userService, times(1)).getMaxTiempoPartidas(null);
 	}
@@ -470,11 +470,11 @@ public class UserControllerTests {
 	@Test
 	@WithMockUser("admin")
 	void shouldGetMaxTiempoPartidasByUserId() throws Exception {
-		when(userService.getMaxTiempoPartidas(TEST_USER_ID)).thenReturn(165600);
+		when(userService.getMaxTiempoPartidas(TEST_USER_ID)).thenReturn(2760);
 
 		mockMvc.perform(get(BASE_URL + "/{userId}/max-tiempo-partidas", TEST_USER_ID))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$").value(165600));
+				.andExpect(jsonPath("$").value(2760));
 
 		verify(userService, times(1)).getMaxTiempoPartidas(TEST_USER_ID);
 	}
@@ -482,11 +482,11 @@ public class UserControllerTests {
 	@Test
 	@WithMockUser("admin")
 	void shouldGetMinTiempoPartidas() throws Exception {
-		when(userService.getMinTiempoPartidas(null)).thenReturn(75600);
+		when(userService.getMinTiempoPartidas(null)).thenReturn(1260);
 
 		mockMvc.perform(get(BASE_URL + "/min-tiempo-partidas"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$").value(75600));
+				.andExpect(jsonPath("$").value(1260));
 
 		verify(userService, times(1)).getMinTiempoPartidas(null);
 	}
@@ -494,11 +494,11 @@ public class UserControllerTests {
 	@Test
 	@WithMockUser("admin")
 	void shouldGetMinTiempoPartidasByUserId() throws Exception {
-		when(userService.getMinTiempoPartidas(TEST_USER_ID)).thenReturn(75600);
+		when(userService.getMinTiempoPartidas(TEST_USER_ID)).thenReturn(1260);
 
 		mockMvc.perform(get(BASE_URL + "/{userId}/min-tiempo-partidas", TEST_USER_ID))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$").value(75600));
+				.andExpect(jsonPath("$").value(1260));
 
 		verify(userService, times(1)).getMinTiempoPartidas(TEST_USER_ID);
 	}
@@ -506,11 +506,11 @@ public class UserControllerTests {
 	@Test
 	@WithMockUser("admin")
 	void shouldGetTotalTiempoPartidas() throws Exception {
-		when(userService.getTotalTiempoPartidas(null)).thenReturn(241200);
+		when(userService.getTotalTiempoPartidas(null)).thenReturn(4020);
 
 		mockMvc.perform(get(BASE_URL + "/total-tiempo-partidas"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$").value(241200));
+				.andExpect(jsonPath("$").value(4020));
 
 		verify(userService, times(1)).getTotalTiempoPartidas(null);
 	}
@@ -518,11 +518,11 @@ public class UserControllerTests {
 	@Test
 	@WithMockUser("admin")
 	void shouldGetTotalTiempoPartidasByUserId() throws Exception {
-		when(userService.getTotalTiempoPartidas(TEST_USER_ID)).thenReturn(241200);
+		when(userService.getTotalTiempoPartidas(TEST_USER_ID)).thenReturn(4020);
 
 		mockMvc.perform(get(BASE_URL + "/{userId}/total-tiempo-partidas", TEST_USER_ID))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$").value(241200));
+				.andExpect(jsonPath("$").value(4020));
 
 		verify(userService, times(1)).getTotalTiempoPartidas(TEST_USER_ID);
 	}

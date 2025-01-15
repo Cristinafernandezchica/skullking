@@ -157,7 +157,6 @@ public class BazaService {
 
     @Transactional
     public Integer getPtosBonificacion(Integer idRonda, Integer idJugador) {
-        // se cogen las bazas de la ronda en la que el jugador haya ganado
         List<Baza> bazasRondaJugador = findByIdRondaAndIdJugador(idRonda, idJugador);
         Integer ptosBonificacion = 0;
         for (Baza baza : bazasRondaJugador) {

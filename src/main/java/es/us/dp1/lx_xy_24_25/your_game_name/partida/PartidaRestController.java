@@ -25,6 +25,9 @@ import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageRespons
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.JugadorService;
 import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -44,18 +47,31 @@ public class PartidaRestController {
         this.jugadorService = jugadorService;
     }
 
-    // @RequestParam es para filtrar por esos valores, por tanto no hacen falta los métodos PartidasByName y PartidasByEstado
+    @Operation(summary = "Obtiene todas las partidas", description = "Devuelve una lista de todas las partidas. Se puede filtrar por nombre y estado.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Partidas obtenidas correctamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontraron partidas")
+    })
     @GetMapping
     public List<Partida> getAllPartidas(@ParameterObject() @RequestParam(value="nombre", required = false) String nombre, @ParameterObject @RequestParam(value="estado",required = false) PartidaEstado estado){
         return partidaService.getAllPartidas(nombre, estado);
     }
 
+    @Operation(summary = "Obtiene una partida por ID", description = "Devuelve una partida dada su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Partida obtenida correctamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontró la partida")
+    })
     @GetMapping("/{id}")
     public Partida getPartidaById(@PathVariable("id")Integer id){
         return partidaService.getPartidaById(id);
     }
 
-    
+    @Operation(summary = "Crea una nueva partida", description = "Crea una nueva partida y decuelve la partida creada.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Partida creada correctamente"),
+        @ApiResponse(responseCode = "400", description = "Error en los datos de la partida")
+    })
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Partida> createPartida(@Valid @RequestBody Partida p){
@@ -68,6 +84,12 @@ public class PartidaRestController {
         return ResponseEntity.created(location).body(p);
     }
 
+    @Operation(summary = "Actualiza una partida existente", description = "Actualiza una partida existente dado su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Partida actualizada correctamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontró la partida"),
+        @ApiResponse(responseCode = "400", description = "Error en los datos de la partida")
+    })
     @PutMapping(value="/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Partida> updatePartida(@Valid @RequestBody Partida p, @PathVariable("id") Integer id){
@@ -75,6 +97,11 @@ public class PartidaRestController {
         return new ResponseEntity<>(this.partidaService.update(p,id), HttpStatus.OK);
     }
 
+    @Operation(summary = "Elimina una partida", description = "Elimina una partida dado su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Partida eliminada correctamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontró la partida")
+    })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<MessageResponse> deletePartida(@PathVariable("id")Integer id){
@@ -83,6 +110,12 @@ public class PartidaRestController {
         return new ResponseEntity<>(new MessageResponse("Partida eliminada"), HttpStatus.NO_CONTENT); 
     }
 
+    @Operation(summary = "Actualiza el propietario de una partida", description = "Actualiza el propietario de una partida dado su ID y el nuevo propietario.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Owner actualizado correctamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontró la partida"),
+        @ApiResponse(responseCode = "400", description = "Error en los datos del nuevo propietario")
+    })
     @PutMapping("/{id}/actualizar-owner")
     public ResponseEntity<MessageResponse> actualizarOwner(@PathVariable Integer id, @RequestBody Map<String, Integer> body) {
         try {
@@ -96,16 +129,23 @@ public class PartidaRestController {
         }
     }
 
-    // Relación de uno a muchos con la clase Jugador, mirar los nombres de los métodos
-    // TENER EN CUENTA  -->  Habrá que hacer un DTO seguramente
-    // Te devulve el jugador con la contraseña incluida, para frontend solo queremos el username
+    @Operation(summary = "Obtiene los jugadores de una partida", description = "Devuelve una lista de jugadores èrtenecientes a una partida dada su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Jugadores obtenidos correctamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontró la partida")
+    })
     @GetMapping("/{id}/jugadores")
     public ResponseEntity<List<Jugador>> getJugadoresByPartidaId(@PathVariable("id")Integer id){
         List<Jugador> jugadoresPartida = jugadorService.findJugadoresByPartidaId(id);
         return ResponseEntity.ok(jugadoresPartida);
     }
 
-    // Obtener las partidas dado el id de un usuario owner
+
+    @Operation(summary = "Obtiene las partidas de un propietario", description = "Devuelve una lista de partidas dado el Id de un propietario.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Partidas obtenidas correctamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontró el propietario")
+    })
     @GetMapping(params = "ownerId")
     public ResponseEntity<List<Partida>> findPartidasByOwnerId(@RequestParam("ownerId") Integer ownerId) {
         List<Partida> partidas = partidaService.findPartidasByOwnerId(ownerId);
@@ -115,28 +155,45 @@ public class PartidaRestController {
         return new ResponseEntity<>(partidas, HttpStatus.OK);
     }
 
-    // Obtener el jugador ganador de la partida
+    @Operation(summary = "Obtiene el jugador ganador de la partida", description = "Devuelve el ganador de la partida especificada por su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Jugador ganador obtenido correctamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontró la partida o el jugador ganador")
+    })
     @GetMapping("/{id}/jugadorGanador")
     public ResponseEntity<Jugador> ganadorPartida (@PathVariable("id") Integer id){
         partidaService.getJugadorGanador(id);
         return new ResponseEntity<>(partidaService.getJugadorGanador(id), HttpStatus.OK);
     }
 
-    // Para iniciar una partida desde frontend
+    @Operation(summary = "Iniciar una partida", description = "Inicia la partida especificada por su ID.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Partida iniciada correctamente"),
+        @ApiResponse(responseCode = "404", description = "No se encontró la partida")
+    })
     @PutMapping("/{id}/iniciar-partida")
     public ResponseEntity<Void> iniciarPartida(@PathVariable("id") Integer id){
         partidaService.iniciarPartida(id);
         return ResponseEntity.ok().build();
     }
 
-    // Para cambiar el estado de una partida desde frontend
+    @Operation(summary = "Cambiar el estado de una partida", description = "Cambiar el estado de la partida especificando ID de la partida y de la baza actual.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Estado cambiado con éxito"),
+        @ApiResponse(responseCode = "404", description = "No se encontró la partida")
+    })
     @PostMapping("/{partidaId}/bazas/{bazaId}/siguiente-estado")
     public ResponseEntity<Void> siguienteEstado(@PathVariable("partidaId") Integer partidaId, @PathVariable("bazaId") Integer bazaId){
         partidaService.siguienteEstado(partidaId, bazaId);
         return ResponseEntity.ok().build();
     }
 
-    // Para apostar
+    @Operation(summary = "Realizar una apuesta", description = "Permite a un jugador realizar una apuesta.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Apuesta realizada con éxito"),
+        @ApiResponse(responseCode = "400", description = "Apuesta no puede ser nula"),
+        @ApiResponse(responseCode = "404", description = "No se encontró el jugador o la partida")
+    })
     @PutMapping("/apuesta/{jugadorId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> apuesta(@RequestParam Integer apuesta, @PathVariable Integer jugadorId) {

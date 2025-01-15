@@ -73,11 +73,15 @@ public class SecurityConfiguration {
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()												
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/developers")).permitAll()												
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/plan")).permitAll()
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users")).permitAll()
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users/**")).permitAll()
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/partidas/**")).permitAll()
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users")).hasAnyAuthority(ADMIN, PLAYER)
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users/**")).hasAnyAuthority(ADMIN, PLAYER)
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/partidas/**")).authenticated()
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
-			.anyRequest().permitAll())					
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/ws/**")).permitAll()
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/amistades/**")).hasAuthority(PLAYER)
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/invitaciones/**")).hasAuthority(PLAYER)
+
+			.anyRequest().authenticated())					
 			
 			.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);		
 		return http.build();

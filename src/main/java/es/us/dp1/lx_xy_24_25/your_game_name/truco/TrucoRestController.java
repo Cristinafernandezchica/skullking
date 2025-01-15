@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.us.dp1.lx_xy_24_25.your_game_name.auth.payload.response.MessageResponse;
-import es.us.dp1.lx_xy_24_25.your_game_name.baza.Baza;
 import es.us.dp1.lx_xy_24_25.your_game_name.bazaCartaManoDTO.BazaCartaManoDTO;
 import es.us.dp1.lx_xy_24_25.your_game_name.util.RestPreconditions;
 

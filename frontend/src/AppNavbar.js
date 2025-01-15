@@ -126,8 +126,18 @@ function AppNavbar() {
                         </NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink style={{ color: "white" }} tag={Link} to="/users/statistics">
-                            Estadísticas
+                        <NavLink style={{ color: "white" }} tag={Link} to="/users/ranking">
+                            Rankings
+                        </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink style={{ color: "white" }} tag={Link} to="/users/partidasStatistics">
+                            Estadísticas partidas
+                        </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink style={{ color: "white" }} tag={Link} to="/users/duracionStatistics">
+                            Estadísticas duración
                         </NavLink>
                     </NavItem>
                 </>
@@ -163,8 +173,18 @@ function AppNavbar() {
             userLinks = (
                 <>
                     <NavItem>
-                        <NavLink style={{ color: "white" }} tag={Link} to="/users/statistics">
-                            Estadísticas
+                        <NavLink style={{ color: "white" }} tag={Link} to="/users/ranking">
+                            Rankings
+                        </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink style={{ color: "white" }} tag={Link} to="/users/partidasStatistics">
+                            Estadísticas partidas
+                        </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink style={{ color: "white" }} tag={Link} to="/users/duracionStatistics">
+                            Estadísticas duración
                         </NavLink>
                     </NavItem>
                     <NavItem>

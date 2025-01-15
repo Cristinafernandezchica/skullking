@@ -150,7 +150,6 @@ public class BazaService {
         return turnosNuevaBaza;
     }
 
-    // Está repetida en partida
     @Transactional
     public Integer primerTurno(List<Integer> turnos) {
         return turnos.get(0);
@@ -173,7 +172,6 @@ public class BazaService {
         return ptosBonificacion;
     }
 
-    // Mover a entidad Carta como método
     public Integer calculoPtosBonificacion(Carta cartaGanadora, Carta carta) {
         Integer ptosBonificacion = 0;
         TipoCarta cartaTipo = carta.getTipoCarta();

@@ -117,15 +117,25 @@ export default function Perfil() {
                 showSuccess("Solicitud de amistad enviada.");
             } else {
                 const errorData = await response.json();
-                showError(errorData.message || "Error al realizar la solicitud.");
+                if (errorData.message && errorData.message.startsWith("User no encontrado con username")) {
+                    showError("No existe ningún usuario con ese nombre.");
+                } else {
+                    showError(errorData.message || "Error al realizar la solicitud.");
+                }
             }
         } catch (error) {
             console.error("Error al conectar con el servidor:", error);
             showError("Error al conectar con el servidor.");
         }
     }
+    
 
     const handleEnviarSolicitud = () => {
+        if (!inputValue.trim()) {
+            showError("No existe ningún usuario con ese nombre.");
+            return;
+        }
+
         enviarSolicitud();
         setInputValue("");
     };
@@ -319,9 +329,11 @@ export default function Perfil() {
 
     return (
 
-        <div
-        className="background-container"
-    >
+        <div className="background-container" >
+        <div 
+            className="perfil-scrollable-container" 
+            style={{ maxHeight: "114vh", overflowY: "auto", boxSizing: "border-box" }}
+        >
         <div className="perfil-container">
             <h2 className="perfil-title">Mi Perfil</h2>
 
@@ -444,7 +456,6 @@ export default function Perfil() {
                             </div>
 
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                {/* Botón para abrir el modal de eliminación */}
                                 <button
                                     className="unfriend-button"
                                     onClick={() => handleMostrarModal(amigo)}
@@ -465,7 +476,7 @@ export default function Perfil() {
                                                     lastPlayer.partida,
                                                     false,
                                                     jwt,
-                                                    showSuccess("invitacion Enviada")
+                                                    showSuccess("Invitación enviada")
                                                 )
                                             }
                                         >
@@ -484,7 +495,7 @@ export default function Perfil() {
                                                     lastPlayer.partida,
                                                     true,
                                                     jwt,
-                                                    showSuccess("invitacion enviada")
+                                                    showSuccess("Invitación enviada")
                                                 )
                                             }
                                         >
@@ -497,7 +508,6 @@ export default function Perfil() {
                 </ul>
             </div>
 
-            {/* Modal para confirmar eliminación */}
             <Modal isOpen={modalVisible} toggle={handleCerrarModal} className="custom-modal">
                 <ModalHeader toggle={handleCerrarModal} className="custom-modal-header">
                     Confirmar Eliminación
@@ -506,8 +516,7 @@ export default function Perfil() {
                     ¿Estás seguro de que quieres eliminar a{' '}
                     <strong>{amigoAEliminar?.username}</strong> de tu lista de amigos?
                 </ModalBody>
-                <ModalFooter style={{background: "#112b44",
-    color: "#f5d76e"}}>
+                <ModalFooter style={{background: "#112b44", color: "#f5d76e"}}>
                     <Button color="danger" onClick={handleConfirmarEliminar}>
                         Sí, eliminar
                     </Button>
@@ -517,6 +526,7 @@ export default function Perfil() {
                 </ModalFooter>
             </Modal>
         </div>
+    </div>
     </div>
     );
 }

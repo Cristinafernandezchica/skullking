@@ -1,20 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-    Navbar,
-    NavbarBrand,
-    NavLink,
-    NavItem,
-    Nav,
-    NavbarText,
-    NavbarToggler,
-    Collapse,
-    Dropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
-    Button,
-    Alert
-} from "reactstrap";
+import { Navbar, NavbarBrand, NavLink, NavItem, Nav, NavbarText, NavbarToggler, Collapse, Dropdown, 
+    DropdownToggle, DropdownMenu, DropdownItem, Button, Alert} from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
 import tokenService from "./services/token.service";
 import jwt_decode from "jwt-decode";
@@ -57,7 +43,8 @@ function AppNavbar() {
 
     useEffect(()=>{
         if(lastPlayer){
-    fetchListaDeAmigosQuePuedenVer(lastPlayer,setListaDeAmigosQuePuedenVer,jwt);}
+            fetchListaDeAmigosQuePuedenVer(lastPlayer,setListaDeAmigosQuePuedenVer,jwt);
+        }
     },[lastPlayer])
 
     const showError = (error) => { 
@@ -150,12 +137,7 @@ function AppNavbar() {
                         </NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink
-                            style={{ color: "white" }}
-                            id="instructions"
-                            tag={Link}
-                            to="/instructions"
-                        >
+                        <NavLink style={{ color: "white" }} id="instructions" tag={Link} to="/instructions">
                             Instrucciones
                         </NavLink>
                     </NavItem>
@@ -209,190 +191,207 @@ function AppNavbar() {
                             Notificaciones
                         </DropdownToggle>
                         <DropdownMenu
-    style={{
-        backgroundColor: "#2B2B2B", 
-        color: "white", 
-        maxHeight: "300px",
-        overflowY: "auto",
-    }}
->
-    {nuevasSolitudes.length > 0 && (
-        <>
-            <p><b>Solicitudes</b></p>
-            {nuevasSolitudes.map((usuario) => (
-                <DropdownItem
-                    key={usuario.id}
-                    style={{
-                        color: "white",
-                        backgroundColor: "#383838", // Negro claro
-                    }}
-                    className="d-flex justify-content-between align-items-center"
-                >
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                        {usuario.imagenPerfil && (
-                            <img
-                                src={usuario.imagenPerfil}
-                                alt="Perfil"
-                                style={{
-                                    width: "30px",
-                                    height: "30px",
-                                    borderRadius: "50%",
-                                    marginRight: "10px"
-                                }}
-                            />
+                            style={{
+                                backgroundColor: "#2B2B2B", 
+                                color: "white", 
+                                maxHeight: "300px",
+                                overflowY: "auto",
+                            }}
+                        >
+
+                            {nuevasSolitudes.length > 0 && (
+                                <>
+                                    <p><b>Solicitudes</b></p>
+                                    {nuevasSolitudes.map((usuario) => (
+                                        <DropdownItem
+                                            key={usuario.id}
+                                            style={{
+                                                color: "white",
+                                                backgroundColor: "#383838", // Negro claro
+                                            }}
+                                            className="d-flex justify-content-between align-items-center"
+                                        >
+                                            <div style={{ display: "flex", alignItems: "center" }}>
+                                                {usuario.imagenPerfil && (
+                                                    <img
+                                                        src={usuario.imagenPerfil}
+                                                        alt="Perfil"
+                                                        style={{
+                                                            width: "30px",
+                                                            height: "30px",
+                                                            borderRadius: "50%",
+                                                            marginRight: "10px"
+                                                        }}
+                                                    />
+                                                )}
+                                                <span>{usuario.username}</span>
+                                            </div>
+                                            <div>
+                                                <Button
+                                                    className="btn btn-success btn-sm mx-1"
+                                                    onClick={async () => await aceptarORechazarSolicitud(usuarioActual.id, usuario.id, true, jwt)}
+                                                >
+                                                    ✓
+                                                </Button>
+                                                <Button
+                                                    className="btn btn-danger btn-sm"
+                                                    onClick={() => aceptarORechazarSolicitud(usuarioActual.id, usuario.id, false, jwt)}
+                                                >
+                                                    ✕
+                                                </Button>
+                                            </div>
+                                        </DropdownItem>
+                                    ))}
+                                </>
+                            )}
+
+                        {amigosConectados.length > 0 && (
+                            <>
+                                <p><b>Amigos conectados</b></p>
+                                {amigosConectados.map((amigo) => (
+                                    <DropdownItem 
+                                        key={amigo.id} 
+                                        tag="div" 
+                                        style={{
+                                            color: "white",
+                                            backgroundColor: "#383838", // Negro claro
+                                        }}
+                                        className="d-flex justify-content-between align-items-center"
+                                    >
+                                        <div style={{ display: "flex", alignItems: "center" }}>
+                                            {amigo.imagenPerfil && (
+                                                <img 
+                                                    src={amigo.imagenPerfil} 
+                                                    alt="Perfil" 
+                                                    style={{ 
+                                                        width: "30px", 
+                                                        height: "30px", 
+                                                        borderRadius: "50%", 
+                                                        marginRight: "10px" 
+                                                    }} 
+                                                />
+                                            )}
+                                            <span>{amigo.username}</span>
+                                        </div>
+                                        <div className="d-flex align-items-center">
+                                            {lastPlayer && lastPlayer.espectador===false && lastPlayer.partida.estado === "ESPERANDO" && (
+                                                <Button 
+                                                    className="btn btn-primary btn-sm me-2" 
+                                                    onClick={() => {
+                                                    invitarAPartida(
+                                                    usuarioActual,
+                                                    amigo,
+                                                    lastPlayer.partida,
+                                                    false,
+                                                    jwt,
+                                                    showSuccess("Invitación enviada"));
+                                                    }}
+                                                    title="Invitar a jugar"
+                                                >
+                                                    🎮
+                                                </Button>
+                                            )}
+                                            {lastPlayer && lastPlayer.espectador===false && listaDeAmigosQuePuedenVer.some(item => item.id === amigo.id) &&
+                                            
+                                            lastPlayer.partida.estado === "JUGANDO" && (
+                                                <Button 
+                                                    className="btn btn-secondary btn-sm ms-2" 
+                                                    onClick={() => {
+                                                        // Lógica para invitar a espectar
+                                                    invitarAPartida(
+                                                    usuarioActual,
+                                                    amigo,
+                                                    lastPlayer.partida,
+                                                    true,
+                                                    jwt,
+                                                    showSuccess("Invitación enviada")
+                                                    ); // Reutilizamos la lógica de invitación
+                                                    }}
+                                                    title="Invitar a espectar"
+                                                >
+                                                    👁️
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </DropdownItem>
+                                ))}
+                            </>
                         )}
-                        <span>{usuario.username}</span>
-                    </div>
-                    <div>
-                        <Button
-                            className="btn btn-success btn-sm mx-1"
-                            onClick={async () => await aceptarORechazarSolicitud(usuarioActual.id, usuario.id, true, jwt)}
-                        >
-                            ✓
-                        </Button>
-                        <Button
-                            className="btn btn-danger btn-sm"
-                            onClick={() => aceptarORechazarSolicitud(usuarioActual.id, usuario.id, false, jwt)}
-                        >
-                            ✕
-                        </Button>
-                    </div>
-                </DropdownItem>
-            ))}
-        </>
-    )}
 
-{amigosConectados.length > 0 && (
-    <>
-        <p><b>Amigos conectados</b></p>
-        {amigosConectados.map((amigo) => (
-            <DropdownItem 
-                key={amigo.id} 
-                tag="div" 
-                style={{
-                    color: "white",
-                    backgroundColor: "#383838", // Negro claro
-                }}
-                className="d-flex justify-content-between align-items-center"
-            >
-                <div style={{ display: "flex", alignItems: "center" }}>
-                    {amigo.imagenPerfil && (
-                        <img 
-                            src={amigo.imagenPerfil} 
-                            alt="Perfil" 
-                            style={{ 
-                                width: "30px", 
-                                height: "30px", 
-                                borderRadius: "50%", 
-                                marginRight: "10px" 
-                            }} 
-                        />
-                    )}
-                    <span>{amigo.username}</span>
-                </div>
-                <div className="d-flex align-items-center">
-                    {lastPlayer && lastPlayer.espectador===false && lastPlayer.partida.estado === "ESPERANDO" && (
-                        <Button 
-                            className="btn btn-primary btn-sm me-2" 
-                            onClick={() => {
-                            invitarAPartida(
-                            usuarioActual,
-                            amigo,
-                            lastPlayer.partida,
-                            false,
-                            jwt,
-                            showSuccess("invitacion enviada"));
-                            }}
-                            title="Invitar a jugar"
-                        >
-                            🎮
-                        </Button>
-                    )}
-                    {lastPlayer && lastPlayer.espectador===false && listaDeAmigosQuePuedenVer.some(item => item.id === amigo.id) &&
-                    
-                    lastPlayer.partida.estado === "JUGANDO" && (
-                        <Button 
-                            className="btn btn-secondary btn-sm ms-2" 
-                            onClick={() => {
-                                // Lógica para invitar a espectar
-                            invitarAPartida(
-                            usuarioActual,
-                            amigo,
-                            lastPlayer.partida,
-                            true,
-                            jwt,
-                            showSuccess("invitacion enviada")
-                            ); // Reutilizamos la lógica de invitación
-                            }}
-                            title="Invitar a espectar"
-                        >
-                            👁️
-                        </Button>
-                    )}
-                </div>
-            </DropdownItem>
-        ))}
-    </>
-)}
+                        {invitaciones.length > 0 && (
+                            <>
+                                <p><b>Invitaciones</b></p>
+                                {invitaciones.map((invitacion) => (
+                                    <DropdownItem 
+                                        key={invitacion.id} 
+                                        tag="div" 
+                                        style={{
+                                            color: "white",
+                                            backgroundColor: "#383838", // Negro claro
+                                        }}
+                                        className="d-flex justify-content-between align-items-center"
+                                    >
+                                        {invitacion.espectador ? (
+                                            <>
+                                                <span>Espectar a {invitacion.remitente.username}</span>
+                                                <div className="d-flex align-items-center">
+                                                    <Button 
+                                                        className="btn btn-secondary btn-sm ms-2" 
+                                                        onClick={() => invitacionAceptada(invitacion)}
+                                                    >
+                                                        👁️
+                                                    </Button>
+                                                    <Button 
+                                                        className="btn btn-danger btn-sm ms-2" 
+                                                        onClick={() => aceptarInvitacion(jwt,invitacion.id)} // Lógica para rechazar
+                                                        title="Rechazar invitación"
+                                                    >
+                                                        ✖
+                                                    </Button>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                            <span>Únete a la partida de {invitacion.remitente.username}</span>
+                                                <div className="d-flex align-items-center">
+                                                    <Button 
+                                                        className="btn btn-primary btn-sm me-2" 
+                                                        onClick={() => invitacionAceptada(invitacion)}
+                                                    >
+                                                        🎮
+                                                    </Button>
+                                                    
+                                                    <Button 
+                                                        className="btn btn-danger btn-sm ms-2" 
+                                                        onClick={() => aceptarInvitacion(jwt,invitacion.id)} // Lógica para rechazar
+                                                        title="Rechazar invitación"
+                                                    >
+                                                        ✖
+                                                    </Button>
+                                                </div>
+                                            </>
+                                        )}
+                                    </DropdownItem>
+                                ))}
+                            </>
+                        )}
 
-{invitaciones.length > 0 && (
-    <>
-        <p><b>Invitaciones</b></p>
-        {invitaciones.map((invitacion) => (
-            <DropdownItem 
-                key={invitacion.id} 
-                tag="div" 
-                style={{
-                    color: "white",
-                    backgroundColor: "#383838", // Negro claro
-                }}
-                className="d-flex justify-content-between align-items-center"
-            >
-                {invitacion.espectador ? (
-                    <>
-                        <span>Espectar a {invitacion.remitente.username}</span>
-                        <div className="d-flex align-items-center">
-                            <Button 
-                                className="btn btn-secondary btn-sm ms-2" 
-                                onClick={() => invitacionAceptada(invitacion)}
+                        {(!nuevasSolitudes || nuevasSolitudes.length === 0) &&
+                        (!amigosConectados || amigosConectados.length === 0) &&
+                        (!invitaciones || invitaciones.length === 0) && (
+                            <DropdownItem 
+                                disabled 
+                                style={{
+                                    color: "gray", 
+                                    textAlign: "center",
+                                    backgroundColor: "#2B2B2B"
+                                }}
                             >
-                                👁️
-                            </Button>
-                            <Button 
-                                className="btn btn-danger btn-sm ms-2" 
-                                onClick={() => aceptarInvitacion(jwt,invitacion.id)} // Lógica para rechazar
-                                title="Rechazar invitación"
-                            >
-                                ✖
-                            </Button>
-                        </div>
-                    </>
-                ) : (
-                    <>
-                    <span>Únete a la partida de {invitacion.remitente.username}</span>
-                        <div className="d-flex align-items-center">
-                            <Button 
-                                className="btn btn-primary btn-sm me-2" 
-                                onClick={() => invitacionAceptada(invitacion)}
-                            >
-                                🎮
-                            </Button>
-                            
-                            <Button 
-                                className="btn btn-danger btn-sm ms-2" 
-                                onClick={() => aceptarInvitacion(jwt,invitacion.id)} // Lógica para rechazar
-                                title="Rechazar invitación"
-                            >
-                                ✖
-                            </Button>
-                        </div>
-                    </>
-                )}
-            </DropdownItem>
-        ))}
-    </>
-)}
-</DropdownMenu>
+                                No tienes ninguna notificación
+                            </DropdownItem>
+                        )}
+
+                        </DropdownMenu>
 
                     </Dropdown>
                     <NavItem>

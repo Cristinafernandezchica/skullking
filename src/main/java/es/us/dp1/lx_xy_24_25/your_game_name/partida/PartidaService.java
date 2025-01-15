@@ -322,6 +322,7 @@ public class PartidaService {
         if(nextBaza > ronda.getNumBazas()){
             rondaService.finalizarRonda(ronda.getId());
             getPuntaje(ronda.getNumBazas(), ronda.getId());
+            messagingTemplate.convertAndSend("/topic/apuesta/partida/" + partida.getId(), jugadores);
             Integer nextRonda = ronda.getNumRonda() + 1;
             // Si es la última ronda, finalizamos partida
             if(nextRonda > ULTIMA_RONDA){

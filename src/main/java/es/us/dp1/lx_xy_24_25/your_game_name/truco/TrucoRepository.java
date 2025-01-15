@@ -9,8 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import es.us.dp1.lx_xy_24_25.your_game_name.carta.Carta;
 
 import java.util.List;
-import java.util.Optional;
-
 
 public interface TrucoRepository extends CrudRepository<Truco, Integer> {
 

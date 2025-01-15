@@ -3,7 +3,12 @@ package es.us.dp1.lx_xy_24_25.your_game_name.baza;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
+
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
+import es.us.dp1.lx_xy_24_25.your_game_name.tipoCarta.TipoCarta;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -129,5 +134,39 @@ public class BazaValidatorTest {
         assertFalse(errors.hasErrors());
         verify(bazaService, times(1)).findByRondaIdAndNumBaza(ronda.getId(), baza.getNumBaza());
     }
+
+    @Test
+    void shouldGanadorEstarEnTurnos() {
+        Jugador ganador = new Jugador();
+        ganador.setId(1);
+
+        Baza baza = new Baza();
+        baza.setGanador(ganador);
+        baza.setTurnos(List.of(1, 2, 3));
+
+        Errors errors = new BeanPropertyBindingResult(baza, "baza");
+        bazaValidator.validate(baza, errors);
+
+        assertFalse(errors.hasErrors());
+    }
+
+
+    @Test
+    void shouldGanadorEstarEnTurnos_NoEsta() {
+        Jugador ganador = new Jugador();
+        ganador.setId(1);
+
+        Baza baza = new Baza();
+        baza.setGanador(ganador);
+        baza.setTurnos(List.of(2, 3, 4));
+
+        Errors errors = new BeanPropertyBindingResult(baza, "baza");
+
+        bazaValidator.validate(baza, errors);
+        assertTrue(errors.hasErrors());
+        assertNotNull(errors.getFieldError("turnos"));
+        assertEquals("turnos.invalid", errors.getFieldError("turnos").getCode());
+    }
+
 }
 

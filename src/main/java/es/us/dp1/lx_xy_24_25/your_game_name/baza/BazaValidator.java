@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
 import es.us.dp1.lx_xy_24_25.your_game_name.ronda.Ronda;
 
 @Component
@@ -32,6 +33,14 @@ public class BazaValidator implements Validator{
             Baza existingBaza = bazaService.findByRondaIdAndNumBaza(ronda.getId(), baza.getNumBaza());
             if (existingBaza != null && !existingBaza.getId().equals(baza.getId())) {
                 errors.rejectValue("numBaza", "numBaza.duplicate", "Ya existe una baza con el mismo número en esta ronda.");
+            }
+        }
+        
+        // Validar que el ID del ganador esté en la lista de turnos
+        Jugador ganador = baza.getGanador();
+        if (ganador != null && baza.getTurnos() != null) {
+            if (!baza.getTurnos().contains(ganador.getId())) {
+                errors.rejectValue("turnos", "turnos.invalid", "El ID del jugador ganador no se encuentra en la lista de turnos.");
             }
         }
     }

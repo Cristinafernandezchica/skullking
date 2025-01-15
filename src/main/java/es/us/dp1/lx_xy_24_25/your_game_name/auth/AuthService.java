@@ -1,7 +1,5 @@
 package es.us.dp1.lx_xy_24_25.your_game_name.auth;
 
-import java.util.ArrayList;
-
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 

@@ -35,6 +35,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import es.us.dp1.lx_xy_24_25.your_game_name.configuration.SecurityConfiguration;
 import es.us.dp1.lx_xy_24_25.your_game_name.exceptions.ResourceNotFoundException;
 import es.us.dp1.lx_xy_24_25.your_game_name.jugador.Jugador;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.Partida;
+import es.us.dp1.lx_xy_24_25.your_game_name.partida.PartidaEstado;
 
 /**
  * Test class for the {@link VetController}
@@ -427,6 +429,138 @@ public class UserControllerTests {
 				.andExpect(jsonPath("$[1].puntos").value(200));
 
 		verify(userService, times(1)).getJugadoresByCurrentUser();
+	}
+
+	@Test
+	@WithMockUser("admin")
+	void shouldGetPromedioTiempoPartidas() throws Exception {
+		when(userService.getPromedioTiempoPartidas(null)).thenReturn(120600.0);
+
+		mockMvc.perform(get(BASE_URL + "/promedio-tiempo-partidas"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$").value(120600.0));
+
+		verify(userService, times(1)).getPromedioTiempoPartidas(null);
+	}
+
+	@Test
+	@WithMockUser("admin")
+	void shouldGetPromedioTiempoPartidasByUserId() throws Exception {
+		when(userService.getPromedioTiempoPartidas(TEST_USER_ID)).thenReturn(120600.0);
+
+		mockMvc.perform(get(BASE_URL + "/{userId}/promedio-tiempo-partidas", TEST_USER_ID))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$").value(120600.0));
+
+		verify(userService, times(1)).getPromedioTiempoPartidas(TEST_USER_ID);
+	}
+
+	@Test
+	@WithMockUser("admin")
+	void shouldGetMaxTiempoPartidas() throws Exception {
+		when(userService.getMaxTiempoPartidas(null)).thenReturn(165600);
+
+		mockMvc.perform(get(BASE_URL + "/max-tiempo-partidas"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$").value(165600));
+
+		verify(userService, times(1)).getMaxTiempoPartidas(null);
+	}
+
+	@Test
+	@WithMockUser("admin")
+	void shouldGetMaxTiempoPartidasByUserId() throws Exception {
+		when(userService.getMaxTiempoPartidas(TEST_USER_ID)).thenReturn(165600);
+
+		mockMvc.perform(get(BASE_URL + "/{userId}/max-tiempo-partidas", TEST_USER_ID))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$").value(165600));
+
+		verify(userService, times(1)).getMaxTiempoPartidas(TEST_USER_ID);
+	}
+
+	@Test
+	@WithMockUser("admin")
+	void shouldGetMinTiempoPartidas() throws Exception {
+		when(userService.getMinTiempoPartidas(null)).thenReturn(75600);
+
+		mockMvc.perform(get(BASE_URL + "/min-tiempo-partidas"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$").value(75600));
+
+		verify(userService, times(1)).getMinTiempoPartidas(null);
+	}
+
+	@Test
+	@WithMockUser("admin")
+	void shouldGetMinTiempoPartidasByUserId() throws Exception {
+		when(userService.getMinTiempoPartidas(TEST_USER_ID)).thenReturn(75600);
+
+		mockMvc.perform(get(BASE_URL + "/{userId}/min-tiempo-partidas", TEST_USER_ID))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$").value(75600));
+
+		verify(userService, times(1)).getMinTiempoPartidas(TEST_USER_ID);
+	}
+
+	@Test
+	@WithMockUser("admin")
+	void shouldGetTotalTiempoPartidas() throws Exception {
+		when(userService.getTotalTiempoPartidas(null)).thenReturn(241200);
+
+		mockMvc.perform(get(BASE_URL + "/total-tiempo-partidas"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$").value(241200));
+
+		verify(userService, times(1)).getTotalTiempoPartidas(null);
+	}
+
+	@Test
+	@WithMockUser("admin")
+	void shouldGetTotalTiempoPartidasByUserId() throws Exception {
+		when(userService.getTotalTiempoPartidas(TEST_USER_ID)).thenReturn(241200);
+
+		mockMvc.perform(get(BASE_URL + "/{userId}/total-tiempo-partidas", TEST_USER_ID))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$").value(241200));
+
+		verify(userService, times(1)).getTotalTiempoPartidas(TEST_USER_ID);
+	}
+
+	@Test
+	@WithMockUser("admin")
+	void shouldGetPromedioPartidas() throws Exception {
+		when(userService.getPromedioPartidas()).thenReturn(0.625);
+
+		mockMvc.perform(get(BASE_URL + "/promedio-partidas"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$").value(0.625));
+
+		verify(userService, times(1)).getPromedioPartidas();
+	}
+
+	@Test
+	@WithMockUser("admin")
+	void shouldGetMaxPartidas() throws Exception {
+		when(userService.getMaxPartidas()).thenReturn(10);
+
+		mockMvc.perform(get(BASE_URL + "/max-partidas"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$").value(10));
+
+		verify(userService, times(1)).getMaxPartidas();
+	}
+
+	@Test
+	@WithMockUser("admin")
+	void shouldGetMinPartidas() throws Exception {
+		when(userService.getMinPartidas()).thenReturn(0);
+
+		mockMvc.perform(get(BASE_URL + "/min-partidas"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$").value(0));
+
+		verify(userService, times(1)).getMinPartidas();
 	}
 
 }
